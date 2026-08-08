@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install P4 Toolchain
+        run: sudo apt-get update && sudo apt-get install -y p4lang-p4c p4lang-bmv2 || (curl -sL https://raw.githubusercontent.com/p4lang/tutorials/master/vm-ubuntu-24.04/install-p4dev.sh -o /dev/null; sudo apt-get install -y p4lang-p4c p4lang-bmv2)
+
+      - name: Compile Definitions
+        run: find . -name '*.p4' | while read program; do echo "compiling $program"; p4c-bm2-ss --target bmv2 --arch v1model --std p4-16 "$program" -o "$RUNNER_TEMP/program.json" || exit 1; done
+
+      - name: Install Python Test Dependencies
+        run: pip3 install dpkt scapy
+
+      - name: Clone Omi Data
+        run: git clone --depth=1 https://github.com/Open-Markets-Initiative/omi-data-packets.git
+
+      - name: Run Iex IexEquities Tops IexTp v1.56 Definition Tests
+        run: sudo -E python3 .github/tests/test_iexequities_tops_v1_56.py
+
+      - name: Run Iex IexEquities Tops IexTp v1.64 Definition Tests
+        run: sudo -E python3 .github/tests/test_iexequities_tops_v1_64.py
+
+      - name: Run Iex IexEquities Tops IexTp v1.66 Definition Tests
+        run: sudo -E python3 .github/tests/test_iexequities_tops_v1_66.py
+
+      - name: Run Iex IexEquities Deep IexTp v1.06 Definition Tests
+        run: sudo -E python3 .github/tests/test_iexequities_deep_v1_06.py
+
+      - name: Run Iex IexEquities Deep IexTp v1.08 Definition Tests
+        run: sudo -E python3 .github/tests/test_iexequities_deep_v1_08.py
+
+      - name: Run Iex IexEquities DeepPlus IexTp v1.04 Definition Tests
+        run: sudo -E python3 .github/tests/test_iexequities_deepplus_v1_04.py
+
+
