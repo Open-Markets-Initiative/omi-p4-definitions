@@ -1,0 +1,8 @@
+# Compiled P4 / bmv2 artifacts (definitions are the source; compiled output is disposable)
+*.json
+*.p4i
+*.p4info.txt
+
+# Python test caches
+__pycache__/
+*.pyc
