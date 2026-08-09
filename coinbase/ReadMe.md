@@ -1,0 +1,57 @@
+[![Coinbase](https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Images/Logo.png)](https://www.coinbase.com/)
+
+
+## Coinbase
+
+| Division | [Protocol][Omi.Coinbase.Protocol.Definitions] | [Encoding][Omi.Encoding.Definitions] | Version | Date | Size | [Status][Omi.Glossary.Status] | [Testing][Omi.Glossary.Testing] | [Documentation][Omi.Coinbase.Specifications] |
+| --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
+| [CoinbaseDerivatives][CoinbaseDerivatives.Exchange] | [MarketDataApi][Coinbase.CoinbaseDerivatives.MarketDataApi] | [Sbe][Omi.Encoding.Sbe] | [1.9][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.9.Definition] | 9/5/2025 | 735 | [Pending][Omi.Glossary.Status.Pending] | [Untested][Omi.Glossary.Testing.Untested] | [url][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.9.Url] - [xml][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.9.Xml] |
+| [CoinbaseDerivatives][CoinbaseDerivatives.Exchange] | [MarketDataApi][Coinbase.CoinbaseDerivatives.MarketDataApi] | [Sbe][Omi.Encoding.Sbe] | [1.7][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.7.Definition] | 4/14/2022 | 693 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [pdf][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.7.Pdf] - [xml][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.7.Xml] |
+| [CoinbaseDerivatives][CoinbaseDerivatives.Exchange] | [MarketDataApi][Coinbase.CoinbaseDerivatives.MarketDataApi] | [Sbe][Omi.Encoding.Sbe] | [1.3][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.3.Definition] | 7/27/2020 | 648 | [Deprecated][Omi.Glossary.Status.Deprecated] | [Untested][Omi.Glossary.Testing.Untested] | [pdf][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.3.Pdf] - [xml][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.3.Xml] |
+| [CoinbaseDerivatives][CoinbaseDerivatives.Exchange] | [MarketDataApi][Coinbase.CoinbaseDerivatives.MarketDataApi] | [Sbe][Omi.Encoding.Sbe] | [1.2][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.2.Definition] | 7/27/2020 | 571 | [Deprecated][Omi.Glossary.Status.Deprecated] | [Verified][Omi.Glossary.Testing.Verified] | [pdf][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.2.Pdf] - [xml][Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.2.Xml] |
+| [Deribit][Deribit.Exchange] | [MarketDataApi][Coinbase.Deribit.MarketDataApi] | [Sbe][Omi.Encoding.Sbe] | [1.0][Coinbase.Deribit.MarketDataApi.Sbe.v1.0.Definition] | 6/8/2026 | 416 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Coinbase.Deribit.MarketDataApi.Sbe.v1.0.Url] - [xml][Coinbase.Deribit.MarketDataApi.Sbe.v1.0.Xml] |
+| [Deribit][Deribit.Exchange] | [MarketDataApi][Coinbase.Deribit.MarketDataApi] | [Sbe][Omi.Encoding.Sbe] | [0.1][Coinbase.Deribit.MarketDataApi.Sbe.v0.1.Definition] | 9/5/2025 | 401 | [Deprecated][Omi.Glossary.Status.Deprecated] | [Verified][Omi.Glossary.Testing.Verified] | [url][Coinbase.Deribit.MarketDataApi.Sbe.v0.1.Url] - [xml][Coinbase.Deribit.MarketDataApi.Sbe.v0.1.Xml] |
+
+
+Coinbase: [website](https://www.coinbase.com/ "Go to Coinbase")
+
+
+[Omi.Glossary.Status]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Status.md "Protocol Deployment Status"
+[Omi.Glossary.Status.Active]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Status.md "Deployment Status: Protocol is in active production"
+[Omi.Glossary.Status.Deprecated]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Status.md "Deployment Status: Protocol is no longer in active use"
+[Omi.Glossary.Status.Pending]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Status.md "Deployment Status: Protocol is not yet deployed to an active production environment"
+[Omi.Glossary.Status.Unknown]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Status.md "Deployment Status: Protocol deployment status is unknown"
+[Omi.Glossary.Status.Header]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Status.md "Deployment Status: Header only protocol provided for debugging"
+[Omi.Glossary.Testing]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Testing.md "Protocol Testing Status"
+[Omi.Glossary.Testing.Verified]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Testing.md "Testing Status: Protocol has been tested on live data"
+[Omi.Glossary.Testing.Incomplete]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Testing.md "Testing Status: Protocol has been tested on live data but contains known issues"
+[Omi.Glossary.Testing.Beta]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Testing.md "Testing Status: Protocol has not been tested and structure is speculative"
+[Omi.Glossary.Testing.Untested]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Testing.md "Testing Status: Protocol has not been tested on live data"
+[Omi.Glossary.Testing.Unavailable]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Glossary/Testing.md "Testing Status: Protocol does not state a testing status"
+[Omi.Encoding.Definitions]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/ReadMe.md "Encoding Directory"
+[Omi.Coinbase.Protocol.Definitions]: https://github.com/Open-Markets-Initiative/Directory/tree/main/Organizations/Coinbase/Protocols "Coinbase Protocol Directory"
+[Omi.Coinbase.Specifications]: https://github.com/Open-Markets-Initiative/Directory/tree/main/Organizations/Coinbase/Specifications "Coinbase Specifications Directory"
+[Omi.Encoding.Sbe]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Sbe.md "Sbe Encoding"
+[CoinbaseDerivatives.Exchange]: https://github.com/Open-Markets-Initiative/Directory/tree/main/Organizations/Coinbase/Protocols/CoinbaseDerivatives "Coinbase CoinbaseDerivatives"
+[Deribit.Exchange]: https://github.com/Open-Markets-Initiative/Directory/tree/main/Organizations/Coinbase/Protocols/Deribit "Coinbase Deribit"
+[Coinbase.CoinbaseDerivatives.MarketDataApi]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Protocols/CoinbaseDerivatives/MarketDataApi.md "Market Data Api"
+[Coinbase.Deribit.MarketDataApi]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Protocols/Deribit/MarketDataApi.md "Market Data Api"
+
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.2.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/coinbase/coinbasederivatives/marketdataapi/coinbasederivatives_marketdataapi_v1_2.p4 "Coinbase CoinbaseDerivatives MarketDataApi Sbe v1.2 P4 Definition"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.2.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/MarketDataApi/Coinbase.Derivatives.MarketDataApi.Sbe.v1.2.pdf "Coinbase 1.2 Pdf"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.2.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/MarketDataApi/Coinbase.Derivatives.MarketDataApi.Sbe.v1.2.xml "Coinbase 1.2 Xml"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.3.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/coinbase/coinbasederivatives/marketdataapi/coinbasederivatives_marketdataapi_v1_3.p4 "Coinbase CoinbaseDerivatives MarketDataApi Sbe v1.3 P4 Definition"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.3.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/MarketDataApi/Coinbase.Derivatives.MarketDataApi.Sbe.v1.2.pdf "Coinbase 1.3 Pdf"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.3.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/MarketDataApi/Coinbase.Derivatives.MarketDataApi.Sbe.v1.3.xml "Coinbase 1.3 Xml"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.7.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/coinbase/coinbasederivatives/marketdataapi/coinbasederivatives_marketdataapi_v1_7.p4 "Coinbase CoinbaseDerivatives MarketDataApi Sbe v1.7 P4 Definition"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.7.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/MarketDataApi/Coinbase.Derivatives.MarketDataApi.Sbe.v1.7.pdf "Coinbase 1.7 Pdf"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.7.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/MarketDataApi/Coinbase.Derivatives.MarketDataApi.Sbe.v1.7.xml "Coinbase 1.7 Xml"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.9.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/coinbase/coinbasederivatives/marketdataapi/coinbasederivatives_marketdataapi_v1_9.p4 "Coinbase CoinbaseDerivatives MarketDataApi Sbe v1.9 P4 Definition"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.9.Url]: https://docs.cdp.coinbase.com/derivatives/introduction/downloads "Coinbase 1.9 Url"
+[Coinbase.CoinbaseDerivatives.MarketDataApi.Sbe.v1.9.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/MarketDataApi/Coinbase.Derivatives.MarketDataApi.Sbe.v1.9.xml "Coinbase 1.9 Xml"
+[Coinbase.Deribit.MarketDataApi.Sbe.v0.1.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/coinbase/deribit/marketdataapi/deribit_marketdataapi_v0_1.p4 "Coinbase Deribit MarketDataApi Sbe v0.1 P4 Definition"
+[Coinbase.Deribit.MarketDataApi.Sbe.v0.1.Url]: https://docs.cdp.coinbase.com/derivatives/introduction/downloads "Coinbase 0.1 Url"
+[Coinbase.Deribit.MarketDataApi.Sbe.v0.1.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/Deribit/MarketDataApi/Coinbase.Deribit.MarketDataApi.Sbe.v0.1.xml "Coinbase 0.1 Xml"
+[Coinbase.Deribit.MarketDataApi.Sbe.v1.0.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/coinbase/deribit/marketdataapi/deribit_marketdataapi_v1_0.p4 "Coinbase Deribit MarketDataApi Sbe v1.0 P4 Definition"
+[Coinbase.Deribit.MarketDataApi.Sbe.v1.0.Url]: https://docs.cdp.coinbase.com/derivatives/introduction/downloads "Coinbase 1.0 Url"
+[Coinbase.Deribit.MarketDataApi.Sbe.v1.0.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Coinbase/Specifications/Deribit/MarketDataApi/Coinbase.Deribit.MarketDataApi.Sbe.v1.0.xml "Coinbase 1.0 Xml"

@@ -1,0 +1,401 @@
+// P4_16 (v1model) definition for: Coinbase Deribit MarketDataApi Sbe v0.1
+// 
+// Protocol:
+//   Organization: Coinbase
+//   Protocol: Market Data Api
+//   Encoding: Simple Binary Encoding
+//   Version: 0.1
+//   Date: 9/5/2025
+//   Specification: Unknown
+// 
+// Byte order: little (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: Public/GPLv3
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// For full Omi information: https://github.com/Open-Markets-Initiative/Directory
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header message_flags_t {
+    bit<64> sending_time;
+    bit<64> seq_num;
+    bit<32> channel_id;
+    bit<1> incremental_update;
+    bit<1> snapshot;
+    bit<1> retransmit;
+    bit<13> reserved_bits;
+    bit<16> message_count;
+    bit<16> message_length;
+    bit<16> template_id;
+    bit<16> schema_version;
+    bit<1> start_of_transaction;
+    bit<1> end_of_transaction;
+    bit<14> reserved_bits;
+    bit<64> transact_time;
+}
+
+header instrument_message_t {
+    bit<64> instrument_id;
+    bit<512> symbol;
+    bit<1024> name;
+    bit<64> base_currency;
+    bit<64> quote_currency;
+    bit<64> base_increment;
+    bit<64> tick_size;
+    bit<64> strike_price;
+    bit<64> large_tick_size_0;
+    bit<64> large_tick_threshold_0;
+    bit<64> large_tick_size_1;
+    bit<64> large_tick_threshold_1;
+    bit<64> creation_time;
+    bit<64> expiry_time;
+    bit<16> year;
+    bit<16> month;
+    bit<16> week_of_month;
+    bit<16> day_of_month;
+    bit<1> is_reversed;
+    bit<1> is_put_option;
+    bit<1> is_perpetual;
+    bit<29> reserved_29;
+    bit<8> type_;
+    bit<8> status;
+    bit<8> quantity_exponent;
+}
+
+header trading_status_update_message_t {
+    bit<64> instrument_id;
+    bit<8> trading_status;
+}
+
+header instrument_info_message_t {
+    bit<64> instrument_id;
+    bit<64> min_sell_price;
+    bit<64> max_buy_price;
+    bit<64> index_price;
+    bit<64> mark_price;
+}
+
+header instrument_ref_message_t {
+    bit<64> instrument_id;
+    bit<64> current_funding;
+    bit<64> funding_8h;
+    bit<64> estimated_delivery_price;
+    bit<64> delivery_price;
+    bit<64> settlement_price;
+}
+
+header bid_put_message_t {
+    bit<64> order_id;
+    bit<64> instrument_id;
+    bit<64> quantity_mantissa;
+    bit<64> price;
+}
+
+header ask_put_message_t {
+    bit<64> order_id;
+    bit<64> instrument_id;
+    bit<64> quantity_mantissa;
+    bit<64> price;
+}
+
+header bid_qty_reduced_message_t {
+    bit<64> order_id;
+    bit<64> instrument_id;
+    bit<64> quantity_mantissa;
+}
+
+header ask_qty_reduced_message_t {
+    bit<64> order_id;
+    bit<64> instrument_id;
+    bit<64> quantity_mantissa;
+}
+
+header bid_delete_message_t {
+    bit<64> order_id;
+    bit<64> instrument_id;
+}
+
+header ask_delete_message_t {
+    bit<64> order_id;
+    bit<64> instrument_id;
+}
+
+header trade_summary_message_t {
+    bit<64> instrument_id;
+    bit<64> taker_order_id;
+    bit<64> total_filled_mantissa;
+    bit<64> deepest_price;
+    bit<64> mark_price;
+    bit<64> index_price;
+    bit<64> implied_volatility;
+    bit<1> is_sell;
+    bit<1> is_liquidation;
+    bit<30> reserved_30;
+}
+
+header trade_message_t {
+    bit<64> match_id;
+    bit<64> instrument_id;
+    bit<64> maker_order_id;
+    bit<64> fill_qty_mantissa;
+    bit<64> fill_price;
+    bit<1> is_sell;
+    bit<1> is_liquidation;
+    bit<30> reserved_30;
+}
+
+header block_trade_message_t {
+    bit<64> match_id;
+    bit<64> instrument_id;
+    bit<64> block_trade_id;
+    bit<64> block_rfq_id;
+    bit<64> fill_qty_mantissa;
+    bit<64> fill_price;
+    bit<64> mark_price;
+    bit<64> index_price;
+    bit<64> implied_volatility;
+    bit<1> is_sell;
+    bit<1> is_liquidation;
+    bit<30> reserved_30;
+    bit<16> number_of_legs;
+}
+
+header snapshot_header_message_t {
+    bit<64> instrument_id;
+    bit<64> incremental_timestamp;
+    bit<64> incremental_seq_num;
+}
+
+header snapshot_trailer_message_t {
+    bit<64> instrument_id;
+    bit<64> timestamp;
+    bit<64> increment_seq_num;
+}
+
+header end_of_cycle_message_t {
+    bit<32> active_instrument_count;
+}
+
+header retransmit_request_message_t {
+    bit<64> begin_seq_num;
+    bit<8> message_count_uint_8;
+}
+
+header retransmit_reject_message_t {
+    bit<64> retry_delay_nanos;
+    bit<320> details;
+    bit<8> reason;
+}
+
+struct metadata_t {
+}
+
+struct headers_t {
+    message_flags_t message_flags;
+    instrument_message_t instrument_message;
+    trading_status_update_message_t trading_status_update_message;
+    instrument_info_message_t instrument_info_message;
+    instrument_ref_message_t instrument_ref_message;
+    bid_put_message_t bid_put_message;
+    ask_put_message_t ask_put_message;
+    bid_qty_reduced_message_t bid_qty_reduced_message;
+    ask_qty_reduced_message_t ask_qty_reduced_message;
+    bid_delete_message_t bid_delete_message;
+    ask_delete_message_t ask_delete_message;
+    trade_summary_message_t trade_summary_message;
+    trade_message_t trade_message;
+    block_trade_message_t block_trade_message;
+    snapshot_header_message_t snapshot_header_message;
+    snapshot_trailer_message_t snapshot_trailer_message;
+    end_of_cycle_message_t end_of_cycle_message;
+    retransmit_request_message_t retransmit_request_message;
+    retransmit_reject_message_t retransmit_reject_message;
+}
+
+parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.message_flags);
+        transition select(hdr.message_flags.template_id) {
+            16w0x10: parse_instrument_message;
+            16w0x12: parse_trading_status_update_message;
+            16w0x13: parse_instrument_info_message;
+            16w0x14: parse_instrument_ref_message;
+            16w0x20: parse_bid_put_message;
+            16w0x21: parse_ask_put_message;
+            16w0x22: parse_bid_qty_reduced_message;
+            16w0x23: parse_ask_qty_reduced_message;
+            16w0x24: parse_bid_delete_message;
+            16w0x25: parse_ask_delete_message;
+            16w0x30: parse_trade_summary_message;
+            16w0x31: parse_trade_message;
+            16w0x33: parse_block_trade_message;
+            16w0x100: parse_snapshot_header_message;
+            16w0x101: parse_snapshot_trailer_message;
+            16w0x119: parse_end_of_cycle_message;
+            16w0x200: parse_retransmit_request_message;
+            16w0x202: parse_retransmit_reject_message;
+            default: accept;
+        }
+    }
+
+    state parse_instrument_message {
+        packet.extract(hdr.instrument_message);
+        transition accept;
+    }
+
+    state parse_trading_status_update_message {
+        packet.extract(hdr.trading_status_update_message);
+        transition accept;
+    }
+
+    state parse_instrument_info_message {
+        packet.extract(hdr.instrument_info_message);
+        transition accept;
+    }
+
+    state parse_instrument_ref_message {
+        packet.extract(hdr.instrument_ref_message);
+        transition accept;
+    }
+
+    state parse_bid_put_message {
+        packet.extract(hdr.bid_put_message);
+        transition accept;
+    }
+
+    state parse_ask_put_message {
+        packet.extract(hdr.ask_put_message);
+        transition accept;
+    }
+
+    state parse_bid_qty_reduced_message {
+        packet.extract(hdr.bid_qty_reduced_message);
+        transition accept;
+    }
+
+    state parse_ask_qty_reduced_message {
+        packet.extract(hdr.ask_qty_reduced_message);
+        transition accept;
+    }
+
+    state parse_bid_delete_message {
+        packet.extract(hdr.bid_delete_message);
+        transition accept;
+    }
+
+    state parse_ask_delete_message {
+        packet.extract(hdr.ask_delete_message);
+        transition accept;
+    }
+
+    state parse_trade_summary_message {
+        packet.extract(hdr.trade_summary_message);
+        transition accept;
+    }
+
+    state parse_trade_message {
+        packet.extract(hdr.trade_message);
+        transition accept;
+    }
+
+    state parse_block_trade_message {
+        packet.extract(hdr.block_trade_message);
+        transition accept;
+    }
+
+    state parse_snapshot_header_message {
+        packet.extract(hdr.snapshot_header_message);
+        transition accept;
+    }
+
+    state parse_snapshot_trailer_message {
+        packet.extract(hdr.snapshot_trailer_message);
+        transition accept;
+    }
+
+    state parse_end_of_cycle_message {
+        packet.extract(hdr.end_of_cycle_message);
+        transition accept;
+    }
+
+    state parse_retransmit_request_message {
+        packet.extract(hdr.retransmit_request_message);
+        transition accept;
+    }
+
+    state parse_retransmit_reject_message {
+        packet.extract(hdr.retransmit_reject_message);
+        transition accept;
+    }
+
+}
+
+control DeribitMarketdataapiVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control DeribitMarketdataapiIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        standard_metadata.egress_spec = FORWARD_PORT;
+    }
+}
+
+control DeribitMarketdataapiEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control DeribitMarketdataapiComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control DeribitMarketdataapiDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.message_flags);
+        packet.emit(hdr.instrument_message);
+        packet.emit(hdr.trading_status_update_message);
+        packet.emit(hdr.instrument_info_message);
+        packet.emit(hdr.instrument_ref_message);
+        packet.emit(hdr.bid_put_message);
+        packet.emit(hdr.ask_put_message);
+        packet.emit(hdr.bid_qty_reduced_message);
+        packet.emit(hdr.ask_qty_reduced_message);
+        packet.emit(hdr.bid_delete_message);
+        packet.emit(hdr.ask_delete_message);
+        packet.emit(hdr.trade_summary_message);
+        packet.emit(hdr.trade_message);
+        packet.emit(hdr.block_trade_message);
+        packet.emit(hdr.snapshot_header_message);
+        packet.emit(hdr.snapshot_trailer_message);
+        packet.emit(hdr.end_of_cycle_message);
+        packet.emit(hdr.retransmit_request_message);
+        packet.emit(hdr.retransmit_reject_message);
+    }
+}
+
+V1Switch(
+    DeribitMarketdataapiParser(),
+    DeribitMarketdataapiVerifyChecksum(),
+    DeribitMarketdataapiIngress(),
+    DeribitMarketdataapiEgress(),
+    DeribitMarketdataapiComputeChecksum(),
+    DeribitMarketdataapiDeparser()
+) main;

@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Install P4 Toolchain
-        run: sudo apt-get update && sudo apt-get install -y p4lang-p4c p4lang-bmv2 || (curl -sL https://raw.githubusercontent.com/p4lang/tutorials/master/vm-ubuntu-24.04/install-p4dev.sh -o /dev/null; sudo apt-get install -y p4lang-p4c p4lang-bmv2)
+        run: . /etc/os-release && echo "deb http://download.opensuse.org/repositories/home:/p4lang/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/home_p4lang.list && curl -fsSL "https://download.opensuse.org/repositories/home:p4lang/xUbuntu_${VERSION_ID}/Release.key" | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/home_p4lang.gpg > /dev/null && sudo apt-get update && sudo apt-get install -y p4lang-p4c p4lang-bmv2
 
       - name: Compile Definitions
         run: find . -name '*.p4' | while read program; do echo "compiling $program"; p4c-bm2-ss --target bmv2 --arch v1model --std p4-16 "$program" -o "$RUNNER_TEMP/program.json" || exit 1; done
