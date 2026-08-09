@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Iex IexEquities Tops IexTp v1.56
+// P4_16 (v1model) definition for: Iex IexEquities Tops IexTp v1.66
 // 
 // Protocol:
 //   Organization: Investors Exchange
 //   Protocol: Top Of Book
 //   Encoding: Investors Exchange Transport Protocol
-//   Version: 1.56
-//   Date: 9/23/2016
-//   Specification: IEX TOPS Specification.pdf
+//   Version: 1.66
+//   Date: 10/19/2021
+//   Specification: IEX TOPS Specification v1.66.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -45,7 +45,7 @@ header iextp_header_t {
     bit<64> send_time;
 }
 
-header message_header_t {
+header message_t {
     bit<16> message_length;
     bit<8> message_type;
 }
@@ -74,6 +74,12 @@ header trading_status_message_t {
     bit<32> reason;
 }
 
+header retail_liquidity_indicator_message_t {
+    bit<8> retail_liquidity_indicator;
+    bit<64> timestamp;
+    bit<64> symbol;
+}
+
 header operational_halt_status_message_t {
     bit<8> operational_halt_status;
     bit<64> timestamp;
@@ -85,12 +91,6 @@ header short_sale_price_test_status_message_t {
     bit<64> timestamp;
     bit<64> symbol;
     bit<8> detail;
-}
-
-header security_event_message_t {
-    bit<8> security_event;
-    bit<64> timestamp;
-    bit<64> symbol;
 }
 
 header quote_update_message_t {
@@ -106,7 +106,8 @@ header quote_update_message_t {
 }
 
 header trade_report_message_t {
-    bit<4> unused_4;
+    bit<3> unused_3;
+    bit<1> singleprice_cross_trade;
     bit<1> trade_through_exempt;
     bit<1> odd_lot;
     bit<1> extended_hours;
@@ -126,7 +127,8 @@ header official_price_message_t {
 }
 
 header trade_break_message_t {
-    bit<4> unused_4;
+    bit<3> unused_3;
+    bit<1> singleprice_cross_trade;
     bit<1> trade_through_exempt;
     bit<1> odd_lot;
     bit<1> extended_hours;
@@ -160,13 +162,13 @@ struct metadata_t {
 
 struct headers_t {
     iextp_header_t iextp_header;
-    message_header_t message_header[MAX_MESSAGES];
+    message_t message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     security_directory_message_t security_directory_message[MAX_MESSAGES];
     trading_status_message_t trading_status_message[MAX_MESSAGES];
+    retail_liquidity_indicator_message_t retail_liquidity_indicator_message[MAX_MESSAGES];
     operational_halt_status_message_t operational_halt_status_message[MAX_MESSAGES];
     short_sale_price_test_status_message_t short_sale_price_test_status_message[MAX_MESSAGES];
-    security_event_message_t security_event_message[MAX_MESSAGES];
     quote_update_message_t quote_update_message[MAX_MESSAGES];
     trade_report_message_t trade_report_message[MAX_MESSAGES];
     official_price_message_t official_price_message[MAX_MESSAGES];
@@ -181,14 +183,14 @@ parser IexequitiesTopsParser(packet_in packet, out headers_t hdr, inout metadata
     }
 
     state parse_message {
-        packet.extract(hdr.message_header.next);
-        transition select(hdr.message_header.last.message_type) {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             8w0x53: parse_system_event_message;
             8w0x44: parse_security_directory_message;
             8w0x48: parse_trading_status_message;
+            8w0x49: parse_retail_liquidity_indicator_message;
             8w0x4f: parse_operational_halt_status_message;
             8w0x50: parse_short_sale_price_test_status_message;
-            8w0x45: parse_security_event_message;
             8w0x51: parse_quote_update_message;
             8w0x54: parse_trade_report_message;
             8w0x58: parse_official_price_message;
@@ -213,6 +215,11 @@ parser IexequitiesTopsParser(packet_in packet, out headers_t hdr, inout metadata
         transition parse_message;
     }
 
+    state parse_retail_liquidity_indicator_message {
+        packet.extract(hdr.retail_liquidity_indicator_message.next);
+        transition parse_message;
+    }
+
     state parse_operational_halt_status_message {
         packet.extract(hdr.operational_halt_status_message.next);
         transition parse_message;
@@ -220,11 +227,6 @@ parser IexequitiesTopsParser(packet_in packet, out headers_t hdr, inout metadata
 
     state parse_short_sale_price_test_status_message {
         packet.extract(hdr.short_sale_price_test_status_message.next);
-        transition parse_message;
-    }
-
-    state parse_security_event_message {
-        packet.extract(hdr.security_event_message.next);
         transition parse_message;
     }
 
@@ -279,13 +281,13 @@ control IexequitiesTopsComputeChecksum(inout headers_t hdr, inout metadata_t met
 control IexequitiesTopsDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.iextp_header);
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.security_directory_message);
         packet.emit(hdr.trading_status_message);
+        packet.emit(hdr.retail_liquidity_indicator_message);
         packet.emit(hdr.operational_halt_status_message);
         packet.emit(hdr.short_sale_price_test_status_message);
-        packet.emit(hdr.security_event_message);
         packet.emit(hdr.quote_update_message);
         packet.emit(hdr.trade_report_message);
         packet.emit(hdr.official_price_message);

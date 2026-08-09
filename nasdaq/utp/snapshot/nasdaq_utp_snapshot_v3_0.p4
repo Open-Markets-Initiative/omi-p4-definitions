@@ -37,9 +37,13 @@ header tcp_packet_header_t {
     bit<8> packet_type;
 }
 
-header message_header_t {
+header sequenced_data_packet_t {
     bit<8> version;
     bit<8> message_category;
+}
+
+header administrative_message_t {
+    bit<8> administrative_message_type;
 }
 
 header issue_symbol_directory_message_t {
@@ -168,6 +172,10 @@ header snapshot_sequence_message_t {
     bit<64> sequence_number;
 }
 
+header control_message_t {
+    bit<8> control_message_type;
+}
+
 header start_of_day_message_t {
     bit<8> market_center_originator;
     bit<8> sub_market_center_id;
@@ -206,6 +214,10 @@ header end_of_transmissions_message_t {
     bit<64> sip_timestamp;
     bit<64> timestamp_1;
     bit<64> participant_token;
+}
+
+header quote_message_t {
+    bit<8> quote_message_type;
 }
 
 header utp_combined_quote_message_long_form_t {
@@ -296,38 +308,48 @@ struct metadata_t {
 
 struct headers_t {
     tcp_packet_header_t tcp_packet_header;
-    message_header_t message_header[MAX_MESSAGES];
-    issue_symbol_directory_message_t issue_symbol_directory_message[MAX_MESSAGES];
-    enhanced_issue_symbol_directory_message_t enhanced_issue_symbol_directory_message[MAX_MESSAGES];
-    reg_sho_short_sale_price_test_restricted_indicator_message_t reg_sho_short_sale_price_test_restricted_indicator_message[MAX_MESSAGES];
-    cross_sro_trading_action_message_t cross_sro_trading_action_message[MAX_MESSAGES];
-    market_center_trading_action_message_t market_center_trading_action_message[MAX_MESSAGES];
-    market_wide_circuit_breaker_decline_level_message_t market_wide_circuit_breaker_decline_level_message[MAX_MESSAGES];
-    limit_up_limit_down_price_band_message_t limit_up_limit_down_price_band_message[MAX_MESSAGES];
-    auction_collar_message_t auction_collar_message[MAX_MESSAGES];
-    snapshot_sequence_message_t snapshot_sequence_message[MAX_MESSAGES];
-    start_of_day_message_t start_of_day_message[MAX_MESSAGES];
-    market_session_open_message_t market_session_open_message[MAX_MESSAGES];
-    market_session_close_message_t market_session_close_message[MAX_MESSAGES];
-    end_of_day_message_t end_of_day_message[MAX_MESSAGES];
-    end_of_transmissions_message_t end_of_transmissions_message[MAX_MESSAGES];
-    utp_combined_quote_message_long_form_t utp_combined_quote_message_long_form[MAX_MESSAGES];
-    odd_lot_quote_message_long_form_t odd_lot_quote_message_long_form[MAX_MESSAGES];
-    debug_packet_t debug_packet[MAX_MESSAGES];
-    login_request_packet_t login_request_packet[MAX_MESSAGES];
-    login_accepted_packet_t login_accepted_packet[MAX_MESSAGES];
-    login_rejected_packet_t login_rejected_packet[MAX_MESSAGES];
+    sequenced_data_packet_t sequenced_data_packet;
+    administrative_message_t administrative_message;
+    issue_symbol_directory_message_t issue_symbol_directory_message;
+    enhanced_issue_symbol_directory_message_t enhanced_issue_symbol_directory_message;
+    reg_sho_short_sale_price_test_restricted_indicator_message_t reg_sho_short_sale_price_test_restricted_indicator_message;
+    cross_sro_trading_action_message_t cross_sro_trading_action_message;
+    market_center_trading_action_message_t market_center_trading_action_message;
+    market_wide_circuit_breaker_decline_level_message_t market_wide_circuit_breaker_decline_level_message;
+    limit_up_limit_down_price_band_message_t limit_up_limit_down_price_band_message;
+    auction_collar_message_t auction_collar_message;
+    snapshot_sequence_message_t snapshot_sequence_message;
+    control_message_t control_message;
+    start_of_day_message_t start_of_day_message;
+    market_session_open_message_t market_session_open_message;
+    market_session_close_message_t market_session_close_message;
+    end_of_day_message_t end_of_day_message;
+    end_of_transmissions_message_t end_of_transmissions_message;
+    quote_message_t quote_message;
+    utp_combined_quote_message_long_form_t utp_combined_quote_message_long_form;
+    odd_lot_quote_message_long_form_t odd_lot_quote_message_long_form;
+    debug_packet_t debug_packet;
+    login_request_packet_t login_request_packet;
+    login_accepted_packet_t login_accepted_packet;
+    login_rejected_packet_t login_rejected_packet;
 }
 
 parser NasdaqUtpSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
-        transition parse_message;
+        transition select(hdr.tcp_packet_header.packet_type) {
+            8w0x53: parse_sequenced_data_packet;
+            8w0x2b: parse_debug_packet;
+            8w0x4c: parse_login_request_packet;
+            8w0x41: parse_login_accepted_packet;
+            8w0x4a: parse_login_rejected_packet;
+            default: accept;
+        }
     }
 
-    state parse_message {
-        packet.extract(hdr.message_header.next);
-        transition select(hdr.message_header.last.message_category) {
+    state parse_sequenced_data_packet {
+        packet.extract(hdr.sequenced_data_packet);
+        transition select(hdr.sequenced_data_packet.message_category) {
             8w0x41: parse_administrative_message;
             8w0x43: parse_control_message;
             8w0x51: parse_quote_message;
@@ -336,18 +358,140 @@ parser NasdaqUtpSnapshotParser(packet_in packet, out headers_t hdr, inout metada
     }
 
     state parse_administrative_message {
-        packet.extract(hdr.administrative_message.next);
-        transition parse_message;
+        packet.extract(hdr.administrative_message);
+        transition select(hdr.administrative_message.administrative_message_type) {
+            8w0x42: parse_issue_symbol_directory_message;
+            8w0x46: parse_enhanced_issue_symbol_directory_message;
+            8w0x56: parse_reg_sho_short_sale_price_test_restricted_indicator_message;
+            8w0x48: parse_cross_sro_trading_action_message;
+            8w0x4b: parse_market_center_trading_action_message;
+            8w0x43: parse_market_wide_circuit_breaker_decline_level_message;
+            8w0x50: parse_limit_up_limit_down_price_band_message;
+            8w0x45: parse_auction_collar_message;
+            8w0x53: parse_snapshot_sequence_message;
+            default: accept;
+        }
+    }
+
+    state parse_issue_symbol_directory_message {
+        packet.extract(hdr.issue_symbol_directory_message);
+        transition accept;
+    }
+
+    state parse_enhanced_issue_symbol_directory_message {
+        packet.extract(hdr.enhanced_issue_symbol_directory_message);
+        transition accept;
+    }
+
+    state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
+        packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message);
+        transition accept;
+    }
+
+    state parse_cross_sro_trading_action_message {
+        packet.extract(hdr.cross_sro_trading_action_message);
+        transition accept;
+    }
+
+    state parse_market_center_trading_action_message {
+        packet.extract(hdr.market_center_trading_action_message);
+        transition accept;
+    }
+
+    state parse_market_wide_circuit_breaker_decline_level_message {
+        packet.extract(hdr.market_wide_circuit_breaker_decline_level_message);
+        transition accept;
+    }
+
+    state parse_limit_up_limit_down_price_band_message {
+        packet.extract(hdr.limit_up_limit_down_price_band_message);
+        transition accept;
+    }
+
+    state parse_auction_collar_message {
+        packet.extract(hdr.auction_collar_message);
+        transition accept;
+    }
+
+    state parse_snapshot_sequence_message {
+        packet.extract(hdr.snapshot_sequence_message);
+        transition accept;
     }
 
     state parse_control_message {
-        packet.extract(hdr.control_message.next);
-        transition parse_message;
+        packet.extract(hdr.control_message);
+        transition select(hdr.control_message.control_message_type) {
+            8w0x49: parse_start_of_day_message;
+            8w0x4f: parse_market_session_open_message;
+            8w0x43: parse_market_session_close_message;
+            8w0x4a: parse_end_of_day_message;
+            8w0x5a: parse_end_of_transmissions_message;
+            default: accept;
+        }
+    }
+
+    state parse_start_of_day_message {
+        packet.extract(hdr.start_of_day_message);
+        transition accept;
+    }
+
+    state parse_market_session_open_message {
+        packet.extract(hdr.market_session_open_message);
+        transition accept;
+    }
+
+    state parse_market_session_close_message {
+        packet.extract(hdr.market_session_close_message);
+        transition accept;
+    }
+
+    state parse_end_of_day_message {
+        packet.extract(hdr.end_of_day_message);
+        transition accept;
+    }
+
+    state parse_end_of_transmissions_message {
+        packet.extract(hdr.end_of_transmissions_message);
+        transition accept;
     }
 
     state parse_quote_message {
-        packet.extract(hdr.quote_message.next);
-        transition parse_message;
+        packet.extract(hdr.quote_message);
+        transition select(hdr.quote_message.quote_message_type) {
+            8w0x44: parse_utp_combined_quote_message_long_form;
+            8w0x42: parse_odd_lot_quote_message_long_form;
+            default: accept;
+        }
+    }
+
+    state parse_utp_combined_quote_message_long_form {
+        packet.extract(hdr.utp_combined_quote_message_long_form);
+        transition accept;
+    }
+
+    state parse_odd_lot_quote_message_long_form {
+        packet.extract(hdr.odd_lot_quote_message_long_form);
+        transition accept;
+    }
+
+    state parse_debug_packet {
+        packet.extract(hdr.debug_packet);
+        transition accept;
+    }
+
+    state parse_login_request_packet {
+        packet.extract(hdr.login_request_packet);
+        transition accept;
+    }
+
+    state parse_login_accepted_packet {
+        packet.extract(hdr.login_accepted_packet);
+        transition accept;
+    }
+
+    state parse_login_rejected_packet {
+        packet.extract(hdr.login_rejected_packet);
+        transition accept;
     }
 
 }
@@ -376,7 +520,8 @@ control NasdaqUtpSnapshotComputeChecksum(inout headers_t hdr, inout metadata_t m
 control NasdaqUtpSnapshotDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.sequenced_data_packet);
+        packet.emit(hdr.administrative_message);
         packet.emit(hdr.issue_symbol_directory_message);
         packet.emit(hdr.enhanced_issue_symbol_directory_message);
         packet.emit(hdr.reg_sho_short_sale_price_test_restricted_indicator_message);
@@ -386,11 +531,13 @@ control NasdaqUtpSnapshotDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.limit_up_limit_down_price_band_message);
         packet.emit(hdr.auction_collar_message);
         packet.emit(hdr.snapshot_sequence_message);
+        packet.emit(hdr.control_message);
         packet.emit(hdr.start_of_day_message);
         packet.emit(hdr.market_session_open_message);
         packet.emit(hdr.market_session_close_message);
         packet.emit(hdr.end_of_day_message);
         packet.emit(hdr.end_of_transmissions_message);
+        packet.emit(hdr.quote_message);
         packet.emit(hdr.utp_combined_quote_message_long_form);
         packet.emit(hdr.odd_lot_quote_message_long_form);
         packet.emit(hdr.debug_packet);

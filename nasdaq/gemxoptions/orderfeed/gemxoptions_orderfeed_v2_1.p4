@@ -38,7 +38,7 @@ header packet_header_t {
     bit<16> message_count;
 }
 
-header message_header_t {
+header message_t {
     bit<16> message_length;
     bit<8> message_type;
 }
@@ -119,7 +119,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    message_header_t message_header[MAX_MESSAGES];
+    message_t message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     derivative_directory_message_t derivative_directory_message[MAX_MESSAGES];
     trading_action_message_t trading_action_message[MAX_MESSAGES];
@@ -134,8 +134,8 @@ parser GemxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout met
     }
 
     state parse_message {
-        packet.extract(hdr.message_header.next);
-        transition select(hdr.message_header.last.message_type) {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             8w0x53: parse_system_event_message;
             8w0x6d: parse_derivative_directory_message;
             8w0x48: parse_trading_action_message;
@@ -196,7 +196,7 @@ control GemxoptionsOrderfeedComputeChecksum(inout headers_t hdr, inout metadata_
 control GemxoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.derivative_directory_message);
         packet.emit(hdr.trading_action_message);

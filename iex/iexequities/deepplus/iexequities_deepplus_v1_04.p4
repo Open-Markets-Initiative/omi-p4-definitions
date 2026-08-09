@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Iex IexEquities Deep IexTp v1.06
+// P4_16 (v1model) definition for: Iex IexEquities DeepPlus IexTp v1.04
 // 
 // Protocol:
 //   Organization: Investors Exchange
-//   Protocol: Depth Of Book
+//   Protocol: DeepPlus
 //   Encoding: Investors Exchange Transport Protocol
-//   Version: 1.06
-//   Date: 2/27/2018
-//   Specification: IEX DEEP Specification.pdf
+//   Version: 1.04
+//   Date: 6/4/2026
+//   Specification: IEX DEEP+ Specification (v1.04).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -45,7 +45,7 @@ header iextp_header_t {
     bit<64> send_time;
 }
 
-header message_header_t {
+header message_t {
     bit<16> message_length;
     bit<8> message_type;
 }
@@ -74,6 +74,12 @@ header trading_status_message_t {
     bit<32> reason;
 }
 
+header retail_liquidity_indicator_message_t {
+    bit<8> retail_liquidity_indicator;
+    bit<64> timestamp;
+    bit<64> symbol;
+}
+
 header operational_halt_status_message_t {
     bit<8> operational_halt_status;
     bit<64> timestamp;
@@ -93,23 +99,48 @@ header security_event_message_t {
     bit<64> symbol;
 }
 
-header price_level_buy_update_message_t {
-    bit<8> event_flags;
+header add_order_message_t {
+    bit<8> side;
     bit<64> timestamp;
     bit<64> symbol;
+    bit<64> order_id;
     bit<32> size;
     bit<64> price;
 }
 
-header price_level_sell_update_message_t {
-    bit<8> event_flags;
+header order_modify_message_t {
+    bit<7> unused_7;
+    bit<1> priority;
     bit<64> timestamp;
     bit<64> symbol;
+    bit<64> order_id_reference;
     bit<32> size;
     bit<64> price;
 }
 
-header trade_report_message_t {
+header order_delete_message_t {
+    bit<8> reserved_1;
+    bit<64> timestamp;
+    bit<64> symbol;
+    bit<64> order_id_reference;
+}
+
+header order_executed_message_t {
+    bit<3> unused_3;
+    bit<1> singleprice_cross_trade;
+    bit<1> trade_through_exempt;
+    bit<1> odd_lot;
+    bit<1> extended_hours;
+    bit<1> intermarket_sweep;
+    bit<64> timestamp;
+    bit<64> symbol;
+    bit<64> order_id_reference;
+    bit<32> size;
+    bit<64> price;
+    bit<64> trade_id;
+}
+
+header trade_message_t {
     bit<3> unused_3;
     bit<1> singleprice_cross_trade;
     bit<1> trade_through_exempt;
@@ -121,13 +152,6 @@ header trade_report_message_t {
     bit<32> size;
     bit<64> price;
     bit<64> trade_id;
-}
-
-header official_price_message_t {
-    bit<8> price_type;
-    bit<64> timestamp;
-    bit<64> symbol;
-    bit<64> official_price;
 }
 
 header trade_break_message_t {
@@ -144,21 +168,10 @@ header trade_break_message_t {
     bit<64> trade_id;
 }
 
-header auction_information_message_t {
-    bit<8> auction_type;
+header clear_book_message_t {
+    bit<8> reserved_1;
     bit<64> timestamp;
     bit<64> symbol;
-    bit<32> paired_shares;
-    bit<64> reference_price;
-    bit<64> indicative_clearing_price;
-    bit<32> imbalance_shares;
-    bit<8> imbalance_side;
-    bit<8> extension_number;
-    bit<32> scheduled_auction_time;
-    bit<64> auction_book_clearing_price;
-    bit<64> collar_reference_price;
-    bit<64> lower_auction_collar;
-    bit<64> upper_auction_collar;
 }
 
 struct metadata_t {
@@ -166,42 +179,46 @@ struct metadata_t {
 
 struct headers_t {
     iextp_header_t iextp_header;
-    message_header_t message_header[MAX_MESSAGES];
+    message_t message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     security_directory_message_t security_directory_message[MAX_MESSAGES];
     trading_status_message_t trading_status_message[MAX_MESSAGES];
+    retail_liquidity_indicator_message_t retail_liquidity_indicator_message[MAX_MESSAGES];
     operational_halt_status_message_t operational_halt_status_message[MAX_MESSAGES];
     short_sale_price_test_status_message_t short_sale_price_test_status_message[MAX_MESSAGES];
     security_event_message_t security_event_message[MAX_MESSAGES];
-    price_level_buy_update_message_t price_level_buy_update_message[MAX_MESSAGES];
-    price_level_sell_update_message_t price_level_sell_update_message[MAX_MESSAGES];
-    trade_report_message_t trade_report_message[MAX_MESSAGES];
-    official_price_message_t official_price_message[MAX_MESSAGES];
+    add_order_message_t add_order_message[MAX_MESSAGES];
+    order_modify_message_t order_modify_message[MAX_MESSAGES];
+    order_delete_message_t order_delete_message[MAX_MESSAGES];
+    order_executed_message_t order_executed_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
     trade_break_message_t trade_break_message[MAX_MESSAGES];
-    auction_information_message_t auction_information_message[MAX_MESSAGES];
+    clear_book_message_t clear_book_message[MAX_MESSAGES];
 }
 
-parser IexequitiesDeepParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser IexequitiesDeepplusParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.iextp_header);
         transition parse_message;
     }
 
     state parse_message {
-        packet.extract(hdr.message_header.next);
-        transition select(hdr.message_header.last.message_type) {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             8w0x53: parse_system_event_message;
             8w0x44: parse_security_directory_message;
             8w0x48: parse_trading_status_message;
+            8w0x49: parse_retail_liquidity_indicator_message;
             8w0x4f: parse_operational_halt_status_message;
             8w0x50: parse_short_sale_price_test_status_message;
             8w0x45: parse_security_event_message;
-            8w0x38: parse_price_level_buy_update_message;
-            8w0x35: parse_price_level_sell_update_message;
-            8w0x54: parse_trade_report_message;
-            8w0x58: parse_official_price_message;
+            8w0x61: parse_add_order_message;
+            8w0x4d: parse_order_modify_message;
+            8w0x52: parse_order_delete_message;
+            8w0x4c: parse_order_executed_message;
+            8w0x54: parse_trade_message;
             8w0x42: parse_trade_break_message;
-            8w0x41: parse_auction_information_message;
+            8w0x43: parse_clear_book_message;
             default: accept;
         }
     }
@@ -221,6 +238,11 @@ parser IexequitiesDeepParser(packet_in packet, out headers_t hdr, inout metadata
         transition parse_message;
     }
 
+    state parse_retail_liquidity_indicator_message {
+        packet.extract(hdr.retail_liquidity_indicator_message.next);
+        transition parse_message;
+    }
+
     state parse_operational_halt_status_message {
         packet.extract(hdr.operational_halt_status_message.next);
         transition parse_message;
@@ -236,23 +258,28 @@ parser IexequitiesDeepParser(packet_in packet, out headers_t hdr, inout metadata
         transition parse_message;
     }
 
-    state parse_price_level_buy_update_message {
-        packet.extract(hdr.price_level_buy_update_message.next);
+    state parse_add_order_message {
+        packet.extract(hdr.add_order_message.next);
         transition parse_message;
     }
 
-    state parse_price_level_sell_update_message {
-        packet.extract(hdr.price_level_sell_update_message.next);
+    state parse_order_modify_message {
+        packet.extract(hdr.order_modify_message.next);
         transition parse_message;
     }
 
-    state parse_trade_report_message {
-        packet.extract(hdr.trade_report_message.next);
+    state parse_order_delete_message {
+        packet.extract(hdr.order_delete_message.next);
         transition parse_message;
     }
 
-    state parse_official_price_message {
-        packet.extract(hdr.official_price_message.next);
+    state parse_order_executed_message {
+        packet.extract(hdr.order_executed_message.next);
+        transition parse_message;
+    }
+
+    state parse_trade_message {
+        packet.extract(hdr.trade_message.next);
         transition parse_message;
     }
 
@@ -261,58 +288,60 @@ parser IexequitiesDeepParser(packet_in packet, out headers_t hdr, inout metadata
         transition parse_message;
     }
 
-    state parse_auction_information_message {
-        packet.extract(hdr.auction_information_message.next);
+    state parse_clear_book_message {
+        packet.extract(hdr.clear_book_message.next);
         transition parse_message;
     }
 
 }
 
-control IexequitiesDeepVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IexequitiesDeepplusVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IexequitiesDeepIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IexequitiesDeepplusIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control IexequitiesDeepEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IexequitiesDeepplusEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control IexequitiesDeepComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IexequitiesDeepplusComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IexequitiesDeepDeparser(packet_out packet, in headers_t hdr) {
+control IexequitiesDeepplusDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.iextp_header);
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.security_directory_message);
         packet.emit(hdr.trading_status_message);
+        packet.emit(hdr.retail_liquidity_indicator_message);
         packet.emit(hdr.operational_halt_status_message);
         packet.emit(hdr.short_sale_price_test_status_message);
         packet.emit(hdr.security_event_message);
-        packet.emit(hdr.price_level_buy_update_message);
-        packet.emit(hdr.price_level_sell_update_message);
-        packet.emit(hdr.trade_report_message);
-        packet.emit(hdr.official_price_message);
+        packet.emit(hdr.add_order_message);
+        packet.emit(hdr.order_modify_message);
+        packet.emit(hdr.order_delete_message);
+        packet.emit(hdr.order_executed_message);
+        packet.emit(hdr.trade_message);
         packet.emit(hdr.trade_break_message);
-        packet.emit(hdr.auction_information_message);
+        packet.emit(hdr.clear_book_message);
     }
 }
 
 V1Switch(
-    IexequitiesDeepParser(),
-    IexequitiesDeepVerifyChecksum(),
-    IexequitiesDeepIngress(),
-    IexequitiesDeepEgress(),
-    IexequitiesDeepComputeChecksum(),
-    IexequitiesDeepDeparser()
+    IexequitiesDeepplusParser(),
+    IexequitiesDeepplusVerifyChecksum(),
+    IexequitiesDeepplusIngress(),
+    IexequitiesDeepplusEgress(),
+    IexequitiesDeepplusComputeChecksum(),
+    IexequitiesDeepplusDeparser()
 ) main;

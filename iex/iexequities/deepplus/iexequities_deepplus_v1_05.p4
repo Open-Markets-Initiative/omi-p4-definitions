@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Iex IexEquities DeepPlus IexTp v1.04
+// P4_16 (v1model) definition for: Iex IexEquities DeepPlus Snap v1.05
 // 
 // Protocol:
 //   Organization: Investors Exchange
 //   Protocol: DeepPlus
-//   Encoding: Investors Exchange Transport Protocol
-//   Version: 1.04
+//   Encoding: Investors Exchange Snapshot Protocol
+//   Version: 1.05
 //   Date: 6/4/2026
-//   Specification: IEX DEEP+ Specification (v1.04).pdf
+//   Specification: IEX DEEP+ SNAP Specification.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -32,22 +32,31 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header iextp_header_t {
-    bit<8> version;
-    bit<8> reserved;
-    bit<16> message_protocol_id;
-    bit<32> channel_id;
-    bit<32> session_id;
-    bit<16> payload_length;
-    bit<16> message_count;
-    bit<64> stream_offset;
-    bit<64> first_message_sequence_number;
-    bit<64> send_time;
-}
-
 header message_header_t {
     bit<16> message_length;
     bit<8> message_type;
+}
+
+header snapshot_request_message_t {
+    bit<320> authentication_token;
+    bit<32> channel_id;
+    bit<32> session_id;
+    bit<64> minimum_sequence_number;
+}
+
+header error_response_message_t {
+    bit<8> reject_reason_code;
+}
+
+header snapshot_start_message_t {
+    bit<64> snapshot_length;
+}
+
+header snapshot_data_message_t {
+    bit<8> iex_tp_header;
+    bit<16> iex_tp_message_block_length;
+    bit<16> iex_tp_message_length;
+    bit<8> iex_tp_message_type;
 }
 
 header system_event_message_t {
@@ -174,37 +183,67 @@ header clear_book_message_t {
     bit<64> symbol;
 }
 
+header snapshot_end_message_t {
+    bit<64> snapshot_sequence_number;
+}
+
 struct metadata_t {
 }
 
 struct headers_t {
-    iextp_header_t iextp_header;
-    message_header_t message_header[MAX_MESSAGES];
-    system_event_message_t system_event_message[MAX_MESSAGES];
-    security_directory_message_t security_directory_message[MAX_MESSAGES];
-    trading_status_message_t trading_status_message[MAX_MESSAGES];
-    retail_liquidity_indicator_message_t retail_liquidity_indicator_message[MAX_MESSAGES];
-    operational_halt_status_message_t operational_halt_status_message[MAX_MESSAGES];
-    short_sale_price_test_status_message_t short_sale_price_test_status_message[MAX_MESSAGES];
-    security_event_message_t security_event_message[MAX_MESSAGES];
-    add_order_message_t add_order_message[MAX_MESSAGES];
-    order_modify_message_t order_modify_message[MAX_MESSAGES];
-    order_delete_message_t order_delete_message[MAX_MESSAGES];
-    order_executed_message_t order_executed_message[MAX_MESSAGES];
-    trade_message_t trade_message[MAX_MESSAGES];
-    trade_break_message_t trade_break_message[MAX_MESSAGES];
-    clear_book_message_t clear_book_message[MAX_MESSAGES];
+    message_header_t message_header;
+    snapshot_request_message_t snapshot_request_message;
+    error_response_message_t error_response_message;
+    snapshot_start_message_t snapshot_start_message;
+    snapshot_data_message_t snapshot_data_message;
+    system_event_message_t system_event_message;
+    security_directory_message_t security_directory_message;
+    trading_status_message_t trading_status_message;
+    retail_liquidity_indicator_message_t retail_liquidity_indicator_message;
+    operational_halt_status_message_t operational_halt_status_message;
+    short_sale_price_test_status_message_t short_sale_price_test_status_message;
+    security_event_message_t security_event_message;
+    add_order_message_t add_order_message;
+    order_modify_message_t order_modify_message;
+    order_delete_message_t order_delete_message;
+    order_executed_message_t order_executed_message;
+    trade_message_t trade_message;
+    trade_break_message_t trade_break_message;
+    clear_book_message_t clear_book_message;
+    snapshot_end_message_t snapshot_end_message;
 }
 
 parser IexequitiesDeepplusParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.iextp_header);
-        transition parse_message;
+        packet.extract(hdr.message_header);
+        transition select(hdr.message_header.message_type) {
+            8w0x72: parse_snapshot_request_message;
+            8w0x65: parse_error_response_message;
+            8w0x73: parse_snapshot_start_message;
+            8w0x64: parse_snapshot_data_message;
+            8w0x78: parse_snapshot_end_message;
+            default: accept;
+        }
     }
 
-    state parse_message {
-        packet.extract(hdr.message_header.next);
-        transition select(hdr.message_header.last.message_type) {
+    state parse_snapshot_request_message {
+        packet.extract(hdr.snapshot_request_message);
+        transition accept;
+    }
+
+    state parse_error_response_message {
+        packet.extract(hdr.error_response_message);
+        transition accept;
+    }
+
+    state parse_snapshot_start_message {
+        packet.extract(hdr.snapshot_start_message);
+        transition accept;
+    }
+
+    state parse_snapshot_data_message {
+        packet.extract(hdr.snapshot_data_message);
+        transition select(hdr.snapshot_data_message.iex_tp_message_type) {
             8w0x53: parse_system_event_message;
             8w0x44: parse_security_directory_message;
             8w0x48: parse_trading_status_message;
@@ -224,73 +263,78 @@ parser IexequitiesDeepplusParser(packet_in packet, out headers_t hdr, inout meta
     }
 
     state parse_system_event_message {
-        packet.extract(hdr.system_event_message.next);
-        transition parse_message;
+        packet.extract(hdr.system_event_message);
+        transition accept;
     }
 
     state parse_security_directory_message {
-        packet.extract(hdr.security_directory_message.next);
-        transition parse_message;
+        packet.extract(hdr.security_directory_message);
+        transition accept;
     }
 
     state parse_trading_status_message {
-        packet.extract(hdr.trading_status_message.next);
-        transition parse_message;
+        packet.extract(hdr.trading_status_message);
+        transition accept;
     }
 
     state parse_retail_liquidity_indicator_message {
-        packet.extract(hdr.retail_liquidity_indicator_message.next);
-        transition parse_message;
+        packet.extract(hdr.retail_liquidity_indicator_message);
+        transition accept;
     }
 
     state parse_operational_halt_status_message {
-        packet.extract(hdr.operational_halt_status_message.next);
-        transition parse_message;
+        packet.extract(hdr.operational_halt_status_message);
+        transition accept;
     }
 
     state parse_short_sale_price_test_status_message {
-        packet.extract(hdr.short_sale_price_test_status_message.next);
-        transition parse_message;
+        packet.extract(hdr.short_sale_price_test_status_message);
+        transition accept;
     }
 
     state parse_security_event_message {
-        packet.extract(hdr.security_event_message.next);
-        transition parse_message;
+        packet.extract(hdr.security_event_message);
+        transition accept;
     }
 
     state parse_add_order_message {
-        packet.extract(hdr.add_order_message.next);
-        transition parse_message;
+        packet.extract(hdr.add_order_message);
+        transition accept;
     }
 
     state parse_order_modify_message {
-        packet.extract(hdr.order_modify_message.next);
-        transition parse_message;
+        packet.extract(hdr.order_modify_message);
+        transition accept;
     }
 
     state parse_order_delete_message {
-        packet.extract(hdr.order_delete_message.next);
-        transition parse_message;
+        packet.extract(hdr.order_delete_message);
+        transition accept;
     }
 
     state parse_order_executed_message {
-        packet.extract(hdr.order_executed_message.next);
-        transition parse_message;
+        packet.extract(hdr.order_executed_message);
+        transition accept;
     }
 
     state parse_trade_message {
-        packet.extract(hdr.trade_message.next);
-        transition parse_message;
+        packet.extract(hdr.trade_message);
+        transition accept;
     }
 
     state parse_trade_break_message {
-        packet.extract(hdr.trade_break_message.next);
-        transition parse_message;
+        packet.extract(hdr.trade_break_message);
+        transition accept;
     }
 
     state parse_clear_book_message {
-        packet.extract(hdr.clear_book_message.next);
-        transition parse_message;
+        packet.extract(hdr.clear_book_message);
+        transition accept;
+    }
+
+    state parse_snapshot_end_message {
+        packet.extract(hdr.snapshot_end_message);
+        transition accept;
     }
 
 }
@@ -318,8 +362,11 @@ control IexequitiesDeepplusComputeChecksum(inout headers_t hdr, inout metadata_t
 
 control IexequitiesDeepplusDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.iextp_header);
         packet.emit(hdr.message_header);
+        packet.emit(hdr.snapshot_request_message);
+        packet.emit(hdr.error_response_message);
+        packet.emit(hdr.snapshot_start_message);
+        packet.emit(hdr.snapshot_data_message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.security_directory_message);
         packet.emit(hdr.trading_status_message);
@@ -334,6 +381,7 @@ control IexequitiesDeepplusDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.trade_message);
         packet.emit(hdr.trade_break_message);
         packet.emit(hdr.clear_book_message);
+        packet.emit(hdr.snapshot_end_message);
     }
 }
 

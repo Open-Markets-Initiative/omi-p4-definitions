@@ -38,7 +38,7 @@ header packet_header_t {
     bit<16> message_count;
 }
 
-header message_header_t {
+header message_t {
     bit<16> message_length;
     bit<8> message_type;
 }
@@ -134,7 +134,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    message_header_t message_header[MAX_MESSAGES];
+    message_t message[MAX_MESSAGES];
     system_event_t system_event[MAX_MESSAGES];
     stock_directory_message_t stock_directory_message[MAX_MESSAGES];
     stock_trading_action_message_t stock_trading_action_message[MAX_MESSAGES];
@@ -152,8 +152,8 @@ parser NsmequitiesNoiviewParser(packet_in packet, out headers_t hdr, inout metad
     }
 
     state parse_message {
-        packet.extract(hdr.message_header.next);
-        transition select(hdr.message_header.last.message_type) {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             8w0x53: parse_system_event;
             8w0x52: parse_stock_directory_message;
             8w0x48: parse_stock_trading_action_message;
@@ -232,7 +232,7 @@ control NsmequitiesNoiviewComputeChecksum(inout headers_t hdr, inout metadata_t 
 control NsmequitiesNoiviewDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.system_event);
         packet.emit(hdr.stock_directory_message);
         packet.emit(hdr.stock_trading_action_message);
