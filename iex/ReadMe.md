@@ -15,7 +15,9 @@
 | [IexEquities][IexEquities.Exchange] | [Deep][Iex.IexEquities.Deep] | [Snap][Omi.Encoding.Snap] | [1.6][Iex.IexEquities.Deep.Snap.v1.6.Definition] | 6/2/2026 | 380 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Iex.IexEquities.Deep.Snap.v1.6.Url] - [pdf][Iex.IexEquities.Deep.Snap.v1.6.Pdf] |
 | [IexEquities][IexEquities.Exchange] | [DeepPlus][Iex.IexEquities.DeepPlus] | [Snap][Omi.Encoding.Snap] | [1.05][Iex.IexEquities.DeepPlus.Snap.v1.05.Definition] | 6/4/2026 | 395 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Iex.IexEquities.DeepPlus.Snap.v1.05.Url] - [pdf][Iex.IexEquities.DeepPlus.Snap.v1.05.Pdf] |
 | [IexEquities][IexEquities.Exchange] | [Tops][Iex.IexEquities.Tops] | [Snap][Omi.Encoding.Snap] | [1.6][Iex.IexEquities.Tops.Snap.v1.6.Definition] | 6/2/2026 | 354 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Iex.IexEquities.Tops.Snap.v1.6.Url] - [pdf][Iex.IexEquities.Tops.Snap.v1.6.Pdf] |
+| [IexOptions][IexOptions.Exchange] | [BinaryOrderEntry][Iex.IexOptions.BinaryOrderEntry] | [Sbe][Omi.Encoding.Sbe] | [1.02][Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Definition] | 6/1/2026 | 805 | [Pending][Omi.Glossary.Status.Pending] | [Untested][Omi.Glossary.Testing.Untested] | [url][Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Url] - [xml][Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Xml] - [pdf][Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Pdf] |
 | [IexOptions][IexOptions.Exchange] | [MarketData][Iex.IexOptions.MarketData] | [Sbe][Omi.Encoding.Sbe] | [1.03][Iex.IexOptions.MarketData.Sbe.v1.03.Definition] | 6/1/2026 | 517 | [Pending][Omi.Glossary.Status.Pending] | [Untested][Omi.Glossary.Testing.Untested] | [url][Iex.IexOptions.MarketData.Sbe.v1.03.Url] - [xml][Iex.IexOptions.MarketData.Sbe.v1.03.Xml] - [pdf][Iex.IexOptions.MarketData.Sbe.v1.03.Pdf] |
+| [IexOptions][IexOptions.Exchange] | [Session][Iex.IexOptions.Session] | [Sbe][Omi.Encoding.Sbe] | [1.0][Iex.IexOptions.Session.Sbe.v1.0.Definition] | 6/1/2026 | 216 | [Header][Omi.Glossary.Status.Header] | [Untested][Omi.Glossary.Testing.Untested] | [url][Iex.IexOptions.Session.Sbe.v1.0.Url] - [xml][Iex.IexOptions.Session.Sbe.v1.0.Xml] - [pdf][Iex.IexOptions.Session.Sbe.v1.0.Pdf] |
 
 
 Iex: [website](https://www.iexexchange.io "Go to Investors Exchange")
@@ -45,6 +47,8 @@ Iex: [website](https://www.iexexchange.io "Go to Investors Exchange")
 [Iex.IexEquities.Deep]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexEquities/Deep.md "Depth Of Book"
 [Iex.IexEquities.DeepPlus]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexEquities/DeepPlus.md "DeepPlus"
 [Iex.IexOptions.MarketData]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexOptions/MarketData.md "Market Data"
+[Iex.IexOptions.BinaryOrderEntry]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexOptions/BinaryOrderEntry.md "Binary Order Entry"
+[Iex.IexOptions.Session]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexOptions/Session.md "Session"
 
 [Iex.IexEquities.Tops.IexTp.v1.56.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/iex/iexequities/tops/iexequities_tops_v1_56.p4 "Iex IexEquities Tops IexTp v1.56 P4 Definition"
 [Iex.IexEquities.Tops.IexTp.v1.56.Url]: https://www.iexexchange.io/resources/trading/documents "Investors Exchange 1.56 Url"
@@ -80,3 +84,11 @@ Iex: [website](https://www.iexexchange.io "Go to Investors Exchange")
 [Iex.IexOptions.MarketData.Sbe.v1.03.Url]: https://www.iexexchange.io/options "Investors Exchange 1.03 Url"
 [Iex.IexOptions.MarketData.Sbe.v1.03.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Specifications/IexOptions/MarketData/Iex.IexOptions.MarketData.Sbe.v1.03.xml "Investors Exchange 1.03 Xml"
 [Iex.IexOptions.MarketData.Sbe.v1.03.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Specifications/IexOptions/MarketData/Iex.IexOptions.MarketDataTransport.v1.03.pdf "Investors Exchange 1.03 Pdf"
+[Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/iex/iexoptions/binaryorderentry/iexoptions_binaryorderentry_v1_02.p4 "Iex IexOptions BinaryOrderEntry Sbe v1.02 P4 Definition"
+[Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Url]: https://www.iexexchange.io/options "Investors Exchange 1.02 Url"
+[Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Specifications/IexOptions/BinaryOrderEntry/Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.xml "Investors Exchange 1.02 Xml"
+[Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Specifications/IexOptions/BinaryOrderEntry/Iex.IexOptions.BinaryOrderEntry.Sbe.v1.02.pdf "Investors Exchange 1.02 Pdf"
+[Iex.IexOptions.Session.Sbe.v1.0.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/iex/iexoptions/session/iexoptions_session_v1_0.p4 "Iex IexOptions Session Sbe v1.0 P4 Definition"
+[Iex.IexOptions.Session.Sbe.v1.0.Url]: https://www.iexexchange.io/options "Investors Exchange 1.0 Url"
+[Iex.IexOptions.Session.Sbe.v1.0.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Specifications/IexOptions/Session/Iex.IexOptions.Session.Sbe.v1.0.xml "Investors Exchange 1.0 Xml"
+[Iex.IexOptions.Session.Sbe.v1.0.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Specifications/IexOptions/Session/Iex.IexOptions.Session.Sbe.v1.0.pdf "Investors Exchange 1.0 Pdf"
