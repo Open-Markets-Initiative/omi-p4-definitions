@@ -524,30 +524,30 @@ parser CoinbasederivativesMarketdataapiParser(packet_in packet, out headers_t hd
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w0x10: parse_outright_instrument_definition_message;
-            16w0x11: parse_spread_instrument_definition_message;
-            16w0x12: parse_option_instrument_definition_message;
-            16w0x17: parse_trading_status_update_message;
-            16w0x20: parse_order_put_message;
-            16w0x21: parse_order_delete_message;
-            16w0x22: parse_implied_order_update_message;
-            16w0x33: parse_trade_summary_message;
-            16w0x30: parse_trade_message;
-            16w0x31: parse_trade_amend_message;
-            16w0x34: parse_spread_trade_amend_message;
-            16w0x32: parse_trade_bust_message;
-            16w0x40: parse_market_stat_message;
-            16w0x41: parse_trade_session_volume_message;
-            16w0x42: parse_open_interest_message;
-            16w0x43: parse_funding_rate_message;
-            16w0x110: parse_start_of_outright_instrument_snapshot_message;
-            16w0x111: parse_start_of_spread_instrument_snapshot_message;
-            16w0x112: parse_start_of_option_instrument_snapshot_message;
-            16w0x120: parse_order_snapshot_message;
-            16w0x122: parse_end_of_snapshot_message;
-            16w0x124: parse_end_of_cycle_message;
-            16w0x200: parse_retransmit_request_message;
-            16w0x202: parse_retransmit_reject_message;
+            16w10: parse_outright_instrument_definition_message;
+            16w11: parse_spread_instrument_definition_message;
+            16w12: parse_option_instrument_definition_message;
+            16w17: parse_trading_status_update_message;
+            16w20: parse_order_put_message;
+            16w21: parse_order_delete_message;
+            16w22: parse_implied_order_update_message;
+            16w33: parse_trade_summary_message;
+            16w30: parse_trade_message;
+            16w31: parse_trade_amend_message;
+            16w34: parse_spread_trade_amend_message;
+            16w32: parse_trade_bust_message;
+            16w40: parse_market_stat_message;
+            16w41: parse_trade_session_volume_message;
+            16w42: parse_open_interest_message;
+            16w43: parse_funding_rate_message;
+            16w110: parse_start_of_outright_instrument_snapshot_message;
+            16w111: parse_start_of_spread_instrument_snapshot_message;
+            16w112: parse_start_of_option_instrument_snapshot_message;
+            16w120: parse_order_snapshot_message;
+            16w122: parse_end_of_snapshot_message;
+            16w124: parse_end_of_cycle_message;
+            16w200: parse_retransmit_request_message;
+            16w202: parse_retransmit_reject_message;
             default: accept;
         }
     }

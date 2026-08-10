@@ -255,7 +255,7 @@ header session_close_recap_message_t {
     bit<64> market_center_ask_size;
 }
 
-header control_t {
+header control__t {
     bit<8> control_message_type;
 }
 
@@ -326,7 +326,7 @@ struct headers_t {
     market_wide_circuit_breaker_status_message_t market_wide_circuit_breaker_status_message;
     auction_collar_message_t auction_collar_message;
     session_close_recap_message_t session_close_recap_message;
-    control_t control;
+    control__t control_;
     start_of_day_message_t start_of_day_message;
     end_of_day_message_t end_of_day_message;
     market_session_open_message_t market_session_open_message;
@@ -433,8 +433,8 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
     }
 
     state parse_control {
-        packet.extract(hdr.control);
-        transition select(hdr.control.control_message_type) {
+        packet.extract(hdr.control_);
+        transition select(hdr.control_.control_message_type) {
             8w0x49: parse_start_of_day_message;
             8w0x4a: parse_end_of_day_message;
             8w0x4f: parse_market_session_open_message;
@@ -515,7 +515,7 @@ control NasdaqUqdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.market_wide_circuit_breaker_status_message);
         packet.emit(hdr.auction_collar_message);
         packet.emit(hdr.session_close_recap_message);
-        packet.emit(hdr.control);
+        packet.emit(hdr.control_);
         packet.emit(hdr.start_of_day_message);
         packet.emit(hdr.end_of_day_message);
         packet.emit(hdr.market_session_open_message);

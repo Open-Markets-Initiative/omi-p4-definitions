@@ -232,24 +232,24 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
     state start {
         packet.extract(hdr.message_flags);
         transition select(hdr.message_flags.template_id) {
-            16w0x10: parse_instrument_message;
-            16w0x12: parse_trading_status_update_message;
-            16w0x13: parse_instrument_info_message;
-            16w0x14: parse_instrument_ref_message;
-            16w0x20: parse_bid_put_message;
-            16w0x21: parse_ask_put_message;
-            16w0x22: parse_bid_qty_reduced_message;
-            16w0x23: parse_ask_qty_reduced_message;
-            16w0x24: parse_bid_delete_message;
-            16w0x25: parse_ask_delete_message;
-            16w0x30: parse_trade_summary_message;
-            16w0x31: parse_trade_message;
-            16w0x33: parse_block_trade_message;
-            16w0x100: parse_snapshot_header_message;
-            16w0x101: parse_snapshot_trailer_message;
-            16w0x119: parse_end_of_cycle_message;
-            16w0x200: parse_retransmit_request_message;
-            16w0x202: parse_retransmit_reject_message;
+            16w10: parse_instrument_message;
+            16w12: parse_trading_status_update_message;
+            16w13: parse_instrument_info_message;
+            16w14: parse_instrument_ref_message;
+            16w20: parse_bid_put_message;
+            16w21: parse_ask_put_message;
+            16w22: parse_bid_qty_reduced_message;
+            16w23: parse_ask_qty_reduced_message;
+            16w24: parse_bid_delete_message;
+            16w25: parse_ask_delete_message;
+            16w30: parse_trade_summary_message;
+            16w31: parse_trade_message;
+            16w33: parse_block_trade_message;
+            16w100: parse_snapshot_header_message;
+            16w101: parse_snapshot_trailer_message;
+            16w119: parse_end_of_cycle_message;
+            16w200: parse_retransmit_request_message;
+            16w202: parse_retransmit_reject_message;
             default: accept;
         }
     }
