@@ -174,7 +174,7 @@ header complex_order_message_t {
     bit<7> year;
     bit<32> explicit_strike_price;
     bit<8> option_type;
-    bit<8> side;
+    bit<8> side_2;
     bit<32> leg_ratio;
 }
 

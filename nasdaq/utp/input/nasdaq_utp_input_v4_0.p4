@@ -84,8 +84,8 @@ header exchange_odd_lot_quote_message_short_form_message_t {
     bit<16> ol_ask_level_count;
     bit<16> ol_price_short_2;
     bit<16> ol_size;
-    bit<16> ol_price_short_2;
-    bit<16> ol_size;
+    bit<16> ol_price_short_2_2;
+    bit<16> ol_size_2;
 }
 
 header exchange_odd_lot_quote_message_long_form_message_t {
@@ -98,8 +98,8 @@ header exchange_odd_lot_quote_message_long_form_message_t {
     bit<16> ol_ask_level_count;
     bit<64> ol_price_long_8;
     bit<16> ol_size;
-    bit<64> ol_price_long_8;
-    bit<16> ol_size;
+    bit<64> ol_price_long_8_2;
+    bit<16> ol_size_2;
 }
 
 header exchange_combined_quote_message_short_form_message_t {
@@ -118,8 +118,8 @@ header exchange_combined_quote_message_short_form_message_t {
     bit<16> ol_ask_level_count;
     bit<16> ol_price_short_2;
     bit<16> ol_size;
-    bit<16> ol_price_short_2;
-    bit<16> ol_size;
+    bit<16> ol_price_short_2_2;
+    bit<16> ol_size_2;
 }
 
 header exchange_combined_quote_message_long_form_message_t {
@@ -138,8 +138,8 @@ header exchange_combined_quote_message_long_form_message_t {
     bit<16> ol_ask_level_count;
     bit<64> ol_price_long_8;
     bit<16> ol_size;
-    bit<64> ol_price_long_8;
-    bit<16> ol_size;
+    bit<64> ol_price_long_8_2;
+    bit<16> ol_size_2;
 }
 
 header finra_protected_quote_message_with_bbo_info_message_t {
@@ -192,9 +192,9 @@ header finra_adf_odd_lot_quotation_message_t {
     bit<64> ol_price_long_8;
     bit<16> ol_size;
     bit<32> mpid;
-    bit<64> ol_price_long_8;
-    bit<16> ol_size;
-    bit<32> mpid;
+    bit<64> ol_price_long_8_2;
+    bit<16> ol_size_2;
+    bit<32> mpid_2;
 }
 
 header finra_adf_combined_quote_message_with_bbo_t {
@@ -222,10 +222,10 @@ header finra_adf_combined_quote_message_with_bbo_t {
     bit<16> ol_ask_level_count;
     bit<64> ol_price_long_8;
     bit<16> ol_size;
-    bit<32> mpid;
-    bit<64> ol_price_long_8;
-    bit<16> ol_size;
-    bit<32> mpid;
+    bit<32> mpid_2;
+    bit<64> ol_price_long_8_2;
+    bit<16> ol_size_2;
+    bit<32> mpid_3;
 }
 
 header inbound_trade_messages_message_t {
@@ -386,7 +386,6 @@ header general_administrative_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<16> text_len;
-    bit<0> text;
 }
 
 header trading_action_message_t {
@@ -510,7 +509,6 @@ header return_general_administrative_message_t {
     bit<16> orig;
     bit<64> sip_time;
     bit<16> text_len;
-    bit<0> text;
 }
 
 header return_market_center_trading_action_acknowledgement_message_t {
@@ -594,10 +592,6 @@ header unsequenced_data_packet_t {
     bit<8> message_category;
 }
 
-header debug_packet_t {
-    bit<0> text;
-}
-
 header login_request_packet_t {
     bit<48> username;
     bit<80> password;
@@ -669,7 +663,6 @@ struct headers_t {
     sequence_inquiry_response_message_t sequence_inquiry_response_message;
     symbol_state_inquiry_response_message_t symbol_state_inquiry_response_message;
     unsequenced_data_packet_t unsequenced_data_packet;
-    debug_packet_t debug_packet;
     login_request_packet_t login_request_packet;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
@@ -1010,7 +1003,6 @@ parser NasdaqUtpInputParser(packet_in packet, out headers_t hdr, inout metadata_
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         transition accept;
     }
 
@@ -1105,7 +1097,6 @@ control NasdaqUtpInputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.sequence_inquiry_response_message);
         packet.emit(hdr.symbol_state_inquiry_response_message);
         packet.emit(hdr.unsequenced_data_packet);
-        packet.emit(hdr.debug_packet);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);

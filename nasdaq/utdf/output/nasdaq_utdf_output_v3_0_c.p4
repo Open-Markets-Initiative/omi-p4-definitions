@@ -283,7 +283,6 @@ header general_administrative_message_t {
     bit<64> timestamp_1;
     bit<64> participant_token;
     bit<16> text_length;
-    bit<0> text;
 }
 
 header cross_sro_trading_action_message_t {

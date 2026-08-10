@@ -46,7 +46,7 @@ header message_flags_t {
     bit<16> schema_version;
     bit<1> start_of_transaction;
     bit<1> end_of_transaction;
-    bit<14> reserved_bits;
+    bit<14> reserved_bits_2;
     bit<64> transact_time;
 }
 
@@ -72,8 +72,8 @@ header instrument_definition_message_t {
     bit<16> num_in_group;
     bit<64> large_tick_size;
     bit<64> threshold_price;
-    bit<16> block_length;
-    bit<16> num_in_group;
+    bit<16> block_length_2;
+    bit<16> num_in_group_2;
     bit<64> leg_instrument_id;
     bit<8> ratio;
 }

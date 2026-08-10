@@ -72,11 +72,11 @@ header utp_quote_shortform_message_t {
     bit<8> national_best_ask_market_center;
     bit<16> national_best_ask_price_short;
     bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
+    bit<8> nbbo_quote_condition_2;
+    bit<8> national_best_bid_market_center_2;
     bit<64> national_best_bid_price_long;
     bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center;
+    bit<8> national_best_ask_market_center_2;
     bit<64> national_best_ask_price_long;
     bit<32> national_best_ask_size_long;
 }
@@ -107,11 +107,11 @@ header utp_quote_longform_message_t {
     bit<8> national_best_ask_market_center;
     bit<16> national_best_ask_price_short;
     bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
+    bit<8> nbbo_quote_condition_2;
+    bit<8> national_best_bid_market_center_2;
     bit<64> national_best_bid_price_long;
     bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center;
+    bit<8> national_best_ask_market_center_2;
     bit<64> national_best_ask_price_long;
     bit<32> national_best_ask_size_long;
 }
@@ -159,11 +159,11 @@ header combined_quote_message_short_form_message_t {
     bit<8> national_best_ask_market_center;
     bit<16> national_best_ask_price_short;
     bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
+    bit<8> nbbo_quote_condition_2;
+    bit<8> national_best_bid_market_center_2;
     bit<64> national_best_bid_price_long;
     bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center;
+    bit<8> national_best_ask_market_center_2;
     bit<64> national_best_ask_price_long;
     bit<32> national_best_ask_size_long;
     bit<8> bolo_best_bid_market_center;
@@ -172,18 +172,18 @@ header combined_quote_message_short_form_message_t {
     bit<8> bolo_best_ask_market_center;
     bit<16> bolo_ask_price_short;
     bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
+    bit<8> bolo_best_bid_market_center_2;
     bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
+    bit<16> bolo_bid_size_2;
+    bit<8> bolo_best_ask_market_center_2;
     bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
+    bit<16> bolo_ask_size_2;
+    bit<8> bolo_best_bid_market_center_3;
+    bit<64> bolo_bid_price_long_2;
+    bit<16> bolo_bid_size_3;
+    bit<8> bolo_best_ask_market_center_3;
+    bit<64> bolo_ask_price_long_2;
+    bit<16> bolo_ask_size_3;
     bit<32> bolo_best_bid_market_participant_identifier;
     bit<32> bolo_best_ask_market_participant_identifier;
 }
@@ -217,11 +217,11 @@ header combined_quote_message_long_form_message_t {
     bit<8> national_best_ask_market_center;
     bit<16> national_best_ask_price_short;
     bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
+    bit<8> nbbo_quote_condition_2;
+    bit<8> national_best_bid_market_center_2;
     bit<64> national_best_bid_price_long;
     bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center;
+    bit<8> national_best_ask_market_center_2;
     bit<64> national_best_ask_price_long;
     bit<32> national_best_ask_size_long;
     bit<32> bid_adf_mpid;
@@ -232,18 +232,18 @@ header combined_quote_message_long_form_message_t {
     bit<8> bolo_best_ask_market_center;
     bit<16> bolo_ask_price_short;
     bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
+    bit<8> bolo_best_bid_market_center_2;
     bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
+    bit<16> bolo_bid_size_2;
+    bit<8> bolo_best_ask_market_center_2;
     bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
+    bit<16> bolo_ask_size_2;
+    bit<8> bolo_best_bid_market_center_3;
+    bit<64> bolo_bid_price_long_2;
+    bit<16> bolo_bid_size_3;
+    bit<8> bolo_best_ask_market_center_3;
+    bit<64> bolo_ask_price_long_2;
+    bit<16> bolo_ask_size_3;
     bit<32> bolo_best_bid_market_participant_identifier;
     bit<32> bolo_best_ask_market_participant_identifier;
 }
@@ -265,18 +265,18 @@ header odd_lot_quote_message_short_form_message_t {
     bit<8> bolo_best_ask_market_center;
     bit<16> bolo_ask_price_short;
     bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
+    bit<8> bolo_best_bid_market_center_2;
     bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
+    bit<16> bolo_bid_size_2;
+    bit<8> bolo_best_ask_market_center_2;
     bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
+    bit<16> bolo_ask_size_2;
+    bit<8> bolo_best_bid_market_center_3;
+    bit<64> bolo_bid_price_long_2;
+    bit<16> bolo_bid_size_3;
+    bit<8> bolo_best_ask_market_center_3;
+    bit<64> bolo_ask_price_long_2;
+    bit<16> bolo_ask_size_3;
     bit<32> bolo_best_bid_market_participant_identifier;
     bit<32> bolo_best_ask_market_participant_identifier;
 }
@@ -299,18 +299,18 @@ header odd_lot_quote_message_long_form_message_t {
     bit<8> bolo_best_ask_market_center;
     bit<16> bolo_ask_price_short;
     bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
+    bit<8> bolo_best_bid_market_center_2;
     bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
+    bit<16> bolo_bid_size_2;
+    bit<8> bolo_best_ask_market_center_2;
     bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size;
+    bit<16> bolo_ask_size_2;
+    bit<8> bolo_best_bid_market_center_3;
+    bit<64> bolo_bid_price_long_2;
+    bit<16> bolo_bid_size_3;
+    bit<8> bolo_best_ask_market_center_3;
+    bit<64> bolo_ask_price_long_2;
+    bit<16> bolo_ask_size_3;
     bit<32> bolo_best_bid_market_participant_identifier;
     bit<32> bolo_best_ask_market_participant_identifier;
 }
@@ -326,7 +326,6 @@ header general_administrative_message_t {
     bit<64> timestamp_1;
     bit<64> participant_token;
     bit<16> text_length;
-    bit<0> text;
 }
 
 header cross_sro_trading_action_message_t {

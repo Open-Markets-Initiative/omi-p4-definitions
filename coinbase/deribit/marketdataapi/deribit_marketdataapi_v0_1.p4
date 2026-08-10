@@ -46,7 +46,7 @@ header message_flags_t {
     bit<16> schema_version;
     bit<1> start_of_transaction;
     bit<1> end_of_transaction;
-    bit<14> reserved_bits;
+    bit<14> reserved_bits_2;
     bit<64> transact_time;
 }
 

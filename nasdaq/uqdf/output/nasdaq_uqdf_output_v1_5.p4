@@ -69,7 +69,7 @@ header quote_short_form_message_t {
     bit<8> national_best_ask_market_center;
     bit<16> national_best_ask_price_short;
     bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition;
+    bit<8> nbbo_quote_condition_2;
     bit<8> best_bid_market_center;
     bit<64> best_bid_price;
     bit<32> best_bid_size;
@@ -104,7 +104,7 @@ header quote_long_form_message_t {
     bit<8> national_best_ask_market_center;
     bit<16> national_best_ask_price_short;
     bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition;
+    bit<8> nbbo_quote_condition_2;
     bit<8> best_bid_market_center;
     bit<64> best_bid_price;
     bit<32> best_bid_size;
@@ -142,7 +142,6 @@ header general_administrative_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<16> text_length;
-    bit<0> text;
 }
 
 header cross_sro_trading_action_message_t {

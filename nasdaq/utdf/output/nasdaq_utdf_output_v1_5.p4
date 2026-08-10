@@ -109,7 +109,7 @@ header trade_cancel_error_message_t {
     bit<64> consolidated_last_price;
     bit<64> consolidated_volume;
     bit<8> consolidated_price_change_indicator;
-    bit<8> market_center_originator_id;
+    bit<8> market_center_originator_id_2;
     bit<64> market_participant_high_price;
     bit<64> market_participant_low_price;
     bit<64> market_participant_last_price;
@@ -136,10 +136,10 @@ header trade_correction_message_t {
     bit<64> corrected_trade_id;
     bit<64> corrected_trade_price;
     bit<32> corrected_volume;
-    bit<8> level_1;
-    bit<8> level_2;
-    bit<8> level_3;
-    bit<8> level_4;
+    bit<8> level_1_2;
+    bit<8> level_2_2;
+    bit<8> level_3_2;
+    bit<8> level_4_2;
     bit<8> corrected_trade_through_exempt_flag;
     bit<16> corrected_sellers_sale_days;
     bit<64> consolidated_high_price;
@@ -147,7 +147,7 @@ header trade_correction_message_t {
     bit<64> consolidated_last_price;
     bit<64> consolidated_volume;
     bit<8> consolidated_price_change_indicator;
-    bit<8> market_center_originator_id;
+    bit<8> market_center_originator_id_2;
     bit<64> market_participant_high_price;
     bit<64> market_participant_low_price;
     bit<64> market_participant_last_price;
@@ -186,7 +186,6 @@ header general_administrative_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<16> text_length;
-    bit<0> text;
 }
 
 header cross_sro_trading_action_message_t {
@@ -287,7 +286,7 @@ header closing_trade_summary_report_message_t {
     bit<64> daily_consolidated_high_price;
     bit<64> daily_consolidated_low_price;
     bit<64> daily_consolidated_closing_price;
-    bit<8> market_center_originator_id;
+    bit<8> market_center_originator_id_2;
     bit<64> consolidated_volume;
     bit<8> trading_action_indicator;
     bit<16> number_of_market_center_summaries;
