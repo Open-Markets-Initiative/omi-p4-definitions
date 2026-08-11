@@ -19,7 +19,7 @@ class IexequitiesTopsV156Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        subprocess.run([P4C, "--target", "bmv2", "--arch", "v1model", "--std", "p4-16", PROGRAM, "-o", JSON], check=True)
+        subprocess.run([P4C, PROGRAM, "-o", JSON], check=True)
         cls.switch = switch.Switch(JSON)
         cls.switch.start()
 

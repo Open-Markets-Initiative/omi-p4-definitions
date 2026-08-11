@@ -12,7 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Compile Definitions
-        run: docker run --rm -v "$PWD":/work -w /work p4lang/p4c sh -c 'set -e; find . -name "*.p4" | while read program; do echo "compiling $program"; p4c-bm2-ss "$program" -o "/tmp/program.json"; done'
+      - name: Clone Omi Data
+        run: git clone --depth=1 https://github.com/Open-Markets-Initiative/omi-data-packets.git
+
+      - name: Compile and Replay
+        run: docker run --rm --privileged -v "$PWD":/work -w /work p4lang/p4c bash -c 'set -e; echo "Compiling definitions"; find . -name "*.p4" | while read program; do echo "  $program"; p4c-bm2-ss "$program" -o /tmp/program.json; done; echo "Replaying captures"; export RUNNER_TEMP=/tmp; for test in .github/tests/test_*.py; do echo "  $test"; python3 "$test"; done'
 
 

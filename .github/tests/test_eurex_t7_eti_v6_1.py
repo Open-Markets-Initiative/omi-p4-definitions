@@ -10,12 +10,12 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "iex/iexequities/deep/iexequities_deep_v1_08.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "iexequities_deep_v1_08.json")
+PROGRAM = "eurex/eti/eurex_t7_eti_v6_1.p4"
+JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v6_1.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class IexequitiesDeepV108Tests(unittest.TestCase):
+class EurexT7EtiV61Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -28,15 +28,15 @@ class IexequitiesDeepV108Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_heartbeat(self):
-        for payload in payloads.of("omi-data-packets/Iex/Deep.IexTp.v1.0/Heartbeat.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/Eti.Fbe.v6.1/Heartbeat.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_pricelevelbuyupdatemessage(self):
-        for payload in payloads.of("omi-data-packets/Iex/Deep.IexTp.v1.0/PriceLevelBuyUpdateMessage.pcap"):
+    def test_retransmitmemessagerequest(self):
+        for payload in payloads.of("omi-data-packets/Eurex/Eti.Fbe.v6.1/RetransmitMeMessageRequest.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_pricelevelsellupdatemessage(self):
-        for payload in payloads.of("omi-data-packets/Iex/Deep.IexTp.v1.0/PriceLevelSellUpdateMessage.pcap"):
+    def test_userloginresponse(self):
+        for payload in payloads.of("omi-data-packets/Eurex/Eti.Fbe.v6.1/UserLoginResponse.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 
