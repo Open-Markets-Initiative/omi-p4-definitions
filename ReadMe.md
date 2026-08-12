@@ -22,7 +22,7 @@ Updates are greatly appreciated; however, this entire repository is source gener
 
 | Protocol Count | Generated Lines |
 | --- | --- |
-| 197 | 266,165 |
+| 283 | 389,078 |
 
 ## Testing
 
@@ -41,7 +41,7 @@ For a list of Omi Hft projects: [Omi Projects](https://github.com/Open-Markets-I
 For details of Omi rules and regulations: [Omi Directory](https://github.com/Open-Markets-Initiative/Directory "Open Markets Initiative Directory")
 ## Organizations
 
-> [B3][B3.Directory] · [Cme][Cme.Directory] · [Coinbase][Coinbase.Directory] · [Eurex][Eurex.Directory] · [Iex][Iex.Directory] · [Nasdaq][Nasdaq.Directory]
+> [B3][B3.Directory] · [Cme][Cme.Directory] · [Coinbase][Coinbase.Directory] · [Eurex][Eurex.Directory] · [Euronext][Euronext.Directory] · [Iex][Iex.Directory] · [Nasdaq][Nasdaq.Directory]
 
 ## Exchanges
 
@@ -49,7 +49,7 @@ For details of Omi rules and regulations: [Omi Directory](https://github.com/Ope
 
 ## Platforms
 
-> [Cme Globex][Globex.Platform] · [Eurex T7][T7.Platform]
+> [Cme Globex][Globex.Platform] · [Euronext Optiq][Optiq.Platform] · [Eurex T7][T7.Platform]
 
 ## Consolidators
 
@@ -57,7 +57,7 @@ For details of Omi rules and regulations: [Omi Directory](https://github.com/Ope
 
 ## Related Definitions
 
-The same exchange protocols are published as machine readable definitions in other formats:
+The Open Markets Initiative provides protocol definitions in several formats:
 
 - [Kaitai Struct Definitions][Kaitai.Definitions.Repository] — cross language binary parsers with the kaitai struct compiler
 - [DFDL Definitions][Dfdl.Definitions.Repository] — declarative DFDL schemas for cross language parsing
@@ -105,6 +105,9 @@ Enjoy.
 [Eurex.T7.Eti]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Eurex/Protocols/T7/Eti.md "Enhanced Trading Interface"
 [Eurex.T7.Xti]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Eurex/Protocols/T7/Xti.md "Cash Enhanced Trading Interface"
 [Eurex.T7.Edci]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Eurex/Protocols/T7/Edci.md "Extended Derivatives Clearing Interface"
+[Euronext.Optiq.MarketDataGateway]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Euronext/Protocols/Optiq/MarketDataGateway.md "Market Data Gateway"
+[Euronext.Optiq.OrderEntryGateway]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Euronext/Protocols/Optiq/OrderEntryGateway.md "Order Entry Gateway"
+[Euronext.Optiq.DropCopyGateway]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Euronext/Protocols/Optiq/DropCopyGateway.md "Drop Copy Gateway"
 [Iex.IexEquities.Tops]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexEquities/Tops.md "Top Of Book"
 [Iex.IexEquities.Deep]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexEquities/Deep.md "Depth Of Book"
 [Iex.IexEquities.DeepPlus]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Iex/Protocols/IexEquities/DeepPlus.md "DeepPlus"
@@ -168,6 +171,7 @@ Enjoy.
 [Cme.Directory]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/cme "CME Group"
 [Coinbase.Directory]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/coinbase "Coinbase"
 [Eurex.Directory]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/eurex "Eurex Exchange"
+[Euronext.Directory]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/euronext "Euronext"
 [Iex.Directory]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/iex "Investors Exchange"
 [Nasdaq.Directory]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq "National Association of Securities Dealers Automated Quotations (Nasdaq)"
 
@@ -184,6 +188,7 @@ Enjoy.
 [NsmEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/nsmequities "Nasdaq Stock Market"
 [NtxEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/ntxequities "Nasdaq Texas"
 [NtxOptions.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/ntxoptions "Nasdaq Texas Options"
+[Optiq.Platform]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/euronext "Euronext Optiq"
 [PhlxOptions.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/phlxoptions "Nasdaq PHLX"
 [PsxEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/psxequities "Nasdaq PSX"
 [T7.Platform]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/eurex "T7"
