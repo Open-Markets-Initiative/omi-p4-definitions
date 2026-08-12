@@ -36,7 +36,10 @@ header message_header_t {
     bit<64> sending_time;
     bit<64> seq_num;
     bit<16> channel_id;
-    bit<8> packet_flags;
+    bit<1> incremental_update;
+    bit<1> snapshot;
+    bit<1> retransmit;
+    bit<5> reserved_bits;
     bit<8> message_count;
     bit<32> snapshot_instrument_id;
     bit<16> frame_length;
