@@ -165,7 +165,7 @@ struct headers_t {
     snapshot_complete_message_t snapshot_complete_message;
 }
 
-parser 24XequitiesMemoirdepthfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser N24x24XequitiesMemoirdepthfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.common_header);
         transition select(hdr.common_header.message_type) {
@@ -261,28 +261,28 @@ parser 24XequitiesMemoirdepthfeedParser(packet_in packet, out headers_t hdr, ino
 
 }
 
-control 24XequitiesMemoirdepthfeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control N24x24XequitiesMemoirdepthfeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control 24XequitiesMemoirdepthfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control N24x24XequitiesMemoirdepthfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control 24XequitiesMemoirdepthfeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control N24x24XequitiesMemoirdepthfeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control 24XequitiesMemoirdepthfeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control N24x24XequitiesMemoirdepthfeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control 24XequitiesMemoirdepthfeedDeparser(packet_out packet, in headers_t hdr) {
+control N24x24XequitiesMemoirdepthfeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.common_header);
         packet.emit(hdr.sequenced_message);
@@ -303,10 +303,10 @@ control 24XequitiesMemoirdepthfeedDeparser(packet_out packet, in headers_t hdr) 
 }
 
 V1Switch(
-    24XequitiesMemoirdepthfeedParser(),
-    24XequitiesMemoirdepthfeedVerifyChecksum(),
-    24XequitiesMemoirdepthfeedIngress(),
-    24XequitiesMemoirdepthfeedEgress(),
-    24XequitiesMemoirdepthfeedComputeChecksum(),
-    24XequitiesMemoirdepthfeedDeparser()
+    N24x24XequitiesMemoirdepthfeedParser(),
+    N24x24XequitiesMemoirdepthfeedVerifyChecksum(),
+    N24x24XequitiesMemoirdepthfeedIngress(),
+    N24x24XequitiesMemoirdepthfeedEgress(),
+    N24x24XequitiesMemoirdepthfeedComputeChecksum(),
+    N24x24XequitiesMemoirdepthfeedDeparser()
 ) main;

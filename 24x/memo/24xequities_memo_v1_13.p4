@@ -542,7 +542,7 @@ struct headers_t {
     sequenced_message_t sequenced_message;
 }
 
-parser 24XequitiesMemoParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser N24x24XequitiesMemoParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.common_header);
         transition select(hdr.common_header.message_type) {
@@ -779,28 +779,28 @@ parser 24XequitiesMemoParser(packet_in packet, out headers_t hdr, inout metadata
 
 }
 
-control 24XequitiesMemoVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control N24x24XequitiesMemoVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control 24XequitiesMemoIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control N24x24XequitiesMemoIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control 24XequitiesMemoEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control N24x24XequitiesMemoEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control 24XequitiesMemoComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control N24x24XequitiesMemoComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control 24XequitiesMemoDeparser(packet_out packet, in headers_t hdr) {
+control N24x24XequitiesMemoDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.common_header);
         packet.emit(hdr.login_request_message);
@@ -841,10 +841,10 @@ control 24XequitiesMemoDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    24XequitiesMemoParser(),
-    24XequitiesMemoVerifyChecksum(),
-    24XequitiesMemoIngress(),
-    24XequitiesMemoEgress(),
-    24XequitiesMemoComputeChecksum(),
-    24XequitiesMemoDeparser()
+    N24x24XequitiesMemoParser(),
+    N24x24XequitiesMemoVerifyChecksum(),
+    N24x24XequitiesMemoIngress(),
+    N24x24XequitiesMemoEgress(),
+    N24x24XequitiesMemoComputeChecksum(),
+    N24x24XequitiesMemoDeparser()
 ) main;

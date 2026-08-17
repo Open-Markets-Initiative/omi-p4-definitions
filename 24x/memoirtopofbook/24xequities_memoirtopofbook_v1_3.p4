@@ -142,7 +142,7 @@ struct headers_t {
     clear_book_message_t clear_book_message;
 }
 
-parser 24XequitiesMemoirtopofbookParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser N24x24XequitiesMemoirtopofbookParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.common_header);
         transition select(hdr.common_header.message_type) {
@@ -226,28 +226,28 @@ parser 24XequitiesMemoirtopofbookParser(packet_in packet, out headers_t hdr, ino
 
 }
 
-control 24XequitiesMemoirtopofbookVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control N24x24XequitiesMemoirtopofbookVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control 24XequitiesMemoirtopofbookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control N24x24XequitiesMemoirtopofbookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control 24XequitiesMemoirtopofbookEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control N24x24XequitiesMemoirtopofbookEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control 24XequitiesMemoirtopofbookComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control N24x24XequitiesMemoirtopofbookComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control 24XequitiesMemoirtopofbookDeparser(packet_out packet, in headers_t hdr) {
+control N24x24XequitiesMemoirtopofbookDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.common_header);
         packet.emit(hdr.sequenced_message);
@@ -266,10 +266,10 @@ control 24XequitiesMemoirtopofbookDeparser(packet_out packet, in headers_t hdr) 
 }
 
 V1Switch(
-    24XequitiesMemoirtopofbookParser(),
-    24XequitiesMemoirtopofbookVerifyChecksum(),
-    24XequitiesMemoirtopofbookIngress(),
-    24XequitiesMemoirtopofbookEgress(),
-    24XequitiesMemoirtopofbookComputeChecksum(),
-    24XequitiesMemoirtopofbookDeparser()
+    N24x24XequitiesMemoirtopofbookParser(),
+    N24x24XequitiesMemoirtopofbookVerifyChecksum(),
+    N24x24XequitiesMemoirtopofbookIngress(),
+    N24x24XequitiesMemoirtopofbookEgress(),
+    N24x24XequitiesMemoirtopofbookComputeChecksum(),
+    N24x24XequitiesMemoirtopofbookDeparser()
 ) main;
