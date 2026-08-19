@@ -22,7 +22,7 @@ Updates are greatly appreciated; however, this entire repository is source gener
 
 | Protocol Count | Generated Lines |
 | --- | --- |
-| 335 | 414,722 |
+| 354 | 420,405 |
 
 ## Testing
 
@@ -61,6 +61,7 @@ The Open Markets Initiative provides protocol definitions in several formats:
 
 - [Kaitai Struct Definitions][Kaitai.Definitions.Repository] — cross language binary parsers with the kaitai struct compiler
 - [DFDL Definitions][Dfdl.Definitions.Repository] — declarative DFDL schemas for cross language parsing
+- [Spicy Definitions][Spicy.Definitions.Repository] — declarative Spicy grammars for the zeek network security monitor
 ## Disclaimer
 
 Any similarities between existing people, places and/or protocols is purely incidental.
@@ -232,3 +233,4 @@ Enjoy.
 
 [Kaitai.Definitions.Repository]: https://github.com/Open-Markets-Initiative/omi-kaitai-struct-definitions "Omi Kaitai Struct Definitions"
 [Dfdl.Definitions.Repository]: https://github.com/Open-Markets-Initiative/omi-dfdl-definitions "Omi DFDL Definitions"
+[Spicy.Definitions.Repository]: https://github.com/Open-Markets-Initiative/omi-spicy-definitions "Omi Spicy Definitions"

@@ -157,6 +157,18 @@ header cross_sro_trading_action_message_t {
     bit<48> trading_action_reason;
 }
 
+header market_center_trading_action_message_t {
+    bit<8> market_center_originator_id;
+    bit<8> sub_market_center_id;
+    bit<64> sip_timestamp;
+    bit<64> participant_timestamp;
+    bit<64> participant_token;
+    bit<88> symbol;
+    bit<8> trading_action_code;
+    bit<64> action_timestamp;
+    bit<8> market_center_identifier;
+}
+
 header issue_symbol_directory_message_t {
     bit<8> market_center_originator_id;
     bit<8> sub_market_center_id;
@@ -318,6 +330,7 @@ struct headers_t {
     administrative_t administrative;
     general_administrative_message_t general_administrative_message;
     cross_sro_trading_action_message_t cross_sro_trading_action_message;
+    market_center_trading_action_message_t market_center_trading_action_message;
     issue_symbol_directory_message_t issue_symbol_directory_message;
     regulation_sho_short_sale_price_test_restricted_indicator_message_t regulation_sho_short_sale_price_test_restricted_indicator_message;
     limit_up_limit_down_price_band_message_t limit_up_limit_down_price_band_message;
@@ -375,6 +388,7 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         transition select(hdr.administrative.administrative_message_type) {
             8w0x41: parse_general_administrative_message;
             8w0x48: parse_cross_sro_trading_action_message;
+            8w0x4b: parse_market_center_trading_action_message;
             8w0x42: parse_issue_symbol_directory_message;
             8w0x56: parse_regulation_sho_short_sale_price_test_restricted_indicator_message;
             8w0x50: parse_limit_up_limit_down_price_band_message;
@@ -393,6 +407,11 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_cross_sro_trading_action_message {
         packet.extract(hdr.cross_sro_trading_action_message);
+        transition accept;
+    }
+
+    state parse_market_center_trading_action_message {
+        packet.extract(hdr.market_center_trading_action_message);
         transition accept;
     }
 
@@ -507,6 +526,7 @@ control NasdaqUqdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.administrative);
         packet.emit(hdr.general_administrative_message);
         packet.emit(hdr.cross_sro_trading_action_message);
+        packet.emit(hdr.market_center_trading_action_message);
         packet.emit(hdr.issue_symbol_directory_message);
         packet.emit(hdr.regulation_sho_short_sale_price_test_restricted_indicator_message);
         packet.emit(hdr.limit_up_limit_down_price_band_message);

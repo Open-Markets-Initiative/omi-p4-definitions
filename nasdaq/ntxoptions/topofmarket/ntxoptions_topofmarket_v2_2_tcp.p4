@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq MrxOptions OrderFeed Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq NtxOptions TopOfMarket Itch v2.2
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Order Feed
+//   Protocol: Top Of Market
 //   Encoding: Itch
-//   Version: 2.1
-//   Date: 02/13/2026
-//   Specification: Options_Order_Feed_2.1.pdf
+//   Version: 2.2
+//   Date: 08/30/2024
+//   Specification: Nasdaq_Texas_Options_Top_of_Market.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -64,17 +64,25 @@ header derivative_directory_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> security_symbol;
+    bit<48> security_symbol;
     bit<8> expiration_year;
     bit<8> expiration_month;
-    bit<8> expiration_day;
+    bit<8> expiration_date;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<104> underlying_symbol;
     bit<8> closing_type;
     bit<8> tradable;
     bit<8> mpv;
-    bit<128> reserved_16;
+    bit<96> isin;
+    bit<16> tick_size_table_id;
+    bit<8> price_notation;
+    bit<8> volume_notation;
+    bit<16> financial_product;
+    bit<8> market_segment_id;
+    bit<24> trading_currency;
+    bit<32> mic;
+    bit<128> instrument_long_name;
 }
 
 header trading_action_message_t {
@@ -84,45 +92,81 @@ header trading_action_message_t {
     bit<8> current_trading_state;
 }
 
-header add_order_message_t {
+header best_bid_and_ask_update_short_form_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> order_reference_number;
-    bit<8> side;
-    bit<32> original_order_volume;
-    bit<32> executable_order_volume;
-    bit<8> order_status;
-    bit<8> order_type;
-    bit<8> order_qualifier;
-    bit<32> limit_price;
-    bit<8> all_or_none;
-    bit<8> time_in_force;
-    bit<8> order_capacity;
-    bit<8> open_close_indicator;
-    bit<48> owner_id;
-    bit<48> giveup;
-    bit<48> cmta;
+    bit<8> quote_condition;
+    bit<16> bid_market_order_size_short;
+    bit<16> bid_price_short;
+    bit<16> bid_size_short;
+    bit<16> bid_cust_size_short;
+    bit<16> bid_procust_size_short;
+    bit<16> ask_market_order_size_short;
+    bit<16> ask_price_short;
+    bit<16> ask_size_short;
+    bit<16> ask_cust_size_short;
+    bit<16> ask_procust_size_short;
 }
 
-header auction_message_t {
+header best_bid_and_ask_update_long_form_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<32> auction_id;
-    bit<8> auction_type;
-    bit<32> auction_duration;
-    bit<8> auction_event;
-    bit<32> quantity;
-    bit<8> side;
-    bit<32> price;
-    bit<32> imbalance_volume;
-    bit<8> exec_flag;
-    bit<8> order_capacity;
-    bit<48> owner_id;
-    bit<48> giveup;
-    bit<48> cmta;
-    bit<128> reserved_16;
+    bit<8> quote_condition;
+    bit<32> bid_market_order_size_long;
+    bit<32> bid_price_long;
+    bit<32> bid_size_long;
+    bit<32> bid_cust_size_long;
+    bit<32> bid_procust_size_long;
+    bit<32> ask_market_order_size_long;
+    bit<32> ask_price_long;
+    bit<32> ask_size_long;
+    bit<32> ask_cust_size_long;
+    bit<32> ask_procust_size_long;
+}
+
+header best_bid_or_ask_update_short_form_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<8> quote_condition;
+    bit<16> market_order_size_short;
+    bit<16> price_short;
+    bit<16> size_short;
+    bit<16> cust_size_short;
+    bit<16> procust_size_short;
+}
+
+header best_bid_or_ask_update_long_form_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<8> quote_condition;
+    bit<32> market_order_size_long;
+    bit<32> price_long;
+    bit<32> size_long;
+    bit<32> cust_size_long;
+    bit<32> procust_size_long;
+}
+
+header trade_report_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<32> cross_id;
+    bit<8> trade_condition;
+    bit<32> price_long;
+    bit<32> volume;
+}
+
+header broken_trade_report_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<32> original_cross_id;
+    bit<32> original_price;
+    bit<32> original_volume;
 }
 
 header end_of_replay_sequence_message_t {
@@ -152,14 +196,18 @@ struct headers_t {
     system_event_message_t system_event_message;
     derivative_directory_message_t derivative_directory_message;
     trading_action_message_t trading_action_message;
-    add_order_message_t add_order_message;
-    auction_message_t auction_message;
+    best_bid_and_ask_update_short_form_message_t best_bid_and_ask_update_short_form_message;
+    best_bid_and_ask_update_long_form_message_t best_bid_and_ask_update_long_form_message;
+    best_bid_or_ask_update_short_form_message_t best_bid_or_ask_update_short_form_message;
+    best_bid_or_ask_update_long_form_message_t best_bid_or_ask_update_long_form_message;
+    trade_report_message_t trade_report_message;
+    broken_trade_report_message_t broken_trade_report_message;
     end_of_replay_sequence_message_t end_of_replay_sequence_message;
     login_request_packet_t login_request_packet;
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser MrxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NtxoptionsTopofmarketTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -192,10 +240,14 @@ parser MrxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout meta
         packet.extract(hdr.sequenced_data_packet);
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
-            8w0x6d: parse_derivative_directory_message;
+            8w0x52: parse_derivative_directory_message;
             8w0x48: parse_trading_action_message;
-            8w0x4f: parse_add_order_message;
-            8w0x4a: parse_auction_message;
+            8w0x71: parse_best_bid_and_ask_update_short_form_message;
+            8w0x51: parse_best_bid_and_ask_update_long_form_message;
+            8w0x62: parse_best_bid_or_ask_update_short_form_message;
+            8w0x42: parse_best_bid_or_ask_update_long_form_message;
+            8w0x54: parse_trade_report_message;
+            8w0x58: parse_broken_trade_report_message;
             8w0x4d: parse_end_of_replay_sequence_message;
             default: accept;
         }
@@ -216,13 +268,33 @@ parser MrxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout meta
         transition accept;
     }
 
-    state parse_add_order_message {
-        packet.extract(hdr.add_order_message);
+    state parse_best_bid_and_ask_update_short_form_message {
+        packet.extract(hdr.best_bid_and_ask_update_short_form_message);
         transition accept;
     }
 
-    state parse_auction_message {
-        packet.extract(hdr.auction_message);
+    state parse_best_bid_and_ask_update_long_form_message {
+        packet.extract(hdr.best_bid_and_ask_update_long_form_message);
+        transition accept;
+    }
+
+    state parse_best_bid_or_ask_update_short_form_message {
+        packet.extract(hdr.best_bid_or_ask_update_short_form_message);
+        transition accept;
+    }
+
+    state parse_best_bid_or_ask_update_long_form_message {
+        packet.extract(hdr.best_bid_or_ask_update_long_form_message);
+        transition accept;
+    }
+
+    state parse_trade_report_message {
+        packet.extract(hdr.trade_report_message);
+        transition accept;
+    }
+
+    state parse_broken_trade_report_message {
+        packet.extract(hdr.broken_trade_report_message);
         transition accept;
     }
 
@@ -243,28 +315,28 @@ parser MrxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout meta
 
 }
 
-control MrxoptionsOrderfeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NtxoptionsTopofmarketTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MrxoptionsOrderfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NtxoptionsTopofmarketTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control MrxoptionsOrderfeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NtxoptionsTopofmarketTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control MrxoptionsOrderfeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NtxoptionsTopofmarketTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MrxoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
+control NtxoptionsTopofmarketTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -274,8 +346,12 @@ control MrxoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.derivative_directory_message);
         packet.emit(hdr.trading_action_message);
-        packet.emit(hdr.add_order_message);
-        packet.emit(hdr.auction_message);
+        packet.emit(hdr.best_bid_and_ask_update_short_form_message);
+        packet.emit(hdr.best_bid_and_ask_update_long_form_message);
+        packet.emit(hdr.best_bid_or_ask_update_short_form_message);
+        packet.emit(hdr.best_bid_or_ask_update_long_form_message);
+        packet.emit(hdr.trade_report_message);
+        packet.emit(hdr.broken_trade_report_message);
         packet.emit(hdr.end_of_replay_sequence_message);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
@@ -283,10 +359,10 @@ control MrxoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    MrxoptionsOrderfeedParser(),
-    MrxoptionsOrderfeedVerifyChecksum(),
-    MrxoptionsOrderfeedIngress(),
-    MrxoptionsOrderfeedEgress(),
-    MrxoptionsOrderfeedComputeChecksum(),
-    MrxoptionsOrderfeedDeparser()
+    NtxoptionsTopofmarketTcpParser(),
+    NtxoptionsTopofmarketTcpVerifyChecksum(),
+    NtxoptionsTopofmarketTcpIngress(),
+    NtxoptionsTopofmarketTcpEgress(),
+    NtxoptionsTopofmarketTcpComputeChecksum(),
+    NtxoptionsTopofmarketTcpDeparser()
 ) main;

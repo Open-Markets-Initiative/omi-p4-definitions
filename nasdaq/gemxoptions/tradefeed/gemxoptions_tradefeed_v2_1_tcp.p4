@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Nasdaq MrxOptions TradeFeed Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq GemxOptions TradeFeed Itch v2.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
@@ -138,7 +138,7 @@ struct headers_t {
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser MrxoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser GemxoptionsTradefeedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -222,28 +222,28 @@ parser MrxoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout meta
 
 }
 
-control MrxoptionsTradefeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control GemxoptionsTradefeedTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MrxoptionsTradefeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control GemxoptionsTradefeedTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control MrxoptionsTradefeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control GemxoptionsTradefeedTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control MrxoptionsTradefeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control GemxoptionsTradefeedTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MrxoptionsTradefeedDeparser(packet_out packet, in headers_t hdr) {
+control GemxoptionsTradefeedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -262,10 +262,10 @@ control MrxoptionsTradefeedDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    MrxoptionsTradefeedParser(),
-    MrxoptionsTradefeedVerifyChecksum(),
-    MrxoptionsTradefeedIngress(),
-    MrxoptionsTradefeedEgress(),
-    MrxoptionsTradefeedComputeChecksum(),
-    MrxoptionsTradefeedDeparser()
+    GemxoptionsTradefeedTcpParser(),
+    GemxoptionsTradefeedTcpVerifyChecksum(),
+    GemxoptionsTradefeedTcpIngress(),
+    GemxoptionsTradefeedTcpEgress(),
+    GemxoptionsTradefeedTcpComputeChecksum(),
+    GemxoptionsTradefeedTcpDeparser()
 ) main;

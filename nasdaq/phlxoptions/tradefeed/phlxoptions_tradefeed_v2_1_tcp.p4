@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Nasdaq NtxOptions TradeFeed Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq PhlxOptions TradeFeed Itch v2.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
@@ -138,7 +138,7 @@ struct headers_t {
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser NtxoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser PhlxoptionsTradefeedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -222,28 +222,28 @@ parser NtxoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout meta
 
 }
 
-control NtxoptionsTradefeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control PhlxoptionsTradefeedTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NtxoptionsTradefeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control PhlxoptionsTradefeedTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control NtxoptionsTradefeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control PhlxoptionsTradefeedTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control NtxoptionsTradefeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control PhlxoptionsTradefeedTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NtxoptionsTradefeedDeparser(packet_out packet, in headers_t hdr) {
+control PhlxoptionsTradefeedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -262,10 +262,10 @@ control NtxoptionsTradefeedDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    NtxoptionsTradefeedParser(),
-    NtxoptionsTradefeedVerifyChecksum(),
-    NtxoptionsTradefeedIngress(),
-    NtxoptionsTradefeedEgress(),
-    NtxoptionsTradefeedComputeChecksum(),
-    NtxoptionsTradefeedDeparser()
+    PhlxoptionsTradefeedTcpParser(),
+    PhlxoptionsTradefeedTcpVerifyChecksum(),
+    PhlxoptionsTradefeedTcpIngress(),
+    PhlxoptionsTradefeedTcpEgress(),
+    PhlxoptionsTradefeedTcpComputeChecksum(),
+    PhlxoptionsTradefeedTcpDeparser()
 ) main;

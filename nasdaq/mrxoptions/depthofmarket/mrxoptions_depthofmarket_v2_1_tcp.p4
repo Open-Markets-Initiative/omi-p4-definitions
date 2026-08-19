@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Nasdaq IseOptions DepthOfMarket Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq MrxOptions DepthOfMarket Itch v2.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
@@ -319,7 +319,7 @@ struct headers_t {
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser IseoptionsDepthofmarketParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser MrxoptionsDepthofmarketTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -487,28 +487,28 @@ parser IseoptionsDepthofmarketParser(packet_in packet, out headers_t hdr, inout 
 
 }
 
-control IseoptionsDepthofmarketVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control MrxoptionsDepthofmarketTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IseoptionsDepthofmarketIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control MrxoptionsDepthofmarketTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control IseoptionsDepthofmarketEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control MrxoptionsDepthofmarketTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control IseoptionsDepthofmarketComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control MrxoptionsDepthofmarketTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IseoptionsDepthofmarketDeparser(packet_out packet, in headers_t hdr) {
+control MrxoptionsDepthofmarketTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -541,10 +541,10 @@ control IseoptionsDepthofmarketDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    IseoptionsDepthofmarketParser(),
-    IseoptionsDepthofmarketVerifyChecksum(),
-    IseoptionsDepthofmarketIngress(),
-    IseoptionsDepthofmarketEgress(),
-    IseoptionsDepthofmarketComputeChecksum(),
-    IseoptionsDepthofmarketDeparser()
+    MrxoptionsDepthofmarketTcpParser(),
+    MrxoptionsDepthofmarketTcpVerifyChecksum(),
+    MrxoptionsDepthofmarketTcpIngress(),
+    MrxoptionsDepthofmarketTcpEgress(),
+    MrxoptionsDepthofmarketTcpComputeChecksum(),
+    MrxoptionsDepthofmarketTcpDeparser()
 ) main;

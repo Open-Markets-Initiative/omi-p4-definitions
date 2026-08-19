@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq GemxOptions DepthOfMarket Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq NtxOptions DepthOfMarket Itch v2.2
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: Depth Of Market
 //   Encoding: Itch
-//   Version: 2.1
-//   Date: 02/13/2026
-//   Specification: Options_Depth_of_Market_Feed_2.1.pdf
+//   Version: 2.2
+//   Date: 12/18/2025
+//   Specification: Nasdaq_Texas_Options_Depth_of_Market.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -64,17 +64,25 @@ header derivative_directory_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> security_symbol;
+    bit<48> security_symbol;
     bit<8> expiration_year;
     bit<8> expiration_month;
-    bit<8> expiration_day;
+    bit<8> expiration_date;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<104> underlying_symbol;
     bit<8> closing_type;
     bit<8> tradable;
     bit<8> mpv;
-    bit<128> reserved_16;
+    bit<96> isin;
+    bit<16> tick_size_table_id;
+    bit<8> price_notation;
+    bit<8> volume_notation;
+    bit<16> financial_product;
+    bit<8> market_segment_id;
+    bit<24> trading_currency;
+    bit<32> mic;
+    bit<128> instrument_long_name;
 }
 
 header trading_action_message_t {
@@ -89,11 +97,11 @@ header add_order_short_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<64> order_reference_number;
-    bit<8> side;
+    bit<8> market_side;
     bit<8> order_capacity;
     bit<16> price_short;
     bit<16> volume_short;
-    bit<32> reserved_4;
+    bit<16> rank;
 }
 
 header add_order_long_form_message_t {
@@ -101,11 +109,11 @@ header add_order_long_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<64> order_reference_number;
-    bit<8> side;
+    bit<8> market_side;
     bit<8> order_capacity;
     bit<32> price_long;
     bit<32> volume_long;
-    bit<32> reserved_4;
+    bit<16> rank;
 }
 
 header add_quote_short_form_message_t {
@@ -132,32 +140,28 @@ header add_quote_long_form_message_t {
     bit<32> ask_size_long;
 }
 
-header single_side_executed_message_t {
+header order_executed_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<32> strategy_id;
-    bit<64> order_reference_number;
+    bit<64> reference_number;
     bit<32> executed_volume;
-    bit<8> trade_condition;
-    bit<32> auction_id;
     bit<32> cross_number;
     bit<32> match_number;
 }
 
-header single_side_executed_with_price_message_t {
+header order_executed_with_price_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<32> strategy_id;
-    bit<64> order_reference_number;
+    bit<64> reference_number;
     bit<32> cross_number;
     bit<32> match_number;
     bit<8> printable;
     bit<32> price_long;
     bit<32> volume_long;
-    bit<8> trade_condition;
-    bit<32> auction_id;
 }
 
 header order_cancel_message_t {
@@ -168,38 +172,38 @@ header order_cancel_message_t {
     bit<32> cancelled_volume;
 }
 
-header single_side_replace_short_form_message_t {
+header order_replace_short_form_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> order_reference_number;
+    bit<64> original_reference_number;
     bit<64> new_reference_number;
     bit<16> price_short;
     bit<16> volume_short;
 }
 
-header single_side_replace_long_form_message_t {
+header order_replace_long_form_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> order_reference_number;
+    bit<64> original_reference_number;
     bit<64> new_reference_number;
     bit<32> price_long;
     bit<32> volume_long;
 }
 
-header single_side_delete_message_t {
+header order_delete_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> order_reference_number;
+    bit<64> reference_number;
 }
 
-header single_side_update_message_t {
+header order_change_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> order_reference_number;
+    bit<64> reference_number;
     bit<8> change_reason;
     bit<32> price_long;
     bit<32> volume_long;
@@ -251,11 +255,8 @@ header trade_message_t {
     bit<8> cross_type;
     bit<32> price_long;
     bit<32> volume_long;
-    bit<8> trade_condition;
-    bit<32> auction_id;
     bit<8> printable;
     bit<8> trade_type;
-    bit<128> reserved_16;
 }
 
 header net_order_imbalance_message_t {
@@ -265,10 +266,14 @@ header net_order_imbalance_message_t {
     bit<32> auction_id;
     bit<8> auction_type;
     bit<32> paired_quantity;
-    bit<8> side_imbalance_direction;
-    bit<32> price_imbalance_price;
+    bit<8> imbalance_direction;
+    bit<32> imbalance_price;
     bit<32> imbalance_volume;
-    bit<8> order_capacity;
+    bit<8> customer_firm_indicator;
+    bit<32> best_bid_price;
+    bit<32> best_bid_quantity;
+    bit<32> best_ask_price;
+    bit<32> best_ask_quantity;
 }
 
 header end_of_replay_sequence_message_t {
@@ -302,13 +307,13 @@ struct headers_t {
     add_order_long_form_message_t add_order_long_form_message;
     add_quote_short_form_message_t add_quote_short_form_message;
     add_quote_long_form_message_t add_quote_long_form_message;
-    single_side_executed_message_t single_side_executed_message;
-    single_side_executed_with_price_message_t single_side_executed_with_price_message;
+    order_executed_message_t order_executed_message;
+    order_executed_with_price_message_t order_executed_with_price_message;
     order_cancel_message_t order_cancel_message;
-    single_side_replace_short_form_message_t single_side_replace_short_form_message;
-    single_side_replace_long_form_message_t single_side_replace_long_form_message;
-    single_side_delete_message_t single_side_delete_message;
-    single_side_update_message_t single_side_update_message;
+    order_replace_short_form_message_t order_replace_short_form_message;
+    order_replace_long_form_message_t order_replace_long_form_message;
+    order_delete_message_t order_delete_message;
+    order_change_message_t order_change_message;
     quote_replace_short_form_message_t quote_replace_short_form_message;
     quote_replace_long_form_message_t quote_replace_long_form_message;
     quote_delete_message_t quote_delete_message;
@@ -319,7 +324,7 @@ struct headers_t {
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser GemxoptionsDepthofmarketParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NtxoptionsDepthofmarketTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -352,24 +357,24 @@ parser GemxoptionsDepthofmarketParser(packet_in packet, out headers_t hdr, inout
         packet.extract(hdr.sequenced_data_packet);
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
-            8w0x6d: parse_derivative_directory_message;
+            8w0x52: parse_derivative_directory_message;
             8w0x48: parse_trading_action_message;
-            8w0x72: parse_add_order_short_form_message;
-            8w0x6f: parse_add_order_long_form_message;
+            8w0x61: parse_add_order_short_form_message;
+            8w0x41: parse_add_order_long_form_message;
             8w0x6a: parse_add_quote_short_form_message;
             8w0x4a: parse_add_quote_long_form_message;
-            8w0x65: parse_single_side_executed_message;
-            8w0x63: parse_single_side_executed_with_price_message;
+            8w0x45: parse_order_executed_message;
+            8w0x43: parse_order_executed_with_price_message;
             8w0x58: parse_order_cancel_message;
-            8w0x75: parse_single_side_replace_short_form_message;
-            8w0x55: parse_single_side_replace_long_form_message;
-            8w0x44: parse_single_side_delete_message;
-            8w0x47: parse_single_side_update_message;
+            8w0x75: parse_order_replace_short_form_message;
+            8w0x55: parse_order_replace_long_form_message;
+            8w0x44: parse_order_delete_message;
+            8w0x47: parse_order_change_message;
             8w0x6b: parse_quote_replace_short_form_message;
             8w0x4b: parse_quote_replace_long_form_message;
             8w0x59: parse_quote_delete_message;
-            8w0x71: parse_trade_message;
-            8w0x4f: parse_net_order_imbalance_message;
+            8w0x51: parse_trade_message;
+            8w0x49: parse_net_order_imbalance_message;
             8w0x4d: parse_end_of_replay_sequence_message;
             default: accept;
         }
@@ -410,13 +415,13 @@ parser GemxoptionsDepthofmarketParser(packet_in packet, out headers_t hdr, inout
         transition accept;
     }
 
-    state parse_single_side_executed_message {
-        packet.extract(hdr.single_side_executed_message);
+    state parse_order_executed_message {
+        packet.extract(hdr.order_executed_message);
         transition accept;
     }
 
-    state parse_single_side_executed_with_price_message {
-        packet.extract(hdr.single_side_executed_with_price_message);
+    state parse_order_executed_with_price_message {
+        packet.extract(hdr.order_executed_with_price_message);
         transition accept;
     }
 
@@ -425,23 +430,23 @@ parser GemxoptionsDepthofmarketParser(packet_in packet, out headers_t hdr, inout
         transition accept;
     }
 
-    state parse_single_side_replace_short_form_message {
-        packet.extract(hdr.single_side_replace_short_form_message);
+    state parse_order_replace_short_form_message {
+        packet.extract(hdr.order_replace_short_form_message);
         transition accept;
     }
 
-    state parse_single_side_replace_long_form_message {
-        packet.extract(hdr.single_side_replace_long_form_message);
+    state parse_order_replace_long_form_message {
+        packet.extract(hdr.order_replace_long_form_message);
         transition accept;
     }
 
-    state parse_single_side_delete_message {
-        packet.extract(hdr.single_side_delete_message);
+    state parse_order_delete_message {
+        packet.extract(hdr.order_delete_message);
         transition accept;
     }
 
-    state parse_single_side_update_message {
-        packet.extract(hdr.single_side_update_message);
+    state parse_order_change_message {
+        packet.extract(hdr.order_change_message);
         transition accept;
     }
 
@@ -487,28 +492,28 @@ parser GemxoptionsDepthofmarketParser(packet_in packet, out headers_t hdr, inout
 
 }
 
-control GemxoptionsDepthofmarketVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NtxoptionsDepthofmarketTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control GemxoptionsDepthofmarketIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NtxoptionsDepthofmarketTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control GemxoptionsDepthofmarketEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NtxoptionsDepthofmarketTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control GemxoptionsDepthofmarketComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NtxoptionsDepthofmarketTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control GemxoptionsDepthofmarketDeparser(packet_out packet, in headers_t hdr) {
+control NtxoptionsDepthofmarketTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -522,13 +527,13 @@ control GemxoptionsDepthofmarketDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.add_order_long_form_message);
         packet.emit(hdr.add_quote_short_form_message);
         packet.emit(hdr.add_quote_long_form_message);
-        packet.emit(hdr.single_side_executed_message);
-        packet.emit(hdr.single_side_executed_with_price_message);
+        packet.emit(hdr.order_executed_message);
+        packet.emit(hdr.order_executed_with_price_message);
         packet.emit(hdr.order_cancel_message);
-        packet.emit(hdr.single_side_replace_short_form_message);
-        packet.emit(hdr.single_side_replace_long_form_message);
-        packet.emit(hdr.single_side_delete_message);
-        packet.emit(hdr.single_side_update_message);
+        packet.emit(hdr.order_replace_short_form_message);
+        packet.emit(hdr.order_replace_long_form_message);
+        packet.emit(hdr.order_delete_message);
+        packet.emit(hdr.order_change_message);
         packet.emit(hdr.quote_replace_short_form_message);
         packet.emit(hdr.quote_replace_long_form_message);
         packet.emit(hdr.quote_delete_message);
@@ -541,10 +546,10 @@ control GemxoptionsDepthofmarketDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    GemxoptionsDepthofmarketParser(),
-    GemxoptionsDepthofmarketVerifyChecksum(),
-    GemxoptionsDepthofmarketIngress(),
-    GemxoptionsDepthofmarketEgress(),
-    GemxoptionsDepthofmarketComputeChecksum(),
-    GemxoptionsDepthofmarketDeparser()
+    NtxoptionsDepthofmarketTcpParser(),
+    NtxoptionsDepthofmarketTcpVerifyChecksum(),
+    NtxoptionsDepthofmarketTcpIngress(),
+    NtxoptionsDepthofmarketTcpEgress(),
+    NtxoptionsDepthofmarketTcpComputeChecksum(),
+    NtxoptionsDepthofmarketTcpDeparser()
 ) main;

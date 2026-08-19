@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq GemxOptions OrderFeed Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq NtxOptions TradeFeed Itch v2.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Order Feed
+//   Protocol: Trade Feed
 //   Encoding: Itch
 //   Version: 2.1
 //   Date: 02/13/2026
-//   Specification: Options_Order_Feed_2.1.pdf
+//   Specification: Options_Trade_Feed_2.1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -84,45 +84,24 @@ header trading_action_message_t {
     bit<8> current_trading_state;
 }
 
-header add_order_message_t {
+header trade_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<64> order_reference_number;
-    bit<8> side;
-    bit<32> original_order_volume;
-    bit<32> executable_order_volume;
-    bit<8> order_status;
-    bit<8> order_type;
-    bit<8> order_qualifier;
-    bit<32> limit_price;
-    bit<8> all_or_none;
-    bit<8> time_in_force;
-    bit<8> order_capacity;
-    bit<8> open_close_indicator;
-    bit<48> owner_id;
-    bit<48> giveup;
-    bit<48> cmta;
+    bit<32> cross_id;
+    bit<8> trade_condition;
+    bit<32> price;
+    bit<32> volume;
+    bit<128> reserved_16;
 }
 
-header auction_message_t {
+header broken_trade_report_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<32> auction_id;
-    bit<8> auction_type;
-    bit<32> auction_duration;
-    bit<8> auction_event;
-    bit<32> quantity;
-    bit<8> side;
-    bit<32> price;
-    bit<32> imbalance_volume;
-    bit<8> exec_flag;
-    bit<8> order_capacity;
-    bit<48> owner_id;
-    bit<48> giveup;
-    bit<48> cmta;
-    bit<128> reserved_16;
+    bit<32> original_cross_id;
+    bit<32> original_price;
+    bit<32> original_volume;
 }
 
 header end_of_replay_sequence_message_t {
@@ -152,14 +131,14 @@ struct headers_t {
     system_event_message_t system_event_message;
     derivative_directory_message_t derivative_directory_message;
     trading_action_message_t trading_action_message;
-    add_order_message_t add_order_message;
-    auction_message_t auction_message;
+    trade_message_t trade_message;
+    broken_trade_report_message_t broken_trade_report_message;
     end_of_replay_sequence_message_t end_of_replay_sequence_message;
     login_request_packet_t login_request_packet;
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser GemxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NtxoptionsTradefeedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -194,8 +173,8 @@ parser GemxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout met
             8w0x53: parse_system_event_message;
             8w0x6d: parse_derivative_directory_message;
             8w0x48: parse_trading_action_message;
-            8w0x4f: parse_add_order_message;
-            8w0x4a: parse_auction_message;
+            8w0x52: parse_trade_message;
+            8w0x58: parse_broken_trade_report_message;
             8w0x4d: parse_end_of_replay_sequence_message;
             default: accept;
         }
@@ -216,13 +195,13 @@ parser GemxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout met
         transition accept;
     }
 
-    state parse_add_order_message {
-        packet.extract(hdr.add_order_message);
+    state parse_trade_message {
+        packet.extract(hdr.trade_message);
         transition accept;
     }
 
-    state parse_auction_message {
-        packet.extract(hdr.auction_message);
+    state parse_broken_trade_report_message {
+        packet.extract(hdr.broken_trade_report_message);
         transition accept;
     }
 
@@ -243,28 +222,28 @@ parser GemxoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout met
 
 }
 
-control GemxoptionsOrderfeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NtxoptionsTradefeedTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control GemxoptionsOrderfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NtxoptionsTradefeedTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control GemxoptionsOrderfeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NtxoptionsTradefeedTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control GemxoptionsOrderfeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NtxoptionsTradefeedTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control GemxoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
+control NtxoptionsTradefeedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -274,8 +253,8 @@ control GemxoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.derivative_directory_message);
         packet.emit(hdr.trading_action_message);
-        packet.emit(hdr.add_order_message);
-        packet.emit(hdr.auction_message);
+        packet.emit(hdr.trade_message);
+        packet.emit(hdr.broken_trade_report_message);
         packet.emit(hdr.end_of_replay_sequence_message);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
@@ -283,10 +262,10 @@ control GemxoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    GemxoptionsOrderfeedParser(),
-    GemxoptionsOrderfeedVerifyChecksum(),
-    GemxoptionsOrderfeedIngress(),
-    GemxoptionsOrderfeedEgress(),
-    GemxoptionsOrderfeedComputeChecksum(),
-    GemxoptionsOrderfeedDeparser()
+    NtxoptionsTradefeedTcpParser(),
+    NtxoptionsTradefeedTcpVerifyChecksum(),
+    NtxoptionsTradefeedTcpIngress(),
+    NtxoptionsTradefeedTcpEgress(),
+    NtxoptionsTradefeedTcpComputeChecksum(),
+    NtxoptionsTradefeedTcpDeparser()
 ) main;

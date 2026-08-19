@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq IseOptions TradeFeed Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq GemxOptions TopOfMarket Itch v2.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Trade Feed
+//   Protocol: Top Of Market
 //   Encoding: Itch
 //   Version: 2.1
 //   Date: 02/13/2026
-//   Specification: Options_Trade_Feed_2.1.pdf
+//   Specification: Options_Top_of_Market_Feed_2.1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -84,24 +84,86 @@ header trading_action_message_t {
     bit<8> current_trading_state;
 }
 
-header trade_message_t {
+header best_bid_and_ask_update_short_form_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<32> cross_id;
-    bit<8> trade_condition;
-    bit<32> price;
-    bit<32> volume;
-    bit<128> reserved_16;
+    bit<8> quote_condition;
+    bit<16> bid_market_order_size_short;
+    bit<16> bid_price_short;
+    bit<16> bid_size_short;
+    bit<16> bid_cust_size_short;
+    bit<16> bid_procust_size_short;
+    bit<16> ask_market_order_size_short;
+    bit<16> ask_price_short;
+    bit<16> ask_size_short;
+    bit<16> ask_cust_size_short;
+    bit<16> ask_procust_size_short;
 }
 
-header broken_trade_report_message_t {
+header best_bid_and_ask_update_long_form_message_t {
     bit<16> tracking_number;
     bit<64> timestamp;
     bit<32> instrument_id;
-    bit<32> original_cross_id;
-    bit<32> original_price;
-    bit<32> original_volume;
+    bit<8> quote_condition;
+    bit<32> bid_market_order_size_long;
+    bit<32> bid_price_long;
+    bit<32> bid_size_long;
+    bit<32> bid_cust_size_long;
+    bit<32> bid_procust_size_long;
+    bit<32> ask_market_order_size_long;
+    bit<32> ask_price_long;
+    bit<32> ask_size_long;
+    bit<32> ask_cust_size_long;
+    bit<32> ask_procust_size_long;
+}
+
+header best_bid_update_short_form_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<8> quote_condition;
+    bit<16> market_order_size_short;
+    bit<16> price_short;
+    bit<16> size_short;
+    bit<16> cust_size_short;
+    bit<16> procust_size_short;
+}
+
+header best_ask_update_short_form_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<8> quote_condition;
+    bit<16> market_order_size_short;
+    bit<16> price_short;
+    bit<16> size_short;
+    bit<16> cust_size_short;
+    bit<16> procust_size_short;
+}
+
+header best_bid_update_long_form_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<8> quote_condition;
+    bit<32> market_order_size_long;
+    bit<32> price_long;
+    bit<32> size_long;
+    bit<32> cust_size_long;
+    bit<32> procust_size_long;
+}
+
+header best_ask_update_long_form_message_t {
+    bit<16> tracking_number;
+    bit<64> timestamp;
+    bit<32> instrument_id;
+    bit<8> quote_condition;
+    bit<32> market_order_size_long;
+    bit<32> price_long;
+    bit<32> size_long;
+    bit<32> cust_size_long;
+    bit<32> procust_size_long;
 }
 
 header end_of_replay_sequence_message_t {
@@ -131,14 +193,18 @@ struct headers_t {
     system_event_message_t system_event_message;
     derivative_directory_message_t derivative_directory_message;
     trading_action_message_t trading_action_message;
-    trade_message_t trade_message;
-    broken_trade_report_message_t broken_trade_report_message;
+    best_bid_and_ask_update_short_form_message_t best_bid_and_ask_update_short_form_message;
+    best_bid_and_ask_update_long_form_message_t best_bid_and_ask_update_long_form_message;
+    best_bid_update_short_form_message_t best_bid_update_short_form_message;
+    best_ask_update_short_form_message_t best_ask_update_short_form_message;
+    best_bid_update_long_form_message_t best_bid_update_long_form_message;
+    best_ask_update_long_form_message_t best_ask_update_long_form_message;
     end_of_replay_sequence_message_t end_of_replay_sequence_message;
     login_request_packet_t login_request_packet;
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser IseoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser GemxoptionsTopofmarketTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -173,8 +239,12 @@ parser IseoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout meta
             8w0x53: parse_system_event_message;
             8w0x6d: parse_derivative_directory_message;
             8w0x48: parse_trading_action_message;
-            8w0x52: parse_trade_message;
-            8w0x58: parse_broken_trade_report_message;
+            8w0x71: parse_best_bid_and_ask_update_short_form_message;
+            8w0x51: parse_best_bid_and_ask_update_long_form_message;
+            8w0x62: parse_best_bid_update_short_form_message;
+            8w0x61: parse_best_ask_update_short_form_message;
+            8w0x42: parse_best_bid_update_long_form_message;
+            8w0x41: parse_best_ask_update_long_form_message;
             8w0x4d: parse_end_of_replay_sequence_message;
             default: accept;
         }
@@ -195,13 +265,33 @@ parser IseoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout meta
         transition accept;
     }
 
-    state parse_trade_message {
-        packet.extract(hdr.trade_message);
+    state parse_best_bid_and_ask_update_short_form_message {
+        packet.extract(hdr.best_bid_and_ask_update_short_form_message);
         transition accept;
     }
 
-    state parse_broken_trade_report_message {
-        packet.extract(hdr.broken_trade_report_message);
+    state parse_best_bid_and_ask_update_long_form_message {
+        packet.extract(hdr.best_bid_and_ask_update_long_form_message);
+        transition accept;
+    }
+
+    state parse_best_bid_update_short_form_message {
+        packet.extract(hdr.best_bid_update_short_form_message);
+        transition accept;
+    }
+
+    state parse_best_ask_update_short_form_message {
+        packet.extract(hdr.best_ask_update_short_form_message);
+        transition accept;
+    }
+
+    state parse_best_bid_update_long_form_message {
+        packet.extract(hdr.best_bid_update_long_form_message);
+        transition accept;
+    }
+
+    state parse_best_ask_update_long_form_message {
+        packet.extract(hdr.best_ask_update_long_form_message);
         transition accept;
     }
 
@@ -222,28 +312,28 @@ parser IseoptionsTradefeedParser(packet_in packet, out headers_t hdr, inout meta
 
 }
 
-control IseoptionsTradefeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control GemxoptionsTopofmarketTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IseoptionsTradefeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control GemxoptionsTopofmarketTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control IseoptionsTradefeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control GemxoptionsTopofmarketTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control IseoptionsTradefeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control GemxoptionsTopofmarketTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IseoptionsTradefeedDeparser(packet_out packet, in headers_t hdr) {
+control GemxoptionsTopofmarketTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -253,8 +343,12 @@ control IseoptionsTradefeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.derivative_directory_message);
         packet.emit(hdr.trading_action_message);
-        packet.emit(hdr.trade_message);
-        packet.emit(hdr.broken_trade_report_message);
+        packet.emit(hdr.best_bid_and_ask_update_short_form_message);
+        packet.emit(hdr.best_bid_and_ask_update_long_form_message);
+        packet.emit(hdr.best_bid_update_short_form_message);
+        packet.emit(hdr.best_ask_update_short_form_message);
+        packet.emit(hdr.best_bid_update_long_form_message);
+        packet.emit(hdr.best_ask_update_long_form_message);
         packet.emit(hdr.end_of_replay_sequence_message);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
@@ -262,10 +356,10 @@ control IseoptionsTradefeedDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    IseoptionsTradefeedParser(),
-    IseoptionsTradefeedVerifyChecksum(),
-    IseoptionsTradefeedIngress(),
-    IseoptionsTradefeedEgress(),
-    IseoptionsTradefeedComputeChecksum(),
-    IseoptionsTradefeedDeparser()
+    GemxoptionsTopofmarketTcpParser(),
+    GemxoptionsTopofmarketTcpVerifyChecksum(),
+    GemxoptionsTopofmarketTcpIngress(),
+    GemxoptionsTopofmarketTcpEgress(),
+    GemxoptionsTopofmarketTcpComputeChecksum(),
+    GemxoptionsTopofmarketTcpDeparser()
 ) main;

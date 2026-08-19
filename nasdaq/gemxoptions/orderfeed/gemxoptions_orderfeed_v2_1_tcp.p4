@@ -1,8 +1,8 @@
-// P4_16 (v1model) definition for: Nasdaq PhlxOptions Orders Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq GemxOptions OrderFeed Itch v2.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: PHLX Orders
+//   Protocol: Order Feed
 //   Encoding: Itch
 //   Version: 2.1
 //   Date: 02/13/2026
@@ -159,7 +159,7 @@ struct headers_t {
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser PhlxoptionsOrdersParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser GemxoptionsOrderfeedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -243,28 +243,28 @@ parser PhlxoptionsOrdersParser(packet_in packet, out headers_t hdr, inout metada
 
 }
 
-control PhlxoptionsOrdersVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control GemxoptionsOrderfeedTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control PhlxoptionsOrdersIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control GemxoptionsOrderfeedTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control PhlxoptionsOrdersEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control GemxoptionsOrderfeedTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control PhlxoptionsOrdersComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control GemxoptionsOrderfeedTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control PhlxoptionsOrdersDeparser(packet_out packet, in headers_t hdr) {
+control GemxoptionsOrderfeedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -283,10 +283,10 @@ control PhlxoptionsOrdersDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    PhlxoptionsOrdersParser(),
-    PhlxoptionsOrdersVerifyChecksum(),
-    PhlxoptionsOrdersIngress(),
-    PhlxoptionsOrdersEgress(),
-    PhlxoptionsOrdersComputeChecksum(),
-    PhlxoptionsOrdersDeparser()
+    GemxoptionsOrderfeedTcpParser(),
+    GemxoptionsOrderfeedTcpVerifyChecksum(),
+    GemxoptionsOrderfeedTcpIngress(),
+    GemxoptionsOrderfeedTcpEgress(),
+    GemxoptionsOrderfeedTcpComputeChecksum(),
+    GemxoptionsOrderfeedTcpDeparser()
 ) main;

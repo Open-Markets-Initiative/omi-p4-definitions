@@ -159,7 +159,7 @@ struct headers_t {
     unsequenced_data_packet_t unsequenced_data_packet;
 }
 
-parser IseoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser IseoptionsOrderfeedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -243,28 +243,28 @@ parser IseoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout meta
 
 }
 
-control IseoptionsOrderfeedVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IseoptionsOrderfeedTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IseoptionsOrderfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IseoptionsOrderfeedTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control IseoptionsOrderfeedEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IseoptionsOrderfeedTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control IseoptionsOrderfeedComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IseoptionsOrderfeedTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IseoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
+control IseoptionsOrderfeedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.debug_packet);
@@ -283,10 +283,10 @@ control IseoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    IseoptionsOrderfeedParser(),
-    IseoptionsOrderfeedVerifyChecksum(),
-    IseoptionsOrderfeedIngress(),
-    IseoptionsOrderfeedEgress(),
-    IseoptionsOrderfeedComputeChecksum(),
-    IseoptionsOrderfeedDeparser()
+    IseoptionsOrderfeedTcpParser(),
+    IseoptionsOrderfeedTcpVerifyChecksum(),
+    IseoptionsOrderfeedTcpIngress(),
+    IseoptionsOrderfeedTcpEgress(),
+    IseoptionsOrderfeedTcpComputeChecksum(),
+    IseoptionsOrderfeedTcpDeparser()
 ) main;
