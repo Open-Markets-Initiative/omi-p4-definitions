@@ -301,7 +301,7 @@ header md_incremental_refresh_book_legacy_t {
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
-    bit<64> md_entry_px_optional;
+    bit<64> md_entry_px_optional_ex;
     bit<32> md_entry_size_short_optional;
     bit<32> security_id;
     bit<32> rpt_seq;
@@ -334,7 +334,7 @@ header md_incremental_refresh_daily_statistics_legacy_t {
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
-    bit<64> md_entry_px_optional;
+    bit<64> md_entry_px_optional_ex;
     bit<32> md_entry_size_short_optional;
     bit<32> security_id;
     bit<32> rpt_seq;
@@ -365,9 +365,9 @@ header md_incremental_refresh_limits_banding_legacy_t {
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
-    bit<64> high_limit_price;
-    bit<64> low_limit_price;
-    bit<64> max_price_variation;
+    bit<64> high_limit_price_ex;
+    bit<64> low_limit_price_ex;
+    bit<64> max_price_variation_ex;
     bit<32> security_id;
     bit<32> rpt_seq;
 }
@@ -385,7 +385,7 @@ header md_incremental_refresh_session_statistics_legacy_t {
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
-    bit<64> md_entry_px;
+    bit<64> md_entry_px_ex;
     bit<32> security_id;
     bit<32> rpt_seq;
     bit<8> open_close_settl_flag;
@@ -429,7 +429,7 @@ header snapshot_full_refresh_legacy_t {
     bit<64> max_price_variation;
     bit<16> block_length;
     bit<8> num_in_group;
-    bit<64> md_entry_px_optional;
+    bit<64> md_entry_px_optional_ex;
     bit<32> md_entry_size_short_optional;
     bit<32> number_of_orders_optional;
     bit<8> md_price_level_optional;
@@ -588,11 +588,11 @@ header md_incremental_refresh_trade_summary_legacy_t {
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
-    bit<64> md_entry_px;
+    bit<64> md_entry_px_ex;
     bit<32> md_entry_size_short;
     bit<32> security_id;
     bit<32> rpt_seq;
-    bit<32> number_of_orders_optional;
+    bit<32> number_of_orders;
     bit<8> aggressor_side;
     bit<8> md_update_action;
     bit<32> md_trade_entry_id;
@@ -620,7 +620,7 @@ header md_incremental_refresh_order_book_legacy_t {
     bit<8> num_in_group;
     bit<64> order_id_optional;
     bit<64> md_order_priority;
-    bit<64> md_entry_px_optional;
+    bit<64> md_entry_px_optional_ex;
     bit<32> md_display_qty_optional;
     bit<32> security_id;
     bit<8> md_update_action;
@@ -639,7 +639,7 @@ header snapshot_full_refresh_order_book_legacy_t {
     bit<8> num_in_group;
     bit<64> order_id;
     bit<64> md_order_priority;
-    bit<64> md_entry_px;
+    bit<64> md_entry_px_ex;
     bit<32> md_display_qty;
     bit<8> md_entry_type_book;
 }
