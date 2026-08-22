@@ -432,6 +432,8 @@ header md_instrument_definition_future_t {
     bit<1> inverted_book;
     bit<1> is_aon_instrument;
     bit<8> reserved_8;
+    bit<16> block_length_4;
+    bit<8> num_in_group_4;
     bit<8> lot_type;
     bit<32> min_lot_size;
 }
@@ -532,14 +534,16 @@ header md_instrument_definition_option_t {
     bit<1> inverted_book;
     bit<1> is_aon_instrument;
     bit<8> reserved_8;
-    bit<8> lot_type;
-    bit<32> min_lot_size;
     bit<16> block_length_4;
     bit<8> num_in_group_4;
-    bit<32> underlying_security_id;
-    bit<160> underlying_symbol;
+    bit<8> lot_type;
+    bit<32> min_lot_size;
     bit<16> block_length_5;
     bit<8> num_in_group_5;
+    bit<32> underlying_security_id;
+    bit<160> underlying_symbol;
+    bit<16> block_length_6;
+    bit<8> num_in_group_6;
     bit<32> related_security_id;
     bit<160> related_symbol;
 }
@@ -640,10 +644,12 @@ header md_instrument_definition_spread_t {
     bit<1> inverted_book;
     bit<1> is_aon_instrument;
     bit<8> reserved_8;
-    bit<8> lot_type;
-    bit<32> min_lot_size;
     bit<16> block_length_4;
     bit<8> num_in_group_4;
+    bit<8> lot_type;
+    bit<32> min_lot_size;
+    bit<16> block_length_5;
+    bit<8> num_in_group_5;
     bit<32> leg_security_id;
     bit<8> leg_side;
     bit<8> leg_ratio_qty;
@@ -746,6 +752,8 @@ header md_instrument_definition_fixed_income_t {
     bit<1> inverted_book;
     bit<1> is_aon_instrument;
     bit<8> reserved_8;
+    bit<16> block_length_4;
+    bit<8> num_in_group_4;
     bit<8> lot_type;
     bit<32> min_lot_size;
 }
@@ -836,10 +844,12 @@ header md_instrument_definition_repo_t {
     bit<1> inverted_book;
     bit<1> is_aon_instrument;
     bit<8> reserved_8;
-    bit<8> lot_type;
-    bit<32> min_lot_size;
     bit<16> block_length_4;
     bit<8> num_in_group_4;
+    bit<8> lot_type;
+    bit<32> min_lot_size;
+    bit<16> block_length_5;
+    bit<8> num_in_group_5;
     bit<160> underlying_symbol;
     bit<32> underlying_security_id_optional;
     bit<96> underlying_security_alt_id;
@@ -852,8 +862,8 @@ header md_instrument_definition_repo_t {
     bit<16> underlying_min_days_to_maturity;
     bit<64> underlying_instrument_guid_optional;
     bit<16> underlying_maturity_date;
-    bit<16> block_length_5;
-    bit<8> num_in_group_5;
+    bit<16> block_length_6;
+    bit<8> num_in_group_6;
     bit<32> related_security_id;
     bit<160> related_symbol;
     bit<64> related_instrument_guid;

@@ -83,6 +83,20 @@ header gap_fill_message_t {
     bit<32> gap_fill_padding;
 }
 
+header ping_message_t {
+    bit<64> correlation_id;
+    bit<64> request_time;
+    bit<8> data_length;
+}
+
+header pong_message_t {
+    bit<64> correlation_id;
+    bit<64> request_time;
+    bit<64> server_time;
+    bit<8> trading_instrument_status;
+    bit<8> data_length;
+}
+
 header instrument_info_request_message_t {
     bit<64> correlation_id;
 }
@@ -342,6 +356,8 @@ struct headers_t {
     test_request_message_t test_request_message;
     resend_request_message_t resend_request_message;
     gap_fill_message_t gap_fill_message;
+    ping_message_t ping_message;
+    pong_message_t pong_message;
     instrument_info_request_message_t instrument_info_request_message;
     instrument_info_message_t instrument_info_message;
     set_account_message_t set_account_message;
@@ -378,7 +394,15 @@ struct headers_t {
 parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.flags);
-        transition select(hdr.flags.template_id) {
+        transition select(hdr.flags.schema_id) {
+            16w1100: parse_session_message;
+            16w1101: parse_order_message;
+            default: accept;
+        }
+    }
+
+    state parse_session_message {
+        transition select(hdr.session_message.template_id) {
             16w100: parse_logon_message;
             16w200: parse_logon_conf_message;
             16w101: parse_logout_message;
@@ -387,37 +411,6 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
             16w11: parse_test_request_message;
             16w102: parse_resend_request_message;
             16w202: parse_gap_fill_message;
-            16w103: parse_instrument_info_request_message;
-            16w203: parse_instrument_info_message;
-            16w105: parse_set_account_message;
-            16w106: parse_set_trader_message;
-            16w205: parse_set_ack_message;
-            16w110: parse_new_order_message;
-            16w111: parse_new_ioc_order_message;
-            16w210: parse_order_entered_message;
-            16w120: parse_replace_order_message;
-            16w121: parse_obsolete_stream_order_message;
-            16w221: parse_order_reject_message;
-            16w220: parse_order_replaced_message;
-            16w130: parse_cancel_order_message;
-            16w230: parse_order_canceled_message;
-            16w233: parse_cancel_order_reject_message;
-            16w131: parse_mass_cancel_order_message;
-            16w231: parse_mass_cancel_order_ack_message;
-            16w232: parse_mass_cancel_order_reject_message;
-            16w132: parse_unlock_trading_message;
-            16w234: parse_unlock_trading_ack_message;
-            16w235: parse_unlock_trading_reject_message;
-            16w240: parse_order_filled_message;
-            16w241: parse_spread_order_filled_message;
-            16w150: parse_last_exec_id_request_message;
-            16w250: parse_last_exec_id_message;
-            16w152: parse_event_resend_request_message;
-            16w252: parse_event_resend_complete_message;
-            16w253: parse_event_resend_reject_message;
-            16w160: parse_reset_options_fill_protection_message;
-            16w260: parse_reset_options_fill_protection_ack_message;
-            16w261: parse_reset_options_fill_protection_reject_message;
             default: accept;
         }
     }
@@ -459,6 +452,55 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
 
     state parse_gap_fill_message {
         packet.extract(hdr.gap_fill_message);
+        transition accept;
+    }
+
+    state parse_order_message {
+        transition select(hdr.order_message.template_id) {
+            16w102: parse_ping_message;
+            16w202: parse_pong_message;
+            16w103: parse_instrument_info_request_message;
+            16w203: parse_instrument_info_message;
+            16w105: parse_set_account_message;
+            16w106: parse_set_trader_message;
+            16w205: parse_set_ack_message;
+            16w110: parse_new_order_message;
+            16w111: parse_new_ioc_order_message;
+            16w210: parse_order_entered_message;
+            16w120: parse_replace_order_message;
+            16w121: parse_obsolete_stream_order_message;
+            16w221: parse_order_reject_message;
+            16w220: parse_order_replaced_message;
+            16w130: parse_cancel_order_message;
+            16w230: parse_order_canceled_message;
+            16w233: parse_cancel_order_reject_message;
+            16w131: parse_mass_cancel_order_message;
+            16w231: parse_mass_cancel_order_ack_message;
+            16w232: parse_mass_cancel_order_reject_message;
+            16w132: parse_unlock_trading_message;
+            16w234: parse_unlock_trading_ack_message;
+            16w235: parse_unlock_trading_reject_message;
+            16w240: parse_order_filled_message;
+            16w241: parse_spread_order_filled_message;
+            16w150: parse_last_exec_id_request_message;
+            16w250: parse_last_exec_id_message;
+            16w152: parse_event_resend_request_message;
+            16w252: parse_event_resend_complete_message;
+            16w253: parse_event_resend_reject_message;
+            16w160: parse_reset_options_fill_protection_message;
+            16w260: parse_reset_options_fill_protection_ack_message;
+            16w261: parse_reset_options_fill_protection_reject_message;
+            default: accept;
+        }
+    }
+
+    state parse_ping_message {
+        packet.extract(hdr.ping_message);
+        transition accept;
+    }
+
+    state parse_pong_message {
+        packet.extract(hdr.pong_message);
         transition accept;
     }
 
@@ -651,6 +693,8 @@ control CoinbasederivativesOrdersapiDeparser(packet_out packet, in headers_t hdr
         packet.emit(hdr.test_request_message);
         packet.emit(hdr.resend_request_message);
         packet.emit(hdr.gap_fill_message);
+        packet.emit(hdr.ping_message);
+        packet.emit(hdr.pong_message);
         packet.emit(hdr.instrument_info_request_message);
         packet.emit(hdr.instrument_info_message);
         packet.emit(hdr.set_account_message);

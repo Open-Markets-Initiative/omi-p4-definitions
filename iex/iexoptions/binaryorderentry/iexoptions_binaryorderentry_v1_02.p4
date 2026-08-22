@@ -40,6 +40,56 @@ header message_header_t {
     bit<16> version;
 }
 
+header login_request_message_t {
+    bit<128> logon_id;
+    bit<256> token;
+}
+
+header login_response_message_t {
+    bit<128> logon_id;
+    bit<8> status;
+}
+
+header gateway_heartbeat_message_t {
+    bit<8> keep_alive;
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+    bit<8> subsession_type;
+    bit<64> subsession_id;
+    bit<8> joined;
+    bit<32> next_seq_no;
+}
+
+header terminate_message_t {
+    bit<8> reason;
+}
+
+header sequenced_message_header_message_t {
+    bit<64> subsession_id;
+    bit<32> sequence;
+    bit<64> timestamp;
+}
+
+header subsession_join_message_t {
+    bit<64> subsession_id;
+    bit<32> start_sequence;
+    bit<32> end_sequence;
+}
+
+header subsession_join_response_message_t {
+    bit<64> subsession_id;
+    bit<8> status;
+}
+
+header subsession_leave_message_t {
+    bit<64> subsession_id;
+}
+
+header subsession_leave_response_message_t {
+    bit<64> subsession_id;
+    bit<8> reason;
+}
+
 header new_order_single_message_t {
     bit<128> account_account;
     bit<32> instrument_id_instrument_id;
@@ -469,37 +519,20 @@ header risk_control_alert_message_t {
     bit<8> notification_reason;
 }
 
-header sequenced_message_header_message_t {
-    bit<64> subsession_id;
-    bit<32> sequence;
-    bit<64> timestamp;
-}
-
-header subsession_join_message_t {
-    bit<64> subsession_id;
-    bit<32> start_sequence;
-    bit<32> end_sequence;
-}
-
-header subsession_join_response_message_t {
-    bit<64> subsession_id;
-    bit<8> status;
-}
-
-header subsession_leave_message_t {
-    bit<64> subsession_id;
-}
-
-header subsession_leave_response_message_t {
-    bit<64> subsession_id;
-    bit<8> reason;
-}
-
 struct metadata_t {
 }
 
 struct headers_t {
     message_header_t message_header;
+    login_request_message_t login_request_message;
+    login_response_message_t login_response_message;
+    gateway_heartbeat_message_t gateway_heartbeat_message;
+    terminate_message_t terminate_message;
+    sequenced_message_header_message_t sequenced_message_header_message;
+    subsession_join_message_t subsession_join_message;
+    subsession_join_response_message_t subsession_join_response_message;
+    subsession_leave_message_t subsession_leave_message;
+    subsession_leave_response_message_t subsession_leave_response_message;
     new_order_single_message_t new_order_single_message;
     order_cancel_replace_request_message_t order_cancel_replace_request_message;
     order_cancel_request_message_t order_cancel_request_message;
@@ -527,17 +560,80 @@ struct headers_t {
     session_configuration_acknowledgement_message_t session_configuration_acknowledgement_message;
     risk_control_acknowledgment_message_t risk_control_acknowledgment_message;
     risk_control_alert_message_t risk_control_alert_message;
-    sequenced_message_header_message_t sequenced_message_header_message;
-    subsession_join_message_t subsession_join_message;
-    subsession_join_response_message_t subsession_join_response_message;
-    subsession_leave_message_t subsession_leave_message;
-    subsession_leave_response_message_t subsession_leave_response_message;
 }
 
 parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        transition select(hdr.message_header.schema_id) {
+            16w20000: parse_session_message;
+            16w20001: parse_business_message;
+            default: accept;
+        }
+    }
+
+    state parse_session_message {
+        transition select(hdr.session_message.template_id) {
+            16w1: parse_login_request_message;
+            16w2: parse_login_response_message;
+            16w3: parse_gateway_heartbeat_message;
+            16w6: parse_terminate_message;
+            16w7: parse_sequenced_message_header_message;
+            16w8: parse_subsession_join_message;
+            16w9: parse_subsession_join_response_message;
+            16w10: parse_subsession_leave_message;
+            16w11: parse_subsession_leave_response_message;
+            default: accept;
+        }
+    }
+
+    state parse_login_request_message {
+        packet.extract(hdr.login_request_message);
+        transition accept;
+    }
+
+    state parse_login_response_message {
+        packet.extract(hdr.login_response_message);
+        transition accept;
+    }
+
+    state parse_gateway_heartbeat_message {
+        packet.extract(hdr.gateway_heartbeat_message);
+        transition accept;
+    }
+
+    state parse_terminate_message {
+        packet.extract(hdr.terminate_message);
+        transition accept;
+    }
+
+    state parse_sequenced_message_header_message {
+        packet.extract(hdr.sequenced_message_header_message);
+        transition accept;
+    }
+
+    state parse_subsession_join_message {
+        packet.extract(hdr.subsession_join_message);
+        transition accept;
+    }
+
+    state parse_subsession_join_response_message {
+        packet.extract(hdr.subsession_join_response_message);
+        transition accept;
+    }
+
+    state parse_subsession_leave_message {
+        packet.extract(hdr.subsession_leave_message);
+        transition accept;
+    }
+
+    state parse_subsession_leave_response_message {
+        packet.extract(hdr.subsession_leave_response_message);
+        transition accept;
+    }
+
+    state parse_business_message {
+        transition select(hdr.business_message.template_id) {
             16w1: parse_new_order_single_message;
             16w2: parse_order_cancel_replace_request_message;
             16w3: parse_order_cancel_request_message;
@@ -565,11 +661,6 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
             16w155: parse_session_configuration_acknowledgement_message;
             16w156: parse_risk_control_acknowledgment_message;
             16w157: parse_risk_control_alert_message;
-            16w7: parse_sequenced_message_header_message;
-            16w8: parse_subsession_join_message;
-            16w9: parse_subsession_join_response_message;
-            16w10: parse_subsession_leave_message;
-            16w11: parse_subsession_leave_response_message;
             default: accept;
         }
     }
@@ -709,31 +800,6 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
         transition accept;
     }
 
-    state parse_sequenced_message_header_message {
-        packet.extract(hdr.sequenced_message_header_message);
-        transition accept;
-    }
-
-    state parse_subsession_join_message {
-        packet.extract(hdr.subsession_join_message);
-        transition accept;
-    }
-
-    state parse_subsession_join_response_message {
-        packet.extract(hdr.subsession_join_response_message);
-        transition accept;
-    }
-
-    state parse_subsession_leave_message {
-        packet.extract(hdr.subsession_leave_message);
-        transition accept;
-    }
-
-    state parse_subsession_leave_response_message {
-        packet.extract(hdr.subsession_leave_response_message);
-        transition accept;
-    }
-
 }
 
 control IexoptionsBinaryorderentryVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -760,6 +826,15 @@ control IexoptionsBinaryorderentryComputeChecksum(inout headers_t hdr, inout met
 control IexoptionsBinaryorderentryDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
+        packet.emit(hdr.login_request_message);
+        packet.emit(hdr.login_response_message);
+        packet.emit(hdr.gateway_heartbeat_message);
+        packet.emit(hdr.terminate_message);
+        packet.emit(hdr.sequenced_message_header_message);
+        packet.emit(hdr.subsession_join_message);
+        packet.emit(hdr.subsession_join_response_message);
+        packet.emit(hdr.subsession_leave_message);
+        packet.emit(hdr.subsession_leave_response_message);
         packet.emit(hdr.new_order_single_message);
         packet.emit(hdr.order_cancel_replace_request_message);
         packet.emit(hdr.order_cancel_request_message);
@@ -787,11 +862,6 @@ control IexoptionsBinaryorderentryDeparser(packet_out packet, in headers_t hdr) 
         packet.emit(hdr.session_configuration_acknowledgement_message);
         packet.emit(hdr.risk_control_acknowledgment_message);
         packet.emit(hdr.risk_control_alert_message);
-        packet.emit(hdr.sequenced_message_header_message);
-        packet.emit(hdr.subsession_join_message);
-        packet.emit(hdr.subsession_join_response_message);
-        packet.emit(hdr.subsession_leave_message);
-        packet.emit(hdr.subsession_leave_response_message);
     }
 }
 

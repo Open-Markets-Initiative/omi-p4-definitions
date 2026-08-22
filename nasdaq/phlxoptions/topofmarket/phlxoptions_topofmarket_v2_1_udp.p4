@@ -1,8 +1,8 @@
-// P4_16 (v1model) definition for: Nasdaq PhlxOptions Topo Itch v2.1
+// P4_16 (v1model) definition for: Nasdaq PhlxOptions TopOfMarket Itch v2.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Phlx Top Order Market Data
+//   Protocol: Top Of Market
 //   Encoding: Itch
 //   Version: 2.1
 //   Date: 02/13/2026
@@ -172,7 +172,7 @@ struct headers_t {
     best_ask_update_long_form_message_t best_ask_update_long_form_message[MAX_MESSAGES];
 }
 
-parser PhlxoptionsTopoUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser PhlxoptionsTopofmarketUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.udp_packet_header);
         transition parse_message;
@@ -241,28 +241,28 @@ parser PhlxoptionsTopoUdpParser(packet_in packet, out headers_t hdr, inout metad
 
 }
 
-control PhlxoptionsTopoUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control PhlxoptionsTopofmarketUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control PhlxoptionsTopoUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control PhlxoptionsTopofmarketUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control PhlxoptionsTopoUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control PhlxoptionsTopofmarketUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control PhlxoptionsTopoUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control PhlxoptionsTopofmarketUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control PhlxoptionsTopoUdpDeparser(packet_out packet, in headers_t hdr) {
+control PhlxoptionsTopofmarketUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.udp_packet_header);
         packet.emit(hdr.message);
@@ -279,10 +279,10 @@ control PhlxoptionsTopoUdpDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    PhlxoptionsTopoUdpParser(),
-    PhlxoptionsTopoUdpVerifyChecksum(),
-    PhlxoptionsTopoUdpIngress(),
-    PhlxoptionsTopoUdpEgress(),
-    PhlxoptionsTopoUdpComputeChecksum(),
-    PhlxoptionsTopoUdpDeparser()
+    PhlxoptionsTopofmarketUdpParser(),
+    PhlxoptionsTopofmarketUdpVerifyChecksum(),
+    PhlxoptionsTopofmarketUdpIngress(),
+    PhlxoptionsTopofmarketUdpEgress(),
+    PhlxoptionsTopofmarketUdpComputeChecksum(),
+    PhlxoptionsTopofmarketUdpDeparser()
 ) main;
