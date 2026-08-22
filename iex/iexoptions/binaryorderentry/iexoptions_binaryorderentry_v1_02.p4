@@ -573,7 +573,7 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
     }
 
     state parse_session_message {
-        transition select(hdr.session_message.template_id) {
+        transition select(hdr.message_header.template_id) {
             16w1: parse_login_request_message;
             16w2: parse_login_response_message;
             16w3: parse_gateway_heartbeat_message;
@@ -633,7 +633,7 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
     }
 
     state parse_business_message {
-        transition select(hdr.business_message.template_id) {
+        transition select(hdr.message_header.template_id) {
             16w1: parse_new_order_single_message;
             16w2: parse_order_cancel_replace_request_message;
             16w3: parse_order_cancel_request_message;

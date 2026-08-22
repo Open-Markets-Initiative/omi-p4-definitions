@@ -382,7 +382,7 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
     }
 
     state parse_session_message {
-        transition select(hdr.session_message.template_id) {
+        transition select(hdr.flags.template_id) {
             16w100: parse_logon_message;
             16w200: parse_logon_conf_message;
             16w101: parse_logout_message;
@@ -436,7 +436,7 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
     }
 
     state parse_order_message {
-        transition select(hdr.order_message.template_id) {
+        transition select(hdr.flags.template_id) {
             16w102: parse_ping_message;
             16w202: parse_pong_message;
             16w103: parse_instrument_info_request_message;
