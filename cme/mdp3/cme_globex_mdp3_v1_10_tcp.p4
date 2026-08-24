@@ -63,7 +63,7 @@ header admin_login_t {
 }
 
 header admin_logout_t {
-    bit<1440> text;
+    bit<800> text;
 }
 
 header security_status_t {
@@ -945,6 +945,89 @@ header snapshot_full_refresh_tcp_t {
     bit<1> null_value;
 }
 
+header negotiate_t {
+    bit<256> hmac_signature;
+    bit<160> access_key_id;
+    bit<64> uuid;
+    bit<64> request_timestamp;
+    bit<40> session;
+    bit<40> firm;
+}
+
+header negotiation_reject_t {
+    bit<384> reason;
+    bit<64> uuid;
+    bit<64> request_timestamp;
+    bit<8> error_codes;
+    bit<40> padding_5;
+}
+
+header negotiation_response_t {
+    bit<64> uuid;
+    bit<64> request_timestamp;
+    bit<16> secret_key_secure_id_expiration;
+    bit<32> padding_4;
+}
+
+header terminate_t {
+    bit<384> reason;
+    bit<64> uuid;
+    bit<64> request_timestamp;
+    bit<8> error_codes;
+    bit<40> padding_5;
+}
+
+header market_data_request_t {
+    bit<32> md_req_id;
+    bit<8> subscription_req_type;
+    bit<16> block_length;
+    bit<8> num_in_group;
+    bit<48> security_group;
+    bit<16> block_length_2;
+    bit<8> num_in_group_2;
+    bit<32> security_id;
+}
+
+header request_ack_t {
+    bit<32> md_req_id;
+    bit<8> subscription_req_type;
+    bit<8> md_req_id_status;
+    bit<16> block_length;
+    bit<8> num_in_group;
+    bit<48> security_group;
+    bit<16> block_length_2;
+    bit<8> num_in_group_2;
+    bit<32> security_id;
+}
+
+header request_reject_t {
+    bit<32> md_req_id_optional;
+    bit<8> md_req_rej_reason;
+    bit<800> text;
+}
+
+header security_list_request_t {
+    bit<32> md_req_id;
+    bit<8> subscription_req_type;
+    bit<16> block_length;
+    bit<8> num_in_group;
+    bit<48> security_group;
+    bit<16> block_length_2;
+    bit<8> num_in_group_2;
+    bit<32> security_id;
+}
+
+header security_status_request_t {
+    bit<32> md_req_id;
+    bit<8> subscription_req_type;
+    bit<16> block_length;
+    bit<8> num_in_group;
+    bit<48> security_group;
+    bit<16> block_length_2;
+    bit<8> num_in_group_2;
+    bit<32> security_id;
+}
+
 struct metadata_t {
 }
 
@@ -972,6 +1055,15 @@ struct headers_t {
     snapshot_refresh_top_orders_t snapshot_refresh_top_orders;
     security_status_workup_t security_status_workup;
     snapshot_full_refresh_tcp_t snapshot_full_refresh_tcp;
+    negotiate_t negotiate;
+    negotiation_reject_t negotiation_reject;
+    negotiation_response_t negotiation_response;
+    terminate_t terminate;
+    market_data_request_t market_data_request;
+    request_ack_t request_ack;
+    request_reject_t request_reject;
+    security_list_request_t security_list_request;
+    security_status_request_t security_status_request;
 }
 
 parser CmeGlobexMdp3TcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -1000,6 +1092,15 @@ parser CmeGlobexMdp3TcpParser(packet_in packet, out headers_t hdr, inout metadat
             16w59: parse_snapshot_refresh_top_orders;
             16w60: parse_security_status_workup;
             16w61: parse_snapshot_full_refresh_tcp;
+            16w200: parse_negotiate;
+            16w201: parse_negotiation_reject;
+            16w202: parse_negotiation_response;
+            16w203: parse_terminate;
+            16w205: parse_market_data_request;
+            16w206: parse_request_ack;
+            16w207: parse_request_reject;
+            16w208: parse_security_list_request;
+            16w209: parse_security_status_request;
             default: accept;
         }
     }
@@ -1114,6 +1215,51 @@ parser CmeGlobexMdp3TcpParser(packet_in packet, out headers_t hdr, inout metadat
         transition accept;
     }
 
+    state parse_negotiate {
+        packet.extract(hdr.negotiate);
+        transition accept;
+    }
+
+    state parse_negotiation_reject {
+        packet.extract(hdr.negotiation_reject);
+        transition accept;
+    }
+
+    state parse_negotiation_response {
+        packet.extract(hdr.negotiation_response);
+        transition accept;
+    }
+
+    state parse_terminate {
+        packet.extract(hdr.terminate);
+        transition accept;
+    }
+
+    state parse_market_data_request {
+        packet.extract(hdr.market_data_request);
+        transition accept;
+    }
+
+    state parse_request_ack {
+        packet.extract(hdr.request_ack);
+        transition accept;
+    }
+
+    state parse_request_reject {
+        packet.extract(hdr.request_reject);
+        transition accept;
+    }
+
+    state parse_security_list_request {
+        packet.extract(hdr.security_list_request);
+        transition accept;
+    }
+
+    state parse_security_status_request {
+        packet.extract(hdr.security_status_request);
+        transition accept;
+    }
+
 }
 
 control CmeGlobexMdp3TcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -1162,6 +1308,15 @@ control CmeGlobexMdp3TcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.snapshot_refresh_top_orders);
         packet.emit(hdr.security_status_workup);
         packet.emit(hdr.snapshot_full_refresh_tcp);
+        packet.emit(hdr.negotiate);
+        packet.emit(hdr.negotiation_reject);
+        packet.emit(hdr.negotiation_response);
+        packet.emit(hdr.terminate);
+        packet.emit(hdr.market_data_request);
+        packet.emit(hdr.request_ack);
+        packet.emit(hdr.request_reject);
+        packet.emit(hdr.security_list_request);
+        packet.emit(hdr.security_status_request);
     }
 }
 
