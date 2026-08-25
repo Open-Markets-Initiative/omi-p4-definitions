@@ -1096,7 +1096,7 @@ header md_instrument_definition_fx_t {
     bit<16> block_length_4;
     bit<8> num_in_group_4;
     bit<8> lot_type;
-    bit<32> min_lot_size_decimal_qty;
+    bit<64> min_lot_size_u_int_64;
     bit<16> block_length_5;
     bit<8> num_in_group_5;
     bit<16> trade_date;
