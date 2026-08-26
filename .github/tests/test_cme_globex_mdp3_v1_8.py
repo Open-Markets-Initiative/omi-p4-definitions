@@ -28,7 +28,7 @@ class CmeGlobexMdp3V18Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_mdincrementalrefreshtradesummary(self):
-        for payload in payloads.of("omi-data-packets/Cme/Mdp3.Sbe.v1.8/MdIncrementalRefreshTradeSummary.pcap"):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.v1.8/MdIncrementalRefreshTradeSummary.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

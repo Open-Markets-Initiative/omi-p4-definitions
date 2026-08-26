@@ -28,55 +28,55 @@ class IexequitiesDeepplusV104Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_addorder(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/a_AddOrder.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/a_AddOrder.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_tradebreak(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/B_TradeBreak.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/B_TradeBreak.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_securitydirectory(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/D_SecurityDirectory.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/D_SecurityDirectory.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_securityevent(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/E_SecurityEvent.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/E_SecurityEvent.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_tradingstatus(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/H_TradingStatus.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/H_TradingStatus.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_retailliquidityindicator(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/I_RetailLiquidityIndicator.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/I_RetailLiquidityIndicator.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderexecuted(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/L_OrderExecuted.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/L_OrderExecuted.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_ordermodify(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/M_OrderModify.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/M_OrderModify.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_operationalhaltstatus(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/O_OperationalHaltStatus.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/O_OperationalHaltStatus.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_shortsalepriceteststatus(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/P_ShortSalePriceTestStatus.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/P_ShortSalePriceTestStatus.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderdelete(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/R_OrderDelete.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/R_OrderDelete.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_systemevent(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/S_SystemEvent.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/S_SystemEvent.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_trade(self):
-        for payload in payloads.of("omi-data-packets/Iex/DeepPlus.IexTp.1.0.2/T_Trade.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.v1.0.2/T_Trade.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

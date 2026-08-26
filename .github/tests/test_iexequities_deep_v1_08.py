@@ -28,15 +28,15 @@ class IexequitiesDeepV108Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_heartbeat(self):
-        for payload in payloads.of("omi-data-packets/Iex/Deep.IexTp.v1.0/Heartbeat.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Deep.v1.0/Heartbeat.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_pricelevelbuyupdatemessage(self):
-        for payload in payloads.of("omi-data-packets/Iex/Deep.IexTp.v1.0/PriceLevelBuyUpdateMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Deep.v1.0/PriceLevelBuyUpdateMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_pricelevelsellupdatemessage(self):
-        for payload in payloads.of("omi-data-packets/Iex/Deep.IexTp.v1.0/PriceLevelSellUpdateMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Deep.v1.0/PriceLevelSellUpdateMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

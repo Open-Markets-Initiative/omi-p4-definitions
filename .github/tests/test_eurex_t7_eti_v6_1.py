@@ -28,15 +28,15 @@ class EurexT7EtiV61Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_heartbeat(self):
-        for payload in payloads.of("omi-data-packets/Eurex/Eti.Fbe.v6.1/Heartbeat.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eti.v6.1/Heartbeat.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_retransmitmemessagerequest(self):
-        for payload in payloads.of("omi-data-packets/Eurex/Eti.Fbe.v6.1/RetransmitMeMessageRequest.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eti.v6.1/RetransmitMeMessageRequest.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_userloginresponse(self):
-        for payload in payloads.of("omi-data-packets/Eurex/Eti.Fbe.v6.1/UserLoginResponse.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eti.v6.1/UserLoginResponse.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

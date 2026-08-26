@@ -114,7 +114,7 @@ header best_bid_short_message_t {
 header best_offer_short_message_t {
     bit<64> timestamp;
     bit<16> security_id;
-    bit<16> offer_size_uint_16;
+    bit<16> offer_size_short;
     bit<16> offer_price_short;
 }
 
