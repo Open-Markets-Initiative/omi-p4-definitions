@@ -28,7 +28,7 @@ class IexequitiesTopsV164Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_quoteupdatemessage(self):
-        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.v1.6/QuoteUpdateMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/QuoteUpdateMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

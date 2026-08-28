@@ -28,23 +28,23 @@ class CmeGlobexMdp3V15Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_mdincrementalrefreshbook(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.v1.5/MdIncrementalRefreshBook.pcap"):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.5/MdIncrementalRefreshBook.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_mdincrementalrefreshsessionstatistics(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.v1.5/MdIncrementalRefreshSessionStatistics.pcap"):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.5/MdIncrementalRefreshSessionStatistics.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_mdincrementalrefreshtradesummary(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.v1.5/MdIncrementalRefreshTradeSummary.pcap"):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.5/MdIncrementalRefreshTradeSummary.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_mdincrementalrefreshvolume(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.v1.5/MdIncrementalRefreshVolume.pcap"):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.5/MdIncrementalRefreshVolume.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_mdinstrumentdefinitionspread(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.v1.5/MdInstrumentDefinitionSpread.pcap"):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.5/MdInstrumentDefinitionSpread.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

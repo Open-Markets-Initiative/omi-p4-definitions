@@ -50,12 +50,6 @@ header sequence_number_reset_message_t {
     bit<8> channel_id;
 }
 
-header source_time_reference_message_t {
-    bit<32> id;
-    bit<32> symbol_seq_num;
-    bit<32> source_time;
-}
-
 header symbol_index_mapping_message_t {
     bit<32> symbol_index;
     bit<88> symbol;
@@ -100,57 +94,6 @@ header security_status_message_t {
     bit<8> ssr_state;
     bit<8> market_state;
     bit<8> session_state;
-}
-
-header retransmission_request_message_t {
-    bit<32> begin_seq_num;
-    bit<32> end_seq_num;
-    bit<80> source_id;
-    bit<8> product_id;
-    bit<8> channel_id;
-}
-
-header symbol_index_mapping_request_message_t {
-    bit<32> symbol_index;
-    bit<80> source_id;
-    bit<8> product_id;
-    bit<8> channel_id;
-    bit<8> retransmit_method;
-}
-
-header refresh_request_message_t {
-    bit<32> symbol_index;
-    bit<80> source_id;
-    bit<8> product_id;
-    bit<8> channel_id;
-}
-
-header message_unavailable_message_t {
-    bit<32> begin_seq_num;
-    bit<32> end_seq_num;
-    bit<8> product_id;
-    bit<8> channel_id;
-}
-
-header refresh_header_message_t {
-    bit<16> current_refresh_pkt;
-    bit<16> total_refresh_pkts;
-    bit<32> last_seq_num;
-    bit<32> last_symbol_seq_num;
-}
-
-header request_response_message_t {
-    bit<32> request_seq_num;
-    bit<32> begin_seq_num;
-    bit<32> end_seq_num;
-    bit<80> source_id;
-    bit<8> product_id;
-    bit<8> channel_id;
-    bit<8> status;
-}
-
-header heartbeat_response_message_t {
-    bit<80> source_id;
 }
 
 header delta_message_t {
@@ -200,17 +143,9 @@ struct metadata_t {
 struct headers_t {
     message_header_t message_header;
     sequence_number_reset_message_t sequence_number_reset_message;
-    source_time_reference_message_t source_time_reference_message;
     symbol_index_mapping_message_t symbol_index_mapping_message;
     symbol_clear_message_t symbol_clear_message;
     security_status_message_t security_status_message;
-    retransmission_request_message_t retransmission_request_message;
-    symbol_index_mapping_request_message_t symbol_index_mapping_request_message;
-    refresh_request_message_t refresh_request_message;
-    message_unavailable_message_t message_unavailable_message;
-    refresh_header_message_t refresh_header_message;
-    request_response_message_t request_response_message;
-    heartbeat_response_message_t heartbeat_response_message;
     delta_message_t delta_message;
     imbalance_message_t imbalance_message;
 }
@@ -220,17 +155,9 @@ parser AmexequitiesDepthfeedParser(packet_in packet, out headers_t hdr, inout me
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
             16w1: parse_sequence_number_reset_message;
-            16w2: parse_source_time_reference_message;
             16w3: parse_symbol_index_mapping_message;
             16w32: parse_symbol_clear_message;
             16w34: parse_security_status_message;
-            16w10: parse_retransmission_request_message;
-            16w13: parse_symbol_index_mapping_request_message;
-            16w15: parse_refresh_request_message;
-            16w31: parse_message_unavailable_message;
-            16w35: parse_refresh_header_message;
-            16w11: parse_request_response_message;
-            16w12: parse_heartbeat_response_message;
             16w115: parse_delta_message;
             16w105: parse_imbalance_message;
             default: accept;
@@ -239,11 +166,6 @@ parser AmexequitiesDepthfeedParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
-        transition accept;
-    }
-
-    state parse_source_time_reference_message {
-        packet.extract(hdr.source_time_reference_message);
         transition accept;
     }
 
@@ -259,41 +181,6 @@ parser AmexequitiesDepthfeedParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_security_status_message {
         packet.extract(hdr.security_status_message);
-        transition accept;
-    }
-
-    state parse_retransmission_request_message {
-        packet.extract(hdr.retransmission_request_message);
-        transition accept;
-    }
-
-    state parse_symbol_index_mapping_request_message {
-        packet.extract(hdr.symbol_index_mapping_request_message);
-        transition accept;
-    }
-
-    state parse_refresh_request_message {
-        packet.extract(hdr.refresh_request_message);
-        transition accept;
-    }
-
-    state parse_message_unavailable_message {
-        packet.extract(hdr.message_unavailable_message);
-        transition accept;
-    }
-
-    state parse_refresh_header_message {
-        packet.extract(hdr.refresh_header_message);
-        transition accept;
-    }
-
-    state parse_request_response_message {
-        packet.extract(hdr.request_response_message);
-        transition accept;
-    }
-
-    state parse_heartbeat_response_message {
-        packet.extract(hdr.heartbeat_response_message);
         transition accept;
     }
 
@@ -334,17 +221,9 @@ control AmexequitiesDepthfeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.sequence_number_reset_message);
-        packet.emit(hdr.source_time_reference_message);
         packet.emit(hdr.symbol_index_mapping_message);
         packet.emit(hdr.symbol_clear_message);
         packet.emit(hdr.security_status_message);
-        packet.emit(hdr.retransmission_request_message);
-        packet.emit(hdr.symbol_index_mapping_request_message);
-        packet.emit(hdr.refresh_request_message);
-        packet.emit(hdr.message_unavailable_message);
-        packet.emit(hdr.refresh_header_message);
-        packet.emit(hdr.request_response_message);
-        packet.emit(hdr.heartbeat_response_message);
         packet.emit(hdr.delta_message);
         packet.emit(hdr.imbalance_message);
     }

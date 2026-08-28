@@ -28,35 +28,35 @@ class NsmequitiesTotalviewV502017Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_addordernompidattributionmessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/AddOrderNoMpidAttributionMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/AddOrderNoMpidAttributionMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_marketparticipantpositionmessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/MarketParticipantPositionMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/MarketParticipantPositionMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_multiplepackets(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/Multiple.Packets.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/Multiple.Packets.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_netorderimbalanceindicatormessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/NetOrderImbalanceIndicatorMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/NetOrderImbalanceIndicatorMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderdeletemessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/OrderDeleteMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/OrderDeleteMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderexecutedmessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/OrderExecutedMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/OrderExecutedMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderreplacemessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/OrderReplaceMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/OrderReplaceMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_stocktradingactionmessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.v5.0/StockTradingActionMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v5.0.2017/StockTradingActionMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

@@ -28,39 +28,39 @@ class EurexT7EobiV60Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_executionsummary(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/ExecutionSummary.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/ExecutionSummary.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_fullorderexecution(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/FullOrderExecution.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/FullOrderExecution.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_heartbeat(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/Heartbeat.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/Heartbeat.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_instrumentsummary(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/InstrumentSummary.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/InstrumentSummary.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderadd(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/OrderAdd.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/OrderAdd.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_ordermodify(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/OrderModify.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/OrderModify.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_partialorderexecution(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/PartialOrderExecution.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/PartialOrderExecution.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_productsummary(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/ProductSummary.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/ProductSummary.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_snapshotorder(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.v6.0/SnapshotOrder.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/SnapshotOrder.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

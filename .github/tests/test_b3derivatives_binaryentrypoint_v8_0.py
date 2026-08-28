@@ -28,11 +28,11 @@ class B3derivativesBinaryentrypointV80Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_negotiaterejectmessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.0/NegotiateRejectMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.0/NegotiateRejectMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_terminatemessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.0/TerminateMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.0/TerminateMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

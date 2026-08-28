@@ -28,27 +28,27 @@ class B3derivativesBinaryentrypointV81Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_establishmessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.1/EstablishMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.1/EstablishMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_executionreportnewmessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.1/ExecutionReportNewMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.1/ExecutionReportNewMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_executionreporttrademessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.1/ExecutionReportTradeMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.1/ExecutionReportTradeMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_negotiatemessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.1/NegotiateMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.1/NegotiateMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_simplemodifyordermessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.1/SimpleModifyOrderMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.1/SimpleModifyOrderMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_simplenewordermessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.v8.1/SimpleNewOrderMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryEntryPoint.Sbe.v8.1/SimpleNewOrderMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

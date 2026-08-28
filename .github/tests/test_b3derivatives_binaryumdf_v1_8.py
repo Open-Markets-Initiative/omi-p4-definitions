@@ -28,11 +28,11 @@ class B3derivativesBinaryumdfV18Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_securitydefinitionmessage(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryUmdf.v1.8/SecurityDefinitionMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryUmdf.Sbe.v1.8/SecurityDefinitionMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_sequence(self):
-        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryUmdf.v1.8/Sequence.pcap"):
+        for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryUmdf.Sbe.v1.8/Sequence.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 
