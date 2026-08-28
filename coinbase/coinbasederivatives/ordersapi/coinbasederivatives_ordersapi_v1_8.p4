@@ -58,11 +58,11 @@ header logon_conf_message_t {
 }
 
 header logout_message_t {
-    bit<512> reason;
+    bit<512> reason_string_64;
 }
 
 header logged_out_message_t {
-    bit<512> reason;
+    bit<512> reason_string_64;
 }
 
 header heartbeat_message_t {
@@ -81,6 +81,12 @@ header resend_request_message_t {
 header gap_fill_message_t {
     bit<32> new_sequence_number;
     bit<32> gap_fill_padding;
+}
+
+header reject_message_t {
+    bit<32> ref_sequence_number;
+    bit<32> reject_reason;
+    bit<512> details;
 }
 
 header ping_message_t {
@@ -356,6 +362,7 @@ struct headers_t {
     test_request_message_t test_request_message;
     resend_request_message_t resend_request_message;
     gap_fill_message_t gap_fill_message;
+    reject_message_t reject_message;
     ping_message_t ping_message;
     pong_message_t pong_message;
     instrument_info_request_message_t instrument_info_request_message;
@@ -411,6 +418,7 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
             16w11: parse_test_request_message;
             16w102: parse_resend_request_message;
             16w202: parse_gap_fill_message;
+            16w210: parse_reject_message;
             default: accept;
         }
     }
@@ -452,6 +460,11 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
 
     state parse_gap_fill_message {
         packet.extract(hdr.gap_fill_message);
+        transition accept;
+    }
+
+    state parse_reject_message {
+        packet.extract(hdr.reject_message);
         transition accept;
     }
 
@@ -693,6 +706,7 @@ control CoinbasederivativesOrdersapiDeparser(packet_out packet, in headers_t hdr
         packet.emit(hdr.test_request_message);
         packet.emit(hdr.resend_request_message);
         packet.emit(hdr.gap_fill_message);
+        packet.emit(hdr.reject_message);
         packet.emit(hdr.ping_message);
         packet.emit(hdr.pong_message);
         packet.emit(hdr.instrument_info_request_message);
