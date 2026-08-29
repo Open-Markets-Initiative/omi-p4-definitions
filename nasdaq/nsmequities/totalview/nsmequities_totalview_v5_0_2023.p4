@@ -1,11 +1,11 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView Itch v5.0.2026
+// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView Itch v5.0.2023
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: TotalView Itch
 //   Encoding: Itch
-//   Version: 5.0.2026
-//   Date: 2/19/2026
+//   Version: 5.0.2023
+//   Date: 4/28/2023
 //   Specification: NQTVITCHSpecification.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
