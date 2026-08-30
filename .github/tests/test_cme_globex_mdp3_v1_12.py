@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "cme/mdp3/cme_globex_mdp3_v1_12_tcp.p4"
+PROGRAM = "cme/mdp3/cme_globex_mdp3_v1_12_clienttcp.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_mdp3_v1_12.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
