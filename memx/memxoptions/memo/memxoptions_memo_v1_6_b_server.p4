@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Memx MemxOptions Memo Sbe v1.3
+// P4_16 (v1model) definition for: Memx MemxOptions Memo Sbe v1.6.b
 // 
 // Protocol:
 //   Organization: The Members Exchange
 //   Protocol: Members Orders
 //   Encoding: Simple Binary Encoding
-//   Version: 1.3
-//   Date: 6/29/2023
-//   Specification: MEMO SBE for Options-v1_3
+//   Version: 1.6.b
+//   Date: 2/2/2024
+//   Specification: MEMO for US Options - SBE-v1_6b
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -23,7 +23,6 @@
 //   https://patents.google.com/patent/US20240129382A1/en
 //   https://patents.google.com/patent/US20240419416A1/en
 // 
-// For full Omi information: https://github.com/Open-Markets-Initiative/Directory
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
 #include <core.p4>
@@ -37,27 +36,45 @@ header common_header_t {
     bit<16> message_length;
 }
 
-header login_request_message_t {
-    bit<8> token_type;
-    bit<8> token;
+header login_accepted_message_t {
+    bit<8> supported_request_mode;
 }
 
-header replay_request_message_t {
+header login_rejected_message_t {
+    bit<8> login_reject_code;
+}
+
+header start_of_session_message_t {
     bit<64> session_id;
+}
+
+header replay_begin_message_t {
     bit<64> next_sequence_number;
-    bit<32> count;
+    bit<32> pending_message_count;
 }
 
-header replay_all_request_message_t {
-    bit<64> session_id;
+header replay_rejected_message_t {
+    bit<8> replay_reject_code;
 }
 
-header stream_request_message_t {
-    bit<64> session_id;
+header replay_complete_message_t {
+    bit<64> message_count;
+}
+
+header stream_begin_message_t {
     bit<64> next_sequence_number;
+    bit<64> max_sequence_number;
 }
 
-header unsequenced_message_t {
+header stream_rejected_message_t {
+    bit<8> stream_reject_code;
+}
+
+header stream_complete_message_t {
+    bit<64> total_sequence_count;
+}
+
+header sequenced_message_t {
     bit<16> block_length;
     bit<8> template_id;
     bit<8> schema_id;
@@ -73,7 +90,7 @@ header new_order_single_message_t {
     bit<8> ord_type;
     bit<64> price_optional;
     bit<8> time_in_force;
-    bit<8> open_or_close_optional;
+    bit<8> position_effect_optional;
     bit<1> participate_do_not_initiate;
     bit<1> intermarket_sweep;
     bit<1> external_routing_not_allowed;
@@ -89,7 +106,7 @@ header new_order_single_message_t {
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header short_two_sided_bulk_quote_message_t {
@@ -109,7 +126,7 @@ header short_two_sided_bulk_quote_message_t {
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
     bit<8> block_length_short_2;
     bit<8> num_in_group_2;
     bit<8> list_seq_no;
@@ -137,7 +154,7 @@ header long_two_sided_bulk_quote_message_t {
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
     bit<8> block_length_short_2;
     bit<8> num_in_group_2;
     bit<8> list_seq_no;
@@ -165,7 +182,7 @@ header short_one_sided_bulk_quote_message_t {
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
     bit<8> block_length_short_2;
     bit<8> num_in_group_2;
     bit<8> list_seq_no;
@@ -192,7 +209,7 @@ header long_one_sided_bulk_quote_message_t {
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
     bit<8> block_length_short_2;
     bit<8> num_in_group_2;
     bit<8> list_seq_no;
@@ -230,7 +247,7 @@ header mass_cancel_request_message_t {
     bit<160> clordid;
     bit<32> efid_optional;
     bit<8> underlying_or_series;
-    bit<48> underlier_optional;
+    bit<48> underlier;
     bit<64> options_security_id_optional;
     bit<16> cancel_group_id;
     bit<1> lockout;
@@ -248,25 +265,25 @@ header mass_cancel_clear_lockout_request_message_t {
 header allocation_instruction_message_t {
     bit<64> sending_time;
     bit<160> alloc_id;
-    bit<8> alloc_trans_type;
     bit<8> alloc_type;
-    bit<64> ref_alloc_report_id;
-    bit<64> exec_ref_id_optional;
-    bit<64> trd_match_id;
+    bit<8> alloc_trans_type;
+    bit<160> ref_alloc_id_optional;
     bit<64> security_id;
     bit<8> side;
-    bit<32> quantity_uint_32;
-    bit<64> trade_date;
     bit<8> block_length_short;
     bit<8> num_in_group;
-    bit<32> alloc_qty;
-    bit<8> trading_capacity;
-    bit<8> open_or_close;
+    bit<64> trade_id;
+    bit<32> last_qty;
+    bit<64> last_px;
     bit<8> block_length_short_2;
     bit<8> num_in_group_2;
-    bit<128> party_i_d_execution_report_new_party_id;
-    bit<8> party_id_source;
-    bit<8> party_role_uint_8;
+    bit<32> alloc_qty;
+    bit<8> alloc_position_effect;
+    bit<8> block_length_short_3;
+    bit<8> num_in_group_3;
+    bit<128> nested_party_id;
+    bit<8> nested_party_id_source;
+    bit<8> nested_party_role;
 }
 
 header execution_report_new_message_t {
@@ -281,7 +298,7 @@ header execution_report_new_message_t {
     bit<8> ord_type;
     bit<64> price_optional;
     bit<8> time_in_force;
-    bit<8> open_or_close_optional;
+    bit<8> position_effect_optional;
     bit<1> participate_do_not_initiate;
     bit<1> intermarket_sweep;
     bit<1> external_routing_not_allowed;
@@ -301,7 +318,7 @@ header execution_report_new_message_t {
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header execution_report_bulk_quote_pending_new_message_t {
@@ -324,7 +341,7 @@ header execution_report_bulk_quote_pending_new_message_t {
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header execution_report_bulk_quote_component_new_message_t {
@@ -373,14 +390,14 @@ header execution_report_trade_message_t {
     bit<64> transact_time;
     bit<8> last_liquidity_ind;
     bit<32> last_mkt;
-    bit<8> open_or_close;
+    bit<8> position_effect;
     bit<8> trading_capacity;
     bit<8> contra_trading_capacity;
     bit<8> block_length_short;
     bit<8> num_in_group;
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header execution_report_pending_cancel_message_t {
@@ -410,6 +427,7 @@ header execution_report_canceled_message_t {
     bit<32> cum_qty;
     bit<64> sending_time;
     bit<64> transact_time;
+    bit<8> orig_list_seq_no;
 }
 
 header execution_report_pending_replace_message_t {
@@ -445,6 +463,7 @@ header execution_report_replaced_message_t {
     bit<32> cum_qty;
     bit<64> sending_time;
     bit<64> transact_time;
+    bit<8> orig_list_seq_no;
 }
 
 header execution_report_trade_correction_message_t {
@@ -469,6 +488,7 @@ header execution_report_trade_break_message_t {
     bit<64> exec_id;
     bit<64> exec_ref_id;
     bit<8> ord_status;
+    bit<64> security_id;
     bit<32> leaves_qty;
     bit<32> cum_qty;
     bit<64> sending_time;
@@ -498,10 +518,10 @@ header pending_mass_cancel_message_t {
     bit<1> send_cancels;
     bit<1> cancel_orders_from_this_port_only;
     bit<5> reserved_5;
-    bit<64> lockout_id_optional;
+    bit<64> lockout_id;
     bit<32> efid_optional;
     bit<8> underlying_or_series;
-    bit<48> underlier_optional;
+    bit<48> underlier;
     bit<64> options_security_id_optional;
     bit<16> cancel_group_id;
     bit<64> sending_time;
@@ -511,7 +531,7 @@ header mass_cancel_reject_message_t {
     bit<160> clordid;
     bit<16> mass_cancel_reject_reason;
     bit<32> efid_optional;
-    bit<8> underlying_or_series;
+    bit<8> underlying_or_series_optional;
     bit<48> underlier_optional;
     bit<64> options_security_id_optional;
     bit<16> cancel_group_id;
@@ -539,36 +559,51 @@ header order_cancel_reject_message_t {
 }
 
 header allocation_instruction_ack_message_t {
-    bit<64> alloc_report_id;
+    bit<64> sending_time;
     bit<160> alloc_id;
+    bit<8> alloc_type;
+    bit<8> alloc_trans_type;
+    bit<160> secondary_alloc_id;
+    bit<160> ref_alloc_id_optional;
     bit<8> alloc_status;
     bit<16> alloc_rej_code;
-    bit<64> sending_time;
-}
-
-header allocation_report_message_t {
-    bit<64> alloc_report_id;
-    bit<160> alloc_id;
-    bit<8> alloc_trans_type;
-    bit<8> alloc_type;
-    bit<8> alloc_status;
-    bit<64> exec_ref_id;
-    bit<64> trd_match_id;
-    bit<64> security_id;
-    bit<8> side;
-    bit<32> quantity_uint_32;
-    bit<64> trade_date;
-    bit<64> sending_time;
     bit<8> block_length_short;
     bit<8> num_in_group;
     bit<32> alloc_qty;
-    bit<8> trading_capacity;
-    bit<8> open_or_close;
+    bit<8> alloc_position_effect;
+    bit<160> alloc_id_2;
     bit<8> block_length_short_2;
     bit<8> num_in_group_2;
-    bit<128> party_i_d_execution_report_new_party_id;
-    bit<8> party_id_source;
-    bit<8> party_role_uint_8;
+    bit<128> nested_party_id;
+    bit<8> nested_party_id_source;
+    bit<8> nested_party_role;
+}
+
+header allocation_instruction_alert_message_t {
+    bit<64> sending_time;
+    bit<160> alloc_id;
+    bit<8> alloc_type;
+    bit<8> alloc_trans_type;
+    bit<160> ref_alloc_id_optional;
+    bit<16> alloc_canc_replace_reason;
+    bit<8> side;
+    bit<64> security_id;
+    bit<64> trade_date;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+    bit<64> trade_id;
+    bit<32> last_qty;
+    bit<64> last_px;
+    bit<8> block_length_short_2;
+    bit<8> num_in_group_2;
+    bit<32> alloc_qty;
+    bit<8> alloc_position_effect;
+    bit<160> alloc_id_2;
+    bit<8> block_length_short_3;
+    bit<8> num_in_group_3;
+    bit<128> nested_party_id;
+    bit<8> nested_party_id_source;
+    bit<8> nested_party_role;
 }
 
 header user_notification_message_t {
@@ -589,61 +624,21 @@ header mass_cancel_clear_lockout_done_message_t {
     bit<64> sending_time;
 }
 
-header login_accepted_message_t {
-    bit<8> supported_request_mode;
-}
-
-header login_rejected_message_t {
-    bit<8> login_reject_code;
-}
-
-header start_of_session_message_t {
-    bit<64> session_id;
-}
-
-header replay_begin_message_t {
-    bit<64> next_sequence_number;
-    bit<32> pending_message_count;
-}
-
-header replay_rejected_message_t {
-    bit<8> replay_reject_code;
-}
-
-header replay_complete_message_t {
-    bit<64> message_count;
-}
-
-header stream_begin_message_t {
-    bit<64> next_sequence_number;
-    bit<64> max_sequence_number;
-}
-
-header stream_rejected_message_t {
-    bit<8> stream_reject_code;
-}
-
-header stream_complete_message_t {
-    bit<64> total_sequence_count;
-}
-
-header sequenced_message_t {
-    bit<16> block_length;
-    bit<8> template_id;
-    bit<8> schema_id;
-    bit<16> version;
-}
-
 struct metadata_t {
 }
 
 struct headers_t {
     common_header_t common_header;
-    login_request_message_t login_request_message;
-    replay_request_message_t replay_request_message;
-    replay_all_request_message_t replay_all_request_message;
-    stream_request_message_t stream_request_message;
-    unsequenced_message_t unsequenced_message;
+    login_accepted_message_t login_accepted_message;
+    login_rejected_message_t login_rejected_message;
+    start_of_session_message_t start_of_session_message;
+    replay_begin_message_t replay_begin_message;
+    replay_rejected_message_t replay_rejected_message;
+    replay_complete_message_t replay_complete_message;
+    stream_begin_message_t stream_begin_message;
+    stream_rejected_message_t stream_rejected_message;
+    stream_complete_message_t stream_complete_message;
+    sequenced_message_t sequenced_message;
     new_order_single_message_t new_order_single_message;
     short_two_sided_bulk_quote_message_t short_two_sided_bulk_quote_message;
     long_two_sided_bulk_quote_message_t long_two_sided_bulk_quote_message;
@@ -671,31 +666,16 @@ struct headers_t {
     mass_cancel_done_message_t mass_cancel_done_message;
     order_cancel_reject_message_t order_cancel_reject_message;
     allocation_instruction_ack_message_t allocation_instruction_ack_message;
-    allocation_report_message_t allocation_report_message;
+    allocation_instruction_alert_message_t allocation_instruction_alert_message;
     user_notification_message_t user_notification_message;
     mass_cancel_clear_lockout_reject_message_t mass_cancel_clear_lockout_reject_message;
     mass_cancel_clear_lockout_done_message_t mass_cancel_clear_lockout_done_message;
-    login_accepted_message_t login_accepted_message;
-    login_rejected_message_t login_rejected_message;
-    start_of_session_message_t start_of_session_message;
-    replay_begin_message_t replay_begin_message;
-    replay_rejected_message_t replay_rejected_message;
-    replay_complete_message_t replay_complete_message;
-    stream_begin_message_t stream_begin_message;
-    stream_rejected_message_t stream_rejected_message;
-    stream_complete_message_t stream_complete_message;
-    sequenced_message_t sequenced_message;
 }
 
-parser MemxoptionsMemoParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser MemxoptionsMemoServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.common_header);
         transition select(hdr.common_header.message_type) {
-            8w100: parse_login_request_message;
-            8w101: parse_replay_request_message;
-            8w102: parse_replay_all_request_message;
-            8w103: parse_stream_request_message;
-            8w104: parse_unsequenced_message;
             8w1: parse_login_accepted_message;
             8w2: parse_login_rejected_message;
             8w3: parse_start_of_session_message;
@@ -710,29 +690,54 @@ parser MemxoptionsMemoParser(packet_in packet, out headers_t hdr, inout metadata
         }
     }
 
-    state parse_login_request_message {
-        packet.extract(hdr.login_request_message);
+    state parse_login_accepted_message {
+        packet.extract(hdr.login_accepted_message);
         transition accept;
     }
 
-    state parse_replay_request_message {
-        packet.extract(hdr.replay_request_message);
+    state parse_login_rejected_message {
+        packet.extract(hdr.login_rejected_message);
         transition accept;
     }
 
-    state parse_replay_all_request_message {
-        packet.extract(hdr.replay_all_request_message);
+    state parse_start_of_session_message {
+        packet.extract(hdr.start_of_session_message);
         transition accept;
     }
 
-    state parse_stream_request_message {
-        packet.extract(hdr.stream_request_message);
+    state parse_replay_begin_message {
+        packet.extract(hdr.replay_begin_message);
         transition accept;
     }
 
-    state parse_unsequenced_message {
-        packet.extract(hdr.unsequenced_message);
-        transition select(hdr.unsequenced_message.template_id) {
+    state parse_replay_rejected_message {
+        packet.extract(hdr.replay_rejected_message);
+        transition accept;
+    }
+
+    state parse_replay_complete_message {
+        packet.extract(hdr.replay_complete_message);
+        transition accept;
+    }
+
+    state parse_stream_begin_message {
+        packet.extract(hdr.stream_begin_message);
+        transition accept;
+    }
+
+    state parse_stream_rejected_message {
+        packet.extract(hdr.stream_rejected_message);
+        transition accept;
+    }
+
+    state parse_stream_complete_message {
+        packet.extract(hdr.stream_complete_message);
+        transition accept;
+    }
+
+    state parse_sequenced_message {
+        packet.extract(hdr.sequenced_message);
+        transition select(hdr.sequenced_message.template_id) {
             8w1: parse_new_order_single_message;
             8w2: parse_short_two_sided_bulk_quote_message;
             8w3: parse_long_two_sided_bulk_quote_message;
@@ -760,7 +765,7 @@ parser MemxoptionsMemoParser(packet_in packet, out headers_t hdr, inout metadata
             8w25: parse_mass_cancel_done_message;
             8w26: parse_order_cancel_reject_message;
             8w27: parse_allocation_instruction_ack_message;
-            8w28: parse_allocation_report_message;
+            8w28: parse_allocation_instruction_alert_message;
             8w29: parse_user_notification_message;
             8w30: parse_mass_cancel_clear_lockout_reject_message;
             8w31: parse_mass_cancel_clear_lockout_done_message;
@@ -903,8 +908,8 @@ parser MemxoptionsMemoParser(packet_in packet, out headers_t hdr, inout metadata
         transition accept;
     }
 
-    state parse_allocation_report_message {
-        packet.extract(hdr.allocation_report_message);
+    state parse_allocation_instruction_alert_message {
+        packet.extract(hdr.allocation_instruction_alert_message);
         transition accept;
     }
 
@@ -923,120 +928,42 @@ parser MemxoptionsMemoParser(packet_in packet, out headers_t hdr, inout metadata
         transition accept;
     }
 
-    state parse_login_accepted_message {
-        packet.extract(hdr.login_accepted_message);
-        transition accept;
-    }
-
-    state parse_login_rejected_message {
-        packet.extract(hdr.login_rejected_message);
-        transition accept;
-    }
-
-    state parse_start_of_session_message {
-        packet.extract(hdr.start_of_session_message);
-        transition accept;
-    }
-
-    state parse_replay_begin_message {
-        packet.extract(hdr.replay_begin_message);
-        transition accept;
-    }
-
-    state parse_replay_rejected_message {
-        packet.extract(hdr.replay_rejected_message);
-        transition accept;
-    }
-
-    state parse_replay_complete_message {
-        packet.extract(hdr.replay_complete_message);
-        transition accept;
-    }
-
-    state parse_stream_begin_message {
-        packet.extract(hdr.stream_begin_message);
-        transition accept;
-    }
-
-    state parse_stream_rejected_message {
-        packet.extract(hdr.stream_rejected_message);
-        transition accept;
-    }
-
-    state parse_stream_complete_message {
-        packet.extract(hdr.stream_complete_message);
-        transition accept;
-    }
-
-    state parse_sequenced_message {
-        packet.extract(hdr.sequenced_message);
-        transition select(hdr.sequenced_message.template_id) {
-            8w1: parse_new_order_single_message;
-            8w2: parse_short_two_sided_bulk_quote_message;
-            8w3: parse_long_two_sided_bulk_quote_message;
-            8w4: parse_short_one_sided_bulk_quote_message;
-            8w5: parse_long_one_sided_bulk_quote_message;
-            8w6: parse_order_cancel_replace_request_message;
-            8w7: parse_order_cancel_request_message;
-            8w8: parse_mass_cancel_request_message;
-            8w9: parse_mass_cancel_clear_lockout_request_message;
-            8w10: parse_allocation_instruction_message;
-            8w11: parse_execution_report_new_message;
-            8w12: parse_execution_report_bulk_quote_pending_new_message;
-            8w13: parse_execution_report_bulk_quote_component_new_message;
-            8w14: parse_execution_report_rejected_message;
-            8w15: parse_execution_report_trade_message;
-            8w16: parse_execution_report_pending_cancel_message;
-            8w17: parse_execution_report_canceled_message;
-            8w18: parse_execution_report_pending_replace_message;
-            8w19: parse_execution_report_replaced_message;
-            8w20: parse_execution_report_trade_correction_message;
-            8w21: parse_execution_report_trade_break_message;
-            8w22: parse_execution_report_restatement_message;
-            8w23: parse_pending_mass_cancel_message;
-            8w24: parse_mass_cancel_reject_message;
-            8w25: parse_mass_cancel_done_message;
-            8w26: parse_order_cancel_reject_message;
-            8w27: parse_allocation_instruction_ack_message;
-            8w28: parse_allocation_report_message;
-            8w29: parse_user_notification_message;
-            8w30: parse_mass_cancel_clear_lockout_reject_message;
-            8w31: parse_mass_cancel_clear_lockout_done_message;
-            default: accept;
-        }
-    }
-
 }
 
-control MemxoptionsMemoVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control MemxoptionsMemoServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MemxoptionsMemoIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control MemxoptionsMemoServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control MemxoptionsMemoEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control MemxoptionsMemoServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control MemxoptionsMemoComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control MemxoptionsMemoServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MemxoptionsMemoDeparser(packet_out packet, in headers_t hdr) {
+control MemxoptionsMemoServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.common_header);
-        packet.emit(hdr.login_request_message);
-        packet.emit(hdr.replay_request_message);
-        packet.emit(hdr.replay_all_request_message);
-        packet.emit(hdr.stream_request_message);
-        packet.emit(hdr.unsequenced_message);
+        packet.emit(hdr.login_accepted_message);
+        packet.emit(hdr.login_rejected_message);
+        packet.emit(hdr.start_of_session_message);
+        packet.emit(hdr.replay_begin_message);
+        packet.emit(hdr.replay_rejected_message);
+        packet.emit(hdr.replay_complete_message);
+        packet.emit(hdr.stream_begin_message);
+        packet.emit(hdr.stream_rejected_message);
+        packet.emit(hdr.stream_complete_message);
+        packet.emit(hdr.sequenced_message);
         packet.emit(hdr.new_order_single_message);
         packet.emit(hdr.short_two_sided_bulk_quote_message);
         packet.emit(hdr.long_two_sided_bulk_quote_message);
@@ -1064,28 +991,18 @@ control MemxoptionsMemoDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.mass_cancel_done_message);
         packet.emit(hdr.order_cancel_reject_message);
         packet.emit(hdr.allocation_instruction_ack_message);
-        packet.emit(hdr.allocation_report_message);
+        packet.emit(hdr.allocation_instruction_alert_message);
         packet.emit(hdr.user_notification_message);
         packet.emit(hdr.mass_cancel_clear_lockout_reject_message);
         packet.emit(hdr.mass_cancel_clear_lockout_done_message);
-        packet.emit(hdr.login_accepted_message);
-        packet.emit(hdr.login_rejected_message);
-        packet.emit(hdr.start_of_session_message);
-        packet.emit(hdr.replay_begin_message);
-        packet.emit(hdr.replay_rejected_message);
-        packet.emit(hdr.replay_complete_message);
-        packet.emit(hdr.stream_begin_message);
-        packet.emit(hdr.stream_rejected_message);
-        packet.emit(hdr.stream_complete_message);
-        packet.emit(hdr.sequenced_message);
     }
 }
 
 V1Switch(
-    MemxoptionsMemoParser(),
-    MemxoptionsMemoVerifyChecksum(),
-    MemxoptionsMemoIngress(),
-    MemxoptionsMemoEgress(),
-    MemxoptionsMemoComputeChecksum(),
-    MemxoptionsMemoDeparser()
+    MemxoptionsMemoServerParser(),
+    MemxoptionsMemoServerVerifyChecksum(),
+    MemxoptionsMemoServerIngress(),
+    MemxoptionsMemoServerEgress(),
+    MemxoptionsMemoServerComputeChecksum(),
+    MemxoptionsMemoServerDeparser()
 ) main;

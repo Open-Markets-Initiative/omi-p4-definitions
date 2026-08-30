@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Memx MemxEquities Memo Sbe v1.2
+// P4_16 (v1model) definition for: Memx MemxEquities Memo Sbe v1.8
 // 
 // Protocol:
 //   Organization: The Members Exchange
 //   Protocol: Members Orders
 //   Encoding: Simple Binary Encoding
-//   Version: 1.2
-//   Date: 9/23/2020
-//   Specification: MEMO SBE-v1_1.pdf
+//   Version: 1.8
+//   Date: 11/17/22
+//   Specification: MEMO SBE-v1_8-revC.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -23,7 +23,6 @@
 //   https://patents.google.com/patent/US20240129382A1/en
 //   https://patents.google.com/patent/US20240419416A1/en
 // 
-// For full Omi information: https://github.com/Open-Markets-Initiative/Directory
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
 #include <core.p4>
@@ -37,27 +36,45 @@ header common_header_t {
     bit<16> message_length;
 }
 
-header login_request_message_t {
-    bit<8> token_type;
-    bit<8> token;
+header login_accepted_message_t {
+    bit<8> supported_request_mode;
 }
 
-header replay_request_message_t {
+header login_rejected_message_t {
+    bit<8> login_reject_code;
+}
+
+header start_of_session_message_t {
     bit<64> session_id;
+}
+
+header replay_begin_message_t {
     bit<64> next_sequence_number;
-    bit<32> count;
+    bit<32> pending_message_count;
 }
 
-header replay_all_request_message_t {
-    bit<64> session_id;
+header replay_rejected_message_t {
+    bit<8> replay_reject_code;
 }
 
-header stream_request_message_t {
-    bit<64> session_id;
+header replay_complete_message_t {
+    bit<64> message_count;
+}
+
+header stream_begin_message_t {
     bit<64> next_sequence_number;
+    bit<64> max_sequence_number;
 }
 
-header unsequenced_message_t {
+header stream_rejected_message_t {
+    bit<8> stream_reject_code;
+}
+
+header stream_complete_message_t {
+    bit<64> total_sequence_count;
+}
+
+header sequenced_message_t {
     bit<16> block_length;
     bit<8> template_id;
     bit<8> schema_id;
@@ -66,7 +83,7 @@ header unsequenced_message_t {
 
 header new_order_single_message_t {
     bit<128> clordid;
-    bit<32> mpid;
+    bit<32> mpid_optional;
     bit<48> symbol;
     bit<48> symbol_sfx;
     bit<8> side;
@@ -111,7 +128,7 @@ header order_cancel_replace_request_message_t {
 }
 
 header order_cancel_request_message_t {
-    bit<128> origclordid;
+    bit<128> origclordid_optional;
     bit<64> order_id_optional;
     bit<128> clordid;
     bit<48> symbol;
@@ -133,7 +150,7 @@ header execution_report_pending_new_message_t {
     bit<64> order_id;
     bit<128> clordid;
     bit<64> exec_id;
-    bit<32> mpid;
+    bit<32> mpid_optional;
     bit<8> ord_status;
     bit<48> symbol;
     bit<48> symbol_sfx;
@@ -172,7 +189,7 @@ header execution_report_new_message_t {
     bit<64> order_id;
     bit<128> clordid;
     bit<64> exec_id;
-    bit<32> mpid;
+    bit<32> mpid_optional;
     bit<8> ord_status;
     bit<48> symbol;
     bit<48> symbol_sfx;
@@ -239,7 +256,7 @@ header execution_report_pending_cancel_message_t {
     bit<64> sending_time;
     bit<64> order_id;
     bit<128> clordid;
-    bit<128> origclordid;
+    bit<128> origclordid_optional;
     bit<64> exec_id;
     bit<48> symbol;
     bit<48> symbol_sfx;
@@ -262,7 +279,7 @@ header pending_mass_cancel_message_t {
 header execution_report_canceled_message_t {
     bit<64> sending_time;
     bit<128> clordid;
-    bit<128> origclordid;
+    bit<128> origclordid_optional;
     bit<64> order_id;
     bit<64> exec_id;
     bit<8> ord_status;
@@ -281,7 +298,7 @@ header execution_report_pending_replace_message_t {
     bit<64> sending_time;
     bit<64> order_id;
     bit<128> clordid;
-    bit<128> origclordid;
+    bit<128> origclordid_optional;
     bit<64> exec_id;
     bit<48> symbol;
     bit<48> symbol_sfx;
@@ -300,7 +317,7 @@ header execution_report_replaced_message_t {
     bit<64> sending_time;
     bit<64> order_id;
     bit<128> clordid;
-    bit<128> origclordid;
+    bit<128> origclordid_optional;
     bit<64> exec_id;
     bit<48> symbol;
     bit<48> symbol_sfx;
@@ -375,61 +392,21 @@ header mass_cancel_reject_message_t {
     bit<8> mass_cancel_reject_reason;
 }
 
-header login_accepted_message_t {
-    bit<8> supported_request_mode;
-}
-
-header login_rejected_message_t {
-    bit<8> login_reject_code;
-}
-
-header start_of_session_message_t {
-    bit<64> session_id;
-}
-
-header replay_begin_message_t {
-    bit<64> next_sequence_number;
-    bit<32> pending_message_count;
-}
-
-header replay_rejected_message_t {
-    bit<8> replay_reject_code;
-}
-
-header replay_complete_message_t {
-    bit<64> message_count;
-}
-
-header stream_begin_message_t {
-    bit<64> next_sequence_number;
-    bit<64> max_sequence_number;
-}
-
-header stream_rejected_message_t {
-    bit<8> stream_reject_code;
-}
-
-header stream_complete_message_t {
-    bit<64> total_sequence_count;
-}
-
-header sequenced_message_t {
-    bit<16> block_length;
-    bit<8> template_id;
-    bit<8> schema_id;
-    bit<16> version;
-}
-
 struct metadata_t {
 }
 
 struct headers_t {
     common_header_t common_header;
-    login_request_message_t login_request_message;
-    replay_request_message_t replay_request_message;
-    replay_all_request_message_t replay_all_request_message;
-    stream_request_message_t stream_request_message;
-    unsequenced_message_t unsequenced_message;
+    login_accepted_message_t login_accepted_message;
+    login_rejected_message_t login_rejected_message;
+    start_of_session_message_t start_of_session_message;
+    replay_begin_message_t replay_begin_message;
+    replay_rejected_message_t replay_rejected_message;
+    replay_complete_message_t replay_complete_message;
+    stream_begin_message_t stream_begin_message;
+    stream_rejected_message_t stream_rejected_message;
+    stream_complete_message_t stream_complete_message;
+    sequenced_message_t sequenced_message;
     new_order_single_message_t new_order_single_message;
     order_cancel_replace_request_message_t order_cancel_replace_request_message;
     order_cancel_request_message_t order_cancel_request_message;
@@ -449,27 +426,12 @@ struct headers_t {
     execution_report_restatement_message_t execution_report_restatement_message;
     order_cancel_reject_message_t order_cancel_reject_message;
     mass_cancel_reject_message_t mass_cancel_reject_message;
-    login_accepted_message_t login_accepted_message;
-    login_rejected_message_t login_rejected_message;
-    start_of_session_message_t start_of_session_message;
-    replay_begin_message_t replay_begin_message;
-    replay_rejected_message_t replay_rejected_message;
-    replay_complete_message_t replay_complete_message;
-    stream_begin_message_t stream_begin_message;
-    stream_rejected_message_t stream_rejected_message;
-    stream_complete_message_t stream_complete_message;
-    sequenced_message_t sequenced_message;
 }
 
-parser MemxequitiesMemoParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser MemxequitiesMemoServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.common_header);
         transition select(hdr.common_header.message_type) {
-            8w100: parse_login_request_message;
-            8w101: parse_replay_request_message;
-            8w102: parse_replay_all_request_message;
-            8w103: parse_stream_request_message;
-            8w104: parse_unsequenced_message;
             8w1: parse_login_accepted_message;
             8w2: parse_login_rejected_message;
             8w3: parse_start_of_session_message;
@@ -484,29 +446,54 @@ parser MemxequitiesMemoParser(packet_in packet, out headers_t hdr, inout metadat
         }
     }
 
-    state parse_login_request_message {
-        packet.extract(hdr.login_request_message);
+    state parse_login_accepted_message {
+        packet.extract(hdr.login_accepted_message);
         transition accept;
     }
 
-    state parse_replay_request_message {
-        packet.extract(hdr.replay_request_message);
+    state parse_login_rejected_message {
+        packet.extract(hdr.login_rejected_message);
         transition accept;
     }
 
-    state parse_replay_all_request_message {
-        packet.extract(hdr.replay_all_request_message);
+    state parse_start_of_session_message {
+        packet.extract(hdr.start_of_session_message);
         transition accept;
     }
 
-    state parse_stream_request_message {
-        packet.extract(hdr.stream_request_message);
+    state parse_replay_begin_message {
+        packet.extract(hdr.replay_begin_message);
         transition accept;
     }
 
-    state parse_unsequenced_message {
-        packet.extract(hdr.unsequenced_message);
-        transition select(hdr.unsequenced_message.template_id) {
+    state parse_replay_rejected_message {
+        packet.extract(hdr.replay_rejected_message);
+        transition accept;
+    }
+
+    state parse_replay_complete_message {
+        packet.extract(hdr.replay_complete_message);
+        transition accept;
+    }
+
+    state parse_stream_begin_message {
+        packet.extract(hdr.stream_begin_message);
+        transition accept;
+    }
+
+    state parse_stream_rejected_message {
+        packet.extract(hdr.stream_rejected_message);
+        transition accept;
+    }
+
+    state parse_stream_complete_message {
+        packet.extract(hdr.stream_complete_message);
+        transition accept;
+    }
+
+    state parse_sequenced_message {
+        packet.extract(hdr.sequenced_message);
+        transition select(hdr.sequenced_message.template_id) {
             8w1: parse_new_order_single_message;
             8w2: parse_order_cancel_replace_request_message;
             8w3: parse_order_cancel_request_message;
@@ -625,108 +612,42 @@ parser MemxequitiesMemoParser(packet_in packet, out headers_t hdr, inout metadat
         transition accept;
     }
 
-    state parse_login_accepted_message {
-        packet.extract(hdr.login_accepted_message);
-        transition accept;
-    }
-
-    state parse_login_rejected_message {
-        packet.extract(hdr.login_rejected_message);
-        transition accept;
-    }
-
-    state parse_start_of_session_message {
-        packet.extract(hdr.start_of_session_message);
-        transition accept;
-    }
-
-    state parse_replay_begin_message {
-        packet.extract(hdr.replay_begin_message);
-        transition accept;
-    }
-
-    state parse_replay_rejected_message {
-        packet.extract(hdr.replay_rejected_message);
-        transition accept;
-    }
-
-    state parse_replay_complete_message {
-        packet.extract(hdr.replay_complete_message);
-        transition accept;
-    }
-
-    state parse_stream_begin_message {
-        packet.extract(hdr.stream_begin_message);
-        transition accept;
-    }
-
-    state parse_stream_rejected_message {
-        packet.extract(hdr.stream_rejected_message);
-        transition accept;
-    }
-
-    state parse_stream_complete_message {
-        packet.extract(hdr.stream_complete_message);
-        transition accept;
-    }
-
-    state parse_sequenced_message {
-        packet.extract(hdr.sequenced_message);
-        transition select(hdr.sequenced_message.template_id) {
-            8w1: parse_new_order_single_message;
-            8w2: parse_order_cancel_replace_request_message;
-            8w3: parse_order_cancel_request_message;
-            8w4: parse_mass_cancel_request_message;
-            8w5: parse_execution_report_pending_new_message;
-            8w6: parse_execution_report_new_message;
-            8w7: parse_execution_report_rejected_message;
-            8w8: parse_execution_report_trade_message;
-            8w9: parse_execution_report_pending_cancel_message;
-            8w10: parse_pending_mass_cancel_message;
-            8w11: parse_execution_report_canceled_message;
-            8w12: parse_mass_cancel_done_message;
-            8w13: parse_execution_report_pending_replace_message;
-            8w14: parse_execution_report_replaced_message;
-            8w15: parse_execution_report_trade_correction_message;
-            8w16: parse_execution_report_trade_break_message;
-            8w17: parse_execution_report_restatement_message;
-            8w18: parse_order_cancel_reject_message;
-            8w20: parse_mass_cancel_reject_message;
-            default: accept;
-        }
-    }
-
 }
 
-control MemxequitiesMemoVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control MemxequitiesMemoServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MemxequitiesMemoIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control MemxequitiesMemoServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control MemxequitiesMemoEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control MemxequitiesMemoServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control MemxequitiesMemoComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control MemxequitiesMemoServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control MemxequitiesMemoDeparser(packet_out packet, in headers_t hdr) {
+control MemxequitiesMemoServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.common_header);
-        packet.emit(hdr.login_request_message);
-        packet.emit(hdr.replay_request_message);
-        packet.emit(hdr.replay_all_request_message);
-        packet.emit(hdr.stream_request_message);
-        packet.emit(hdr.unsequenced_message);
+        packet.emit(hdr.login_accepted_message);
+        packet.emit(hdr.login_rejected_message);
+        packet.emit(hdr.start_of_session_message);
+        packet.emit(hdr.replay_begin_message);
+        packet.emit(hdr.replay_rejected_message);
+        packet.emit(hdr.replay_complete_message);
+        packet.emit(hdr.stream_begin_message);
+        packet.emit(hdr.stream_rejected_message);
+        packet.emit(hdr.stream_complete_message);
+        packet.emit(hdr.sequenced_message);
         packet.emit(hdr.new_order_single_message);
         packet.emit(hdr.order_cancel_replace_request_message);
         packet.emit(hdr.order_cancel_request_message);
@@ -746,24 +667,14 @@ control MemxequitiesMemoDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.execution_report_restatement_message);
         packet.emit(hdr.order_cancel_reject_message);
         packet.emit(hdr.mass_cancel_reject_message);
-        packet.emit(hdr.login_accepted_message);
-        packet.emit(hdr.login_rejected_message);
-        packet.emit(hdr.start_of_session_message);
-        packet.emit(hdr.replay_begin_message);
-        packet.emit(hdr.replay_rejected_message);
-        packet.emit(hdr.replay_complete_message);
-        packet.emit(hdr.stream_begin_message);
-        packet.emit(hdr.stream_rejected_message);
-        packet.emit(hdr.stream_complete_message);
-        packet.emit(hdr.sequenced_message);
     }
 }
 
 V1Switch(
-    MemxequitiesMemoParser(),
-    MemxequitiesMemoVerifyChecksum(),
-    MemxequitiesMemoIngress(),
-    MemxequitiesMemoEgress(),
-    MemxequitiesMemoComputeChecksum(),
-    MemxequitiesMemoDeparser()
+    MemxequitiesMemoServerParser(),
+    MemxequitiesMemoServerVerifyChecksum(),
+    MemxequitiesMemoServerIngress(),
+    MemxequitiesMemoServerEgress(),
+    MemxequitiesMemoServerComputeChecksum(),
+    MemxequitiesMemoServerDeparser()
 ) main;
