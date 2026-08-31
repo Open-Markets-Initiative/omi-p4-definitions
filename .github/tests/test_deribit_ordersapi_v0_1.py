@@ -75,6 +75,10 @@ class DeribitOrdersapiV01Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Coinbase/Deribit.OrdersApi.Sbe.v0.1/OrderFilledMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
+    def test_starbaseorderentry(self):
+        for payload in payloads.of("omi-data-packets/Coinbase/Deribit.OrdersApi.Sbe.v0.1/StarbaseOrderEntry.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
 
 if __name__ == "__main__":
     unittest.main()

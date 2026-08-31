@@ -27,36 +27,36 @@ class LinkatsMulticastV43Tests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
-    def test_startofspinmessage(self):
-        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/StartOfSpin.11.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_endofspinmessage(self):
+    def test_endofspin12(self):
         for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/EndOfSpin.12.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_marketopenmessage(self):
-        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/MarketOpen.13.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_marketclosemessage(self):
-        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/MarketClose.14.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_securitymessage(self):
-        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/Security.9.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_quotemessage(self):
-        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/Quote.1.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_quoteupdatemessage(self):
-        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/QuoteUpdate.2.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_heartbeat(self):
         for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/Heartbeat.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_marketclose14(self):
+        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/MarketClose.14.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_marketopen13(self):
+        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/MarketOpen.13.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_quote1(self):
+        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/Quote.1.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_quoteupdate2(self):
+        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/QuoteUpdate.2.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_security9(self):
+        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/Security.9.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_startofspin11(self):
+        for payload in payloads.of("omi-data-packets/OtcMarkets/LinkAts.Multicast.Link.v4.3/StartOfSpin.11.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

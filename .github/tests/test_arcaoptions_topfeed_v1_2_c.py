@@ -27,7 +27,7 @@ class ArcaoptionsTopfeedV12CTests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
-    def test_message(self):
+    def test_heartbeat(self):
         for payload in payloads.of("omi-data-packets/Nyse/ArcaOptions.TopFeed.Pillar.v1.2.c/HeartBeat.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
