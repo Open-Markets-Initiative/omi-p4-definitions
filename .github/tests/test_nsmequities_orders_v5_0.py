@@ -35,7 +35,7 @@ class NsmequitiesOrdersV50Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.Orders.Ouch.v5.0/CanceledMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_clientheartbeatpacket(self):
+    def test_clientheartbeat(self):
         for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.Orders.Ouch.v5.0/ClientHeartbeatPacket.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
@@ -47,7 +47,7 @@ class NsmequitiesOrdersV50Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.Orders.Ouch.v5.0/OrderAcceptedMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_serverheartbeatpacket(self):
+    def test_serverheartbeat(self):
         for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.Orders.Ouch.v5.0/ServerHeartbeatPacket.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 

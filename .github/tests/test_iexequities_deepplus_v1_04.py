@@ -27,15 +27,15 @@ class IexequitiesDeepplusV104Tests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
-    def test_addorder(self):
+    def test_addordermessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/a_AddOrder.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_tradebreak(self):
+    def test_tradebreakmessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/B_TradeBreak.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_securitydirectory(self):
+    def test_securitydirectorymessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/D_SecurityDirectory.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
@@ -51,11 +51,11 @@ class IexequitiesDeepplusV104Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/I_RetailLiquidityIndicator.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_orderexecuted(self):
+    def test_orderexecutedmessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/L_OrderExecuted.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_ordermodify(self):
+    def test_ordermodifymessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/M_OrderModify.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
@@ -67,7 +67,7 @@ class IexequitiesDeepplusV104Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/P_ShortSalePriceTestStatus.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_orderdelete(self):
+    def test_orderdeletemessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/R_OrderDelete.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
@@ -75,7 +75,7 @@ class IexequitiesDeepplusV104Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/S_SystemEvent.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_trade(self):
+    def test_trademessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.DeepPlus.IexTp.v1.0.2/T_Trade.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 

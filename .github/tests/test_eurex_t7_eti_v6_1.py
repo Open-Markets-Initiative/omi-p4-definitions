@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "eurex/eti/eurex_t7_eti_v6_1.p4"
+PROGRAM = "eurex/eti/eurex_t7_eti_v6_1_server.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v6_1.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

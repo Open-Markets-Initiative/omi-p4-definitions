@@ -31,7 +31,7 @@ class B3derivativesBinaryumdfV18Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryUmdf.Sbe.v1.8/SecurityDefinitionMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_sequence(self):
+    def test_sequencemessage(self):
         for payload in payloads.of("omi-data-packets/B3/B3Derivatives.BinaryUmdf.Sbe.v1.8/Sequence.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
