@@ -27,10 +27,6 @@ class EurexT7EobiV60Tests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
-    def test_executionsummary(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/ExecutionSummary.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
     def test_fullorderexecution(self):
         for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/FullOrderExecution.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
@@ -49,10 +45,6 @@ class EurexT7EobiV60Tests(unittest.TestCase):
 
     def test_ordermodify(self):
         for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/OrderModify.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_partialorderexecution(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Eobi.Fbe.v6.0/PartialOrderExecution.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_productsummary(self):

@@ -1005,6 +1005,10 @@ header execution_report_trade_addendum_spread_leg_t {
     bit<8> trade_addendum;
     bit<8> order_event_reason;
     bit<32> original_order_event_exec_id;
+    bit<64> mantissa_3;
+    bit<8> exponent_3;
+    bit<64> mantissa_4;
+    bit<8> exponent_4;
 }
 
 header security_definition_response_t {

@@ -264,6 +264,7 @@ header order_cancel_replace_request_message_t {
     bit<16> prefix;
     bit<32> document;
     bit<32> strategy_id;
+    bit<16> block_padding;
     bit<8> desk_id_length;
     bit<8> desk_id_data;
     bit<8> memo_length;
@@ -452,6 +453,7 @@ header execution_report_cancel_message_t {
     bit<32> document;
     bit<32> strategy_id;
     bit<32> action_requested_from_session_id;
+    bit<16> block_padding;
     bit<8> desk_id_length;
     bit<8> desk_id_data;
     bit<8> memo_length;
