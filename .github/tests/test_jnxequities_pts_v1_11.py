@@ -30,19 +30,19 @@ class JnxequitiesPtsV111TcpTests(unittest.TestCase):
         cls.switch.stop()
 
     def test_cancelordermessage(self):
-        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.12/CancelOrderMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.11/CancelOrderMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_ordercanceledmessage(self):
-        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.12/OrderCanceledMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.11/OrderCanceledMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderexecutedmessage(self):
-        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.12/OrderExecutedMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.11/OrderExecutedMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_orderrejectedmessage(self):
-        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.12/OrderRejectedMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Ouch.v1.11/OrderRejectedMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

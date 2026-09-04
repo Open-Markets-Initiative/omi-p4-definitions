@@ -91,7 +91,7 @@ header symbol_index_mapping_response_message_t {
     bit<32> symbol_index;
 }
 
-header full_update_message_t {
+header full_update_messages_t {
     bit<16> update_size;
     bit<32> symbol_index;
     bit<32> source_time;
@@ -111,7 +111,7 @@ header full_update_message_t {
     bit<8> filler_1_2;
 }
 
-header delta_update_message_t {
+header delta_update_messages_t {
     bit<16> delta_size;
     bit<32> symbol_index;
     bit<32> source_time;
@@ -146,8 +146,8 @@ struct headers_t {
     extended_book_refresh_request_message_t extended_book_refresh_request_message;
     symbol_index_mapping_request_message_t symbol_index_mapping_request_message;
     symbol_index_mapping_response_message_t symbol_index_mapping_response_message;
-    full_update_message_t full_update_message;
-    delta_update_message_t delta_update_message;
+    full_update_messages_t full_update_messages;
+    delta_update_messages_t delta_update_messages;
 }
 
 parser AmexequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -163,8 +163,8 @@ parser AmexequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
             16w27: parse_extended_book_refresh_request_message;
             16w34: parse_symbol_index_mapping_request_message;
             16w35: parse_symbol_index_mapping_response_message;
-            16w230: parse_full_update_message;
-            16w231: parse_delta_update_message;
+            16w230: parse_full_update_messages;
+            16w231: parse_delta_update_messages;
             default: accept;
         }
     }
@@ -214,13 +214,13 @@ parser AmexequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
         transition accept;
     }
 
-    state parse_full_update_message {
-        packet.extract(hdr.full_update_message);
+    state parse_full_update_messages {
+        packet.extract(hdr.full_update_messages);
         transition accept;
     }
 
-    state parse_delta_update_message {
-        packet.extract(hdr.delta_update_message);
+    state parse_delta_update_messages {
+        packet.extract(hdr.delta_update_messages);
         transition accept;
     }
 
@@ -259,8 +259,8 @@ control AmexequitiesOpenbookDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.extended_book_refresh_request_message);
         packet.emit(hdr.symbol_index_mapping_request_message);
         packet.emit(hdr.symbol_index_mapping_response_message);
-        packet.emit(hdr.full_update_message);
-        packet.emit(hdr.delta_update_message);
+        packet.emit(hdr.full_update_messages);
+        packet.emit(hdr.delta_update_messages);
     }
 }
 
