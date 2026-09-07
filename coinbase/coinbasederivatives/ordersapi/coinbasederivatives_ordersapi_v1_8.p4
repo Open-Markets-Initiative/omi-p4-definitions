@@ -401,23 +401,23 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
     state start {
         packet.extract(hdr.flags);
         transition select(hdr.flags.schema_id) {
-            16w1100: parse_session_message;
-            16w1101: parse_order_message;
+            16w0x4c04: parse_session_message;
+            16w0x4d04: parse_order_message;
             default: accept;
         }
     }
 
     state parse_session_message {
         transition select(hdr.flags.template_id) {
-            16w100: parse_logon_message;
-            16w200: parse_logon_conf_message;
-            16w101: parse_logout_message;
-            16w201: parse_logged_out_message;
-            16w10: parse_heartbeat_message;
-            16w11: parse_test_request_message;
-            16w102: parse_resend_request_message;
-            16w202: parse_gap_fill_message;
-            16w210: parse_reject_message;
+            16w0x6400: parse_logon_message;
+            16w0xc800: parse_logon_conf_message;
+            16w0x6500: parse_logout_message;
+            16w0xc900: parse_logged_out_message;
+            16w0xa00: parse_heartbeat_message;
+            16w0xb00: parse_test_request_message;
+            16w0x6600: parse_resend_request_message;
+            16w0xca00: parse_gap_fill_message;
+            16w0xd200: parse_reject_message;
             default: accept;
         }
     }
@@ -469,39 +469,39 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
 
     state parse_order_message {
         transition select(hdr.flags.template_id) {
-            16w102: parse_ping_message;
-            16w202: parse_pong_message;
-            16w103: parse_instrument_info_request_message;
-            16w203: parse_instrument_info_message;
-            16w105: parse_set_account_message;
-            16w106: parse_set_trader_message;
-            16w205: parse_set_ack_message;
-            16w110: parse_new_order_message;
-            16w111: parse_new_ioc_order_message;
-            16w210: parse_order_entered_message;
-            16w120: parse_replace_order_message;
-            16w121: parse_obsolete_stream_order_message;
-            16w221: parse_order_reject_message;
-            16w220: parse_order_replaced_message;
-            16w130: parse_cancel_order_message;
-            16w230: parse_order_canceled_message;
-            16w233: parse_cancel_order_reject_message;
-            16w131: parse_mass_cancel_order_message;
-            16w231: parse_mass_cancel_order_ack_message;
-            16w232: parse_mass_cancel_order_reject_message;
-            16w132: parse_unlock_trading_message;
-            16w234: parse_unlock_trading_ack_message;
-            16w235: parse_unlock_trading_reject_message;
-            16w240: parse_order_filled_message;
-            16w241: parse_spread_order_filled_message;
-            16w150: parse_last_exec_id_request_message;
-            16w250: parse_last_exec_id_message;
-            16w152: parse_event_resend_request_message;
-            16w252: parse_event_resend_complete_message;
-            16w253: parse_event_resend_reject_message;
-            16w160: parse_reset_options_fill_protection_message;
-            16w260: parse_reset_options_fill_protection_ack_message;
-            16w261: parse_reset_options_fill_protection_reject_message;
+            16w0x6600: parse_ping_message;
+            16w0xca00: parse_pong_message;
+            16w0x6700: parse_instrument_info_request_message;
+            16w0xcb00: parse_instrument_info_message;
+            16w0x6900: parse_set_account_message;
+            16w0x6a00: parse_set_trader_message;
+            16w0xcd00: parse_set_ack_message;
+            16w0x6e00: parse_new_order_message;
+            16w0x6f00: parse_new_ioc_order_message;
+            16w0xd200: parse_order_entered_message;
+            16w0x7800: parse_replace_order_message;
+            16w0x7900: parse_obsolete_stream_order_message;
+            16w0xdd00: parse_order_reject_message;
+            16w0xdc00: parse_order_replaced_message;
+            16w0x8200: parse_cancel_order_message;
+            16w0xe600: parse_order_canceled_message;
+            16w0xe900: parse_cancel_order_reject_message;
+            16w0x8300: parse_mass_cancel_order_message;
+            16w0xe700: parse_mass_cancel_order_ack_message;
+            16w0xe800: parse_mass_cancel_order_reject_message;
+            16w0x8400: parse_unlock_trading_message;
+            16w0xea00: parse_unlock_trading_ack_message;
+            16w0xeb00: parse_unlock_trading_reject_message;
+            16w0xf000: parse_order_filled_message;
+            16w0xf100: parse_spread_order_filled_message;
+            16w0x9600: parse_last_exec_id_request_message;
+            16w0xfa00: parse_last_exec_id_message;
+            16w0x9800: parse_event_resend_request_message;
+            16w0xfc00: parse_event_resend_complete_message;
+            16w0xfd00: parse_event_resend_reject_message;
+            16w0xa000: parse_reset_options_fill_protection_message;
+            16w0x401: parse_reset_options_fill_protection_ack_message;
+            16w0x501: parse_reset_options_fill_protection_reject_message;
             default: accept;
         }
     }

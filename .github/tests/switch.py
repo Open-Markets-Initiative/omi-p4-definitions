@@ -11,11 +11,18 @@ INGRESS = "veth0"
 EGRESS = "veth2"
 SWITCH = "simple_switch"
 
+# A market data payload is not bounded by the ethernet MTU the way a routed frame is: these
+# are transport payloads lifted out of a capture and injected whole, and an sbe message
+# carrying a large repeating group runs past 1500 bytes. The veth pair is given a jumbo mtu
+# so the harness measures what the parser does rather than what the link will carry.
+MTU = 9000
+
 
 def _veth(left, right):
     subprocess.run(["ip", "link", "delete", left], stderr=subprocess.DEVNULL)
     subprocess.run(["ip", "link", "add", left, "type", "veth", "peer", "name", right], check=True)
     for interface in (left, right):
+        subprocess.run(["ip", "link", "set", interface, "mtu", str(MTU)], check=True)
         subprocess.run(["ip", "link", "set", interface, "up"], check=True)
         subprocess.run(["sysctl", "-w", f"net.ipv6.conf.{interface}.disable_ipv6=1"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
@@ -52,10 +59,13 @@ class Switch:
         # The parser dictates acceptance: parsed packets are forwarded to port 1, rejects are dropped.
         # Ethernet requires a 60 byte minimum frame, so short payloads are zero padded.
         frame = payload if len(payload) >= 60 else payload + b"\x00" * (60 - len(payload))
+        # A frame the harness cannot inject is not a verdict on the parser, which never saw it.
+        # Reporting it as a rejection sends the reader looking for a fault in the definition.
         try:
             self.tx.send(frame)
-        except OSError:
-            return False
+        except OSError as error:
+            raise OSError(f"harness could not inject a {len(frame)} byte frame on {INGRESS} "
+                          f"(mtu {MTU}): {error}") from error
         try:
             return bool(self.rx.recv(65535))
         except socket.timeout:

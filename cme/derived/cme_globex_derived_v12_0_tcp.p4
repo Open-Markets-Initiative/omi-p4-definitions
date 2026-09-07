@@ -157,11 +157,11 @@ parser CmeGlobexDerivedTcpParser(packet_in packet, out headers_t hdr, inout meta
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w303: parse_md_incremental_refresh_spectrum;
-            16w304: parse_md_incremental_refresh_ticker;
-            16w305: parse_md_snapshot_refresh_spectrum;
-            16w306: parse_md_snapshot_refresh_ticker;
-            16w307: parse_global_day_roll;
+            16w0x2f01: parse_md_incremental_refresh_spectrum;
+            16w0x3001: parse_md_incremental_refresh_ticker;
+            16w0x3101: parse_md_snapshot_refresh_spectrum;
+            16w0x3201: parse_md_snapshot_refresh_ticker;
+            16w0x3301: parse_global_day_roll;
             default: accept;
         }
     }

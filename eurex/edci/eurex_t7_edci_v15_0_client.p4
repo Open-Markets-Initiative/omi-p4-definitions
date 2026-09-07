@@ -117,13 +117,13 @@ parser EurexT7EdciClientParser(packet_in packet, out headers_t hdr, inout metada
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w10011: parse_heartbeat;
-            16w10000: parse_logon_request;
-            16w10002: parse_logout_request;
-            16w10008: parse_retransmit_request;
-            16w10908: parse_trading_action_request;
-            16w10018: parse_user_login_request;
-            16w10029: parse_user_logout_request;
+            16w0x1b27: parse_heartbeat;
+            16w0x1027: parse_logon_request;
+            16w0x1227: parse_logout_request;
+            16w0x1827: parse_retransmit_request;
+            16w0x9c2a: parse_trading_action_request;
+            16w0x2227: parse_user_login_request;
+            16w0x2d27: parse_user_logout_request;
             default: accept;
         }
     }

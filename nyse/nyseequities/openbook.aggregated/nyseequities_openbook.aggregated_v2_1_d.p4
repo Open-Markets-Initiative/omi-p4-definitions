@@ -210,20 +210,20 @@ parser NyseequitiesOpenbookaggregatedParser(packet_in packet, out headers_t hdr,
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w1: parse_sequence_number_reset_message;
-            16w2: parse_source_time_reference_message;
-            16w3: parse_symbol_index_mapping_message;
-            16w32: parse_symbol_clear_message;
-            16w34: parse_security_status_message;
-            16w10: parse_retransmission_request_message;
-            16w13: parse_symbol_index_mapping_request_message;
-            16w15: parse_refresh_request_message;
-            16w31: parse_message_unavailable_message;
-            16w35: parse_refresh_header_message;
-            16w11: parse_request_response_message;
-            16w12: parse_heartbeat_response_message;
-            16w110: parse_orderbook_snapshot_message;
-            16w111: parse_orderbook_delta_update_message;
+            16w0x100: parse_sequence_number_reset_message;
+            16w0x200: parse_source_time_reference_message;
+            16w0x300: parse_symbol_index_mapping_message;
+            16w0x2000: parse_symbol_clear_message;
+            16w0x2200: parse_security_status_message;
+            16w0xa00: parse_retransmission_request_message;
+            16w0xd00: parse_symbol_index_mapping_request_message;
+            16w0xf00: parse_refresh_request_message;
+            16w0x1f00: parse_message_unavailable_message;
+            16w0x2300: parse_refresh_header_message;
+            16w0xb00: parse_request_response_message;
+            16w0xc00: parse_heartbeat_response_message;
+            16w0x6e00: parse_orderbook_snapshot_message;
+            16w0x6f00: parse_orderbook_delta_update_message;
             default: accept;
         }
     }

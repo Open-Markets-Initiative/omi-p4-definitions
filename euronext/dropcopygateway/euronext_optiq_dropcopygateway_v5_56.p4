@@ -907,25 +907,25 @@ parser EuronextOptiqDropcopygatewayParser(packet_in packet, out headers_t hdr, i
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w16001: parse_dc_market_status_change_message;
-            16w16003: parse_dc_price_update_message;
-            16w16006: parse_long_order_message;
-            16w16010: parse_dc_short_order_reject_message;
-            16w16016: parse_dc_short_trade_cancellation_message;
-            16w16018: parse_dc_static_collars_message;
-            16w16021: parse_trade_bust_notification_message;
-            16w16050: parse_dc_quote_message;
-            16w16051: parse_dcafqrfe_message;
-            16w16052: parse_dc_declaration_new_message;
-            16w16053: parse_dc_short_declaration_reject_message;
-            16w16054: parse_dc_short_declaration_cancel_message;
-            16w16055: parse_dc_short_trade_declaration_message;
-            16w16056: parse_dc_short_trade_declaration_cancellation_message;
-            16w16057: parse_dc_trade_bust_declaration_message;
-            16w16058: parse_dc_trade_message;
-            16w16059: parse_dc_short_declaration_fill_message;
-            16w16060: parse_dc_quote_request_message;
-            16w16061: parse_dc_clear_book_message;
+            16w0x813e: parse_dc_market_status_change_message;
+            16w0x833e: parse_dc_price_update_message;
+            16w0x863e: parse_long_order_message;
+            16w0x8a3e: parse_dc_short_order_reject_message;
+            16w0x903e: parse_dc_short_trade_cancellation_message;
+            16w0x923e: parse_dc_static_collars_message;
+            16w0x953e: parse_trade_bust_notification_message;
+            16w0xb23e: parse_dc_quote_message;
+            16w0xb33e: parse_dcafqrfe_message;
+            16w0xb43e: parse_dc_declaration_new_message;
+            16w0xb53e: parse_dc_short_declaration_reject_message;
+            16w0xb63e: parse_dc_short_declaration_cancel_message;
+            16w0xb73e: parse_dc_short_trade_declaration_message;
+            16w0xb83e: parse_dc_short_trade_declaration_cancellation_message;
+            16w0xb93e: parse_dc_trade_bust_declaration_message;
+            16w0xba3e: parse_dc_trade_message;
+            16w0xbb3e: parse_dc_short_declaration_fill_message;
+            16w0xbc3e: parse_dc_quote_request_message;
+            16w0xbd3e: parse_dc_clear_book_message;
             default: accept;
         }
     }

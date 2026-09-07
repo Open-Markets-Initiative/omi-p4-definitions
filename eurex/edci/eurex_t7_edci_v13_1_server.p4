@@ -233,16 +233,16 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w10902: parse_delete_order_broadcast;
-            16w10012: parse_forced_logout_notification;
-            16w10023: parse_heartbeat_notification;
-            16w10001: parse_logon_response;
-            16w10003: parse_logout_response;
-            16w10901: parse_order_exec_report_broadcast;
-            16w10037: parse_partition_list_notification;
-            16w10010: parse_reject;
-            16w10036: parse_session_list_notification;
-            16w10903: parse_session_status_broadcast;
+            16w0x962a: parse_delete_order_broadcast;
+            16w0x1c27: parse_forced_logout_notification;
+            16w0x2727: parse_heartbeat_notification;
+            16w0x1127: parse_logon_response;
+            16w0x1327: parse_logout_response;
+            16w0x952a: parse_order_exec_report_broadcast;
+            16w0x3527: parse_partition_list_notification;
+            16w0x1a27: parse_reject;
+            16w0x3427: parse_session_list_notification;
+            16w0x972a: parse_session_status_broadcast;
             default: accept;
         }
     }

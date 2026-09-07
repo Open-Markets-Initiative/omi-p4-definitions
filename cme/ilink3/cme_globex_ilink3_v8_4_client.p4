@@ -394,24 +394,24 @@ parser CmeGlobexIlink3ClientParser(packet_in packet, out headers_t hdr, inout me
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w500: parse_negotiate;
-            16w503: parse_establish;
-            16w506: parse_sequence;
-            16w507: parse_terminate;
-            16w508: parse_retransmit_request;
-            16w514: parse_new_order_single;
-            16w515: parse_order_cancel_replace_request;
-            16w516: parse_order_cancel_request;
-            16w517: parse_mass_quote;
-            16w518: parse_party_details_definition_request;
-            16w528: parse_quote_cancel;
-            16w529: parse_order_mass_action_request;
-            16w530: parse_order_mass_status_request;
-            16w533: parse_order_status_request;
-            16w537: parse_party_details_list_request;
-            16w543: parse_request_for_quote;
-            16w544: parse_new_order_cross;
-            16w560: parse_security_definition_request;
+            16w0xf401: parse_negotiate;
+            16w0xf701: parse_establish;
+            16w0xfa01: parse_sequence;
+            16w0xfb01: parse_terminate;
+            16w0xfc01: parse_retransmit_request;
+            16w0x202: parse_new_order_single;
+            16w0x302: parse_order_cancel_replace_request;
+            16w0x402: parse_order_cancel_request;
+            16w0x502: parse_mass_quote;
+            16w0x602: parse_party_details_definition_request;
+            16w0x1002: parse_quote_cancel;
+            16w0x1102: parse_order_mass_action_request;
+            16w0x1202: parse_order_mass_status_request;
+            16w0x1502: parse_order_status_request;
+            16w0x1902: parse_party_details_list_request;
+            16w0x1f02: parse_request_for_quote;
+            16w0x2002: parse_new_order_cross;
+            16w0x3002: parse_security_definition_request;
             default: accept;
         }
     }

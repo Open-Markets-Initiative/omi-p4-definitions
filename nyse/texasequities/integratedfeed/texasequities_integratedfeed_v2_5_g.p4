@@ -273,23 +273,23 @@ parser TexasequitiesIntegratedfeedParser(packet_in packet, out headers_t hdr, in
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w1: parse_sequence_number_reset_message;
-            16w2: parse_source_time_reference_message;
-            16w3: parse_symbol_index_mapping_message;
-            16w32: parse_symbol_clear_message;
-            16w34: parse_security_status_message;
-            16w100: parse_add_order_message;
-            16w101: parse_modify_order_message;
-            16w102: parse_delete_order_message;
-            16w103: parse_order_execution_message;
-            16w104: parse_replace_order_message;
-            16w105: parse_imbalance_message;
-            16w106: parse_add_order_refresh_message;
-            16w110: parse_non_displayed_trade_message;
-            16w111: parse_cross_trade_message;
-            16w112: parse_trade_cancel_message;
-            16w113: parse_cross_correction_message;
-            16w114: parse_retail_price_improvement_message;
+            16w0x100: parse_sequence_number_reset_message;
+            16w0x200: parse_source_time_reference_message;
+            16w0x300: parse_symbol_index_mapping_message;
+            16w0x2000: parse_symbol_clear_message;
+            16w0x2200: parse_security_status_message;
+            16w0x6400: parse_add_order_message;
+            16w0x6500: parse_modify_order_message;
+            16w0x6600: parse_delete_order_message;
+            16w0x6700: parse_order_execution_message;
+            16w0x6800: parse_replace_order_message;
+            16w0x6900: parse_imbalance_message;
+            16w0x6a00: parse_add_order_refresh_message;
+            16w0x6e00: parse_non_displayed_trade_message;
+            16w0x6f00: parse_cross_trade_message;
+            16w0x7000: parse_trade_cancel_message;
+            16w0x7100: parse_cross_correction_message;
+            16w0x7200: parse_retail_price_improvement_message;
             default: accept;
         }
     }

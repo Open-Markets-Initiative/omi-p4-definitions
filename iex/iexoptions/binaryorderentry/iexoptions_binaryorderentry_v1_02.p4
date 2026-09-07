@@ -565,23 +565,23 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.schema_id) {
-            16w20000: parse_session_message;
-            16w20001: parse_business_message;
+            16w0x204e: parse_session_message;
+            16w0x214e: parse_business_message;
             default: accept;
         }
     }
 
     state parse_session_message {
         transition select(hdr.message_header.template_id) {
-            16w1: parse_login_request_message;
-            16w2: parse_login_response_message;
-            16w3: parse_gateway_heartbeat_message;
-            16w6: parse_terminate_message;
-            16w7: parse_sequenced_message_header_message;
-            16w8: parse_subsession_join_message;
-            16w9: parse_subsession_join_response_message;
-            16w10: parse_subsession_leave_message;
-            16w11: parse_subsession_leave_response_message;
+            16w0x100: parse_login_request_message;
+            16w0x200: parse_login_response_message;
+            16w0x300: parse_gateway_heartbeat_message;
+            16w0x600: parse_terminate_message;
+            16w0x700: parse_sequenced_message_header_message;
+            16w0x800: parse_subsession_join_message;
+            16w0x900: parse_subsession_join_response_message;
+            16w0xa00: parse_subsession_leave_message;
+            16w0xb00: parse_subsession_leave_response_message;
             default: accept;
         }
     }
@@ -633,33 +633,33 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
 
     state parse_business_message {
         transition select(hdr.message_header.template_id) {
-            16w1: parse_new_order_single_message;
-            16w2: parse_order_cancel_replace_request_message;
-            16w3: parse_order_cancel_request_message;
-            16w4: parse_new_bulk_quote_message;
-            16w5: parse_mass_cancel_request_message;
-            16w6: parse_purge_request_message;
-            16w101: parse_order_ack_message;
-            16w102: parse_unsolicited_modify_ack_message;
-            16w103: parse_order_cancel_ack_message;
-            16w104: parse_mass_cancel_ack_message;
-            16w105: parse_bulk_quote_ack_message;
-            16w106: parse_new_ioc_quote_ack_message;
-            16w107: parse_quote_restated_message;
-            16w108: parse_quote_canceled_message;
-            16w109: parse_purge_ack_message;
-            16w110: parse_execution_report_message;
-            16w111: parse_trade_bust_correct_message;
-            16w112: parse_application_layer_reject_message;
-            16w51: parse_risk_limit_update_request_message;
-            16w52: parse_risk_action_request_message;
-            16w151: parse_underlying_ref_data_message;
-            16w152: parse_instrument_ref_data_message;
-            16w153: parse_mpid_configuration_acknowledgement_message;
-            16w154: parse_market_maker_symbol_appointment_message;
-            16w155: parse_session_configuration_acknowledgement_message;
-            16w156: parse_risk_control_acknowledgment_message;
-            16w157: parse_risk_control_alert_message;
+            16w0x100: parse_new_order_single_message;
+            16w0x200: parse_order_cancel_replace_request_message;
+            16w0x300: parse_order_cancel_request_message;
+            16w0x400: parse_new_bulk_quote_message;
+            16w0x500: parse_mass_cancel_request_message;
+            16w0x600: parse_purge_request_message;
+            16w0x6500: parse_order_ack_message;
+            16w0x6600: parse_unsolicited_modify_ack_message;
+            16w0x6700: parse_order_cancel_ack_message;
+            16w0x6800: parse_mass_cancel_ack_message;
+            16w0x6900: parse_bulk_quote_ack_message;
+            16w0x6a00: parse_new_ioc_quote_ack_message;
+            16w0x6b00: parse_quote_restated_message;
+            16w0x6c00: parse_quote_canceled_message;
+            16w0x6d00: parse_purge_ack_message;
+            16w0x6e00: parse_execution_report_message;
+            16w0x6f00: parse_trade_bust_correct_message;
+            16w0x7000: parse_application_layer_reject_message;
+            16w0x3300: parse_risk_limit_update_request_message;
+            16w0x3400: parse_risk_action_request_message;
+            16w0x9700: parse_underlying_ref_data_message;
+            16w0x9800: parse_instrument_ref_data_message;
+            16w0x9900: parse_mpid_configuration_acknowledgement_message;
+            16w0x9a00: parse_market_maker_symbol_appointment_message;
+            16w0x9b00: parse_session_configuration_acknowledgement_message;
+            16w0x9c00: parse_risk_control_acknowledgment_message;
+            16w0x9d00: parse_risk_control_alert_message;
             default: accept;
         }
     }

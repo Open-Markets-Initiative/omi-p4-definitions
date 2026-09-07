@@ -277,25 +277,25 @@ parser NyseequitiesBqtParser(packet_in packet, out headers_t hdr, inout metadata
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w1: parse_sequence_number_reset_message;
-            16w3: parse_symbol_index_mapping_message;
-            16w10: parse_retransmission_request_message;
-            16w11: parse_request_response_message;
-            16w12: parse_heartbeat_response_message;
-            16w13: parse_symbol_index_mapping_request_message;
-            16w15: parse_refresh_request_message;
-            16w31: parse_message_unavailable_message;
-            16w32: parse_consolidated_symbol_clear_message;
-            16w33: parse_consolidated_trading_session_change_message;
-            16w34: parse_consolidated_security_status_message;
-            16w35: parse_refresh_header_message;
-            16w142: parse_bqt_message;
-            16w143: parse_consolidated_single_sided_quote_message;
-            16w220: parse_consolidated_trade_message;
-            16w221: parse_consolidated_trade_cancel_message;
-            16w222: parse_consolidated_trade_correction_message;
-            16w229: parse_consolidated_stock_summary_message;
-            16w240: parse_consolidated_volume_message;
+            16w0x100: parse_sequence_number_reset_message;
+            16w0x300: parse_symbol_index_mapping_message;
+            16w0xa00: parse_retransmission_request_message;
+            16w0xb00: parse_request_response_message;
+            16w0xc00: parse_heartbeat_response_message;
+            16w0xd00: parse_symbol_index_mapping_request_message;
+            16w0xf00: parse_refresh_request_message;
+            16w0x1f00: parse_message_unavailable_message;
+            16w0x2000: parse_consolidated_symbol_clear_message;
+            16w0x2100: parse_consolidated_trading_session_change_message;
+            16w0x2200: parse_consolidated_security_status_message;
+            16w0x2300: parse_refresh_header_message;
+            16w0x8e00: parse_bqt_message;
+            16w0x8f00: parse_consolidated_single_sided_quote_message;
+            16w0xdc00: parse_consolidated_trade_message;
+            16w0xdd00: parse_consolidated_trade_cancel_message;
+            16w0xde00: parse_consolidated_trade_correction_message;
+            16w0xe500: parse_consolidated_stock_summary_message;
+            16w0xf000: parse_consolidated_volume_message;
             default: accept;
         }
     }

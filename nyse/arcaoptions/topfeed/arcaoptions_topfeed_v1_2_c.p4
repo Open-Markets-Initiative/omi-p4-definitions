@@ -303,27 +303,27 @@ parser ArcaoptionsTopfeedParser(packet_in packet, out headers_t hdr, inout metad
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w1: parse_sequence_number_reset_message;
-            16w2: parse_time_reference_message;
-            16w3: parse_symbol_index_mapping_message;
-            16w10: parse_retransmission_request_message;
-            16w11: parse_request_response_message;
-            16w12: parse_heartbeat_response_message;
-            16w13: parse_symbol_index_mapping_request_message;
-            16w15: parse_refresh_request_message;
-            16w31: parse_message_unavailable_message;
-            16w32: parse_symbol_clear_message;
-            16w34: parse_security_status_message;
-            16w35: parse_refresh_header_message;
-            16w50: parse_outright_series_index_mapping_message;
-            16w51: parse_options_status_message;
-            16w340: parse_options_quote_message;
-            16w320: parse_options_trade_message;
-            16w321: parse_options_trade_cancel_message;
-            16w322: parse_options_trade_correction_message;
-            16w305: parse_options_imbalance_message;
-            16w307: parse_series_rfq_message;
-            16w323: parse_outright_series_summary_message;
+            16w0x100: parse_sequence_number_reset_message;
+            16w0x200: parse_time_reference_message;
+            16w0x300: parse_symbol_index_mapping_message;
+            16w0xa00: parse_retransmission_request_message;
+            16w0xb00: parse_request_response_message;
+            16w0xc00: parse_heartbeat_response_message;
+            16w0xd00: parse_symbol_index_mapping_request_message;
+            16w0xf00: parse_refresh_request_message;
+            16w0x1f00: parse_message_unavailable_message;
+            16w0x2000: parse_symbol_clear_message;
+            16w0x2200: parse_security_status_message;
+            16w0x2300: parse_refresh_header_message;
+            16w0x3200: parse_outright_series_index_mapping_message;
+            16w0x3300: parse_options_status_message;
+            16w0x5401: parse_options_quote_message;
+            16w0x4001: parse_options_trade_message;
+            16w0x4101: parse_options_trade_cancel_message;
+            16w0x4201: parse_options_trade_correction_message;
+            16w0x3101: parse_options_imbalance_message;
+            16w0x3301: parse_series_rfq_message;
+            16w0x4301: parse_outright_series_summary_message;
             default: accept;
         }
     }

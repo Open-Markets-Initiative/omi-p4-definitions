@@ -288,27 +288,27 @@ parser BseindiaEobiParser(packet_in packet, out headers_t hdr, inout metadata_t 
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id_2) {
-            16w13001: parse_heartbeat_message;
-            16w13600: parse_product_summary_message;
-            16w13602: parse_snapshot_order_message;
-            16w13601: parse_instrument_summary_message;
-            16w13500: parse_auction_best_bid_offer_message;
-            16w13501: parse_auction_clearing_price_message;
-            16w13504: parse_top_of_book_message;
-            16w13100: parse_order_add_message;
-            16w13101: parse_order_modify_message;
-            16w13106: parse_order_modify_same_priority_message;
-            16w13102: parse_order_delete_message;
-            16w13103: parse_order_mass_delete_message;
-            16w13105: parse_partial_order_execution_message;
-            16w13104: parse_full_order_execution_message;
-            16w13200: parse_trade_reversal_message;
-            16w13202: parse_execution_summary_message;
-            16w13203: parse_instrument_info_message;
-            16w13204: parse_lpp_range_message;
-            16w13300: parse_product_state_change_message;
-            16w13301: parse_instrument_state_change_message;
-            16w13400: parse_add_complex_instrument_message;
+            16w0xc932: parse_heartbeat_message;
+            16w0x2035: parse_product_summary_message;
+            16w0x2235: parse_snapshot_order_message;
+            16w0x2135: parse_instrument_summary_message;
+            16w0xbc34: parse_auction_best_bid_offer_message;
+            16w0xbd34: parse_auction_clearing_price_message;
+            16w0xc034: parse_top_of_book_message;
+            16w0x2c33: parse_order_add_message;
+            16w0x2d33: parse_order_modify_message;
+            16w0x3233: parse_order_modify_same_priority_message;
+            16w0x2e33: parse_order_delete_message;
+            16w0x2f33: parse_order_mass_delete_message;
+            16w0x3133: parse_partial_order_execution_message;
+            16w0x3033: parse_full_order_execution_message;
+            16w0x9033: parse_trade_reversal_message;
+            16w0x9233: parse_execution_summary_message;
+            16w0x9333: parse_instrument_info_message;
+            16w0x9433: parse_lpp_range_message;
+            16w0xf433: parse_product_state_change_message;
+            16w0xf533: parse_instrument_state_change_message;
+            16w0x5834: parse_add_complex_instrument_message;
             default: accept;
         }
     }

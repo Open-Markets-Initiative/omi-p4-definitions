@@ -535,30 +535,30 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w10907: parse_cross_request_notification;
-            16w10902: parse_delete_order_broadcast;
-            16w10906: parse_enter_clip_request_notification;
-            16w10012: parse_forced_logout_notification;
-            16w10023: parse_heartbeat_notification;
-            16w10035: parse_legal_notification_broadcast;
-            16w10001: parse_logon_response;
-            16w10003: parse_logout_response;
-            16w10901: parse_order_exec_report_broadcast;
-            16w10014: parse_order_reject_notification;
-            16w10037: parse_partition_list_notification;
-            16w10038: parse_party_action_report;
-            16w10034: parse_party_entitlements_update_report;
-            16w10010: parse_reject;
-            16w10009: parse_retransmit_response;
-            16w10905: parse_rfq_notification;
-            16w10033: parse_risk_notification_broadcast;
-            16w10044: parse_service_availability_market_broadcast;
-            16w10036: parse_session_list_notification;
-            16w10903: parse_session_status_broadcast;
-            16w10045: parse_status_broadcast;
-            16w10909: parse_trading_action_response;
-            16w10019: parse_user_login_response;
-            16w10024: parse_user_logout_response;
+            16w0x9b2a: parse_cross_request_notification;
+            16w0x962a: parse_delete_order_broadcast;
+            16w0x9a2a: parse_enter_clip_request_notification;
+            16w0x1c27: parse_forced_logout_notification;
+            16w0x2727: parse_heartbeat_notification;
+            16w0x3327: parse_legal_notification_broadcast;
+            16w0x1127: parse_logon_response;
+            16w0x1327: parse_logout_response;
+            16w0x952a: parse_order_exec_report_broadcast;
+            16w0x1e27: parse_order_reject_notification;
+            16w0x3527: parse_partition_list_notification;
+            16w0x3627: parse_party_action_report;
+            16w0x3227: parse_party_entitlements_update_report;
+            16w0x1a27: parse_reject;
+            16w0x1927: parse_retransmit_response;
+            16w0x992a: parse_rfq_notification;
+            16w0x3127: parse_risk_notification_broadcast;
+            16w0x3c27: parse_service_availability_market_broadcast;
+            16w0x3427: parse_session_list_notification;
+            16w0x972a: parse_session_status_broadcast;
+            16w0x3d27: parse_status_broadcast;
+            16w0x9d2a: parse_trading_action_response;
+            16w0x2327: parse_user_login_response;
+            16w0x2827: parse_user_logout_response;
             default: accept;
         }
     }

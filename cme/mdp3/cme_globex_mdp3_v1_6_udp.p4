@@ -725,31 +725,31 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w4: parse_channel_reset;
-            16w15: parse_admin_login;
-            16w16: parse_admin_logout;
-            16w27: parse_md_instrument_definition_future;
-            16w29: parse_md_instrument_definition_spread;
-            16w30: parse_security_status;
-            16w32: parse_md_incremental_refresh_book;
-            16w33: parse_md_incremental_refresh_daily_statistics;
-            16w34: parse_md_incremental_refresh_limits_banding;
-            16w35: parse_md_incremental_refresh_session_statistics;
-            16w36: parse_md_incremental_refresh_trade;
-            16w37: parse_md_incremental_refresh_volume;
-            16w38: parse_snapshot_full_refresh;
-            16w39: parse_quote_request;
-            16w41: parse_md_instrument_definition_option;
-            16w42: parse_md_incremental_refresh_trade_summary;
-            16w200: parse_negotiate;
-            16w201: parse_negotiation_reject;
-            16w202: parse_negotiation_response;
-            16w203: parse_terminate;
-            16w205: parse_market_data_request;
-            16w206: parse_request_ack;
-            16w207: parse_request_reject;
-            16w208: parse_security_list_request;
-            16w209: parse_security_status_request;
+            16w0x400: parse_channel_reset;
+            16w0xf00: parse_admin_login;
+            16w0x1000: parse_admin_logout;
+            16w0x1b00: parse_md_instrument_definition_future;
+            16w0x1d00: parse_md_instrument_definition_spread;
+            16w0x1e00: parse_security_status;
+            16w0x2000: parse_md_incremental_refresh_book;
+            16w0x2100: parse_md_incremental_refresh_daily_statistics;
+            16w0x2200: parse_md_incremental_refresh_limits_banding;
+            16w0x2300: parse_md_incremental_refresh_session_statistics;
+            16w0x2400: parse_md_incremental_refresh_trade;
+            16w0x2500: parse_md_incremental_refresh_volume;
+            16w0x2600: parse_snapshot_full_refresh;
+            16w0x2700: parse_quote_request;
+            16w0x2900: parse_md_instrument_definition_option;
+            16w0x2a00: parse_md_incremental_refresh_trade_summary;
+            16w0xc800: parse_negotiate;
+            16w0xc900: parse_negotiation_reject;
+            16w0xca00: parse_negotiation_response;
+            16w0xcb00: parse_terminate;
+            16w0xcd00: parse_market_data_request;
+            16w0xce00: parse_request_ack;
+            16w0xcf00: parse_request_reject;
+            16w0xd000: parse_security_list_request;
+            16w0xd100: parse_security_status_request;
             default: accept;
         }
     }

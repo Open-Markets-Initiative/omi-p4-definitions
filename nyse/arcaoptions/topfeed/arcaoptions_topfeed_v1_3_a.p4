@@ -279,23 +279,23 @@ parser ArcaoptionsTopfeedParser(packet_in packet, out headers_t hdr, inout metad
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w401: parse_outright_quote_message;
-            16w407: parse_outright_trade_message;
-            16w409: parse_outright_trade_cancel_message;
-            16w411: parse_outright_trade_correction_message;
-            16w413: parse_outright_imbalance_message;
-            16w415: parse_outright_crossing_rfq_message;
-            16w471: parse_outright_bold_rfq_message;
-            16w417: parse_outright_summary_message;
-            16w419: parse_underlying_status_message;
-            16w421: parse_outright_series_status_message;
-            16w501: parse_refresh_outright_quote_message;
-            16w507: parse_refresh_outright_trade_message;
-            16w509: parse_refresh_outright_imbalance_message;
-            16w435: parse_underlying_index_mapping_message;
-            16w437: parse_series_index_mapping_message;
-            16w455: parse_stream_id_message;
-            16w1: parse_sequence_number_reset_message;
+            16w0x9101: parse_outright_quote_message;
+            16w0x9701: parse_outright_trade_message;
+            16w0x9901: parse_outright_trade_cancel_message;
+            16w0x9b01: parse_outright_trade_correction_message;
+            16w0x9d01: parse_outright_imbalance_message;
+            16w0x9f01: parse_outright_crossing_rfq_message;
+            16w0xd701: parse_outright_bold_rfq_message;
+            16w0xa101: parse_outright_summary_message;
+            16w0xa301: parse_underlying_status_message;
+            16w0xa501: parse_outright_series_status_message;
+            16w0xf501: parse_refresh_outright_quote_message;
+            16w0xfb01: parse_refresh_outright_trade_message;
+            16w0xfd01: parse_refresh_outright_imbalance_message;
+            16w0xb301: parse_underlying_index_mapping_message;
+            16w0xb501: parse_series_index_mapping_message;
+            16w0xc701: parse_stream_id_message;
+            16w0x100: parse_sequence_number_reset_message;
             default: accept;
         }
     }

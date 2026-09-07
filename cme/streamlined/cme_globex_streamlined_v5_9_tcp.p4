@@ -791,21 +791,21 @@ parser CmeGlobexStreamlinedTcpParser(packet_in packet, out headers_t hdr, inout 
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w315: parse_admin_login;
-            16w316: parse_admin_logout;
-            16w333: parse_md_incremental_refresh_eris_reference_data_and_daily_statistics;
-            16w339: parse_md_news_indices;
-            16w340: parse_md_incremental_refresh_trade_blocks_340;
-            16w345: parse_quote_request;
-            16w347: parse_md_instrument_definition_indices;
-            16w348: parse_md_incremental_refresh_indices;
-            16w349: parse_md_incremental_refresh_trade_blocks_349;
-            16w351: parse_md_incremental_refresh_eris_351;
-            16w353: parse_md_incremental_refresh_eris_353;
-            16w356: parse_md_incremental_refresh_ot_c_356;
-            16w363: parse_md_instrument_definition_eris;
-            16w365: parse_md_incremental_refresh_trade_blocks_365;
-            16w366: parse_md_incremental_refresh_ot_c_366;
+            16w0x3b01: parse_admin_login;
+            16w0x3c01: parse_admin_logout;
+            16w0x4d01: parse_md_incremental_refresh_eris_reference_data_and_daily_statistics;
+            16w0x5301: parse_md_news_indices;
+            16w0x5401: parse_md_incremental_refresh_trade_blocks_340;
+            16w0x5901: parse_quote_request;
+            16w0x5b01: parse_md_instrument_definition_indices;
+            16w0x5c01: parse_md_incremental_refresh_indices;
+            16w0x5d01: parse_md_incremental_refresh_trade_blocks_349;
+            16w0x5f01: parse_md_incremental_refresh_eris_351;
+            16w0x6101: parse_md_incremental_refresh_eris_353;
+            16w0x6401: parse_md_incremental_refresh_ot_c_356;
+            16w0x6b01: parse_md_instrument_definition_eris;
+            16w0x6d01: parse_md_incremental_refresh_trade_blocks_365;
+            16w0x6e01: parse_md_incremental_refresh_ot_c_366;
             default: accept;
         }
     }

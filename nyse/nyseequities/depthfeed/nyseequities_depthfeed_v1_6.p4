@@ -153,12 +153,12 @@ parser NyseequitiesDepthfeedParser(packet_in packet, out headers_t hdr, inout me
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w1: parse_sequence_number_reset_message;
-            16w3: parse_symbol_index_mapping_message;
-            16w32: parse_symbol_clear_message;
-            16w34: parse_security_status_message;
-            16w115: parse_delta_message;
-            16w105: parse_imbalance_message;
+            16w0x100: parse_sequence_number_reset_message;
+            16w0x300: parse_symbol_index_mapping_message;
+            16w0x2000: parse_symbol_clear_message;
+            16w0x2200: parse_security_status_message;
+            16w0x7300: parse_delta_message;
+            16w0x6900: parse_imbalance_message;
             default: accept;
         }
     }

@@ -109,15 +109,15 @@ parser IexoptionsSessionParser(packet_in packet, out headers_t hdr, inout metada
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w1: parse_login_request_message;
-            16w2: parse_login_response_message;
-            16w3: parse_gateway_heartbeat_message;
-            16w6: parse_terminate_message;
-            16w7: parse_sequenced_message_header_message;
-            16w8: parse_subsession_join_message;
-            16w9: parse_subsession_join_response_message;
-            16w10: parse_subsession_leave_message;
-            16w11: parse_subsession_leave_response_message;
+            16w0x100: parse_login_request_message;
+            16w0x200: parse_login_response_message;
+            16w0x300: parse_gateway_heartbeat_message;
+            16w0x600: parse_terminate_message;
+            16w0x700: parse_sequenced_message_header_message;
+            16w0x800: parse_subsession_join_message;
+            16w0x900: parse_subsession_join_response_message;
+            16w0xa00: parse_subsession_leave_message;
+            16w0xb00: parse_subsession_leave_response_message;
             default: accept;
         }
     }

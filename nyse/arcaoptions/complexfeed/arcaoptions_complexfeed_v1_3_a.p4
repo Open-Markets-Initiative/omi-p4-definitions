@@ -181,16 +181,16 @@ parser ArcaoptionsComplexfeedParser(packet_in packet, out headers_t hdr, inout m
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w423: parse_complex_quote_message;
-            16w425: parse_complex_trade_message;
-            16w429: parse_complex_crossing_rfq_message;
-            16w472: parse_complex_cube_rfq_message;
-            16w433: parse_complex_status_message;
-            16w511: parse_refresh_complex_quote_message;
-            16w513: parse_refresh_complex_trade_message;
-            16w439: parse_complex_symbol_definition_message;
-            16w455: parse_stream_id_message;
-            16w1: parse_sequence_number_reset_message;
+            16w0xa701: parse_complex_quote_message;
+            16w0xa901: parse_complex_trade_message;
+            16w0xad01: parse_complex_crossing_rfq_message;
+            16w0xd801: parse_complex_cube_rfq_message;
+            16w0xb101: parse_complex_status_message;
+            16w0xff01: parse_refresh_complex_quote_message;
+            16w0x102: parse_refresh_complex_trade_message;
+            16w0xb701: parse_complex_symbol_definition_message;
+            16w0xc701: parse_stream_id_message;
+            16w0x100: parse_sequence_number_reset_message;
             default: accept;
         }
     }

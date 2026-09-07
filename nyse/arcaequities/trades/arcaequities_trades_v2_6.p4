@@ -299,27 +299,27 @@ parser ArcaequitiesTradesParser(packet_in packet, out headers_t hdr, inout metad
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w1: parse_sequence_number_reset_message;
-            16w2: parse_source_time_reference_message;
-            16w3: parse_symbol_index_mapping_message;
-            16w32: parse_symbol_clear_message;
-            16w34: parse_security_status_message;
-            16w10: parse_retransmission_request_message;
-            16w13: parse_symbol_index_mapping_request_message;
-            16w15: parse_refresh_request_message;
-            16w31: parse_message_unavailable_message;
-            16w35: parse_refresh_header_message;
-            16w11: parse_request_response_message;
-            16w12: parse_heartbeat_response_message;
-            16w220: parse_trade_message;
-            16w221: parse_trade_cancel_message;
-            16w222: parse_trade_correction_message;
-            16w223: parse_stock_summary_message;
-            16w210: parse_trf_fractional_trade_message;
-            16w216: parse_trf_trade_cancel_message;
-            16w212: parse_trf_fractional_trade_correction_message;
-            16w213: parse_trf_fractional_prior_day_trade_message;
-            16w214: parse_trf_fractional_prior_day_trade_cancel_message;
+            16w0x100: parse_sequence_number_reset_message;
+            16w0x200: parse_source_time_reference_message;
+            16w0x300: parse_symbol_index_mapping_message;
+            16w0x2000: parse_symbol_clear_message;
+            16w0x2200: parse_security_status_message;
+            16w0xa00: parse_retransmission_request_message;
+            16w0xd00: parse_symbol_index_mapping_request_message;
+            16w0xf00: parse_refresh_request_message;
+            16w0x1f00: parse_message_unavailable_message;
+            16w0x2300: parse_refresh_header_message;
+            16w0xb00: parse_request_response_message;
+            16w0xc00: parse_heartbeat_response_message;
+            16w0xdc00: parse_trade_message;
+            16w0xdd00: parse_trade_cancel_message;
+            16w0xde00: parse_trade_correction_message;
+            16w0xdf00: parse_stock_summary_message;
+            16w0xd200: parse_trf_fractional_trade_message;
+            16w0xd800: parse_trf_trade_cancel_message;
+            16w0xd400: parse_trf_fractional_trade_correction_message;
+            16w0xd500: parse_trf_fractional_prior_day_trade_message;
+            16w0xd600: parse_trf_fractional_prior_day_trade_cancel_message;
             default: accept;
         }
     }

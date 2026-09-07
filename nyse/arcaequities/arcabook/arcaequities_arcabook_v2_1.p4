@@ -164,14 +164,14 @@ parser ArcaequitiesArcabookParser(packet_in packet, out headers_t hdr, inout met
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w100: parse_add_order_message;
-            16w101: parse_modify_order_message;
-            16w102: parse_delete_order_message;
-            16w103: parse_execution_message;
-            16w105: parse_imbalance_message;
-            16w106: parse_add_order_refresh_message;
-            16w107: parse_attributed_add_order_message;
-            16w108: parse_attributed_add_order_refresh_message;
+            16w0x6400: parse_add_order_message;
+            16w0x6500: parse_modify_order_message;
+            16w0x6600: parse_delete_order_message;
+            16w0x6700: parse_execution_message;
+            16w0x6900: parse_imbalance_message;
+            16w0x6a00: parse_add_order_refresh_message;
+            16w0x6b00: parse_attributed_add_order_message;
+            16w0x6c00: parse_attributed_add_order_refresh_message;
             default: accept;
         }
     }

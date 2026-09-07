@@ -108,11 +108,11 @@ parser CmeGlobexMdp3ClienttcpParser(packet_in packet, out headers_t hdr, inout m
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w200: parse_negotiate;
-            16w203: parse_terminate;
-            16w205: parse_market_data_request;
-            16w208: parse_security_list_request;
-            16w209: parse_security_status_request;
+            16w0xc800: parse_negotiate;
+            16w0xcb00: parse_terminate;
+            16w0xcd00: parse_market_data_request;
+            16w0xd000: parse_security_list_request;
+            16w0xd100: parse_security_status_request;
             default: accept;
         }
     }

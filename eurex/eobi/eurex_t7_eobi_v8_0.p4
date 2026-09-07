@@ -362,29 +362,29 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state start {
         packet.extract(hdr.message_header_comp);
         transition select(hdr.message_header_comp.template_id_2) {
-            16w13400: parse_add_complex_instrument;
-            16w13500: parse_auction_bbo;
-            16w13501: parse_auction_clearing_price;
-            16w13502: parse_cross_request;
-            16w13202: parse_execution_summary;
-            16w13104: parse_full_order_execution;
-            16w13001: parse_heartbeat;
-            16w13301: parse_instrument_state_change;
-            16w13601: parse_instrument_summary;
-            16w13302: parse_mass_instrument_state_change;
-            16w13100: parse_order_add;
-            16w13102: parse_order_delete;
-            16w13103: parse_order_mass_delete;
-            16w13101: parse_order_modify;
-            16w13106: parse_order_modify_same_prio;
-            16w13105: parse_partial_order_execution;
-            16w13300: parse_product_state_change;
-            16w13600: parse_product_summary;
-            16w13503: parse_quote_request;
-            16w13602: parse_snapshot_order;
-            16w13504: parse_top_of_book;
-            16w13201: parse_trade_report;
-            16w13200: parse_trade_reversal;
+            16w0x5834: parse_add_complex_instrument;
+            16w0xbc34: parse_auction_bbo;
+            16w0xbd34: parse_auction_clearing_price;
+            16w0xbe34: parse_cross_request;
+            16w0x9233: parse_execution_summary;
+            16w0x3033: parse_full_order_execution;
+            16w0xc932: parse_heartbeat;
+            16w0xf533: parse_instrument_state_change;
+            16w0x2135: parse_instrument_summary;
+            16w0xf633: parse_mass_instrument_state_change;
+            16w0x2c33: parse_order_add;
+            16w0x2e33: parse_order_delete;
+            16w0x2f33: parse_order_mass_delete;
+            16w0x2d33: parse_order_modify;
+            16w0x3233: parse_order_modify_same_prio;
+            16w0x3133: parse_partial_order_execution;
+            16w0xf433: parse_product_state_change;
+            16w0x2035: parse_product_summary;
+            16w0xbf34: parse_quote_request;
+            16w0x2235: parse_snapshot_order;
+            16w0xc034: parse_top_of_book;
+            16w0x9133: parse_trade_report;
+            16w0x9033: parse_trade_reversal;
             default: accept;
         }
     }

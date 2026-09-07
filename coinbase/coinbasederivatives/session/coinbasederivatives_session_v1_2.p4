@@ -108,15 +108,15 @@ parser CoinbasederivativesSessionParser(packet_in packet, out headers_t hdr, ino
     state start {
         packet.extract(hdr.flags);
         transition select(hdr.flags.template_id) {
-            16w100: parse_logon_message;
-            16w200: parse_logon_conf_message;
-            16w101: parse_logout_message;
-            16w201: parse_logged_out_message;
-            16w10: parse_heartbeat_message;
-            16w11: parse_test_request_message;
-            16w102: parse_resend_request_message;
-            16w202: parse_gap_fill_message;
-            16w210: parse_reject_message;
+            16w0x6400: parse_logon_message;
+            16w0xc800: parse_logon_conf_message;
+            16w0x6500: parse_logout_message;
+            16w0xc900: parse_logged_out_message;
+            16w0xa00: parse_heartbeat_message;
+            16w0xb00: parse_test_request_message;
+            16w0x6600: parse_resend_request_message;
+            16w0xca00: parse_gap_fill_message;
+            16w0xd200: parse_reject_message;
             default: accept;
         }
     }

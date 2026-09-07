@@ -165,9 +165,9 @@ parser CmeGlobexSettlementsUdpParser(packet_in packet, out headers_t hdr, inout 
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
-            16w401: parse_md_incremental_refresh_settle;
-            16w402: parse_md_incremental_refresh_voi;
-            16w403: parse_md_incremental_refresh_high_low;
+            16w0x9101: parse_md_incremental_refresh_settle;
+            16w0x9201: parse_md_incremental_refresh_voi;
+            16w0x9301: parse_md_incremental_refresh_high_low;
             default: accept;
         }
     }

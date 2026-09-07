@@ -203,16 +203,16 @@ parser ArcaoptionsDeepfeedParser(packet_in packet, out headers_t hdr, inout meta
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_type) {
-            16w403: parse_outright_market_depth_buy_message;
-            16w405: parse_outright_market_depth_sell_message;
-            16w419: parse_underlying_status_message;
-            16w421: parse_outright_series_status_message;
-            16w503: parse_refresh_outright_market_depth_buy_message;
-            16w505: parse_refresh_outright_market_depth_sell_message;
-            16w435: parse_underlying_index_mapping_message;
-            16w437: parse_series_index_mapping_message;
-            16w455: parse_stream_id_message;
-            16w1: parse_sequence_number_reset_message;
+            16w0x9301: parse_outright_market_depth_buy_message;
+            16w0x9501: parse_outright_market_depth_sell_message;
+            16w0xa301: parse_underlying_status_message;
+            16w0xa501: parse_outright_series_status_message;
+            16w0xf701: parse_refresh_outright_market_depth_buy_message;
+            16w0xf901: parse_refresh_outright_market_depth_sell_message;
+            16w0xb301: parse_underlying_index_mapping_message;
+            16w0xb501: parse_series_index_mapping_message;
+            16w0xc701: parse_stream_id_message;
+            16w0x100: parse_sequence_number_reset_message;
             default: accept;
         }
     }
