@@ -314,6 +314,7 @@ header consolidated_fractional_volume_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -376,116 +377,139 @@ parser TexasequitiesBqtParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_source_time_reference_message {
         packet.extract(hdr.source_time_reference_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_message {
         packet.extract(hdr.symbol_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_clear_message {
         packet.extract(hdr.symbol_clear_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_status_message {
         packet.extract(hdr.security_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_request_message {
         packet.extract(hdr.retransmission_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_request_message {
         packet.extract(hdr.symbol_index_mapping_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_request_message {
         packet.extract(hdr.refresh_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_message_unavailable_message {
         packet.extract(hdr.message_unavailable_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_header_message {
         packet.extract(hdr.refresh_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_request_response_message {
         packet.extract(hdr.request_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_response_message {
         packet.extract(hdr.heartbeat_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_quotes_message {
         packet.extract(hdr.best_quotes_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_consolidated_single_sided_quote_message {
         packet.extract(hdr.consolidated_single_sided_quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trf_fractional_trade_message {
         packet.extract(hdr.trf_fractional_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_consolidated_trade_message {
         packet.extract(hdr.consolidated_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_consolidated_trade_cancel_message {
         packet.extract(hdr.consolidated_trade_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trf_fractional_trade_correction_message {
         packet.extract(hdr.trf_fractional_trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_consolidated_trade_correction_message {
         packet.extract(hdr.consolidated_trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trf_fractional_prior_day_trade_message {
         packet.extract(hdr.trf_fractional_prior_day_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trf_fractional_prior_day_trade_cancel_message {
         packet.extract(hdr.trf_fractional_prior_day_trade_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_consolidated_fractional_stock_summary_message {
         packet.extract(hdr.consolidated_fractional_stock_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_consolidated_fractional_volume_message {
         packet.extract(hdr.consolidated_fractional_volume_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -498,7 +522,12 @@ control TexasequitiesBqtVerifyChecksum(inout headers_t hdr, inout metadata_t met
 
 control TexasequitiesBqtIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

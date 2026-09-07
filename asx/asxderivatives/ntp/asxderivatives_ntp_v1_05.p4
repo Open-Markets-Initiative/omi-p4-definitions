@@ -370,6 +370,7 @@ header volume_and_open_interest_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -444,131 +445,157 @@ parser AsxderivativesNtpParser(packet_in packet, out headers_t hdr, inout metada
 
     state parse_seconds_message {
         packet.extract(hdr.seconds_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_end_of_business_trade_date_message {
         packet.extract(hdr.end_of_business_trade_date_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_future_symbol_directory_message {
         packet.extract(hdr.future_symbol_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_options_symbol_directory_message {
         packet.extract(hdr.options_symbol_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_combination_symbol_directory_message {
         packet.extract(hdr.combination_symbol_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_bundles_symbol_directory {
         packet.extract(hdr.bundles_symbol_directory.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_book_state_message {
         packet.extract(hdr.order_book_state_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_message {
         packet.extract(hdr.add_order_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_volume_cancelled_message {
         packet.extract(hdr.order_volume_cancelled_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_deleted_message {
         packet.extract(hdr.order_deleted_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_auction_order_executed_message {
         packet.extract(hdr.auction_order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_combination_order_executed_message {
         packet.extract(hdr.combination_order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_implied_order_added_message {
         packet.extract(hdr.implied_order_added_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_implied_order_replaced_message {
         packet.extract(hdr.implied_order_replaced_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_implied_order_deleted_message {
         packet.extract(hdr.implied_order_deleted_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_executed_message {
         packet.extract(hdr.trade_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_combination_trade_executed_message {
         packet.extract(hdr.combination_trade_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_cancellation_message {
         packet.extract(hdr.trade_cancellation_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_equilibrium_price_message {
         packet.extract(hdr.equilibrium_price_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_open_high_low_last_trade_adjustment_message {
         packet.extract(hdr.open_high_low_last_trade_adjustment_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_market_settlement_message {
         packet.extract(hdr.market_settlement_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_text_message {
         packet.extract(hdr.text_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_request_for_quote_message {
         packet.extract(hdr.request_for_quote_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_anomalous_order_threshold_publish_message {
         packet.extract(hdr.anomalous_order_threshold_publish_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_volume_and_open_interest_message {
         packet.extract(hdr.volume_and_open_interest_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -581,7 +608,12 @@ control AsxderivativesNtpVerifyChecksum(inout headers_t hdr, inout metadata_t me
 
 control AsxderivativesNtpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

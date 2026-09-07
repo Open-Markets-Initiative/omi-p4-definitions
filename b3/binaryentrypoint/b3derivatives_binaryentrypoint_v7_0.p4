@@ -309,15 +309,14 @@ header new_order_cross_message_t {
     bit<16> crossed_indicator;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header new_order_cross_message_cross_sides_group_t {
     bit<8> side;
     bit<8> offset_1_padding_1;
     bit<32> account;
     bit<32> entering_firm_optional;
     bit<64> clordid;
-    bit<8> desk_id_length;
-    bit<8> desk_id_data;
-    bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header execution_report_new_message_t {
@@ -567,6 +566,9 @@ header security_definition_request_message_t {
     bit<40> entering_trader;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header security_definition_request_message_legs_group_t {
     bit<160> leg_symbol;
     bit<64> leg_ratio_qty;
     bit<8> leg_side;
@@ -613,14 +615,11 @@ header quote_request_message_t {
     bit<16> days_to_settlement;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header quote_request_message_sides_group_t {
     bit<8> side;
     bit<32> account;
-    bit<8> quote_req_id_length;
-    bit<8> quote_req_id_data;
-    bit<8> desk_id_length;
-    bit<8> desk_id_data;
-    bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header quote_status_report_message_t {
@@ -732,16 +731,11 @@ header quote_request_reject_message_t {
     bit<16> days_to_settlement_optional;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header quote_request_reject_message_sides_group_t {
     bit<8> side;
     bit<32> account;
-    bit<8> quote_req_id_length;
-    bit<8> quote_req_id_data;
-    bit<8> desk_id_length;
-    bit<8> desk_id_data;
-    bit<8> memo_length;
-    bit<8> memo_data;
-    bit<8> text_length;
-    bit<8> text_data;
 }
 
 header position_maintenance_cancel_request_message_t {
@@ -804,15 +798,12 @@ header position_maintenance_report_message_t {
     bit<8> contrary_instruction_indicator;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header position_maintenance_report_message_positions_group_t {
     bit<8> pos_type;
     bit<64> long_qty_optional;
     bit<64> short_qty;
-    bit<8> desk_id_length;
-    bit<8> desk_id_data;
-    bit<8> memo_length;
-    bit<8> memo_data;
-    bit<8> text_length;
-    bit<8> text_data;
 }
 
 header allocation_instruction_message_t {
@@ -904,12 +895,20 @@ header order_mass_action_report_message_t {
     bit<32> action_target_group_id;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header order_mass_action_report_message_comp_ids_group_t {
     bit<32> ref_comp_id;
-    bit<8> text_length;
-    bit<8> text_data;
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> new_order_cross_message_cross_sides_group_remaining;
+    bit<8> security_definition_request_message_legs_group_remaining;
+    bit<8> quote_request_message_sides_group_remaining;
+    bit<8> quote_request_reject_message_sides_group_remaining;
+    bit<8> position_maintenance_report_message_positions_group_remaining;
+    bit<8> order_mass_action_report_message_comp_ids_group_remaining;
 }
 
 struct headers_t {
@@ -932,6 +931,7 @@ struct headers_t {
     order_cancel_replace_request_message_t order_cancel_replace_request_message;
     order_cancel_request_message_t order_cancel_request_message;
     new_order_cross_message_t new_order_cross_message;
+    new_order_cross_message_cross_sides_group_t new_order_cross_message_cross_sides_group[MAX_MESSAGES];
     execution_report_new_message_t execution_report_new_message;
     execution_report_modify_message_t execution_report_modify_message;
     execution_report_cancel_message_t execution_report_cancel_message;
@@ -940,19 +940,24 @@ struct headers_t {
     execution_report_forward_message_t execution_report_forward_message;
     business_message_reject_message_t business_message_reject_message;
     security_definition_request_message_t security_definition_request_message;
+    security_definition_request_message_legs_group_t security_definition_request_message_legs_group[MAX_MESSAGES];
     security_definition_response_message_t security_definition_response_message;
     quote_request_message_t quote_request_message;
+    quote_request_message_sides_group_t quote_request_message_sides_group[MAX_MESSAGES];
     quote_status_report_message_t quote_status_report_message;
     quote_message_t quote_message;
     quote_cancel_message_t quote_cancel_message;
     quote_request_reject_message_t quote_request_reject_message;
+    quote_request_reject_message_sides_group_t quote_request_reject_message_sides_group[MAX_MESSAGES];
     position_maintenance_cancel_request_message_t position_maintenance_cancel_request_message;
     position_maintenance_request_message_t position_maintenance_request_message;
     position_maintenance_report_message_t position_maintenance_report_message;
+    position_maintenance_report_message_positions_group_t position_maintenance_report_message_positions_group[MAX_MESSAGES];
     allocation_instruction_message_t allocation_instruction_message;
     allocation_report_message_t allocation_report_message;
     order_mass_action_request_message_t order_mass_action_request_message;
     order_mass_action_report_message_t order_mass_action_report_message;
+    order_mass_action_report_message_comp_ids_group_t order_mass_action_report_message_comp_ids_group[MAX_MESSAGES];
 }
 
 parser B3derivativesBinaryentrypointParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -1004,197 +1009,314 @@ parser B3derivativesBinaryentrypointParser(packet_in packet, out headers_t hdr, 
 
     state parse_negotiate_message {
         packet.extract(hdr.negotiate_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_negotiate_response_message {
         packet.extract(hdr.negotiate_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_negotiate_reject_message {
         packet.extract(hdr.negotiate_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_establish_message {
         packet.extract(hdr.establish_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_establish_ack_message {
         packet.extract(hdr.establish_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_establish_reject_message {
         packet.extract(hdr.establish_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_terminate_message {
         packet.extract(hdr.terminate_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_not_applied_message {
         packet.extract(hdr.not_applied_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequence_message {
         packet.extract(hdr.sequence_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_request_message {
         packet.extract(hdr.retransmit_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_message {
         packet.extract(hdr.retransmission_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_reject_message {
         packet.extract(hdr.retransmit_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_simple_new_order_message {
         packet.extract(hdr.simple_new_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_simple_modify_order_message {
         packet.extract(hdr.simple_modify_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_single_message {
         packet.extract(hdr.new_order_single_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_replace_request_message {
         packet.extract(hdr.order_cancel_replace_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_request_message {
         packet.extract(hdr.order_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_cross_message {
         packet.extract(hdr.new_order_cross_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.new_order_cross_message_cross_sides_group_remaining = hdr.new_order_cross_message.num_in_group;
+        transition select(meta.new_order_cross_message_cross_sides_group_remaining) {
+            8w0: accept;
+            default: parse_new_order_cross_message_cross_sides_group;
+        }
+    }
+
+    state parse_new_order_cross_message_cross_sides_group {
+        packet.extract(hdr.new_order_cross_message_cross_sides_group.next);
+        meta.new_order_cross_message_cross_sides_group_remaining = meta.new_order_cross_message_cross_sides_group_remaining - 1;
+        transition select(meta.new_order_cross_message_cross_sides_group_remaining) {
+            8w0: accept;
+            default: parse_new_order_cross_message_cross_sides_group;
+        }
     }
 
     state parse_execution_report_new_message {
         packet.extract(hdr.execution_report_new_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_modify_message {
         packet.extract(hdr.execution_report_modify_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_cancel_message {
         packet.extract(hdr.execution_report_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_trade_message {
         packet.extract(hdr.execution_report_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_reject_message {
         packet.extract(hdr.execution_report_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_forward_message {
         packet.extract(hdr.execution_report_forward_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_business_message_reject_message {
         packet.extract(hdr.business_message_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_definition_request_message {
         packet.extract(hdr.security_definition_request_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.security_definition_request_message_legs_group_remaining = hdr.security_definition_request_message.num_in_group;
+        transition select(meta.security_definition_request_message_legs_group_remaining) {
+            8w0: accept;
+            default: parse_security_definition_request_message_legs_group;
+        }
+    }
+
+    state parse_security_definition_request_message_legs_group {
+        packet.extract(hdr.security_definition_request_message_legs_group.next);
+        meta.security_definition_request_message_legs_group_remaining = meta.security_definition_request_message_legs_group_remaining - 1;
+        transition select(meta.security_definition_request_message_legs_group_remaining) {
+            8w0: accept;
+            default: parse_security_definition_request_message_legs_group;
+        }
     }
 
     state parse_security_definition_response_message {
         packet.extract(hdr.security_definition_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_request_message {
         packet.extract(hdr.quote_request_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.quote_request_message_sides_group_remaining = hdr.quote_request_message.num_in_group;
+        transition select(meta.quote_request_message_sides_group_remaining) {
+            8w0: accept;
+            default: parse_quote_request_message_sides_group;
+        }
+    }
+
+    state parse_quote_request_message_sides_group {
+        packet.extract(hdr.quote_request_message_sides_group.next);
+        meta.quote_request_message_sides_group_remaining = meta.quote_request_message_sides_group_remaining - 1;
+        transition select(meta.quote_request_message_sides_group_remaining) {
+            8w0: accept;
+            default: parse_quote_request_message_sides_group;
+        }
     }
 
     state parse_quote_status_report_message {
         packet.extract(hdr.quote_status_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_message {
         packet.extract(hdr.quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_cancel_message {
         packet.extract(hdr.quote_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_request_reject_message {
         packet.extract(hdr.quote_request_reject_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.quote_request_reject_message_sides_group_remaining = hdr.quote_request_reject_message.num_in_group;
+        transition select(meta.quote_request_reject_message_sides_group_remaining) {
+            8w0: accept;
+            default: parse_quote_request_reject_message_sides_group;
+        }
+    }
+
+    state parse_quote_request_reject_message_sides_group {
+        packet.extract(hdr.quote_request_reject_message_sides_group.next);
+        meta.quote_request_reject_message_sides_group_remaining = meta.quote_request_reject_message_sides_group_remaining - 1;
+        transition select(meta.quote_request_reject_message_sides_group_remaining) {
+            8w0: accept;
+            default: parse_quote_request_reject_message_sides_group;
+        }
     }
 
     state parse_position_maintenance_cancel_request_message {
         packet.extract(hdr.position_maintenance_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_position_maintenance_request_message {
         packet.extract(hdr.position_maintenance_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_position_maintenance_report_message {
         packet.extract(hdr.position_maintenance_report_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.position_maintenance_report_message_positions_group_remaining = hdr.position_maintenance_report_message.num_in_group;
+        transition select(meta.position_maintenance_report_message_positions_group_remaining) {
+            8w0: accept;
+            default: parse_position_maintenance_report_message_positions_group;
+        }
+    }
+
+    state parse_position_maintenance_report_message_positions_group {
+        packet.extract(hdr.position_maintenance_report_message_positions_group.next);
+        meta.position_maintenance_report_message_positions_group_remaining = meta.position_maintenance_report_message_positions_group_remaining - 1;
+        transition select(meta.position_maintenance_report_message_positions_group_remaining) {
+            8w0: accept;
+            default: parse_position_maintenance_report_message_positions_group;
+        }
     }
 
     state parse_allocation_instruction_message {
         packet.extract(hdr.allocation_instruction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_allocation_report_message {
         packet.extract(hdr.allocation_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_mass_action_request_message {
         packet.extract(hdr.order_mass_action_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_mass_action_report_message {
         packet.extract(hdr.order_mass_action_report_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.order_mass_action_report_message_comp_ids_group_remaining = hdr.order_mass_action_report_message.num_in_group;
+        transition select(meta.order_mass_action_report_message_comp_ids_group_remaining) {
+            8w0: accept;
+            default: parse_order_mass_action_report_message_comp_ids_group;
+        }
+    }
+
+    state parse_order_mass_action_report_message_comp_ids_group {
+        packet.extract(hdr.order_mass_action_report_message_comp_ids_group.next);
+        meta.order_mass_action_report_message_comp_ids_group_remaining = meta.order_mass_action_report_message_comp_ids_group_remaining - 1;
+        transition select(meta.order_mass_action_report_message_comp_ids_group_remaining) {
+            8w0: accept;
+            default: parse_order_mass_action_report_message_comp_ids_group;
+        }
     }
 
 }
@@ -1206,7 +1328,12 @@ control B3derivativesBinaryentrypointVerifyChecksum(inout headers_t hdr, inout m
 
 control B3derivativesBinaryentrypointIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -1241,6 +1368,7 @@ control B3derivativesBinaryentrypointDeparser(packet_out packet, in headers_t hd
         packet.emit(hdr.order_cancel_replace_request_message);
         packet.emit(hdr.order_cancel_request_message);
         packet.emit(hdr.new_order_cross_message);
+        packet.emit(hdr.new_order_cross_message_cross_sides_group);
         packet.emit(hdr.execution_report_new_message);
         packet.emit(hdr.execution_report_modify_message);
         packet.emit(hdr.execution_report_cancel_message);
@@ -1249,19 +1377,24 @@ control B3derivativesBinaryentrypointDeparser(packet_out packet, in headers_t hd
         packet.emit(hdr.execution_report_forward_message);
         packet.emit(hdr.business_message_reject_message);
         packet.emit(hdr.security_definition_request_message);
+        packet.emit(hdr.security_definition_request_message_legs_group);
         packet.emit(hdr.security_definition_response_message);
         packet.emit(hdr.quote_request_message);
+        packet.emit(hdr.quote_request_message_sides_group);
         packet.emit(hdr.quote_status_report_message);
         packet.emit(hdr.quote_message);
         packet.emit(hdr.quote_cancel_message);
         packet.emit(hdr.quote_request_reject_message);
+        packet.emit(hdr.quote_request_reject_message_sides_group);
         packet.emit(hdr.position_maintenance_cancel_request_message);
         packet.emit(hdr.position_maintenance_request_message);
         packet.emit(hdr.position_maintenance_report_message);
+        packet.emit(hdr.position_maintenance_report_message_positions_group);
         packet.emit(hdr.allocation_instruction_message);
         packet.emit(hdr.allocation_report_message);
         packet.emit(hdr.order_mass_action_request_message);
         packet.emit(hdr.order_mass_action_report_message);
+        packet.emit(hdr.order_mass_action_report_message_comp_ids_group);
     }
 }
 

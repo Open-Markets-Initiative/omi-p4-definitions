@@ -190,9 +190,18 @@ header long_order_message_t {
     bit<8> order_sweep_reason;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header long_order_message_long_order_free_text_section_group_t {
     bit<144> free_text;
-    bit<8> block_length_uint_8_2;
-    bit<8> num_in_group_2;
+}
+
+header long_order_message_long_order_optional_fields_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_optional_fields_group_t {
     bit<64> stop_px;
     bit<8> peg_offset;
     bit<64> undisclosed_price;
@@ -207,8 +216,14 @@ header long_order_message_t {
     bit<3> reserved_3;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
-    bit<8> block_length_uint_8_3;
-    bit<8> num_in_group_3;
+}
+
+header long_order_message_long_order_clearing_fields_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_clearing_fields_group_t {
     bit<64> clearing_firm_i_d_char_8_optional;
     bit<64> client_id;
     bit<96> account_number;
@@ -225,65 +240,137 @@ header long_order_message_t {
     bit<1> leg_9;
     bit<6> reserved_6;
     bit<16> clearing_instruction_clearing_instructionenum_optional;
-    bit<8> block_length_uint_8_4;
-    bit<8> num_in_group_4;
+}
+
+header long_order_message_long_order_non_modifiable_opt_fields_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_non_modifiable_opt_fields_group_t {
     bit<8> trading_capacity_trading_capacityenum_optional;
     bit<64> minimum_order_quantity;
     bit<8> account_type_cross;
-    bit<8> block_length_uint_8_5;
-    bit<8> num_in_group_5;
+}
+
+header long_order_message_long_order_non_modifiable_short_codes_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_non_modifiable_short_codes_group_t {
     bit<32> original_client_id_short_code;
     bit<32> original_exec_w_firm_short_code;
     bit<32> original_invest_decis_w_firm_short_code;
     bit<32> original_non_exec_broker_short_code;
-    bit<8> block_length_uint_8_6;
-    bit<8> num_in_group_6;
+}
+
+header long_order_message_long_order_modifiable_short_codes_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_modifiable_short_codes_group_t {
     bit<32> event_client_id_short_code;
     bit<32> event_exec_w_firm_short_code;
-    bit<8> block_length_uint_8_7;
-    bit<8> num_in_group_7;
+}
+
+header long_order_message_long_order_commercial_fields_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_commercial_fields_group_t {
     bit<8> market_phase_flag;
     bit<8> margin_trading_flag;
     bit<8> access_flag;
     bit<128> trader_id;
     bit<88> sender_location_id;
     bit<88> desk_id;
-    bit<8> block_length_uint_8_8;
-    bit<8> num_in_group_8;
+}
+
+header long_order_message_long_order_modifiable_commercial_investor_field_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_modifiable_commercial_investor_field_group_t {
     bit<128> event_investor_id;
-    bit<8> block_length_uint_8_9;
-    bit<8> num_in_group_9;
+}
+
+header long_order_message_long_order_non_modifiable_commercial_investor_field_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_non_modifiable_commercial_investor_field_group_t {
     bit<128> original_investor_id;
-    bit<8> block_length_uint_8_10;
-    bit<8> num_in_group_10;
+}
+
+header long_order_message_long_order_extended_clearing_account_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_extended_clearing_account_group_t {
     bit<128> clearing_account;
-    bit<8> block_length_uint_8_11;
-    bit<8> num_in_group_11;
+}
+
+header long_order_message_long_order_strategy_fields_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_strategy_fields_group_t {
     bit<64> leg_last_px;
     bit<64> leg_last_qty;
     bit<32> leg_instrument_id;
     bit<8> leg_side;
-    bit<32> execution_i_d_uint_32t_optional_2;
-    bit<128> trade_unique_identifier_2;
-    bit<8> block_length_uint_8_12;
-    bit<8> num_in_group_12;
+    bit<32> execution_i_d_uint_32t_optional;
+    bit<128> trade_unique_identifier;
+}
+
+header long_order_message_long_order_optional_fields_derivatives_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_optional_fields_derivatives_group_t {
     bit<64> evaluated_price;
     bit<8> message_price_notation;
     bit<32> final_symbol_index;
     bit<32> final_execution_id;
-    bit<8> block_length_uint_8_13;
-    bit<8> num_in_group_13;
+}
+
+header long_order_message_long_order_additional_infos_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_additional_infos_group_t {
     bit<128> long_client_id;
-    bit<8> block_length_uint_8_14;
-    bit<8> num_in_group_14;
+}
+
+header long_order_message_long_order_short_codes_details_non_modifiable_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_short_codes_details_non_modifiable_group_t {
     bit<8> original_short_code_type;
     bit<8> short_code_role;
     bit<8> short_code_role_qualifier;
-    bit<8> block_length_uint_8_15;
-    bit<8> num_in_group_15;
+}
+
+header long_order_message_long_order_short_codes_details_modifiable_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header long_order_message_long_order_short_codes_details_modifiable_group_t {
     bit<8> event_short_code_type;
-    bit<8> short_code_role_2;
-    bit<8> short_code_role_qualifier_2;
+    bit<8> short_code_role;
+    bit<8> short_code_role_qualifier;
 }
 
 header dc_short_order_reject_message_t {
@@ -317,10 +404,19 @@ header dc_short_order_reject_message_t {
     bit<8> time_in_force_time_in_forceenum_optional;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_t {
     bit<32> event_client_id_short_code;
     bit<32> event_exec_w_firm_short_code;
-    bit<8> block_length_uint_8_2;
-    bit<8> num_in_group_2;
+}
+
+header dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_t {
     bit<8> event_short_code_type;
     bit<8> short_code_role;
     bit<8> short_code_role_qualifier;
@@ -348,6 +444,9 @@ header dc_static_collars_message_t {
     bit<8> emm;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_t {
     bit<8> update_type;
     bit<64> price_int_64t;
 }
@@ -420,14 +519,23 @@ header trade_bust_notification_message_t {
     bit<128> parent_trade_unique_identifier;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_t {
     bit<8> original_short_code_type;
     bit<8> short_code_role;
     bit<8> short_code_role_qualifier;
-    bit<8> block_length_uint_8_2;
-    bit<8> num_in_group_2;
+}
+
+header trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_t {
     bit<8> event_short_code_type;
-    bit<8> short_code_role_2;
-    bit<8> short_code_role_qualifier_2;
+    bit<8> short_code_role;
+    bit<8> short_code_role_qualifier;
 }
 
 header dc_quote_message_t {
@@ -463,6 +571,9 @@ header dc_quote_message_t {
     bit<16> stpid;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header dc_quote_message_d_c_quote_message_bid_quoterep_group_t {
     bit<64> bid_size;
     bit<64> bid_px;
     bit<64> bid_quote_priority;
@@ -474,8 +585,14 @@ header dc_quote_message_t {
     bit<64> bid_leaves_quantity;
     bit<64> bid_previous_size;
     bit<64> bid_previous_px;
-    bit<8> block_length_uint_8_2;
-    bit<8> num_in_group_2;
+}
+
+header dc_quote_message_d_c_quote_message_offer_quoterep_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_quote_message_d_c_quote_message_offer_quoterep_group_t {
     bit<64> offer_size;
     bit<64> offer_px;
     bit<64> offer_quote_priority;
@@ -483,12 +600,18 @@ header dc_quote_message_t {
     bit<8> sell_revision_flag;
     bit<16> offer_error_code;
     bit<64> offer_oe_session_id;
-    bit<8> rfe_answer_unsignedchar_optional_2;
+    bit<8> rfe_answer_unsignedchar_optional;
     bit<64> offer_leaves_quantity;
     bit<64> offer_previous_size;
     bit<64> offer_previous_px;
-    bit<8> block_length_uint_8_3;
-    bit<8> num_in_group_3;
+}
+
+header dc_quote_message_d_c_quote_message_clearing_dataset_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_quote_message_d_c_quote_message_clearing_dataset_group_t {
     bit<64> clearing_firm_i_d_char_8_optional;
     bit<64> client_id;
     bit<96> account_number;
@@ -506,14 +629,26 @@ header dc_quote_message_t {
     bit<6> reserved_6;
     bit<16> clearing_instruction_clearing_instructionenum_optional;
     bit<144> free_text;
-    bit<8> block_length_uint_8_4;
-    bit<8> num_in_group_4;
+}
+
+header dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_t {
     bit<32> original_client_id_short_code;
     bit<32> original_exec_w_firm_short_code;
     bit<32> original_invest_decis_w_firm_short_code;
     bit<32> original_non_exec_broker_short_code;
-    bit<8> block_length_uint_8_5;
-    bit<8> num_in_group_5;
+}
+
+header dc_quote_message_d_c_quote_message_modifiable_short_codes_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_quote_message_d_c_quote_message_modifiable_short_codes_group_t {
     bit<32> event_client_id_short_code;
     bit<32> event_exec_w_firm_short_code;
 }
@@ -627,6 +762,9 @@ header dc_short_trade_declaration_message_t {
     bit<8> guarantee_flag_guarantee_flagenum_optional;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_t {
     bit<64> declaration_id;
     bit<64> price_int_64t_optional;
     bit<64> quantity_uint_64t_optional;
@@ -720,6 +858,9 @@ header dc_trade_message_t {
     bit<8> trade_type;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header dc_trade_message_d_c_trade_message_matched_orders_group_t {
     bit<64> order_id;
     bit<8> order_side_order_sideenum;
     bit<8> order_type;
@@ -743,14 +884,14 @@ header dc_trade_message_t {
     bit<16> oe_partition_i_d_uint_16t_optional;
     bit<32> logical_access_i_d_uint_32t_optional;
     bit<64> book_in_uint_64t_optional;
-    bit<1> uncrossing_trade_2;
-    bit<1> first_trade_price_2;
-    bit<1> passive_order_2;
-    bit<1> aggressive_order_2;
-    bit<1> trade_creation_by_market_operations_2;
-    bit<1> nav_trade_expressed_in_bps_2;
-    bit<1> nav_trade_expressed_in_price_currency_2;
-    bit<1> deferred_publication_2;
+    bit<1> uncrossing_trade;
+    bit<1> first_trade_price;
+    bit<1> passive_order;
+    bit<1> aggressive_order;
+    bit<1> trade_creation_by_market_operations;
+    bit<1> nav_trade_expressed_in_bps;
+    bit<1> nav_trade_expressed_in_price_currency;
+    bit<1> deferred_publication;
     bit<8> account_type_internal_account_type_internalenum_optional;
     bit<8> lp_role_lp_roleenum_optional;
     bit<128> clearing_account;
@@ -760,23 +901,29 @@ header dc_trade_message_t {
     bit<128> original_investor_id;
     bit<8> cross_order_indicator_unsignedchar_optional;
     bit<16> clearing_instruction_clearing_instructionenum;
-    bit<8> block_length_uint_8_2;
-    bit<8> num_in_group_2;
+}
+
+header dc_trade_message_d_c_trade_message_matched_declarations_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_trade_message_d_c_trade_message_matched_declarations_group_t {
     bit<64> declaration_id;
     bit<8> side;
     bit<8> operation_type;
-    bit<64> firm_id_2;
-    bit<16> oe_partition_i_d_uint_16t_optional_2;
-    bit<32> logical_access_i_d_uint_32t_optional_2;
-    bit<64> book_in_uint_64t_optional_2;
+    bit<64> firm_id;
+    bit<16> oe_partition_i_d_uint_16t_optional;
+    bit<32> logical_access_i_d_uint_32t_optional;
+    bit<64> book_in_uint_64t_optional;
     bit<8> account_type_account_typeenum_optional;
-    bit<64> client_order_i_d_int_64t_2;
-    bit<144> free_text_2;
-    bit<64> clearing_firm_i_d_char_8_optional_2;
-    bit<128> clearing_account_2;
+    bit<64> client_order_i_d_int_64t;
+    bit<144> free_text;
+    bit<64> clearing_firm_i_d_char_8_optional;
+    bit<128> clearing_account;
     bit<64> principal_code;
-    bit<8> cross_order_indicator_unsignedchar_optional_2;
-    bit<128> trader_id_2;
+    bit<8> cross_order_indicator_unsignedchar_optional;
+    bit<128> trader_id;
     bit<128> investor_id;
 }
 
@@ -853,17 +1000,32 @@ header dc_quote_request_message_t {
     bit<8> rfq_type;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_t {
     bit<32> original_client_id_short_code;
     bit<32> original_exec_w_firm_short_code;
     bit<32> original_invest_decis_w_firm_short_code;
     bit<32> original_non_exec_broker_short_code;
-    bit<8> block_length_uint_8_2;
-    bit<8> num_in_group_2;
+}
+
+header dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_t {
     bit<8> original_short_code_type;
     bit<8> short_code_role;
     bit<8> short_code_role_qualifier;
-    bit<8> block_length_uint_8_3;
-    bit<8> num_in_group_3;
+}
+
+header dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_header_t {
+    bit<8> block_length_uint_8;
+    bit<8> num_in_group;
+}
+
+header dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_t {
     bit<64> limit_matching_price;
     bit<8> minimum_number_of_l_ps;
     bit<16> expiration_delay;
@@ -880,6 +1042,38 @@ header dc_clear_book_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> long_order_message_long_order_free_text_section_group_remaining;
+    bit<8> long_order_message_long_order_optional_fields_group_remaining;
+    bit<8> long_order_message_long_order_clearing_fields_group_remaining;
+    bit<8> long_order_message_long_order_non_modifiable_opt_fields_group_remaining;
+    bit<8> long_order_message_long_order_non_modifiable_short_codes_group_remaining;
+    bit<8> long_order_message_long_order_modifiable_short_codes_group_remaining;
+    bit<8> long_order_message_long_order_commercial_fields_group_remaining;
+    bit<8> long_order_message_long_order_modifiable_commercial_investor_field_group_remaining;
+    bit<8> long_order_message_long_order_non_modifiable_commercial_investor_field_group_remaining;
+    bit<8> long_order_message_long_order_extended_clearing_account_group_remaining;
+    bit<8> long_order_message_long_order_strategy_fields_group_remaining;
+    bit<8> long_order_message_long_order_optional_fields_derivatives_group_remaining;
+    bit<8> long_order_message_long_order_additional_infos_group_remaining;
+    bit<8> long_order_message_long_order_short_codes_details_non_modifiable_group_remaining;
+    bit<8> long_order_message_long_order_short_codes_details_modifiable_group_remaining;
+    bit<8> dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_remaining;
+    bit<8> dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_remaining;
+    bit<8> dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_remaining;
+    bit<8> trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_remaining;
+    bit<8> trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_remaining;
+    bit<8> dc_quote_message_d_c_quote_message_bid_quoterep_group_remaining;
+    bit<8> dc_quote_message_d_c_quote_message_offer_quoterep_group_remaining;
+    bit<8> dc_quote_message_d_c_quote_message_clearing_dataset_group_remaining;
+    bit<8> dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_remaining;
+    bit<8> dc_quote_message_d_c_quote_message_modifiable_short_codes_group_remaining;
+    bit<8> dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_remaining;
+    bit<8> dc_trade_message_d_c_trade_message_matched_orders_group_remaining;
+    bit<8> dc_trade_message_d_c_trade_message_matched_declarations_group_remaining;
+    bit<8> dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_remaining;
+    bit<8> dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_remaining;
+    bit<8> dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_remaining;
 }
 
 struct headers_t {
@@ -887,21 +1081,75 @@ struct headers_t {
     dc_market_status_change_message_t dc_market_status_change_message;
     dc_price_update_message_t dc_price_update_message;
     long_order_message_t long_order_message;
+    long_order_message_long_order_free_text_section_group_t long_order_message_long_order_free_text_section_group[MAX_MESSAGES];
+    long_order_message_long_order_optional_fields_group_header_t long_order_message_long_order_optional_fields_group_header;
+    long_order_message_long_order_optional_fields_group_t long_order_message_long_order_optional_fields_group[MAX_MESSAGES];
+    long_order_message_long_order_clearing_fields_group_header_t long_order_message_long_order_clearing_fields_group_header;
+    long_order_message_long_order_clearing_fields_group_t long_order_message_long_order_clearing_fields_group[MAX_MESSAGES];
+    long_order_message_long_order_non_modifiable_opt_fields_group_header_t long_order_message_long_order_non_modifiable_opt_fields_group_header;
+    long_order_message_long_order_non_modifiable_opt_fields_group_t long_order_message_long_order_non_modifiable_opt_fields_group[MAX_MESSAGES];
+    long_order_message_long_order_non_modifiable_short_codes_group_header_t long_order_message_long_order_non_modifiable_short_codes_group_header;
+    long_order_message_long_order_non_modifiable_short_codes_group_t long_order_message_long_order_non_modifiable_short_codes_group[MAX_MESSAGES];
+    long_order_message_long_order_modifiable_short_codes_group_header_t long_order_message_long_order_modifiable_short_codes_group_header;
+    long_order_message_long_order_modifiable_short_codes_group_t long_order_message_long_order_modifiable_short_codes_group[MAX_MESSAGES];
+    long_order_message_long_order_commercial_fields_group_header_t long_order_message_long_order_commercial_fields_group_header;
+    long_order_message_long_order_commercial_fields_group_t long_order_message_long_order_commercial_fields_group[MAX_MESSAGES];
+    long_order_message_long_order_modifiable_commercial_investor_field_group_header_t long_order_message_long_order_modifiable_commercial_investor_field_group_header;
+    long_order_message_long_order_modifiable_commercial_investor_field_group_t long_order_message_long_order_modifiable_commercial_investor_field_group[MAX_MESSAGES];
+    long_order_message_long_order_non_modifiable_commercial_investor_field_group_header_t long_order_message_long_order_non_modifiable_commercial_investor_field_group_header;
+    long_order_message_long_order_non_modifiable_commercial_investor_field_group_t long_order_message_long_order_non_modifiable_commercial_investor_field_group[MAX_MESSAGES];
+    long_order_message_long_order_extended_clearing_account_group_header_t long_order_message_long_order_extended_clearing_account_group_header;
+    long_order_message_long_order_extended_clearing_account_group_t long_order_message_long_order_extended_clearing_account_group[MAX_MESSAGES];
+    long_order_message_long_order_strategy_fields_group_header_t long_order_message_long_order_strategy_fields_group_header;
+    long_order_message_long_order_strategy_fields_group_t long_order_message_long_order_strategy_fields_group[MAX_MESSAGES];
+    long_order_message_long_order_optional_fields_derivatives_group_header_t long_order_message_long_order_optional_fields_derivatives_group_header;
+    long_order_message_long_order_optional_fields_derivatives_group_t long_order_message_long_order_optional_fields_derivatives_group[MAX_MESSAGES];
+    long_order_message_long_order_additional_infos_group_header_t long_order_message_long_order_additional_infos_group_header;
+    long_order_message_long_order_additional_infos_group_t long_order_message_long_order_additional_infos_group[MAX_MESSAGES];
+    long_order_message_long_order_short_codes_details_non_modifiable_group_header_t long_order_message_long_order_short_codes_details_non_modifiable_group_header;
+    long_order_message_long_order_short_codes_details_non_modifiable_group_t long_order_message_long_order_short_codes_details_non_modifiable_group[MAX_MESSAGES];
+    long_order_message_long_order_short_codes_details_modifiable_group_header_t long_order_message_long_order_short_codes_details_modifiable_group_header;
+    long_order_message_long_order_short_codes_details_modifiable_group_t long_order_message_long_order_short_codes_details_modifiable_group[MAX_MESSAGES];
     dc_short_order_reject_message_t dc_short_order_reject_message;
+    dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_t dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group[MAX_MESSAGES];
+    dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_header_t dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_header;
+    dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_t dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group[MAX_MESSAGES];
     dc_short_trade_cancellation_message_t dc_short_trade_cancellation_message;
     dc_static_collars_message_t dc_static_collars_message;
+    dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_t dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group[MAX_MESSAGES];
     trade_bust_notification_message_t trade_bust_notification_message;
+    trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_t trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group[MAX_MESSAGES];
+    trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_header_t trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_header;
+    trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_t trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group[MAX_MESSAGES];
     dc_quote_message_t dc_quote_message;
+    dc_quote_message_d_c_quote_message_bid_quoterep_group_t dc_quote_message_d_c_quote_message_bid_quoterep_group[MAX_MESSAGES];
+    dc_quote_message_d_c_quote_message_offer_quoterep_group_header_t dc_quote_message_d_c_quote_message_offer_quoterep_group_header;
+    dc_quote_message_d_c_quote_message_offer_quoterep_group_t dc_quote_message_d_c_quote_message_offer_quoterep_group[MAX_MESSAGES];
+    dc_quote_message_d_c_quote_message_clearing_dataset_group_header_t dc_quote_message_d_c_quote_message_clearing_dataset_group_header;
+    dc_quote_message_d_c_quote_message_clearing_dataset_group_t dc_quote_message_d_c_quote_message_clearing_dataset_group[MAX_MESSAGES];
+    dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_header_t dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_header;
+    dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_t dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group[MAX_MESSAGES];
+    dc_quote_message_d_c_quote_message_modifiable_short_codes_group_header_t dc_quote_message_d_c_quote_message_modifiable_short_codes_group_header;
+    dc_quote_message_d_c_quote_message_modifiable_short_codes_group_t dc_quote_message_d_c_quote_message_modifiable_short_codes_group[MAX_MESSAGES];
     dcafqrfe_message_t dcafqrfe_message;
     dc_declaration_new_message_t dc_declaration_new_message;
     dc_short_declaration_reject_message_t dc_short_declaration_reject_message;
     dc_short_declaration_cancel_message_t dc_short_declaration_cancel_message;
     dc_short_trade_declaration_message_t dc_short_trade_declaration_message;
+    dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_t dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group[MAX_MESSAGES];
     dc_short_trade_declaration_cancellation_message_t dc_short_trade_declaration_cancellation_message;
     dc_trade_bust_declaration_message_t dc_trade_bust_declaration_message;
     dc_trade_message_t dc_trade_message;
+    dc_trade_message_d_c_trade_message_matched_orders_group_t dc_trade_message_d_c_trade_message_matched_orders_group[MAX_MESSAGES];
+    dc_trade_message_d_c_trade_message_matched_declarations_group_header_t dc_trade_message_d_c_trade_message_matched_declarations_group_header;
+    dc_trade_message_d_c_trade_message_matched_declarations_group_t dc_trade_message_d_c_trade_message_matched_declarations_group[MAX_MESSAGES];
     dc_short_declaration_fill_message_t dc_short_declaration_fill_message;
     dc_quote_request_message_t dc_quote_request_message;
+    dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_t dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group[MAX_MESSAGES];
+    dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_header_t dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_header;
+    dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_t dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group[MAX_MESSAGES];
+    dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_header_t dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_header;
+    dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_t dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group[MAX_MESSAGES];
     dc_clear_book_message_t dc_clear_book_message;
 }
 
@@ -934,96 +1182,633 @@ parser EuronextOptiqDropcopygatewayParser(packet_in packet, out headers_t hdr, i
 
     state parse_dc_market_status_change_message {
         packet.extract(hdr.dc_market_status_change_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_price_update_message {
         packet.extract(hdr.dc_price_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_long_order_message {
         packet.extract(hdr.long_order_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.long_order_message_long_order_free_text_section_group_remaining = hdr.long_order_message.num_in_group;
+        transition select(meta.long_order_message_long_order_free_text_section_group_remaining) {
+            8w0: read_long_order_message_long_order_optional_fields_group;
+            default: parse_long_order_message_long_order_free_text_section_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_free_text_section_group {
+        packet.extract(hdr.long_order_message_long_order_free_text_section_group.next);
+        meta.long_order_message_long_order_free_text_section_group_remaining = meta.long_order_message_long_order_free_text_section_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_free_text_section_group_remaining) {
+            8w0: read_long_order_message_long_order_optional_fields_group;
+            default: parse_long_order_message_long_order_free_text_section_group;
+        }
+    }
+
+    state read_long_order_message_long_order_optional_fields_group {
+        packet.extract(hdr.long_order_message_long_order_optional_fields_group_header);
+        meta.long_order_message_long_order_optional_fields_group_remaining = hdr.long_order_message_long_order_optional_fields_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_optional_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_clearing_fields_group;
+            default: parse_long_order_message_long_order_optional_fields_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_optional_fields_group {
+        packet.extract(hdr.long_order_message_long_order_optional_fields_group.next);
+        meta.long_order_message_long_order_optional_fields_group_remaining = meta.long_order_message_long_order_optional_fields_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_optional_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_clearing_fields_group;
+            default: parse_long_order_message_long_order_optional_fields_group;
+        }
+    }
+
+    state read_long_order_message_long_order_clearing_fields_group {
+        packet.extract(hdr.long_order_message_long_order_clearing_fields_group_header);
+        meta.long_order_message_long_order_clearing_fields_group_remaining = hdr.long_order_message_long_order_clearing_fields_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_clearing_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_non_modifiable_opt_fields_group;
+            default: parse_long_order_message_long_order_clearing_fields_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_clearing_fields_group {
+        packet.extract(hdr.long_order_message_long_order_clearing_fields_group.next);
+        meta.long_order_message_long_order_clearing_fields_group_remaining = meta.long_order_message_long_order_clearing_fields_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_clearing_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_non_modifiable_opt_fields_group;
+            default: parse_long_order_message_long_order_clearing_fields_group;
+        }
+    }
+
+    state read_long_order_message_long_order_non_modifiable_opt_fields_group {
+        packet.extract(hdr.long_order_message_long_order_non_modifiable_opt_fields_group_header);
+        meta.long_order_message_long_order_non_modifiable_opt_fields_group_remaining = hdr.long_order_message_long_order_non_modifiable_opt_fields_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_non_modifiable_opt_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_non_modifiable_short_codes_group;
+            default: parse_long_order_message_long_order_non_modifiable_opt_fields_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_non_modifiable_opt_fields_group {
+        packet.extract(hdr.long_order_message_long_order_non_modifiable_opt_fields_group.next);
+        meta.long_order_message_long_order_non_modifiable_opt_fields_group_remaining = meta.long_order_message_long_order_non_modifiable_opt_fields_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_non_modifiable_opt_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_non_modifiable_short_codes_group;
+            default: parse_long_order_message_long_order_non_modifiable_opt_fields_group;
+        }
+    }
+
+    state read_long_order_message_long_order_non_modifiable_short_codes_group {
+        packet.extract(hdr.long_order_message_long_order_non_modifiable_short_codes_group_header);
+        meta.long_order_message_long_order_non_modifiable_short_codes_group_remaining = hdr.long_order_message_long_order_non_modifiable_short_codes_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_non_modifiable_short_codes_group_remaining) {
+            8w0: read_long_order_message_long_order_modifiable_short_codes_group;
+            default: parse_long_order_message_long_order_non_modifiable_short_codes_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_non_modifiable_short_codes_group {
+        packet.extract(hdr.long_order_message_long_order_non_modifiable_short_codes_group.next);
+        meta.long_order_message_long_order_non_modifiable_short_codes_group_remaining = meta.long_order_message_long_order_non_modifiable_short_codes_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_non_modifiable_short_codes_group_remaining) {
+            8w0: read_long_order_message_long_order_modifiable_short_codes_group;
+            default: parse_long_order_message_long_order_non_modifiable_short_codes_group;
+        }
+    }
+
+    state read_long_order_message_long_order_modifiable_short_codes_group {
+        packet.extract(hdr.long_order_message_long_order_modifiable_short_codes_group_header);
+        meta.long_order_message_long_order_modifiable_short_codes_group_remaining = hdr.long_order_message_long_order_modifiable_short_codes_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_modifiable_short_codes_group_remaining) {
+            8w0: read_long_order_message_long_order_commercial_fields_group;
+            default: parse_long_order_message_long_order_modifiable_short_codes_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_modifiable_short_codes_group {
+        packet.extract(hdr.long_order_message_long_order_modifiable_short_codes_group.next);
+        meta.long_order_message_long_order_modifiable_short_codes_group_remaining = meta.long_order_message_long_order_modifiable_short_codes_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_modifiable_short_codes_group_remaining) {
+            8w0: read_long_order_message_long_order_commercial_fields_group;
+            default: parse_long_order_message_long_order_modifiable_short_codes_group;
+        }
+    }
+
+    state read_long_order_message_long_order_commercial_fields_group {
+        packet.extract(hdr.long_order_message_long_order_commercial_fields_group_header);
+        meta.long_order_message_long_order_commercial_fields_group_remaining = hdr.long_order_message_long_order_commercial_fields_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_commercial_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_modifiable_commercial_investor_field_group;
+            default: parse_long_order_message_long_order_commercial_fields_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_commercial_fields_group {
+        packet.extract(hdr.long_order_message_long_order_commercial_fields_group.next);
+        meta.long_order_message_long_order_commercial_fields_group_remaining = meta.long_order_message_long_order_commercial_fields_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_commercial_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_modifiable_commercial_investor_field_group;
+            default: parse_long_order_message_long_order_commercial_fields_group;
+        }
+    }
+
+    state read_long_order_message_long_order_modifiable_commercial_investor_field_group {
+        packet.extract(hdr.long_order_message_long_order_modifiable_commercial_investor_field_group_header);
+        meta.long_order_message_long_order_modifiable_commercial_investor_field_group_remaining = hdr.long_order_message_long_order_modifiable_commercial_investor_field_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_modifiable_commercial_investor_field_group_remaining) {
+            8w0: read_long_order_message_long_order_non_modifiable_commercial_investor_field_group;
+            default: parse_long_order_message_long_order_modifiable_commercial_investor_field_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_modifiable_commercial_investor_field_group {
+        packet.extract(hdr.long_order_message_long_order_modifiable_commercial_investor_field_group.next);
+        meta.long_order_message_long_order_modifiable_commercial_investor_field_group_remaining = meta.long_order_message_long_order_modifiable_commercial_investor_field_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_modifiable_commercial_investor_field_group_remaining) {
+            8w0: read_long_order_message_long_order_non_modifiable_commercial_investor_field_group;
+            default: parse_long_order_message_long_order_modifiable_commercial_investor_field_group;
+        }
+    }
+
+    state read_long_order_message_long_order_non_modifiable_commercial_investor_field_group {
+        packet.extract(hdr.long_order_message_long_order_non_modifiable_commercial_investor_field_group_header);
+        meta.long_order_message_long_order_non_modifiable_commercial_investor_field_group_remaining = hdr.long_order_message_long_order_non_modifiable_commercial_investor_field_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_non_modifiable_commercial_investor_field_group_remaining) {
+            8w0: read_long_order_message_long_order_extended_clearing_account_group;
+            default: parse_long_order_message_long_order_non_modifiable_commercial_investor_field_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_non_modifiable_commercial_investor_field_group {
+        packet.extract(hdr.long_order_message_long_order_non_modifiable_commercial_investor_field_group.next);
+        meta.long_order_message_long_order_non_modifiable_commercial_investor_field_group_remaining = meta.long_order_message_long_order_non_modifiable_commercial_investor_field_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_non_modifiable_commercial_investor_field_group_remaining) {
+            8w0: read_long_order_message_long_order_extended_clearing_account_group;
+            default: parse_long_order_message_long_order_non_modifiable_commercial_investor_field_group;
+        }
+    }
+
+    state read_long_order_message_long_order_extended_clearing_account_group {
+        packet.extract(hdr.long_order_message_long_order_extended_clearing_account_group_header);
+        meta.long_order_message_long_order_extended_clearing_account_group_remaining = hdr.long_order_message_long_order_extended_clearing_account_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_extended_clearing_account_group_remaining) {
+            8w0: read_long_order_message_long_order_strategy_fields_group;
+            default: parse_long_order_message_long_order_extended_clearing_account_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_extended_clearing_account_group {
+        packet.extract(hdr.long_order_message_long_order_extended_clearing_account_group.next);
+        meta.long_order_message_long_order_extended_clearing_account_group_remaining = meta.long_order_message_long_order_extended_clearing_account_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_extended_clearing_account_group_remaining) {
+            8w0: read_long_order_message_long_order_strategy_fields_group;
+            default: parse_long_order_message_long_order_extended_clearing_account_group;
+        }
+    }
+
+    state read_long_order_message_long_order_strategy_fields_group {
+        packet.extract(hdr.long_order_message_long_order_strategy_fields_group_header);
+        meta.long_order_message_long_order_strategy_fields_group_remaining = hdr.long_order_message_long_order_strategy_fields_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_strategy_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_optional_fields_derivatives_group;
+            default: parse_long_order_message_long_order_strategy_fields_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_strategy_fields_group {
+        packet.extract(hdr.long_order_message_long_order_strategy_fields_group.next);
+        meta.long_order_message_long_order_strategy_fields_group_remaining = meta.long_order_message_long_order_strategy_fields_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_strategy_fields_group_remaining) {
+            8w0: read_long_order_message_long_order_optional_fields_derivatives_group;
+            default: parse_long_order_message_long_order_strategy_fields_group;
+        }
+    }
+
+    state read_long_order_message_long_order_optional_fields_derivatives_group {
+        packet.extract(hdr.long_order_message_long_order_optional_fields_derivatives_group_header);
+        meta.long_order_message_long_order_optional_fields_derivatives_group_remaining = hdr.long_order_message_long_order_optional_fields_derivatives_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_optional_fields_derivatives_group_remaining) {
+            8w0: read_long_order_message_long_order_additional_infos_group;
+            default: parse_long_order_message_long_order_optional_fields_derivatives_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_optional_fields_derivatives_group {
+        packet.extract(hdr.long_order_message_long_order_optional_fields_derivatives_group.next);
+        meta.long_order_message_long_order_optional_fields_derivatives_group_remaining = meta.long_order_message_long_order_optional_fields_derivatives_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_optional_fields_derivatives_group_remaining) {
+            8w0: read_long_order_message_long_order_additional_infos_group;
+            default: parse_long_order_message_long_order_optional_fields_derivatives_group;
+        }
+    }
+
+    state read_long_order_message_long_order_additional_infos_group {
+        packet.extract(hdr.long_order_message_long_order_additional_infos_group_header);
+        meta.long_order_message_long_order_additional_infos_group_remaining = hdr.long_order_message_long_order_additional_infos_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_additional_infos_group_remaining) {
+            8w0: read_long_order_message_long_order_short_codes_details_non_modifiable_group;
+            default: parse_long_order_message_long_order_additional_infos_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_additional_infos_group {
+        packet.extract(hdr.long_order_message_long_order_additional_infos_group.next);
+        meta.long_order_message_long_order_additional_infos_group_remaining = meta.long_order_message_long_order_additional_infos_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_additional_infos_group_remaining) {
+            8w0: read_long_order_message_long_order_short_codes_details_non_modifiable_group;
+            default: parse_long_order_message_long_order_additional_infos_group;
+        }
+    }
+
+    state read_long_order_message_long_order_short_codes_details_non_modifiable_group {
+        packet.extract(hdr.long_order_message_long_order_short_codes_details_non_modifiable_group_header);
+        meta.long_order_message_long_order_short_codes_details_non_modifiable_group_remaining = hdr.long_order_message_long_order_short_codes_details_non_modifiable_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_short_codes_details_non_modifiable_group_remaining) {
+            8w0: read_long_order_message_long_order_short_codes_details_modifiable_group;
+            default: parse_long_order_message_long_order_short_codes_details_non_modifiable_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_short_codes_details_non_modifiable_group {
+        packet.extract(hdr.long_order_message_long_order_short_codes_details_non_modifiable_group.next);
+        meta.long_order_message_long_order_short_codes_details_non_modifiable_group_remaining = meta.long_order_message_long_order_short_codes_details_non_modifiable_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_short_codes_details_non_modifiable_group_remaining) {
+            8w0: read_long_order_message_long_order_short_codes_details_modifiable_group;
+            default: parse_long_order_message_long_order_short_codes_details_non_modifiable_group;
+        }
+    }
+
+    state read_long_order_message_long_order_short_codes_details_modifiable_group {
+        packet.extract(hdr.long_order_message_long_order_short_codes_details_modifiable_group_header);
+        meta.long_order_message_long_order_short_codes_details_modifiable_group_remaining = hdr.long_order_message_long_order_short_codes_details_modifiable_group_header.num_in_group;
+        transition select(meta.long_order_message_long_order_short_codes_details_modifiable_group_remaining) {
+            8w0: accept;
+            default: parse_long_order_message_long_order_short_codes_details_modifiable_group;
+        }
+    }
+
+    state parse_long_order_message_long_order_short_codes_details_modifiable_group {
+        packet.extract(hdr.long_order_message_long_order_short_codes_details_modifiable_group.next);
+        meta.long_order_message_long_order_short_codes_details_modifiable_group_remaining = meta.long_order_message_long_order_short_codes_details_modifiable_group_remaining - 1;
+        transition select(meta.long_order_message_long_order_short_codes_details_modifiable_group_remaining) {
+            8w0: accept;
+            default: parse_long_order_message_long_order_short_codes_details_modifiable_group;
+        }
     }
 
     state parse_dc_short_order_reject_message {
         packet.extract(hdr.dc_short_order_reject_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_remaining = hdr.dc_short_order_reject_message.num_in_group;
+        transition select(meta.dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_remaining) {
+            8w0: read_dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group;
+            default: parse_dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group;
+        }
+    }
+
+    state parse_dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group {
+        packet.extract(hdr.dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group.next);
+        meta.dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_remaining = meta.dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_remaining - 1;
+        transition select(meta.dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group_remaining) {
+            8w0: read_dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group;
+            default: parse_dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group;
+        }
+    }
+
+    state read_dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group {
+        packet.extract(hdr.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_header);
+        meta.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_remaining = hdr.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_header.num_in_group;
+        transition select(meta.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_remaining) {
+            8w0: accept;
+            default: parse_dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group;
+        }
+    }
+
+    state parse_dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group {
+        packet.extract(hdr.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group.next);
+        meta.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_remaining = meta.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_remaining - 1;
+        transition select(meta.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_remaining) {
+            8w0: accept;
+            default: parse_dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group;
+        }
     }
 
     state parse_dc_short_trade_cancellation_message {
         packet.extract(hdr.dc_short_trade_cancellation_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_static_collars_message {
         packet.extract(hdr.dc_static_collars_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_remaining = hdr.dc_static_collars_message.num_in_group;
+        transition select(meta.dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_remaining) {
+            8w0: accept;
+            default: parse_dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group;
+        }
+    }
+
+    state parse_dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group {
+        packet.extract(hdr.dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group.next);
+        meta.dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_remaining = meta.dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_remaining - 1;
+        transition select(meta.dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_remaining) {
+            8w0: accept;
+            default: parse_dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group;
+        }
     }
 
     state parse_trade_bust_notification_message {
         packet.extract(hdr.trade_bust_notification_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_remaining = hdr.trade_bust_notification_message.num_in_group;
+        transition select(meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_remaining) {
+            8w0: read_trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group;
+            default: parse_trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group;
+        }
+    }
+
+    state parse_trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group {
+        packet.extract(hdr.trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group.next);
+        meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_remaining = meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_remaining - 1;
+        transition select(meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group_remaining) {
+            8w0: read_trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group;
+            default: parse_trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group;
+        }
+    }
+
+    state read_trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group {
+        packet.extract(hdr.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_header);
+        meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_remaining = hdr.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_header.num_in_group;
+        transition select(meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_remaining) {
+            8w0: accept;
+            default: parse_trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group;
+        }
+    }
+
+    state parse_trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group {
+        packet.extract(hdr.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group.next);
+        meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_remaining = meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_remaining - 1;
+        transition select(meta.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_remaining) {
+            8w0: accept;
+            default: parse_trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group;
+        }
     }
 
     state parse_dc_quote_message {
         packet.extract(hdr.dc_quote_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.dc_quote_message_d_c_quote_message_bid_quoterep_group_remaining = hdr.dc_quote_message.num_in_group;
+        transition select(meta.dc_quote_message_d_c_quote_message_bid_quoterep_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_offer_quoterep_group;
+            default: parse_dc_quote_message_d_c_quote_message_bid_quoterep_group;
+        }
+    }
+
+    state parse_dc_quote_message_d_c_quote_message_bid_quoterep_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_bid_quoterep_group.next);
+        meta.dc_quote_message_d_c_quote_message_bid_quoterep_group_remaining = meta.dc_quote_message_d_c_quote_message_bid_quoterep_group_remaining - 1;
+        transition select(meta.dc_quote_message_d_c_quote_message_bid_quoterep_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_offer_quoterep_group;
+            default: parse_dc_quote_message_d_c_quote_message_bid_quoterep_group;
+        }
+    }
+
+    state read_dc_quote_message_d_c_quote_message_offer_quoterep_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_offer_quoterep_group_header);
+        meta.dc_quote_message_d_c_quote_message_offer_quoterep_group_remaining = hdr.dc_quote_message_d_c_quote_message_offer_quoterep_group_header.num_in_group;
+        transition select(meta.dc_quote_message_d_c_quote_message_offer_quoterep_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_clearing_dataset_group;
+            default: parse_dc_quote_message_d_c_quote_message_offer_quoterep_group;
+        }
+    }
+
+    state parse_dc_quote_message_d_c_quote_message_offer_quoterep_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_offer_quoterep_group.next);
+        meta.dc_quote_message_d_c_quote_message_offer_quoterep_group_remaining = meta.dc_quote_message_d_c_quote_message_offer_quoterep_group_remaining - 1;
+        transition select(meta.dc_quote_message_d_c_quote_message_offer_quoterep_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_clearing_dataset_group;
+            default: parse_dc_quote_message_d_c_quote_message_offer_quoterep_group;
+        }
+    }
+
+    state read_dc_quote_message_d_c_quote_message_clearing_dataset_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_clearing_dataset_group_header);
+        meta.dc_quote_message_d_c_quote_message_clearing_dataset_group_remaining = hdr.dc_quote_message_d_c_quote_message_clearing_dataset_group_header.num_in_group;
+        transition select(meta.dc_quote_message_d_c_quote_message_clearing_dataset_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group;
+            default: parse_dc_quote_message_d_c_quote_message_clearing_dataset_group;
+        }
+    }
+
+    state parse_dc_quote_message_d_c_quote_message_clearing_dataset_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_clearing_dataset_group.next);
+        meta.dc_quote_message_d_c_quote_message_clearing_dataset_group_remaining = meta.dc_quote_message_d_c_quote_message_clearing_dataset_group_remaining - 1;
+        transition select(meta.dc_quote_message_d_c_quote_message_clearing_dataset_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group;
+            default: parse_dc_quote_message_d_c_quote_message_clearing_dataset_group;
+        }
+    }
+
+    state read_dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_header);
+        meta.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_remaining = hdr.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_header.num_in_group;
+        transition select(meta.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_modifiable_short_codes_group;
+            default: parse_dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group;
+        }
+    }
+
+    state parse_dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group.next);
+        meta.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_remaining = meta.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_remaining - 1;
+        transition select(meta.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_remaining) {
+            8w0: read_dc_quote_message_d_c_quote_message_modifiable_short_codes_group;
+            default: parse_dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group;
+        }
+    }
+
+    state read_dc_quote_message_d_c_quote_message_modifiable_short_codes_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_header);
+        meta.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_remaining = hdr.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_header.num_in_group;
+        transition select(meta.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_remaining) {
+            8w0: accept;
+            default: parse_dc_quote_message_d_c_quote_message_modifiable_short_codes_group;
+        }
+    }
+
+    state parse_dc_quote_message_d_c_quote_message_modifiable_short_codes_group {
+        packet.extract(hdr.dc_quote_message_d_c_quote_message_modifiable_short_codes_group.next);
+        meta.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_remaining = meta.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_remaining - 1;
+        transition select(meta.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_remaining) {
+            8w0: accept;
+            default: parse_dc_quote_message_d_c_quote_message_modifiable_short_codes_group;
+        }
     }
 
     state parse_dcafqrfe_message {
         packet.extract(hdr.dcafqrfe_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_declaration_new_message {
         packet.extract(hdr.dc_declaration_new_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_short_declaration_reject_message {
         packet.extract(hdr.dc_short_declaration_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_short_declaration_cancel_message {
         packet.extract(hdr.dc_short_declaration_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_short_trade_declaration_message {
         packet.extract(hdr.dc_short_trade_declaration_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_remaining = hdr.dc_short_trade_declaration_message.num_in_group;
+        transition select(meta.dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_remaining) {
+            8w0: accept;
+            default: parse_dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group;
+        }
+    }
+
+    state parse_dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group {
+        packet.extract(hdr.dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group.next);
+        meta.dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_remaining = meta.dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_remaining - 1;
+        transition select(meta.dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_remaining) {
+            8w0: accept;
+            default: parse_dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group;
+        }
     }
 
     state parse_dc_short_trade_declaration_cancellation_message {
         packet.extract(hdr.dc_short_trade_declaration_cancellation_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_trade_bust_declaration_message {
         packet.extract(hdr.dc_trade_bust_declaration_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_trade_message {
         packet.extract(hdr.dc_trade_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.dc_trade_message_d_c_trade_message_matched_orders_group_remaining = hdr.dc_trade_message.num_in_group;
+        transition select(meta.dc_trade_message_d_c_trade_message_matched_orders_group_remaining) {
+            8w0: read_dc_trade_message_d_c_trade_message_matched_declarations_group;
+            default: parse_dc_trade_message_d_c_trade_message_matched_orders_group;
+        }
+    }
+
+    state parse_dc_trade_message_d_c_trade_message_matched_orders_group {
+        packet.extract(hdr.dc_trade_message_d_c_trade_message_matched_orders_group.next);
+        meta.dc_trade_message_d_c_trade_message_matched_orders_group_remaining = meta.dc_trade_message_d_c_trade_message_matched_orders_group_remaining - 1;
+        transition select(meta.dc_trade_message_d_c_trade_message_matched_orders_group_remaining) {
+            8w0: read_dc_trade_message_d_c_trade_message_matched_declarations_group;
+            default: parse_dc_trade_message_d_c_trade_message_matched_orders_group;
+        }
+    }
+
+    state read_dc_trade_message_d_c_trade_message_matched_declarations_group {
+        packet.extract(hdr.dc_trade_message_d_c_trade_message_matched_declarations_group_header);
+        meta.dc_trade_message_d_c_trade_message_matched_declarations_group_remaining = hdr.dc_trade_message_d_c_trade_message_matched_declarations_group_header.num_in_group;
+        transition select(meta.dc_trade_message_d_c_trade_message_matched_declarations_group_remaining) {
+            8w0: accept;
+            default: parse_dc_trade_message_d_c_trade_message_matched_declarations_group;
+        }
+    }
+
+    state parse_dc_trade_message_d_c_trade_message_matched_declarations_group {
+        packet.extract(hdr.dc_trade_message_d_c_trade_message_matched_declarations_group.next);
+        meta.dc_trade_message_d_c_trade_message_matched_declarations_group_remaining = meta.dc_trade_message_d_c_trade_message_matched_declarations_group_remaining - 1;
+        transition select(meta.dc_trade_message_d_c_trade_message_matched_declarations_group_remaining) {
+            8w0: accept;
+            default: parse_dc_trade_message_d_c_trade_message_matched_declarations_group;
+        }
     }
 
     state parse_dc_short_declaration_fill_message {
         packet.extract(hdr.dc_short_declaration_fill_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dc_quote_request_message {
         packet.extract(hdr.dc_quote_request_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_remaining = hdr.dc_quote_request_message.num_in_group;
+        transition select(meta.dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_remaining) {
+            8w0: read_dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group;
+            default: parse_dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group;
+        }
+    }
+
+    state parse_dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group {
+        packet.extract(hdr.dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group.next);
+        meta.dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_remaining = meta.dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_remaining - 1;
+        transition select(meta.dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group_remaining) {
+            8w0: read_dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group;
+            default: parse_dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group;
+        }
+    }
+
+    state read_dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group {
+        packet.extract(hdr.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_header);
+        meta.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_remaining = hdr.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_header.num_in_group;
+        transition select(meta.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_remaining) {
+            8w0: read_dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group;
+            default: parse_dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group;
+        }
+    }
+
+    state parse_dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group {
+        packet.extract(hdr.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group.next);
+        meta.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_remaining = meta.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_remaining - 1;
+        transition select(meta.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_remaining) {
+            8w0: read_dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group;
+            default: parse_dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group;
+        }
+    }
+
+    state read_dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group {
+        packet.extract(hdr.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_header);
+        meta.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_remaining = hdr.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_header.num_in_group;
+        transition select(meta.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_remaining) {
+            8w0: accept;
+            default: parse_dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group;
+        }
+    }
+
+    state parse_dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group {
+        packet.extract(hdr.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group.next);
+        meta.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_remaining = meta.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_remaining - 1;
+        transition select(meta.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_remaining) {
+            8w0: accept;
+            default: parse_dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group;
+        }
     }
 
     state parse_dc_clear_book_message {
         packet.extract(hdr.dc_clear_book_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -1036,7 +1821,12 @@ control EuronextOptiqDropcopygatewayVerifyChecksum(inout headers_t hdr, inout me
 
 control EuronextOptiqDropcopygatewayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -1056,21 +1846,75 @@ control EuronextOptiqDropcopygatewayDeparser(packet_out packet, in headers_t hdr
         packet.emit(hdr.dc_market_status_change_message);
         packet.emit(hdr.dc_price_update_message);
         packet.emit(hdr.long_order_message);
+        packet.emit(hdr.long_order_message_long_order_free_text_section_group);
+        packet.emit(hdr.long_order_message_long_order_optional_fields_group_header);
+        packet.emit(hdr.long_order_message_long_order_optional_fields_group);
+        packet.emit(hdr.long_order_message_long_order_clearing_fields_group_header);
+        packet.emit(hdr.long_order_message_long_order_clearing_fields_group);
+        packet.emit(hdr.long_order_message_long_order_non_modifiable_opt_fields_group_header);
+        packet.emit(hdr.long_order_message_long_order_non_modifiable_opt_fields_group);
+        packet.emit(hdr.long_order_message_long_order_non_modifiable_short_codes_group_header);
+        packet.emit(hdr.long_order_message_long_order_non_modifiable_short_codes_group);
+        packet.emit(hdr.long_order_message_long_order_modifiable_short_codes_group_header);
+        packet.emit(hdr.long_order_message_long_order_modifiable_short_codes_group);
+        packet.emit(hdr.long_order_message_long_order_commercial_fields_group_header);
+        packet.emit(hdr.long_order_message_long_order_commercial_fields_group);
+        packet.emit(hdr.long_order_message_long_order_modifiable_commercial_investor_field_group_header);
+        packet.emit(hdr.long_order_message_long_order_modifiable_commercial_investor_field_group);
+        packet.emit(hdr.long_order_message_long_order_non_modifiable_commercial_investor_field_group_header);
+        packet.emit(hdr.long_order_message_long_order_non_modifiable_commercial_investor_field_group);
+        packet.emit(hdr.long_order_message_long_order_extended_clearing_account_group_header);
+        packet.emit(hdr.long_order_message_long_order_extended_clearing_account_group);
+        packet.emit(hdr.long_order_message_long_order_strategy_fields_group_header);
+        packet.emit(hdr.long_order_message_long_order_strategy_fields_group);
+        packet.emit(hdr.long_order_message_long_order_optional_fields_derivatives_group_header);
+        packet.emit(hdr.long_order_message_long_order_optional_fields_derivatives_group);
+        packet.emit(hdr.long_order_message_long_order_additional_infos_group_header);
+        packet.emit(hdr.long_order_message_long_order_additional_infos_group);
+        packet.emit(hdr.long_order_message_long_order_short_codes_details_non_modifiable_group_header);
+        packet.emit(hdr.long_order_message_long_order_short_codes_details_non_modifiable_group);
+        packet.emit(hdr.long_order_message_long_order_short_codes_details_modifiable_group_header);
+        packet.emit(hdr.long_order_message_long_order_short_codes_details_modifiable_group);
         packet.emit(hdr.dc_short_order_reject_message);
+        packet.emit(hdr.dc_short_order_reject_message_d_c_short_order_reject_message_modifiable_short_codes_group);
+        packet.emit(hdr.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group_header);
+        packet.emit(hdr.dc_short_order_reject_message_d_c_short_order_reject_message_short_codes_details_modifiable_group);
         packet.emit(hdr.dc_short_trade_cancellation_message);
         packet.emit(hdr.dc_static_collars_message);
+        packet.emit(hdr.dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group);
         packet.emit(hdr.trade_bust_notification_message);
+        packet.emit(hdr.trade_bust_notification_message_trade_bust_notification_short_codes_details_non_modifiable_group);
+        packet.emit(hdr.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group_header);
+        packet.emit(hdr.trade_bust_notification_message_trade_bust_notification_short_codes_details_modifiable_group);
         packet.emit(hdr.dc_quote_message);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_bid_quoterep_group);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_offer_quoterep_group_header);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_offer_quoterep_group);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_clearing_dataset_group_header);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_clearing_dataset_group);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group_header);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_non_modifiable_short_codes_group);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_modifiable_short_codes_group_header);
+        packet.emit(hdr.dc_quote_message_d_c_quote_message_modifiable_short_codes_group);
         packet.emit(hdr.dcafqrfe_message);
         packet.emit(hdr.dc_declaration_new_message);
         packet.emit(hdr.dc_short_declaration_reject_message);
         packet.emit(hdr.dc_short_declaration_cancel_message);
         packet.emit(hdr.dc_short_trade_declaration_message);
+        packet.emit(hdr.dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group);
         packet.emit(hdr.dc_short_trade_declaration_cancellation_message);
         packet.emit(hdr.dc_trade_bust_declaration_message);
         packet.emit(hdr.dc_trade_message);
+        packet.emit(hdr.dc_trade_message_d_c_trade_message_matched_orders_group);
+        packet.emit(hdr.dc_trade_message_d_c_trade_message_matched_declarations_group_header);
+        packet.emit(hdr.dc_trade_message_d_c_trade_message_matched_declarations_group);
         packet.emit(hdr.dc_short_declaration_fill_message);
         packet.emit(hdr.dc_quote_request_message);
+        packet.emit(hdr.dc_quote_request_message_d_c_quote_request_message_non_modifiable_short_codes_group);
+        packet.emit(hdr.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group_header);
+        packet.emit(hdr.dc_quote_request_message_d_c_quote_request_message_short_codes_details_non_modifiable_group);
+        packet.emit(hdr.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group_header);
+        packet.emit(hdr.dc_quote_request_message_d_c_quote_request_message_rf_q_optional_fields_group);
         packet.emit(hdr.dc_clear_book_message);
     }
 }

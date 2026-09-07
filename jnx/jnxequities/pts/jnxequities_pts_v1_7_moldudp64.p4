@@ -128,6 +128,7 @@ header order_replaced_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -172,56 +173,67 @@ parser JnxequitiesPtsMoldudp64Parser(packet_in packet, out headers_t hdr, inout 
 
     state parse_seconds_message {
         packet.extract(hdr.seconds_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_price_tick_size_message {
         packet.extract(hdr.price_tick_size_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_orderbook_directory_message {
         packet.extract(hdr.orderbook_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trading_state_message {
         packet.extract(hdr.trading_state_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_short_selling_price_restriction_state_message {
         packet.extract(hdr.short_selling_price_restriction_state_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_added_without_attributes_message {
         packet.extract(hdr.order_added_without_attributes_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_added_with_attributes_message {
         packet.extract(hdr.order_added_with_attributes_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_deleted_message {
         packet.extract(hdr.order_deleted_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_replaced_message {
         packet.extract(hdr.order_replaced_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -234,7 +246,12 @@ control JnxequitiesPtsMoldudp64VerifyChecksum(inout headers_t hdr, inout metadat
 
 control JnxequitiesPtsMoldudp64Ingress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

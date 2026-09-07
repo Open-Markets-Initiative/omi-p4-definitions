@@ -146,6 +146,7 @@ header attributed_add_order_refresh_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -178,41 +179,49 @@ parser ArcaequitiesArcabookParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_add_order_message {
         packet.extract(hdr.add_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_modify_order_message {
         packet.extract(hdr.modify_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_order_message {
         packet.extract(hdr.delete_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_message {
         packet.extract(hdr.execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_add_order_refresh_message {
         packet.extract(hdr.add_order_refresh_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_attributed_add_order_message {
         packet.extract(hdr.attributed_add_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_attributed_add_order_refresh_message {
         packet.extract(hdr.attributed_add_order_refresh_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -225,7 +234,12 @@ control ArcaequitiesArcabookVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control ArcaequitiesArcabookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

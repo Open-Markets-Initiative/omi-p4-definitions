@@ -110,6 +110,7 @@ header system_recovery_event_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -140,36 +141,43 @@ parser OvernightTopofbookParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_start_of_spin_message {
         packet.extract(hdr.start_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_spin_message {
         packet.extract(hdr.end_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_session_message {
         packet.extract(hdr.trading_session_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_message {
         packet.extract(hdr.security_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_top_of_book_message {
         packet.extract(hdr.top_of_book_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_system_recovery_event_message {
         packet.extract(hdr.system_recovery_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -182,7 +190,12 @@ control OvernightTopofbookVerifyChecksum(inout headers_t hdr, inout metadata_t m
 
 control OvernightTopofbookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

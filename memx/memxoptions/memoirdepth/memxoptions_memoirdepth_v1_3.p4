@@ -160,6 +160,7 @@ header clear_book_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -191,6 +192,7 @@ parser MemxoptionsMemoirdepthParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_message.template_id) {
             8w1: parse_instrument_directory_message;
             8w2: parse_instrument_trading_status_message;
@@ -211,66 +213,79 @@ parser MemxoptionsMemoirdepthParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_instrument_directory_message {
         packet.extract(hdr.instrument_directory_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_trading_status_message {
         packet.extract(hdr.instrument_trading_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_session_status_message {
         packet.extract(hdr.trading_session_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_broken_trade_message {
         packet.extract(hdr.broken_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_corrected_trade_message {
         packet.extract(hdr.corrected_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_complete_message {
         packet.extract(hdr.snapshot_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_added_short_message {
         packet.extract(hdr.order_added_short_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_added_long_message {
         packet.extract(hdr.order_added_long_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_added_extended_message {
         packet.extract(hdr.order_added_extended_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_deleted_message {
         packet.extract(hdr.order_deleted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_reduced_message {
         packet.extract(hdr.order_reduced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_clear_book_message {
         packet.extract(hdr.clear_book_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -283,7 +298,12 @@ control MemxoptionsMemoirdepthVerifyChecksum(inout headers_t hdr, inout metadata
 
 control MemxoptionsMemoirdepthIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

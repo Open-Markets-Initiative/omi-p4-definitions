@@ -174,6 +174,7 @@ header clear_book_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -224,71 +225,85 @@ parser IexequitiesDeepplusParser(packet_in packet, out headers_t hdr, inout meta
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_security_directory_message {
         packet.extract(hdr.security_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trading_status_message {
         packet.extract(hdr.trading_status_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_retail_liquidity_indicator_message {
         packet.extract(hdr.retail_liquidity_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_operational_halt_status_message {
         packet.extract(hdr.operational_halt_status_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_short_sale_price_test_status_message {
         packet.extract(hdr.short_sale_price_test_status_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_security_event_message {
         packet.extract(hdr.security_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_message {
         packet.extract(hdr.add_order_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_modify_message {
         packet.extract(hdr.order_modify_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_delete_message {
         packet.extract(hdr.order_delete_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_break_message {
         packet.extract(hdr.trade_break_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_clear_book_message {
         packet.extract(hdr.clear_book_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -301,7 +316,12 @@ control IexequitiesDeepplusVerifyChecksum(inout headers_t hdr, inout metadata_t 
 
 control IexequitiesDeepplusIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

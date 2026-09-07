@@ -224,6 +224,7 @@ header equilibrium_price_update_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -274,71 +275,85 @@ parser AsxsecuritiesTradeParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_seconds_message {
         packet.extract(hdr.seconds_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_book_directory_message {
         packet.extract(hdr.order_book_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_combination_order_book_directory_message {
         packet.extract(hdr.combination_order_book_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_tick_size_table_entry_message {
         packet.extract(hdr.tick_size_table_entry_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_book_state_message {
         packet.extract(hdr.order_book_state_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_no_participant_id_message {
         packet.extract(hdr.add_order_no_participant_id_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_participant_id_message {
         packet.extract(hdr.add_order_participant_id_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_with_price_message {
         packet.extract(hdr.order_executed_with_price_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_replace_message {
         packet.extract(hdr.order_replace_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_delete_message {
         packet.extract(hdr.order_delete_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_equilibrium_price_update_message {
         packet.extract(hdr.equilibrium_price_update_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -351,7 +366,12 @@ control AsxsecuritiesTradeVerifyChecksum(inout headers_t hdr, inout metadata_t m
 
 control AsxsecuritiesTradeIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

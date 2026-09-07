@@ -44,13 +44,13 @@ header message_t {
 
 header system_event_t {
     bit<16> tracking_number;
-    bit<48> timestamp_timestamp_6;
+    bit<48> timestamp;
     bit<8> event_code;
 }
 
 header stock_directory_message_t {
     bit<16> tracking_number;
-    bit<48> timestamp_integer_6;
+    bit<48> timestamp;
     bit<64> stock;
     bit<8> market_category;
     bit<8> financial_status_indicator;
@@ -69,7 +69,7 @@ header stock_directory_message_t {
 
 header stock_trading_action_message_t {
     bit<16> tracking_number;
-    bit<48> timestamp_timestamp_6;
+    bit<48> timestamp;
     bit<64> stock;
     bit<8> current_trading_state;
     bit<32> reason;
@@ -77,14 +77,14 @@ header stock_trading_action_message_t {
 
 header reg_sho_short_sale_price_test_restricted_indicator_message_t {
     bit<16> tracking_number;
-    bit<48> timestamp_timestamp_6;
+    bit<48> timestamp;
     bit<64> stock;
     bit<8> reg_sho_action;
 }
 
 header net_order_imbalance_indicator_message_t {
     bit<16> tracking_number;
-    bit<48> timestamp_timestamp_6;
+    bit<48> timestamp;
     bit<64> paired_shares;
     bit<64> imbalance_shares;
     bit<8> imbalance_direction;
@@ -98,7 +98,7 @@ header net_order_imbalance_indicator_message_t {
 
 header cross_trade_message_t {
     bit<16> tracking_number;
-    bit<48> timestamp_timestamp_6;
+    bit<48> timestamp;
     bit<64> shares;
     bit<64> stock;
     bit<32> cross_price;
@@ -108,7 +108,7 @@ header cross_trade_message_t {
 
 header ipo_quoting_period_update_message_t {
     bit<16> tracking_number;
-    bit<48> timestamp_timestamp_6;
+    bit<48> timestamp;
     bit<64> stock;
     bit<32> ipo_quotation_release_time;
     bit<8> ipo_quotation_release_qualifier;
@@ -117,7 +117,7 @@ header ipo_quoting_period_update_message_t {
 
 header direct_listing_with_capital_raise_price_discovery_message_t {
     bit<16> tracking_number;
-    bit<48> timestamp_integer_6;
+    bit<48> timestamp;
     bit<64> stock;
     bit<8> open_eligibility_status;
     bit<32> minimum_allowable_price;
@@ -129,6 +129,7 @@ header direct_listing_with_capital_raise_price_discovery_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -167,41 +168,49 @@ parser NsmequitiesNoiviewParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_system_event {
         packet.extract(hdr.system_event.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_directory_message {
         packet.extract(hdr.stock_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_trading_action_message {
         packet.extract(hdr.stock_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
         packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_net_order_imbalance_indicator_message {
         packet.extract(hdr.net_order_imbalance_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_cross_trade_message {
         packet.extract(hdr.cross_trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_ipo_quoting_period_update_message {
         packet.extract(hdr.ipo_quoting_period_update_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_direct_listing_with_capital_raise_price_discovery_message {
         packet.extract(hdr.direct_listing_with_capital_raise_price_discovery_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -214,7 +223,12 @@ control NsmequitiesNoiviewVerifyChecksum(inout headers_t hdr, inout metadata_t m
 
 control NsmequitiesNoiviewIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

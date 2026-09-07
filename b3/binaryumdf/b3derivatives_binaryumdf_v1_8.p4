@@ -176,23 +176,36 @@ header deprecated_security_definition_message_t {
     bit<64> min_cross_qty;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header deprecated_security_definition_message_deprecated_underlyings_group_t {
     bit<64> underlying_security_id;
     bit<64> index_pct;
     bit<64> index_theoretical_qty;
     bit<160> underlying_symbol;
-    bit<16> block_length_2;
-    bit<8> num_in_group_2;
+}
+
+header deprecated_security_definition_message_deprecated_legs_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header deprecated_security_definition_message_deprecated_legs_group_t {
     bit<64> leg_security_id;
     bit<64> leg_ratio_qty;
     bit<8> leg_security_type;
     bit<8> leg_side;
     bit<160> leg_symbol;
-    bit<16> block_length_3;
-    bit<8> num_in_group_3;
+}
+
+header deprecated_security_definition_message_deprecated_instr_attribs_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header deprecated_security_definition_message_deprecated_instr_attribs_group_t {
     bit<8> instr_attrib_type;
     bit<8> instr_attrib_value;
-    bit<8> security_desc_length;
-    bit<8> security_desc_data;
 }
 
 header security_definition_message_t {
@@ -255,21 +268,34 @@ header security_definition_message_t {
     bit<64> min_cross_qty;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header security_definition_message_underlyings_group_t {
     bit<64> underlying_security_id;
     bit<160> underlying_symbol;
-    bit<16> block_length_2;
-    bit<8> num_in_group_2;
+}
+
+header security_definition_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header security_definition_message_legs_group_t {
     bit<64> leg_security_id;
     bit<64> leg_ratio_qty;
     bit<8> leg_security_type;
     bit<8> leg_side;
     bit<160> leg_symbol;
-    bit<16> block_length_3;
-    bit<8> num_in_group_3;
+}
+
+header security_definition_message_instr_attribs_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header security_definition_message_instr_attribs_group_t {
     bit<8> instr_attrib_type;
     bit<8> instr_attrib_value;
-    bit<8> security_desc_length;
-    bit<8> security_desc_data;
 }
 
 header news_5_message_t {
@@ -763,6 +789,9 @@ header snapshot_full_refresh_orders_mb_o_71_message_t {
     bit<64> security_id;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_t {
     bit<64> md_corporate_offset_price_optional;
     bit<64> md_entry_size_quantity;
     bit<32> md_entry_position_no;
@@ -773,6 +802,14 @@ header snapshot_full_refresh_orders_mb_o_71_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> deprecated_security_definition_message_deprecated_underlyings_group_remaining;
+    bit<8> deprecated_security_definition_message_deprecated_legs_group_remaining;
+    bit<8> deprecated_security_definition_message_deprecated_instr_attribs_group_remaining;
+    bit<8> security_definition_message_underlyings_group_remaining;
+    bit<8> security_definition_message_legs_group_remaining;
+    bit<8> security_definition_message_instr_attribs_group_remaining;
+    bit<8> snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_remaining;
 }
 
 struct headers_t {
@@ -783,7 +820,17 @@ struct headers_t {
     security_status_3_message_t security_status_3_message;
     security_group_phase_10_message_t security_group_phase_10_message;
     deprecated_security_definition_message_t deprecated_security_definition_message;
+    deprecated_security_definition_message_deprecated_underlyings_group_t deprecated_security_definition_message_deprecated_underlyings_group[MAX_MESSAGES];
+    deprecated_security_definition_message_deprecated_legs_group_header_t deprecated_security_definition_message_deprecated_legs_group_header;
+    deprecated_security_definition_message_deprecated_legs_group_t deprecated_security_definition_message_deprecated_legs_group[MAX_MESSAGES];
+    deprecated_security_definition_message_deprecated_instr_attribs_group_header_t deprecated_security_definition_message_deprecated_instr_attribs_group_header;
+    deprecated_security_definition_message_deprecated_instr_attribs_group_t deprecated_security_definition_message_deprecated_instr_attribs_group[MAX_MESSAGES];
     security_definition_message_t security_definition_message;
+    security_definition_message_underlyings_group_t security_definition_message_underlyings_group[MAX_MESSAGES];
+    security_definition_message_legs_group_header_t security_definition_message_legs_group_header;
+    security_definition_message_legs_group_t security_definition_message_legs_group[MAX_MESSAGES];
+    security_definition_message_instr_attribs_group_header_t security_definition_message_instr_attribs_group_header;
+    security_definition_message_instr_attribs_group_t security_definition_message_instr_attribs_group[MAX_MESSAGES];
     news_5_message_t news_5_message;
     opening_price_15_message_t opening_price_15_message;
     theoretical_opening_price_16_message_t theoretical_opening_price_16_message;
@@ -807,6 +854,7 @@ struct headers_t {
     execution_statistics_56_message_t execution_statistics_56_message;
     trade_bust_57_message_t trade_bust_57_message;
     snapshot_full_refresh_orders_mb_o_71_message_t snapshot_full_refresh_orders_mb_o_71_message;
+    snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_t snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group[MAX_MESSAGES];
 }
 
 parser B3derivativesBinaryumdfParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -849,152 +897,293 @@ parser B3derivativesBinaryumdfParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_sequence_message {
         packet.extract(hdr.sequence_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_empty_book_message {
         packet.extract(hdr.empty_book_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_channel_reset_11_message {
         packet.extract(hdr.channel_reset_11_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_status_3_message {
         packet.extract(hdr.security_status_3_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_group_phase_10_message {
         packet.extract(hdr.security_group_phase_10_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_deprecated_security_definition_message {
         packet.extract(hdr.deprecated_security_definition_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.deprecated_security_definition_message_deprecated_underlyings_group_remaining = hdr.deprecated_security_definition_message.num_in_group;
+        transition select(meta.deprecated_security_definition_message_deprecated_underlyings_group_remaining) {
+            8w0: read_deprecated_security_definition_message_deprecated_legs_group;
+            default: parse_deprecated_security_definition_message_deprecated_underlyings_group;
+        }
+    }
+
+    state parse_deprecated_security_definition_message_deprecated_underlyings_group {
+        packet.extract(hdr.deprecated_security_definition_message_deprecated_underlyings_group.next);
+        meta.deprecated_security_definition_message_deprecated_underlyings_group_remaining = meta.deprecated_security_definition_message_deprecated_underlyings_group_remaining - 1;
+        transition select(meta.deprecated_security_definition_message_deprecated_underlyings_group_remaining) {
+            8w0: read_deprecated_security_definition_message_deprecated_legs_group;
+            default: parse_deprecated_security_definition_message_deprecated_underlyings_group;
+        }
+    }
+
+    state read_deprecated_security_definition_message_deprecated_legs_group {
+        packet.extract(hdr.deprecated_security_definition_message_deprecated_legs_group_header);
+        meta.deprecated_security_definition_message_deprecated_legs_group_remaining = hdr.deprecated_security_definition_message_deprecated_legs_group_header.num_in_group;
+        transition select(meta.deprecated_security_definition_message_deprecated_legs_group_remaining) {
+            8w0: read_deprecated_security_definition_message_deprecated_instr_attribs_group;
+            default: parse_deprecated_security_definition_message_deprecated_legs_group;
+        }
+    }
+
+    state parse_deprecated_security_definition_message_deprecated_legs_group {
+        packet.extract(hdr.deprecated_security_definition_message_deprecated_legs_group.next);
+        meta.deprecated_security_definition_message_deprecated_legs_group_remaining = meta.deprecated_security_definition_message_deprecated_legs_group_remaining - 1;
+        transition select(meta.deprecated_security_definition_message_deprecated_legs_group_remaining) {
+            8w0: read_deprecated_security_definition_message_deprecated_instr_attribs_group;
+            default: parse_deprecated_security_definition_message_deprecated_legs_group;
+        }
+    }
+
+    state read_deprecated_security_definition_message_deprecated_instr_attribs_group {
+        packet.extract(hdr.deprecated_security_definition_message_deprecated_instr_attribs_group_header);
+        meta.deprecated_security_definition_message_deprecated_instr_attribs_group_remaining = hdr.deprecated_security_definition_message_deprecated_instr_attribs_group_header.num_in_group;
+        transition select(meta.deprecated_security_definition_message_deprecated_instr_attribs_group_remaining) {
+            8w0: accept;
+            default: parse_deprecated_security_definition_message_deprecated_instr_attribs_group;
+        }
+    }
+
+    state parse_deprecated_security_definition_message_deprecated_instr_attribs_group {
+        packet.extract(hdr.deprecated_security_definition_message_deprecated_instr_attribs_group.next);
+        meta.deprecated_security_definition_message_deprecated_instr_attribs_group_remaining = meta.deprecated_security_definition_message_deprecated_instr_attribs_group_remaining - 1;
+        transition select(meta.deprecated_security_definition_message_deprecated_instr_attribs_group_remaining) {
+            8w0: accept;
+            default: parse_deprecated_security_definition_message_deprecated_instr_attribs_group;
+        }
     }
 
     state parse_security_definition_message {
         packet.extract(hdr.security_definition_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.security_definition_message_underlyings_group_remaining = hdr.security_definition_message.num_in_group;
+        transition select(meta.security_definition_message_underlyings_group_remaining) {
+            8w0: read_security_definition_message_legs_group;
+            default: parse_security_definition_message_underlyings_group;
+        }
+    }
+
+    state parse_security_definition_message_underlyings_group {
+        packet.extract(hdr.security_definition_message_underlyings_group.next);
+        meta.security_definition_message_underlyings_group_remaining = meta.security_definition_message_underlyings_group_remaining - 1;
+        transition select(meta.security_definition_message_underlyings_group_remaining) {
+            8w0: read_security_definition_message_legs_group;
+            default: parse_security_definition_message_underlyings_group;
+        }
+    }
+
+    state read_security_definition_message_legs_group {
+        packet.extract(hdr.security_definition_message_legs_group_header);
+        meta.security_definition_message_legs_group_remaining = hdr.security_definition_message_legs_group_header.num_in_group;
+        transition select(meta.security_definition_message_legs_group_remaining) {
+            8w0: read_security_definition_message_instr_attribs_group;
+            default: parse_security_definition_message_legs_group;
+        }
+    }
+
+    state parse_security_definition_message_legs_group {
+        packet.extract(hdr.security_definition_message_legs_group.next);
+        meta.security_definition_message_legs_group_remaining = meta.security_definition_message_legs_group_remaining - 1;
+        transition select(meta.security_definition_message_legs_group_remaining) {
+            8w0: read_security_definition_message_instr_attribs_group;
+            default: parse_security_definition_message_legs_group;
+        }
+    }
+
+    state read_security_definition_message_instr_attribs_group {
+        packet.extract(hdr.security_definition_message_instr_attribs_group_header);
+        meta.security_definition_message_instr_attribs_group_remaining = hdr.security_definition_message_instr_attribs_group_header.num_in_group;
+        transition select(meta.security_definition_message_instr_attribs_group_remaining) {
+            8w0: accept;
+            default: parse_security_definition_message_instr_attribs_group;
+        }
+    }
+
+    state parse_security_definition_message_instr_attribs_group {
+        packet.extract(hdr.security_definition_message_instr_attribs_group.next);
+        meta.security_definition_message_instr_attribs_group_remaining = meta.security_definition_message_instr_attribs_group_remaining - 1;
+        transition select(meta.security_definition_message_instr_attribs_group_remaining) {
+            8w0: accept;
+            default: parse_security_definition_message_instr_attribs_group;
+        }
     }
 
     state parse_news_5_message {
         packet.extract(hdr.news_5_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_opening_price_15_message {
         packet.extract(hdr.opening_price_15_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_theoretical_opening_price_16_message {
         packet.extract(hdr.theoretical_opening_price_16_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_closing_price_17_message {
         packet.extract(hdr.closing_price_17_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_auction_imbalance_19_message {
         packet.extract(hdr.auction_imbalance_19_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_price_band_20_message {
         packet.extract(hdr.price_band_20_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quantity_band_21_message {
         packet.extract(hdr.quantity_band_21_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_price_band_22_message {
         packet.extract(hdr.price_band_22_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_high_price_24_message {
         packet.extract(hdr.high_price_24_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_low_price_25_message {
         packet.extract(hdr.low_price_25_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_last_trade_price_27_message {
         packet.extract(hdr.last_trade_price_27_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_settlement_price_28_message {
         packet.extract(hdr.settlement_price_28_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_open_interest_29_message {
         packet.extract(hdr.open_interest_29_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_full_refresh_header_30_message {
         packet.extract(hdr.snapshot_full_refresh_header_30_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_mb_o_50_message {
         packet.extract(hdr.order_mb_o_50_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_order_mb_o_51_message {
         packet.extract(hdr.delete_order_mb_o_51_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_delete_orders_mb_o_52_message {
         packet.extract(hdr.mass_delete_orders_mb_o_52_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_53_message {
         packet.extract(hdr.trade_53_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_forward_trade_54_message {
         packet.extract(hdr.forward_trade_54_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_summary_55_message {
         packet.extract(hdr.execution_summary_55_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_statistics_56_message {
         packet.extract(hdr.execution_statistics_56_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_bust_57_message {
         packet.extract(hdr.trade_bust_57_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_full_refresh_orders_mb_o_71_message {
         packet.extract(hdr.snapshot_full_refresh_orders_mb_o_71_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_remaining = hdr.snapshot_full_refresh_orders_mb_o_71_message.num_in_group;
+        transition select(meta.snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_remaining) {
+            8w0: accept;
+            default: parse_snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group;
+        }
+    }
+
+    state parse_snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group {
+        packet.extract(hdr.snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group.next);
+        meta.snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_remaining = meta.snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_remaining - 1;
+        transition select(meta.snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_remaining) {
+            8w0: accept;
+            default: parse_snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group;
+        }
     }
 
 }
@@ -1006,7 +1195,12 @@ control B3derivativesBinaryumdfVerifyChecksum(inout headers_t hdr, inout metadat
 
 control B3derivativesBinaryumdfIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -1029,7 +1223,17 @@ control B3derivativesBinaryumdfDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.security_status_3_message);
         packet.emit(hdr.security_group_phase_10_message);
         packet.emit(hdr.deprecated_security_definition_message);
+        packet.emit(hdr.deprecated_security_definition_message_deprecated_underlyings_group);
+        packet.emit(hdr.deprecated_security_definition_message_deprecated_legs_group_header);
+        packet.emit(hdr.deprecated_security_definition_message_deprecated_legs_group);
+        packet.emit(hdr.deprecated_security_definition_message_deprecated_instr_attribs_group_header);
+        packet.emit(hdr.deprecated_security_definition_message_deprecated_instr_attribs_group);
         packet.emit(hdr.security_definition_message);
+        packet.emit(hdr.security_definition_message_underlyings_group);
+        packet.emit(hdr.security_definition_message_legs_group_header);
+        packet.emit(hdr.security_definition_message_legs_group);
+        packet.emit(hdr.security_definition_message_instr_attribs_group_header);
+        packet.emit(hdr.security_definition_message_instr_attribs_group);
         packet.emit(hdr.news_5_message);
         packet.emit(hdr.opening_price_15_message);
         packet.emit(hdr.theoretical_opening_price_16_message);
@@ -1053,6 +1257,7 @@ control B3derivativesBinaryumdfDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.execution_statistics_56_message);
         packet.emit(hdr.trade_bust_57_message);
         packet.emit(hdr.snapshot_full_refresh_orders_mb_o_71_message);
+        packet.emit(hdr.snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group);
     }
 }
 

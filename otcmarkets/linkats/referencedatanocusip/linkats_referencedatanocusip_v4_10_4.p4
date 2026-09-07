@@ -111,6 +111,7 @@ header extended_security_no_cusip_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -137,26 +138,31 @@ parser LinkatsReferencedatanocusipParser(packet_in packet, out headers_t hdr, in
 
     state parse_start_of_spin_message {
         packet.extract(hdr.start_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_spin_message {
         packet.extract(hdr.end_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_open_message {
         packet.extract(hdr.market_open_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_close_message {
         packet.extract(hdr.market_close_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_extended_security_no_cusip_message {
         packet.extract(hdr.extended_security_no_cusip_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -169,7 +175,12 @@ control LinkatsReferencedatanocusipVerifyChecksum(inout headers_t hdr, inout met
 
 control LinkatsReferencedatanocusipIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

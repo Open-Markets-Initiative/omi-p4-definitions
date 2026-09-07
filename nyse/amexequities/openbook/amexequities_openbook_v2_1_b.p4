@@ -133,6 +133,7 @@ header delta_update_messages_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -171,56 +172,67 @@ parser AmexequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unavailable_message {
         packet.extract(hdr.unavailable_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_request_response_message {
         packet.extract(hdr.request_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_request_message {
         packet.extract(hdr.retransmission_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_book_refresh_request_message {
         packet.extract(hdr.book_refresh_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_response_message {
         packet.extract(hdr.heartbeat_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_extended_book_refresh_request_message {
         packet.extract(hdr.extended_book_refresh_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_request_message {
         packet.extract(hdr.symbol_index_mapping_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_response_message {
         packet.extract(hdr.symbol_index_mapping_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_full_update_messages {
         packet.extract(hdr.full_update_messages);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delta_update_messages {
         packet.extract(hdr.delta_update_messages);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -233,7 +245,12 @@ control AmexequitiesOpenbookVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control AmexequitiesOpenbookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

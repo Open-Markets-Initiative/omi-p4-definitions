@@ -48,6 +48,9 @@ header add_complex_instrument_request_t {
     bit<8> no_legs;
     bit<160> compliance_text;
     bit<16> pad2v2;
+}
+
+header add_complex_instrument_request_instrmt_leg_grp_comp_t {
     bit<64> leg_security_id;
     bit<64> leg_price;
     bit<32> leg_symbol;
@@ -227,6 +230,9 @@ header mass_quote_request_t {
     bit<8> quote_size_type;
     bit<8> no_quote_entries;
     bit<56> pad7;
+}
+
+header mass_quote_request_quote_entry_grp_comp_t {
     bit<64> security_id;
     bit<64> bid_px;
     bit<64> offer_px;
@@ -270,6 +276,9 @@ header modify_order_complex_request_t {
     bit<96> free_text_3;
     bit<8> no_legs;
     bit<16> pad2v2;
+}
+
+header modify_order_complex_request_leg_ord_grp_comp_t {
     bit<16> leg_account;
     bit<8> leg_position_effect;
     bit<40> pad5;
@@ -367,6 +376,9 @@ header new_order_complex_request_t {
     bit<96> free_text_3;
     bit<8> no_legs;
     bit<56> pad7;
+}
+
+header new_order_complex_request_leg_ord_grp_comp_t {
     bit<16> leg_account;
     bit<8> leg_position_effect;
     bit<40> pad5;
@@ -519,11 +531,17 @@ header user_logout_request_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> add_complex_instrument_request_instrmt_leg_grp_comp_remaining;
+    bit<8> mass_quote_request_quote_entry_grp_comp_remaining;
+    bit<8> modify_order_complex_request_leg_ord_grp_comp_remaining;
+    bit<8> new_order_complex_request_leg_ord_grp_comp_remaining;
 }
 
 struct headers_t {
     message_header_t message_header;
     add_complex_instrument_request_t add_complex_instrument_request;
+    add_complex_instrument_request_instrmt_leg_grp_comp_t add_complex_instrument_request_instrmt_leg_grp_comp[MAX_MESSAGES];
     cross_request_t cross_request;
     delete_all_order_request_t delete_all_order_request;
     delete_all_quote_request_t delete_all_quote_request;
@@ -539,10 +557,13 @@ struct headers_t {
     logout_request_t logout_request;
     mm_parameter_definition_request_t mm_parameter_definition_request;
     mass_quote_request_t mass_quote_request;
+    mass_quote_request_quote_entry_grp_comp_t mass_quote_request_quote_entry_grp_comp[MAX_MESSAGES];
     modify_order_complex_request_t modify_order_complex_request;
+    modify_order_complex_request_leg_ord_grp_comp_t modify_order_complex_request_leg_ord_grp_comp[MAX_MESSAGES];
     modify_order_single_request_t modify_order_single_request;
     modify_order_single_short_request_t modify_order_single_short_request;
     new_order_complex_request_t new_order_complex_request;
+    new_order_complex_request_leg_ord_grp_comp_t new_order_complex_request_leg_ord_grp_comp[MAX_MESSAGES];
     new_order_single_request_t new_order_single_request;
     new_order_single_short_request_t new_order_single_short_request;
     quote_activation_request_t quote_activation_request;
@@ -595,151 +616,233 @@ parser EurexT7EtiClientParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_add_complex_instrument_request {
         packet.extract(hdr.add_complex_instrument_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.add_complex_instrument_request_instrmt_leg_grp_comp_remaining = hdr.add_complex_instrument_request.no_legs;
+        transition select(meta.add_complex_instrument_request_instrmt_leg_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_add_complex_instrument_request_instrmt_leg_grp_comp;
+        }
+    }
+
+    state parse_add_complex_instrument_request_instrmt_leg_grp_comp {
+        packet.extract(hdr.add_complex_instrument_request_instrmt_leg_grp_comp.next);
+        meta.add_complex_instrument_request_instrmt_leg_grp_comp_remaining = meta.add_complex_instrument_request_instrmt_leg_grp_comp_remaining - 1;
+        transition select(meta.add_complex_instrument_request_instrmt_leg_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_add_complex_instrument_request_instrmt_leg_grp_comp;
+        }
     }
 
     state parse_cross_request {
         packet.extract(hdr.cross_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_all_order_request {
         packet.extract(hdr.delete_all_order_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_all_quote_request {
         packet.extract(hdr.delete_all_quote_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_order_complex_request {
         packet.extract(hdr.delete_order_complex_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_order_single_request {
         packet.extract(hdr.delete_order_single_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gateway_request {
         packet.extract(hdr.gateway_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat {
         packet.extract(hdr.heartbeat);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inquire_enrichment_rule_id_list_request {
         packet.extract(hdr.inquire_enrichment_rule_id_list_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inquire_mm_parameter_request {
         packet.extract(hdr.inquire_mm_parameter_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inquire_session_list_request {
         packet.extract(hdr.inquire_session_list_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inquire_user_request {
         packet.extract(hdr.inquire_user_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_request {
         packet.extract(hdr.logon_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_request {
         packet.extract(hdr.logout_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mm_parameter_definition_request {
         packet.extract(hdr.mm_parameter_definition_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_quote_request {
         packet.extract(hdr.mass_quote_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mass_quote_request_quote_entry_grp_comp_remaining = hdr.mass_quote_request.no_quote_entries;
+        transition select(meta.mass_quote_request_quote_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_mass_quote_request_quote_entry_grp_comp;
+        }
+    }
+
+    state parse_mass_quote_request_quote_entry_grp_comp {
+        packet.extract(hdr.mass_quote_request_quote_entry_grp_comp.next);
+        meta.mass_quote_request_quote_entry_grp_comp_remaining = meta.mass_quote_request_quote_entry_grp_comp_remaining - 1;
+        transition select(meta.mass_quote_request_quote_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_mass_quote_request_quote_entry_grp_comp;
+        }
     }
 
     state parse_modify_order_complex_request {
         packet.extract(hdr.modify_order_complex_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.modify_order_complex_request_leg_ord_grp_comp_remaining = hdr.modify_order_complex_request.no_legs;
+        transition select(meta.modify_order_complex_request_leg_ord_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_modify_order_complex_request_leg_ord_grp_comp;
+        }
+    }
+
+    state parse_modify_order_complex_request_leg_ord_grp_comp {
+        packet.extract(hdr.modify_order_complex_request_leg_ord_grp_comp.next);
+        meta.modify_order_complex_request_leg_ord_grp_comp_remaining = meta.modify_order_complex_request_leg_ord_grp_comp_remaining - 1;
+        transition select(meta.modify_order_complex_request_leg_ord_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_modify_order_complex_request_leg_ord_grp_comp;
+        }
     }
 
     state parse_modify_order_single_request {
         packet.extract(hdr.modify_order_single_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_modify_order_single_short_request {
         packet.extract(hdr.modify_order_single_short_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_complex_request {
         packet.extract(hdr.new_order_complex_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.new_order_complex_request_leg_ord_grp_comp_remaining = hdr.new_order_complex_request.no_legs;
+        transition select(meta.new_order_complex_request_leg_ord_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_new_order_complex_request_leg_ord_grp_comp;
+        }
+    }
+
+    state parse_new_order_complex_request_leg_ord_grp_comp {
+        packet.extract(hdr.new_order_complex_request_leg_ord_grp_comp.next);
+        meta.new_order_complex_request_leg_ord_grp_comp_remaining = meta.new_order_complex_request_leg_ord_grp_comp_remaining - 1;
+        transition select(meta.new_order_complex_request_leg_ord_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_new_order_complex_request_leg_ord_grp_comp;
+        }
     }
 
     state parse_new_order_single_request {
         packet.extract(hdr.new_order_single_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_single_short_request {
         packet.extract(hdr.new_order_single_short_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_activation_request {
         packet.extract(hdr.quote_activation_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_rfq_request {
         packet.extract(hdr.rfq_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_me_message_request {
         packet.extract(hdr.retransmit_me_message_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_request {
         packet.extract(hdr.retransmit_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subscribe_request {
         packet.extract(hdr.subscribe_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unsubscribe_request {
         packet.extract(hdr.unsubscribe_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_user_login_request {
         packet.extract(hdr.user_login_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_user_logout_request {
         packet.extract(hdr.user_logout_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -752,7 +855,12 @@ control EurexT7EtiClientVerifyChecksum(inout headers_t hdr, inout metadata_t met
 
 control EurexT7EtiClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -770,6 +878,7 @@ control EurexT7EtiClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.add_complex_instrument_request);
+        packet.emit(hdr.add_complex_instrument_request_instrmt_leg_grp_comp);
         packet.emit(hdr.cross_request);
         packet.emit(hdr.delete_all_order_request);
         packet.emit(hdr.delete_all_quote_request);
@@ -785,10 +894,13 @@ control EurexT7EtiClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.logout_request);
         packet.emit(hdr.mm_parameter_definition_request);
         packet.emit(hdr.mass_quote_request);
+        packet.emit(hdr.mass_quote_request_quote_entry_grp_comp);
         packet.emit(hdr.modify_order_complex_request);
+        packet.emit(hdr.modify_order_complex_request_leg_ord_grp_comp);
         packet.emit(hdr.modify_order_single_request);
         packet.emit(hdr.modify_order_single_short_request);
         packet.emit(hdr.new_order_complex_request);
+        packet.emit(hdr.new_order_complex_request_leg_ord_grp_comp);
         packet.emit(hdr.new_order_single_request);
         packet.emit(hdr.new_order_single_short_request);
         packet.emit(hdr.quote_activation_request);

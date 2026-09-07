@@ -330,6 +330,7 @@ header extended_trade_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -376,76 +377,91 @@ parser LinkatsMulticastParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_start_of_spin_message {
         packet.extract(hdr.start_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_spin_message {
         packet.extract(hdr.end_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_open_message {
         packet.extract(hdr.market_open_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_close_message {
         packet.extract(hdr.market_close_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_message {
         packet.extract(hdr.security_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_message {
         packet.extract(hdr.quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_update_message {
         packet.extract(hdr.quote_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inside_message {
         packet.extract(hdr.inside_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inside_update_message {
         packet.extract(hdr.inside_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reference_price_message {
         packet.extract(hdr.reference_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reference_price_update_message {
         packet.extract(hdr.reference_price_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_extended_security_message {
         packet.extract(hdr.extended_security_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_extended_security_no_cusip_message {
         packet.extract(hdr.extended_security_no_cusip_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_extended_trade_message {
         packet.extract(hdr.extended_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -458,7 +474,12 @@ control LinkatsMulticastVerifyChecksum(inout headers_t hdr, inout metadata_t met
 
 control LinkatsMulticastIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

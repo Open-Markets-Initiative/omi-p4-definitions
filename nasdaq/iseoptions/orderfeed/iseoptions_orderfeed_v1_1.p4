@@ -121,11 +121,16 @@ header auction_message_t {
     bit<48> cmta;
     bit<8> auction_event;
     bit<8> number_of_responses;
+}
+
+header auction_message_auction_response_t {
     bit<32> response_price;
     bit<32> response_size;
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> auction_message_auction_response_remaining;
 }
 
 struct headers_t {
@@ -138,6 +143,7 @@ struct headers_t {
     opening_imbalance_message_t opening_imbalance_message[MAX_MESSAGES];
     order_on_book_message_t order_on_book_message[MAX_MESSAGES];
     auction_message_t auction_message[MAX_MESSAGES];
+    auction_message_auction_response_t auction_message_auction_response[MAX_MESSAGES];
 }
 
 parser IseoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -162,37 +168,57 @@ parser IseoptionsOrderfeedParser(packet_in packet, out headers_t hdr, inout meta
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_option_directory_message {
         packet.extract(hdr.option_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_security_open_closed_message {
         packet.extract(hdr.security_open_closed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_opening_imbalance_message {
         packet.extract(hdr.opening_imbalance_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_on_book_message {
         packet.extract(hdr.order_on_book_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_auction_message {
         packet.extract(hdr.auction_message.next);
-        transition parse_message;
+        meta.dispatched = 1;
+        meta.auction_message_auction_response_remaining = hdr.auction_message.last.number_of_responses;
+        transition select(meta.auction_message_auction_response_remaining) {
+            8w0: parse_message;
+            default: parse_auction_message_auction_response;
+        }
+    }
+
+    state parse_auction_message_auction_response {
+        packet.extract(hdr.auction_message_auction_response.next);
+        meta.auction_message_auction_response_remaining = meta.auction_message_auction_response_remaining - 1;
+        transition select(meta.auction_message_auction_response_remaining) {
+            8w0: parse_message;
+            default: parse_auction_message_auction_response;
+        }
     }
 
 }
@@ -204,7 +230,12 @@ control IseoptionsOrderfeedVerifyChecksum(inout headers_t hdr, inout metadata_t 
 
 control IseoptionsOrderfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -229,6 +260,7 @@ control IseoptionsOrderfeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.opening_imbalance_message);
         packet.emit(hdr.order_on_book_message);
         packet.emit(hdr.auction_message);
+        packet.emit(hdr.auction_message_auction_response);
     }
 }
 

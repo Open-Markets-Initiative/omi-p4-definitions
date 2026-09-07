@@ -571,6 +571,7 @@ header risk_control_alert_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -647,151 +648,181 @@ parser NyseequitiesBinarygatewayParser(packet_in packet, out headers_t hdr, inou
 
     state parse_session_configuration_request_message {
         packet.extract(hdr.session_configuration_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_single_and_cancel_replace_request_message {
         packet.extract(hdr.new_order_single_and_cancel_replace_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_request_message {
         packet.extract(hdr.order_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_request_message {
         packet.extract(hdr.order_modify_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bulk_cancel_request_message {
         packet.extract(hdr.bulk_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_subscription_request_message {
         packet.extract(hdr.symbol_subscription_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_manual_action_response_message {
         packet.extract(hdr.manual_action_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_limit_update_request_message {
         packet.extract(hdr.risk_limit_update_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_action_request_message {
         packet.extract(hdr.risk_action_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_equities_symbol_reference_data_message {
         packet.extract(hdr.equities_symbol_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_dmm_symbol_reference_data_message {
         packet.extract(hdr.dmm_symbol_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_minimum_price_variant_class_reference_data_message {
         packet.extract(hdr.minimum_price_variant_class_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_minimum_price_variant_level_reference_data_message {
         packet.extract(hdr.minimum_price_variant_level_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mpid_configuration_message {
         packet.extract(hdr.mpid_configuration_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mmid_configuration_message {
         packet.extract(hdr.mmid_configuration_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_session_configuration_acknowledgement_message {
         packet.extract(hdr.session_configuration_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_and_cancel_replace_acknowledgement_message {
         packet.extract(hdr.order_and_cancel_replace_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_cancel_request_acknowledgment_and_urout_message {
         packet.extract(hdr.order_modify_cancel_request_acknowledgment_and_urout_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_priority_update_acknowledgment_message {
         packet.extract(hdr.order_priority_update_acknowledgment_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_message {
         packet.extract(hdr.execution_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_bust_correct_message {
         packet.extract(hdr.trade_bust_correct_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_application_layer_reject_message {
         packet.extract(hdr.application_layer_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_subscription_acknowledgement_message {
         packet.extract(hdr.symbol_subscription_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gt_begin_message {
         packet.extract(hdr.gt_begin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gt_end_message {
         packet.extract(hdr.gt_end_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_auction_price_data_message {
         packet.extract(hdr.auction_price_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_auction_request_message {
         packet.extract(hdr.auction_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_manual_action_request_message {
         packet.extract(hdr.manual_action_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_control_acknowledgement_message {
         packet.extract(hdr.risk_control_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_control_alert_message {
         packet.extract(hdr.risk_control_alert_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -804,7 +835,12 @@ control NyseequitiesBinarygatewayVerifyChecksum(inout headers_t hdr, inout metad
 
 control NyseequitiesBinarygatewayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

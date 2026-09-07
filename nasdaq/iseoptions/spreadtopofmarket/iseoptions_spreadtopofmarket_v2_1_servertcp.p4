@@ -67,6 +67,9 @@ header complex_strategy_directory_message_t {
     bit<104> underlying_symbol;
     bit<128> reserved_16;
     bit<8> number_of_legs;
+}
+
+header complex_strategy_directory_message_leg_information_t {
     bit<32> option_id;
     bit<64> security_symbol;
     bit<8> expiration_year;
@@ -139,6 +142,8 @@ header end_of_replay_sequence_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_strategy_directory_message_leg_information_remaining;
 }
 
 struct headers_t {
@@ -149,6 +154,7 @@ struct headers_t {
     sequenced_data_packet_t sequenced_data_packet;
     system_event_message_t system_event_message;
     complex_strategy_directory_message_t complex_strategy_directory_message;
+    complex_strategy_directory_message_leg_information_t complex_strategy_directory_message_leg_information[MAX_MESSAGES];
     strategy_trading_action_message_t strategy_trading_action_message;
     strategy_best_bid_and_ask_update_message_t strategy_best_bid_and_ask_update_message;
     strategy_best_bid_update_message_t strategy_best_bid_update_message;
@@ -170,21 +176,25 @@ parser IseoptionsSpreadtopofmarketServertcpParser(packet_in packet, out headers_
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_accepted_packet {
         packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_data_packet {
         packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
             8w0x73: parse_complex_strategy_directory_message;
@@ -199,36 +209,56 @@ parser IseoptionsSpreadtopofmarketServertcpParser(packet_in packet, out headers_
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_strategy_directory_message {
         packet.extract(hdr.complex_strategy_directory_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.complex_strategy_directory_message_leg_information_remaining = hdr.complex_strategy_directory_message.number_of_legs;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: accept;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
+    }
+
+    state parse_complex_strategy_directory_message_leg_information {
+        packet.extract(hdr.complex_strategy_directory_message_leg_information.next);
+        meta.complex_strategy_directory_message_leg_information_remaining = meta.complex_strategy_directory_message_leg_information_remaining - 1;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: accept;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
     }
 
     state parse_strategy_trading_action_message {
         packet.extract(hdr.strategy_trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_strategy_best_bid_and_ask_update_message {
         packet.extract(hdr.strategy_best_bid_and_ask_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_strategy_best_bid_update_message {
         packet.extract(hdr.strategy_best_bid_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_strategy_best_ask_update_message {
         packet.extract(hdr.strategy_best_ask_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_replay_sequence_message {
         packet.extract(hdr.end_of_replay_sequence_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -241,7 +271,12 @@ control IseoptionsSpreadtopofmarketServertcpVerifyChecksum(inout headers_t hdr, 
 
 control IseoptionsSpreadtopofmarketServertcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -264,6 +299,7 @@ control IseoptionsSpreadtopofmarketServertcpDeparser(packet_out packet, in heade
         packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.complex_strategy_directory_message);
+        packet.emit(hdr.complex_strategy_directory_message_leg_information);
         packet.emit(hdr.strategy_trading_action_message);
         packet.emit(hdr.strategy_best_bid_and_ask_update_message);
         packet.emit(hdr.strategy_best_bid_update_message);

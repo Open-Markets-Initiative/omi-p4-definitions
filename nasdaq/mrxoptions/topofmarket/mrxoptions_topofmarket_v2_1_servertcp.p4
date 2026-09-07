@@ -170,6 +170,7 @@ header end_of_replay_sequence_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -204,21 +205,25 @@ parser MrxoptionsTopofmarketServertcpParser(packet_in packet, out headers_t hdr,
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_accepted_packet {
         packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_data_packet {
         packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
             8w0x6d: parse_derivative_directory_message;
@@ -236,51 +241,61 @@ parser MrxoptionsTopofmarketServertcpParser(packet_in packet, out headers_t hdr,
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_derivative_directory_message {
         packet.extract(hdr.derivative_directory_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_bid_and_ask_update_short_form_message {
         packet.extract(hdr.best_bid_and_ask_update_short_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_bid_and_ask_update_long_form_message {
         packet.extract(hdr.best_bid_and_ask_update_long_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_bid_update_short_form_message {
         packet.extract(hdr.best_bid_update_short_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_ask_update_short_form_message {
         packet.extract(hdr.best_ask_update_short_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_bid_update_long_form_message {
         packet.extract(hdr.best_bid_update_long_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_ask_update_long_form_message {
         packet.extract(hdr.best_ask_update_long_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_replay_sequence_message {
         packet.extract(hdr.end_of_replay_sequence_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -293,7 +308,12 @@ control MrxoptionsTopofmarketServertcpVerifyChecksum(inout headers_t hdr, inout 
 
 control MrxoptionsTopofmarketServertcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

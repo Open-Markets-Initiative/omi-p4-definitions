@@ -69,10 +69,19 @@ header instrument_definition_message_t {
     bit<8> status;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header instrument_definition_message_instrument_definition_message_large_tick_sizes_group_t {
     bit<64> large_tick_size;
     bit<64> threshold_price;
-    bit<16> block_length_2;
-    bit<16> num_in_group_2;
+}
+
+header instrument_definition_message_instrument_definition_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header instrument_definition_message_instrument_definition_message_legs_group_t {
     bit<64> leg_instrument_id;
     bit<8> ratio;
 }
@@ -210,11 +219,17 @@ header retransmit_reject_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining;
+    bit<16> instrument_definition_message_instrument_definition_message_legs_group_remaining;
 }
 
 struct headers_t {
     message_flags_t message_flags;
     instrument_definition_message_t instrument_definition_message;
+    instrument_definition_message_instrument_definition_message_large_tick_sizes_group_t instrument_definition_message_instrument_definition_message_large_tick_sizes_group[MAX_MESSAGES];
+    instrument_definition_message_instrument_definition_message_legs_group_header_t instrument_definition_message_instrument_definition_message_legs_group_header;
+    instrument_definition_message_instrument_definition_message_legs_group_t instrument_definition_message_instrument_definition_message_legs_group[MAX_MESSAGES];
     index_definition_message_t index_definition_message;
     instrument_info_message_t instrument_info_message;
     instrument_ref_message_t instrument_ref_message;
@@ -264,96 +279,146 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_instrument_definition_message {
         packet.extract(hdr.instrument_definition_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining = hdr.instrument_definition_message.num_in_group;
+        transition select(meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining) {
+            16w0: read_instrument_definition_message_instrument_definition_message_legs_group;
+            default: parse_instrument_definition_message_instrument_definition_message_large_tick_sizes_group;
+        }
+    }
+
+    state parse_instrument_definition_message_instrument_definition_message_large_tick_sizes_group {
+        packet.extract(hdr.instrument_definition_message_instrument_definition_message_large_tick_sizes_group.next);
+        meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining = meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining - 1;
+        transition select(meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining) {
+            16w0: read_instrument_definition_message_instrument_definition_message_legs_group;
+            default: parse_instrument_definition_message_instrument_definition_message_large_tick_sizes_group;
+        }
+    }
+
+    state read_instrument_definition_message_instrument_definition_message_legs_group {
+        packet.extract(hdr.instrument_definition_message_instrument_definition_message_legs_group_header);
+        meta.instrument_definition_message_instrument_definition_message_legs_group_remaining = hdr.instrument_definition_message_instrument_definition_message_legs_group_header.num_in_group;
+        transition select(meta.instrument_definition_message_instrument_definition_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_instrument_definition_message_instrument_definition_message_legs_group;
+        }
+    }
+
+    state parse_instrument_definition_message_instrument_definition_message_legs_group {
+        packet.extract(hdr.instrument_definition_message_instrument_definition_message_legs_group.next);
+        meta.instrument_definition_message_instrument_definition_message_legs_group_remaining = meta.instrument_definition_message_instrument_definition_message_legs_group_remaining - 1;
+        transition select(meta.instrument_definition_message_instrument_definition_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_instrument_definition_message_instrument_definition_message_legs_group;
+        }
     }
 
     state parse_index_definition_message {
         packet.extract(hdr.index_definition_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_info_message {
         packet.extract(hdr.instrument_info_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_ref_message {
         packet.extract(hdr.instrument_ref_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_status_update_message {
         packet.extract(hdr.instrument_status_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bid_put_message {
         packet.extract(hdr.bid_put_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ask_put_message {
         packet.extract(hdr.ask_put_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bid_qty_reduced_message {
         packet.extract(hdr.bid_qty_reduced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ask_qty_reduced_message {
         packet.extract(hdr.ask_qty_reduced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bid_delete_message {
         packet.extract(hdr.bid_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ask_delete_message {
         packet.extract(hdr.ask_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_summary_message {
         packet.extract(hdr.trade_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_block_trade_message {
         packet.extract(hdr.block_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_header_message {
         packet.extract(hdr.snapshot_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_trailer_message {
         packet.extract(hdr.snapshot_trailer_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_cycle_message {
         packet.extract(hdr.end_of_cycle_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_request_message {
         packet.extract(hdr.retransmit_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_reject_message {
         packet.extract(hdr.retransmit_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -366,7 +431,12 @@ control DeribitMarketdataapiVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control DeribitMarketdataapiIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -384,6 +454,9 @@ control DeribitMarketdataapiDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_flags);
         packet.emit(hdr.instrument_definition_message);
+        packet.emit(hdr.instrument_definition_message_instrument_definition_message_large_tick_sizes_group);
+        packet.emit(hdr.instrument_definition_message_instrument_definition_message_legs_group_header);
+        packet.emit(hdr.instrument_definition_message_instrument_definition_message_legs_group);
         packet.emit(hdr.index_definition_message);
         packet.emit(hdr.instrument_info_message);
         packet.emit(hdr.instrument_ref_message);

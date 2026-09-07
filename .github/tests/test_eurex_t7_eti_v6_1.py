@@ -10,17 +10,19 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "eurex/eti/eurex_t7_eti_v6_1_client.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v6_1.json")
+PROGRAM_CLIENT = "eurex/eti/eurex_t7_eti_v6_1_client.p4"
+JSON_CLIENT = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v6_1_client.json")
+PROGRAM_SERVER = "eurex/eti/eurex_t7_eti_v6_1_server.p4"
+JSON_SERVER = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v6_1_server.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class EurexT7EtiV61Tests(unittest.TestCase):
+class EurexT7EtiV61ClientTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        subprocess.run([P4C, PROGRAM, "-o", JSON], check=True)
-        cls.switch = switch.Switch(JSON)
+        subprocess.run([P4C, PROGRAM_CLIENT, "-o", JSON_CLIENT], check=True)
+        cls.switch = switch.Switch(JSON_CLIENT)
         cls.switch.start()
 
     @classmethod
@@ -34,6 +36,19 @@ class EurexT7EtiV61Tests(unittest.TestCase):
     def test_retransmitmemessagerequest(self):
         for payload in payloads.of("omi-data-packets/Eurex/T7.Eti.Fbe.v6.1/RetransmitMeMessageRequest.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+
+class EurexT7EtiV61ServerTests(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        subprocess.run([P4C, PROGRAM_SERVER, "-o", JSON_SERVER], check=True)
+        cls.switch = switch.Switch(JSON_SERVER)
+        cls.switch.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.switch.stop()
 
     def test_userloginresponse(self):
         for payload in payloads.of("omi-data-packets/Eurex/T7.Eti.Fbe.v6.1/UserLoginResponse.pcap"):

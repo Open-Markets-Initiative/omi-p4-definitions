@@ -81,14 +81,29 @@ header new_order_message_t {
     bit<64> ioi_id_optional;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header new_order_message_new_order_message_free_text_section_group_t {
     bit<144> free_text;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header new_order_message_mifid_short_codes_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header new_order_message_mifid_short_codes_group_t {
     bit<32> investment_decision_w_firm_short_code;
     bit<32> non_executing_broker_short_code;
     bit<32> client_identification_shortcode;
-    bit<8> block_length_short_3;
-    bit<8> num_in_group_3;
+}
+
+header new_order_message_order_optional_fields_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header new_order_message_order_optional_fields_group_t {
     bit<64> stop_px;
     bit<64> undisclosed_price;
     bit<64> disclosed_qty;
@@ -102,11 +117,17 @@ header new_order_message_t {
     bit<1> session_2;
     bit<1> session_3;
     bit<1> session_4;
-    bit<3> reserved_3_2;
+    bit<3> reserved_3;
     bit<8> undisclosed_iceberg_type;
     bit<8> stop_triggered_time_in_force;
-    bit<8> block_length_short_4;
-    bit<8> num_in_group_4;
+}
+
+header new_order_message_order_clearing_fields_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header new_order_message_order_clearing_fields_group_t {
     bit<64> clearing_firm_id;
     bit<64> client_id;
     bit<96> account_number;
@@ -125,12 +146,18 @@ header new_order_message_t {
     bit<16> clearing_instruction;
     bit<8> account_type_cross;
     bit<8> trading_capacity_cross;
-    bit<8> block_length_short_5;
-    bit<8> num_in_group_5;
-    bit<8> block_length_short_6;
-    bit<8> num_in_group_6;
-    bit<8> block_length_short_7;
-    bit<8> num_in_group_7;
+}
+
+header new_order_message_additional_infos_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+    bit<8> block_length_short_2;
+    bit<8> num_in_group_2;
+    bit<8> block_length_short_3;
+    bit<8> num_in_group_3;
+}
+
+header new_order_message_additional_infos_group_t {
     bit<128> long_client_id;
 }
 
@@ -165,6 +192,9 @@ header ack_message_t {
     bit<1> executed_upon_entry_flag;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header ack_message_mifid_fields_group_t {
     bit<1> stp_resting_order;
     bit<1> stp_incoming_order;
     bit<1> disclosed_quantity_randomization;
@@ -214,20 +244,35 @@ header fill_message_t {
     bit<128> trade_unique_identifier;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header fill_message_fill_optional_field_group_t {
     bit<64> counterpart_firm_id;
     bit<64> other_leg_last_px;
     bit<96> package_id;
     bit<32> underlying_instrument_id;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header fill_message_fill_strategy_field_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header fill_message_fill_strategy_field_group_t {
     bit<64> leg_last_px;
     bit<64> leg_last_qty;
     bit<32> leg_instrument_id;
     bit<8> leg_side_optional;
     bit<32> execution_id_optional;
-    bit<128> trade_unique_identifier_2;
-    bit<8> block_length_short_3;
-    bit<8> num_in_group_3;
+    bit<128> trade_unique_identifier;
+}
+
+header fill_message_mifid_fields_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header fill_message_mifid_fields_group_t {
     bit<1> stp_resting_order;
     bit<1> stp_incoming_order;
     bit<1> disclosed_quantity_randomization;
@@ -244,8 +289,14 @@ header fill_message_t {
     bit<1> deferral_indicator;
     bit<1> frmaramplp;
     bit<2> reserved_2;
-    bit<8> block_length_short_4;
-    bit<8> num_in_group_4;
+}
+
+header fill_message_fill_derivatives_field_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header fill_message_fill_derivatives_field_group_t {
     bit<64> evaluated_price;
     bit<8> message_price_notation;
     bit<32> final_symbol_index;
@@ -278,6 +329,9 @@ header kill_message_t {
     bit<1> executed_upon_entry_flag;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header kill_message_mifid_fields_group_t {
     bit<1> stp_resting_order;
     bit<1> stp_incoming_order;
     bit<1> disclosed_quantity_randomization;
@@ -338,9 +392,18 @@ header cancel_replace_message_t {
     bit<16> stpid;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header cancel_replace_message_new_order_message_free_text_section_group_t {
     bit<144> free_text;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header cancel_replace_message_cancel_replace_optional_field_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<64> stop_px;
     bit<8> peg_offset;
     bit<64> undisclosed_price;
@@ -352,11 +415,17 @@ header cancel_replace_message_t {
     bit<1> session_2;
     bit<1> session_3;
     bit<1> session_4;
-    bit<3> reserved_3_2;
+    bit<3> reserved_3;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
-    bit<8> block_length_short_3;
-    bit<8> num_in_group_3;
+}
+
+header cancel_replace_message_cancel_replace_clearing_fields_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header cancel_replace_message_cancel_replace_clearing_fields_group_t {
     bit<64> clearing_firm_id;
     bit<64> client_id;
     bit<96> account_number;
@@ -373,12 +442,18 @@ header cancel_replace_message_t {
     bit<1> leg_9;
     bit<6> reserved_6;
     bit<16> clearing_instruction;
-    bit<8> block_length_short_4;
-    bit<8> num_in_group_4;
-    bit<8> block_length_short_5;
-    bit<8> num_in_group_5;
-    bit<8> block_length_short_6;
-    bit<8> num_in_group_6;
+}
+
+header cancel_replace_message_additional_infos_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+    bit<8> block_length_short_2;
+    bit<8> num_in_group_2;
+    bit<8> block_length_short_3;
+    bit<8> num_in_group_3;
+}
+
+header cancel_replace_message_additional_infos_group_t {
     bit<128> long_client_id;
 }
 
@@ -409,10 +484,19 @@ header reject_message_t {
     bit<1> executed_upon_entry_flag;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header reject_message_collar_fields_group_t {
     bit<8> collar_rej_type;
     bit<64> breached_collar_price;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header reject_message_mifid_fields_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header reject_message_mifid_fields_group_t {
     bit<1> stp_resting_order;
     bit<1> stp_incoming_order;
     bit<1> disclosed_quantity_randomization;
@@ -459,11 +543,20 @@ header quotes_message_t {
     bit<16> stpid;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header quotes_message_mifid_short_codes_group_t {
     bit<32> investment_decision_w_firm_short_code;
     bit<32> non_executing_broker_short_code;
     bit<32> client_identification_shortcode;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header quotes_message_clearing_dataset_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header quotes_message_clearing_dataset_group_t {
     bit<64> clearing_firm_id;
     bit<64> client_id;
     bit<96> account_number;
@@ -481,8 +574,14 @@ header quotes_message_t {
     bit<6> reserved_6;
     bit<16> clearing_instruction;
     bit<144> free_text;
-    bit<8> block_length_short_3;
-    bit<8> num_in_group_3;
+}
+
+header quotes_message_quotes_rep_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header quotes_message_quotes_rep_group_t {
     bit<64> bid_size;
     bit<64> bid_px;
     bit<64> offer_size;
@@ -522,6 +621,9 @@ header quote_ack_message_t {
     bit<1> executed_upon_entry_flag;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header quote_ack_message_quote_acks_group_t {
     bit<64> bid_order_id;
     bit<64> offer_order_id;
     bit<32> symbol_index;
@@ -634,6 +736,9 @@ header mass_cancel_ack_message_t {
     bit<32> target_execution_within_firm_short_code;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header mass_cancel_ack_message_mifid_fields_group_t {
     bit<1> stp_resting_order;
     bit<1> stp_incoming_order;
     bit<1> disclosed_quantity_randomization;
@@ -913,6 +1018,9 @@ header instrument_synchronization_list_message_t {
     bit<16> resynchronization_id;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header instrument_synchronization_list_message_instrument_synchronization_group_t {
     bit<32> symbol_index;
     bit<8> emm;
 }
@@ -933,6 +1041,9 @@ header security_definition_request_message_t {
     bit<8> strategy_code;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header security_definition_request_message_strategy_legs_group_t {
     bit<32> leg_symbol_index;
     bit<32> leg_ratio;
     bit<8> leg_security_type;
@@ -968,6 +1079,9 @@ header mm_protection_request_message_t {
     bit<8> request_type;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header mm_protection_request_message_mmp_request_group_t {
     bit<8> protection_type;
     bit<64> protection_threshold;
     bit<8> breach_action;
@@ -993,6 +1107,9 @@ header mm_protection_ack_message_t {
     bit<5> reserved_5;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header mm_protection_ack_message_mmp_ack_group_t {
     bit<8> protection_type_optional;
     bit<64> protection_threshold;
     bit<8> breach_action;
@@ -1024,6 +1141,9 @@ header new_wholesale_order_message_t {
     bit<8> message_price_notation;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header new_wholesale_order_message_wholesale_legs_group_t {
     bit<32> leg_symbol_index;
     bit<64> leg_price;
     bit<64> bid_quantity;
@@ -1034,8 +1154,14 @@ header new_wholesale_order_message_t {
     bit<8> leg_put_or_call;
     bit<8> leg_security_type;
     bit<64> leg_last_trading_date;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header new_wholesale_order_message_wholesale_client_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header new_wholesale_order_message_wholesale_client_group_t {
     bit<32> symbol_index;
     bit<8> side;
     bit<8> account_type;
@@ -1102,13 +1228,22 @@ header wholesale_order_ack_message_t {
     bit<1> executed_upon_entry_flag;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header wholesale_order_ack_message_wholesale_ack_legs_group_t {
     bit<32> leg_symbol_index;
     bit<64> leg_bid_order_id;
     bit<64> leg_offer_order_id;
     bit<8> leg_side_optional;
     bit<16> leg_error_code;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header wholesale_order_ack_message_wholesale_ack_clearing_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header wholesale_order_ack_message_wholesale_ack_clearing_group_t {
     bit<32> symbol_index;
     bit<8> side;
     bit<32> investment_decision_w_firm_short_code;
@@ -1160,14 +1295,29 @@ header cross_order_message_t {
     bit<8> message_price_notation;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header cross_order_message_new_order_message_free_text_section_group_t {
     bit<144> free_text;
-    bit<8> block_length_short_2;
-    bit<8> num_in_group_2;
+}
+
+header cross_order_message_mifid_short_codes_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header cross_order_message_mifid_short_codes_group_t {
     bit<32> investment_decision_w_firm_short_code;
     bit<32> non_executing_broker_short_code;
     bit<32> client_identification_shortcode;
-    bit<8> block_length_short_3;
-    bit<8> num_in_group_3;
+}
+
+header cross_order_message_cross_clearing_fields_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header cross_order_message_cross_clearing_fields_group_t {
     bit<64> clearing_firm_id;
     bit<128> long_client_id;
     bit<96> account_number;
@@ -1186,8 +1336,14 @@ header cross_order_message_t {
     bit<16> clearing_instruction;
     bit<8> account_type;
     bit<8> trading_capacity_optional;
-    bit<8> block_length_short_4;
-    bit<8> num_in_group_4;
+}
+
+header cross_order_message_cross_strategy_fields_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header cross_order_message_cross_strategy_fields_group_t {
     bit<64> leg_last_px;
     bit<64> leg_last_qty;
     bit<32> leg_instrument_id;
@@ -1205,6 +1361,9 @@ header rfq_audit_message_t {
     bit<8> emm;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header rfq_audit_message_rfq_counterparts_group_t {
     bit<8> order_origin;
     bit<64> order_price;
     bit<64> last_traded_quantity;
@@ -1469,22 +1628,93 @@ header declaration_entry_reject_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> new_order_message_new_order_message_free_text_section_group_remaining;
+    bit<8> new_order_message_mifid_short_codes_group_remaining;
+    bit<8> new_order_message_order_optional_fields_group_remaining;
+    bit<8> new_order_message_order_clearing_fields_group_remaining;
+    bit<8> new_order_message_additional_infos_group_remaining;
+    bit<8> ack_message_mifid_fields_group_remaining;
+    bit<8> fill_message_fill_optional_field_group_remaining;
+    bit<8> fill_message_fill_strategy_field_group_remaining;
+    bit<8> fill_message_mifid_fields_group_remaining;
+    bit<8> fill_message_fill_derivatives_field_group_remaining;
+    bit<8> kill_message_mifid_fields_group_remaining;
+    bit<8> cancel_replace_message_new_order_message_free_text_section_group_remaining;
+    bit<8> cancel_replace_message_cancel_replace_optional_field_group_remaining;
+    bit<8> cancel_replace_message_cancel_replace_clearing_fields_group_remaining;
+    bit<8> cancel_replace_message_additional_infos_group_remaining;
+    bit<8> reject_message_collar_fields_group_remaining;
+    bit<8> reject_message_mifid_fields_group_remaining;
+    bit<8> quotes_message_mifid_short_codes_group_remaining;
+    bit<8> quotes_message_clearing_dataset_group_remaining;
+    bit<8> quotes_message_quotes_rep_group_remaining;
+    bit<8> quote_ack_message_quote_acks_group_remaining;
+    bit<8> mass_cancel_ack_message_mifid_fields_group_remaining;
+    bit<8> instrument_synchronization_list_message_instrument_synchronization_group_remaining;
+    bit<8> security_definition_request_message_strategy_legs_group_remaining;
+    bit<8> mm_protection_request_message_mmp_request_group_remaining;
+    bit<8> mm_protection_ack_message_mmp_ack_group_remaining;
+    bit<8> new_wholesale_order_message_wholesale_legs_group_remaining;
+    bit<8> new_wholesale_order_message_wholesale_client_group_remaining;
+    bit<8> wholesale_order_ack_message_wholesale_ack_legs_group_remaining;
+    bit<8> wholesale_order_ack_message_wholesale_ack_clearing_group_remaining;
+    bit<8> cross_order_message_new_order_message_free_text_section_group_remaining;
+    bit<8> cross_order_message_mifid_short_codes_group_remaining;
+    bit<8> cross_order_message_cross_clearing_fields_group_remaining;
+    bit<8> cross_order_message_cross_strategy_fields_group_remaining;
+    bit<8> rfq_audit_message_rfq_counterparts_group_remaining;
 }
 
 struct headers_t {
     message_header_t message_header;
     new_order_message_t new_order_message;
+    new_order_message_new_order_message_free_text_section_group_t new_order_message_new_order_message_free_text_section_group[MAX_MESSAGES];
+    new_order_message_mifid_short_codes_group_header_t new_order_message_mifid_short_codes_group_header;
+    new_order_message_mifid_short_codes_group_t new_order_message_mifid_short_codes_group[MAX_MESSAGES];
+    new_order_message_order_optional_fields_group_header_t new_order_message_order_optional_fields_group_header;
+    new_order_message_order_optional_fields_group_t new_order_message_order_optional_fields_group[MAX_MESSAGES];
+    new_order_message_order_clearing_fields_group_header_t new_order_message_order_clearing_fields_group_header;
+    new_order_message_order_clearing_fields_group_t new_order_message_order_clearing_fields_group[MAX_MESSAGES];
+    new_order_message_additional_infos_group_header_t new_order_message_additional_infos_group_header;
+    new_order_message_additional_infos_group_t new_order_message_additional_infos_group[MAX_MESSAGES];
     ack_message_t ack_message;
+    ack_message_mifid_fields_group_t ack_message_mifid_fields_group[MAX_MESSAGES];
     fill_message_t fill_message;
+    fill_message_fill_optional_field_group_t fill_message_fill_optional_field_group[MAX_MESSAGES];
+    fill_message_fill_strategy_field_group_header_t fill_message_fill_strategy_field_group_header;
+    fill_message_fill_strategy_field_group_t fill_message_fill_strategy_field_group[MAX_MESSAGES];
+    fill_message_mifid_fields_group_header_t fill_message_mifid_fields_group_header;
+    fill_message_mifid_fields_group_t fill_message_mifid_fields_group[MAX_MESSAGES];
+    fill_message_fill_derivatives_field_group_header_t fill_message_fill_derivatives_field_group_header;
+    fill_message_fill_derivatives_field_group_t fill_message_fill_derivatives_field_group[MAX_MESSAGES];
     kill_message_t kill_message;
+    kill_message_mifid_fields_group_t kill_message_mifid_fields_group[MAX_MESSAGES];
     cancel_replace_message_t cancel_replace_message;
+    cancel_replace_message_new_order_message_free_text_section_group_t cancel_replace_message_new_order_message_free_text_section_group[MAX_MESSAGES];
+    cancel_replace_message_cancel_replace_optional_field_group_header_t cancel_replace_message_cancel_replace_optional_field_group_header;
+    cancel_replace_message_cancel_replace_optional_field_group_t cancel_replace_message_cancel_replace_optional_field_group[MAX_MESSAGES];
+    cancel_replace_message_cancel_replace_clearing_fields_group_header_t cancel_replace_message_cancel_replace_clearing_fields_group_header;
+    cancel_replace_message_cancel_replace_clearing_fields_group_t cancel_replace_message_cancel_replace_clearing_fields_group[MAX_MESSAGES];
+    cancel_replace_message_additional_infos_group_header_t cancel_replace_message_additional_infos_group_header;
+    cancel_replace_message_additional_infos_group_t cancel_replace_message_additional_infos_group[MAX_MESSAGES];
     reject_message_t reject_message;
+    reject_message_collar_fields_group_t reject_message_collar_fields_group[MAX_MESSAGES];
+    reject_message_mifid_fields_group_header_t reject_message_mifid_fields_group_header;
+    reject_message_mifid_fields_group_t reject_message_mifid_fields_group[MAX_MESSAGES];
     quotes_message_t quotes_message;
+    quotes_message_mifid_short_codes_group_t quotes_message_mifid_short_codes_group[MAX_MESSAGES];
+    quotes_message_clearing_dataset_group_header_t quotes_message_clearing_dataset_group_header;
+    quotes_message_clearing_dataset_group_t quotes_message_clearing_dataset_group[MAX_MESSAGES];
+    quotes_message_quotes_rep_group_header_t quotes_message_quotes_rep_group_header;
+    quotes_message_quotes_rep_group_t quotes_message_quotes_rep_group[MAX_MESSAGES];
     quote_ack_message_t quote_ack_message;
+    quote_ack_message_quote_acks_group_t quote_ack_message_quote_acks_group[MAX_MESSAGES];
     quote_request_message_t quote_request_message;
     cancel_request_message_t cancel_request_message;
     mass_cancel_message_t mass_cancel_message;
     mass_cancel_ack_message_t mass_cancel_ack_message;
+    mass_cancel_ack_message_mifid_fields_group_t mass_cancel_ack_message_mifid_fields_group[MAX_MESSAGES];
     open_order_request_message_t open_order_request_message;
     ownership_request_ack_message_t ownership_request_ack_message;
     ownership_request_message_t ownership_request_message;
@@ -1501,16 +1731,34 @@ struct headers_t {
     mm_sign_in_message_t mm_sign_in_message;
     mm_sign_in_ack_message_t mm_sign_in_ack_message;
     instrument_synchronization_list_message_t instrument_synchronization_list_message;
+    instrument_synchronization_list_message_instrument_synchronization_group_t instrument_synchronization_list_message_instrument_synchronization_group[MAX_MESSAGES];
     synchronization_time_message_t synchronization_time_message;
     security_definition_request_message_t security_definition_request_message;
+    security_definition_request_message_strategy_legs_group_t security_definition_request_message_strategy_legs_group[MAX_MESSAGES];
     security_definition_ack_message_t security_definition_ack_message;
     mm_protection_request_message_t mm_protection_request_message;
+    mm_protection_request_message_mmp_request_group_t mm_protection_request_message_mmp_request_group[MAX_MESSAGES];
     mm_protection_ack_message_t mm_protection_ack_message;
+    mm_protection_ack_message_mmp_ack_group_t mm_protection_ack_message_mmp_ack_group[MAX_MESSAGES];
     new_wholesale_order_message_t new_wholesale_order_message;
+    new_wholesale_order_message_wholesale_legs_group_t new_wholesale_order_message_wholesale_legs_group[MAX_MESSAGES];
+    new_wholesale_order_message_wholesale_client_group_header_t new_wholesale_order_message_wholesale_client_group_header;
+    new_wholesale_order_message_wholesale_client_group_t new_wholesale_order_message_wholesale_client_group[MAX_MESSAGES];
     wholesale_order_ack_message_t wholesale_order_ack_message;
+    wholesale_order_ack_message_wholesale_ack_legs_group_t wholesale_order_ack_message_wholesale_ack_legs_group[MAX_MESSAGES];
+    wholesale_order_ack_message_wholesale_ack_clearing_group_header_t wholesale_order_ack_message_wholesale_ack_clearing_group_header;
+    wholesale_order_ack_message_wholesale_ack_clearing_group_t wholesale_order_ack_message_wholesale_ack_clearing_group[MAX_MESSAGES];
     request_for_implied_execution_message_t request_for_implied_execution_message;
     cross_order_message_t cross_order_message;
+    cross_order_message_new_order_message_free_text_section_group_t cross_order_message_new_order_message_free_text_section_group[MAX_MESSAGES];
+    cross_order_message_mifid_short_codes_group_header_t cross_order_message_mifid_short_codes_group_header;
+    cross_order_message_mifid_short_codes_group_t cross_order_message_mifid_short_codes_group[MAX_MESSAGES];
+    cross_order_message_cross_clearing_fields_group_header_t cross_order_message_cross_clearing_fields_group_header;
+    cross_order_message_cross_clearing_fields_group_t cross_order_message_cross_clearing_fields_group[MAX_MESSAGES];
+    cross_order_message_cross_strategy_fields_group_header_t cross_order_message_cross_strategy_fields_group_header;
+    cross_order_message_cross_strategy_fields_group_t cross_order_message_cross_strategy_fields_group[MAX_MESSAGES];
     rfq_audit_message_t rfq_audit_message;
+    rfq_audit_message_rfq_counterparts_group_t rfq_audit_message_rfq_counterparts_group[MAX_MESSAGES];
     wave_for_liquidity_message_t wave_for_liquidity_message;
     wave_for_liquidity_notification_message_t wave_for_liquidity_notification_message;
     logon_message_t logon_message;
@@ -1589,261 +1837,858 @@ parser EuronextOptiqOrderentrygatewayParser(packet_in packet, out headers_t hdr,
 
     state parse_new_order_message {
         packet.extract(hdr.new_order_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.new_order_message_new_order_message_free_text_section_group_remaining = hdr.new_order_message.num_in_group;
+        transition select(meta.new_order_message_new_order_message_free_text_section_group_remaining) {
+            8w0: read_new_order_message_mifid_short_codes_group;
+            default: parse_new_order_message_new_order_message_free_text_section_group;
+        }
+    }
+
+    state parse_new_order_message_new_order_message_free_text_section_group {
+        packet.extract(hdr.new_order_message_new_order_message_free_text_section_group.next);
+        meta.new_order_message_new_order_message_free_text_section_group_remaining = meta.new_order_message_new_order_message_free_text_section_group_remaining - 1;
+        transition select(meta.new_order_message_new_order_message_free_text_section_group_remaining) {
+            8w0: read_new_order_message_mifid_short_codes_group;
+            default: parse_new_order_message_new_order_message_free_text_section_group;
+        }
+    }
+
+    state read_new_order_message_mifid_short_codes_group {
+        packet.extract(hdr.new_order_message_mifid_short_codes_group_header);
+        meta.new_order_message_mifid_short_codes_group_remaining = hdr.new_order_message_mifid_short_codes_group_header.num_in_group;
+        transition select(meta.new_order_message_mifid_short_codes_group_remaining) {
+            8w0: read_new_order_message_order_optional_fields_group;
+            default: parse_new_order_message_mifid_short_codes_group;
+        }
+    }
+
+    state parse_new_order_message_mifid_short_codes_group {
+        packet.extract(hdr.new_order_message_mifid_short_codes_group.next);
+        meta.new_order_message_mifid_short_codes_group_remaining = meta.new_order_message_mifid_short_codes_group_remaining - 1;
+        transition select(meta.new_order_message_mifid_short_codes_group_remaining) {
+            8w0: read_new_order_message_order_optional_fields_group;
+            default: parse_new_order_message_mifid_short_codes_group;
+        }
+    }
+
+    state read_new_order_message_order_optional_fields_group {
+        packet.extract(hdr.new_order_message_order_optional_fields_group_header);
+        meta.new_order_message_order_optional_fields_group_remaining = hdr.new_order_message_order_optional_fields_group_header.num_in_group;
+        transition select(meta.new_order_message_order_optional_fields_group_remaining) {
+            8w0: read_new_order_message_order_clearing_fields_group;
+            default: parse_new_order_message_order_optional_fields_group;
+        }
+    }
+
+    state parse_new_order_message_order_optional_fields_group {
+        packet.extract(hdr.new_order_message_order_optional_fields_group.next);
+        meta.new_order_message_order_optional_fields_group_remaining = meta.new_order_message_order_optional_fields_group_remaining - 1;
+        transition select(meta.new_order_message_order_optional_fields_group_remaining) {
+            8w0: read_new_order_message_order_clearing_fields_group;
+            default: parse_new_order_message_order_optional_fields_group;
+        }
+    }
+
+    state read_new_order_message_order_clearing_fields_group {
+        packet.extract(hdr.new_order_message_order_clearing_fields_group_header);
+        meta.new_order_message_order_clearing_fields_group_remaining = hdr.new_order_message_order_clearing_fields_group_header.num_in_group;
+        transition select(meta.new_order_message_order_clearing_fields_group_remaining) {
+            8w0: read_new_order_message_additional_infos_group;
+            default: parse_new_order_message_order_clearing_fields_group;
+        }
+    }
+
+    state parse_new_order_message_order_clearing_fields_group {
+        packet.extract(hdr.new_order_message_order_clearing_fields_group.next);
+        meta.new_order_message_order_clearing_fields_group_remaining = meta.new_order_message_order_clearing_fields_group_remaining - 1;
+        transition select(meta.new_order_message_order_clearing_fields_group_remaining) {
+            8w0: read_new_order_message_additional_infos_group;
+            default: parse_new_order_message_order_clearing_fields_group;
+        }
+    }
+
+    state read_new_order_message_additional_infos_group {
+        packet.extract(hdr.new_order_message_additional_infos_group_header);
+        meta.new_order_message_additional_infos_group_remaining = hdr.new_order_message_additional_infos_group_header.num_in_group_3;
+        transition select(meta.new_order_message_additional_infos_group_remaining) {
+            8w0: accept;
+            default: parse_new_order_message_additional_infos_group;
+        }
+    }
+
+    state parse_new_order_message_additional_infos_group {
+        packet.extract(hdr.new_order_message_additional_infos_group.next);
+        meta.new_order_message_additional_infos_group_remaining = meta.new_order_message_additional_infos_group_remaining - 1;
+        transition select(meta.new_order_message_additional_infos_group_remaining) {
+            8w0: accept;
+            default: parse_new_order_message_additional_infos_group;
+        }
     }
 
     state parse_ack_message {
         packet.extract(hdr.ack_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.ack_message_mifid_fields_group_remaining = hdr.ack_message.num_in_group;
+        transition select(meta.ack_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_ack_message_mifid_fields_group;
+        }
+    }
+
+    state parse_ack_message_mifid_fields_group {
+        packet.extract(hdr.ack_message_mifid_fields_group.next);
+        meta.ack_message_mifid_fields_group_remaining = meta.ack_message_mifid_fields_group_remaining - 1;
+        transition select(meta.ack_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_ack_message_mifid_fields_group;
+        }
     }
 
     state parse_fill_message {
         packet.extract(hdr.fill_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.fill_message_fill_optional_field_group_remaining = hdr.fill_message.num_in_group;
+        transition select(meta.fill_message_fill_optional_field_group_remaining) {
+            8w0: read_fill_message_fill_strategy_field_group;
+            default: parse_fill_message_fill_optional_field_group;
+        }
+    }
+
+    state parse_fill_message_fill_optional_field_group {
+        packet.extract(hdr.fill_message_fill_optional_field_group.next);
+        meta.fill_message_fill_optional_field_group_remaining = meta.fill_message_fill_optional_field_group_remaining - 1;
+        transition select(meta.fill_message_fill_optional_field_group_remaining) {
+            8w0: read_fill_message_fill_strategy_field_group;
+            default: parse_fill_message_fill_optional_field_group;
+        }
+    }
+
+    state read_fill_message_fill_strategy_field_group {
+        packet.extract(hdr.fill_message_fill_strategy_field_group_header);
+        meta.fill_message_fill_strategy_field_group_remaining = hdr.fill_message_fill_strategy_field_group_header.num_in_group;
+        transition select(meta.fill_message_fill_strategy_field_group_remaining) {
+            8w0: read_fill_message_mifid_fields_group;
+            default: parse_fill_message_fill_strategy_field_group;
+        }
+    }
+
+    state parse_fill_message_fill_strategy_field_group {
+        packet.extract(hdr.fill_message_fill_strategy_field_group.next);
+        meta.fill_message_fill_strategy_field_group_remaining = meta.fill_message_fill_strategy_field_group_remaining - 1;
+        transition select(meta.fill_message_fill_strategy_field_group_remaining) {
+            8w0: read_fill_message_mifid_fields_group;
+            default: parse_fill_message_fill_strategy_field_group;
+        }
+    }
+
+    state read_fill_message_mifid_fields_group {
+        packet.extract(hdr.fill_message_mifid_fields_group_header);
+        meta.fill_message_mifid_fields_group_remaining = hdr.fill_message_mifid_fields_group_header.num_in_group;
+        transition select(meta.fill_message_mifid_fields_group_remaining) {
+            8w0: read_fill_message_fill_derivatives_field_group;
+            default: parse_fill_message_mifid_fields_group;
+        }
+    }
+
+    state parse_fill_message_mifid_fields_group {
+        packet.extract(hdr.fill_message_mifid_fields_group.next);
+        meta.fill_message_mifid_fields_group_remaining = meta.fill_message_mifid_fields_group_remaining - 1;
+        transition select(meta.fill_message_mifid_fields_group_remaining) {
+            8w0: read_fill_message_fill_derivatives_field_group;
+            default: parse_fill_message_mifid_fields_group;
+        }
+    }
+
+    state read_fill_message_fill_derivatives_field_group {
+        packet.extract(hdr.fill_message_fill_derivatives_field_group_header);
+        meta.fill_message_fill_derivatives_field_group_remaining = hdr.fill_message_fill_derivatives_field_group_header.num_in_group;
+        transition select(meta.fill_message_fill_derivatives_field_group_remaining) {
+            8w0: accept;
+            default: parse_fill_message_fill_derivatives_field_group;
+        }
+    }
+
+    state parse_fill_message_fill_derivatives_field_group {
+        packet.extract(hdr.fill_message_fill_derivatives_field_group.next);
+        meta.fill_message_fill_derivatives_field_group_remaining = meta.fill_message_fill_derivatives_field_group_remaining - 1;
+        transition select(meta.fill_message_fill_derivatives_field_group_remaining) {
+            8w0: accept;
+            default: parse_fill_message_fill_derivatives_field_group;
+        }
     }
 
     state parse_kill_message {
         packet.extract(hdr.kill_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.kill_message_mifid_fields_group_remaining = hdr.kill_message.num_in_group;
+        transition select(meta.kill_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_kill_message_mifid_fields_group;
+        }
+    }
+
+    state parse_kill_message_mifid_fields_group {
+        packet.extract(hdr.kill_message_mifid_fields_group.next);
+        meta.kill_message_mifid_fields_group_remaining = meta.kill_message_mifid_fields_group_remaining - 1;
+        transition select(meta.kill_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_kill_message_mifid_fields_group;
+        }
     }
 
     state parse_cancel_replace_message {
         packet.extract(hdr.cancel_replace_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.cancel_replace_message_new_order_message_free_text_section_group_remaining = hdr.cancel_replace_message.num_in_group;
+        transition select(meta.cancel_replace_message_new_order_message_free_text_section_group_remaining) {
+            8w0: read_cancel_replace_message_cancel_replace_optional_field_group;
+            default: parse_cancel_replace_message_new_order_message_free_text_section_group;
+        }
+    }
+
+    state parse_cancel_replace_message_new_order_message_free_text_section_group {
+        packet.extract(hdr.cancel_replace_message_new_order_message_free_text_section_group.next);
+        meta.cancel_replace_message_new_order_message_free_text_section_group_remaining = meta.cancel_replace_message_new_order_message_free_text_section_group_remaining - 1;
+        transition select(meta.cancel_replace_message_new_order_message_free_text_section_group_remaining) {
+            8w0: read_cancel_replace_message_cancel_replace_optional_field_group;
+            default: parse_cancel_replace_message_new_order_message_free_text_section_group;
+        }
+    }
+
+    state read_cancel_replace_message_cancel_replace_optional_field_group {
+        packet.extract(hdr.cancel_replace_message_cancel_replace_optional_field_group_header);
+        meta.cancel_replace_message_cancel_replace_optional_field_group_remaining = hdr.cancel_replace_message_cancel_replace_optional_field_group_header.num_in_group;
+        transition select(meta.cancel_replace_message_cancel_replace_optional_field_group_remaining) {
+            8w0: read_cancel_replace_message_cancel_replace_clearing_fields_group;
+            default: parse_cancel_replace_message_cancel_replace_optional_field_group;
+        }
+    }
+
+    state parse_cancel_replace_message_cancel_replace_optional_field_group {
+        packet.extract(hdr.cancel_replace_message_cancel_replace_optional_field_group.next);
+        meta.cancel_replace_message_cancel_replace_optional_field_group_remaining = meta.cancel_replace_message_cancel_replace_optional_field_group_remaining - 1;
+        transition select(meta.cancel_replace_message_cancel_replace_optional_field_group_remaining) {
+            8w0: read_cancel_replace_message_cancel_replace_clearing_fields_group;
+            default: parse_cancel_replace_message_cancel_replace_optional_field_group;
+        }
+    }
+
+    state read_cancel_replace_message_cancel_replace_clearing_fields_group {
+        packet.extract(hdr.cancel_replace_message_cancel_replace_clearing_fields_group_header);
+        meta.cancel_replace_message_cancel_replace_clearing_fields_group_remaining = hdr.cancel_replace_message_cancel_replace_clearing_fields_group_header.num_in_group;
+        transition select(meta.cancel_replace_message_cancel_replace_clearing_fields_group_remaining) {
+            8w0: read_cancel_replace_message_additional_infos_group;
+            default: parse_cancel_replace_message_cancel_replace_clearing_fields_group;
+        }
+    }
+
+    state parse_cancel_replace_message_cancel_replace_clearing_fields_group {
+        packet.extract(hdr.cancel_replace_message_cancel_replace_clearing_fields_group.next);
+        meta.cancel_replace_message_cancel_replace_clearing_fields_group_remaining = meta.cancel_replace_message_cancel_replace_clearing_fields_group_remaining - 1;
+        transition select(meta.cancel_replace_message_cancel_replace_clearing_fields_group_remaining) {
+            8w0: read_cancel_replace_message_additional_infos_group;
+            default: parse_cancel_replace_message_cancel_replace_clearing_fields_group;
+        }
+    }
+
+    state read_cancel_replace_message_additional_infos_group {
+        packet.extract(hdr.cancel_replace_message_additional_infos_group_header);
+        meta.cancel_replace_message_additional_infos_group_remaining = hdr.cancel_replace_message_additional_infos_group_header.num_in_group_3;
+        transition select(meta.cancel_replace_message_additional_infos_group_remaining) {
+            8w0: accept;
+            default: parse_cancel_replace_message_additional_infos_group;
+        }
+    }
+
+    state parse_cancel_replace_message_additional_infos_group {
+        packet.extract(hdr.cancel_replace_message_additional_infos_group.next);
+        meta.cancel_replace_message_additional_infos_group_remaining = meta.cancel_replace_message_additional_infos_group_remaining - 1;
+        transition select(meta.cancel_replace_message_additional_infos_group_remaining) {
+            8w0: accept;
+            default: parse_cancel_replace_message_additional_infos_group;
+        }
     }
 
     state parse_reject_message {
         packet.extract(hdr.reject_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.reject_message_collar_fields_group_remaining = hdr.reject_message.num_in_group;
+        transition select(meta.reject_message_collar_fields_group_remaining) {
+            8w0: read_reject_message_mifid_fields_group;
+            default: parse_reject_message_collar_fields_group;
+        }
+    }
+
+    state parse_reject_message_collar_fields_group {
+        packet.extract(hdr.reject_message_collar_fields_group.next);
+        meta.reject_message_collar_fields_group_remaining = meta.reject_message_collar_fields_group_remaining - 1;
+        transition select(meta.reject_message_collar_fields_group_remaining) {
+            8w0: read_reject_message_mifid_fields_group;
+            default: parse_reject_message_collar_fields_group;
+        }
+    }
+
+    state read_reject_message_mifid_fields_group {
+        packet.extract(hdr.reject_message_mifid_fields_group_header);
+        meta.reject_message_mifid_fields_group_remaining = hdr.reject_message_mifid_fields_group_header.num_in_group;
+        transition select(meta.reject_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_reject_message_mifid_fields_group;
+        }
+    }
+
+    state parse_reject_message_mifid_fields_group {
+        packet.extract(hdr.reject_message_mifid_fields_group.next);
+        meta.reject_message_mifid_fields_group_remaining = meta.reject_message_mifid_fields_group_remaining - 1;
+        transition select(meta.reject_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_reject_message_mifid_fields_group;
+        }
     }
 
     state parse_quotes_message {
         packet.extract(hdr.quotes_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.quotes_message_mifid_short_codes_group_remaining = hdr.quotes_message.num_in_group;
+        transition select(meta.quotes_message_mifid_short_codes_group_remaining) {
+            8w0: read_quotes_message_clearing_dataset_group;
+            default: parse_quotes_message_mifid_short_codes_group;
+        }
+    }
+
+    state parse_quotes_message_mifid_short_codes_group {
+        packet.extract(hdr.quotes_message_mifid_short_codes_group.next);
+        meta.quotes_message_mifid_short_codes_group_remaining = meta.quotes_message_mifid_short_codes_group_remaining - 1;
+        transition select(meta.quotes_message_mifid_short_codes_group_remaining) {
+            8w0: read_quotes_message_clearing_dataset_group;
+            default: parse_quotes_message_mifid_short_codes_group;
+        }
+    }
+
+    state read_quotes_message_clearing_dataset_group {
+        packet.extract(hdr.quotes_message_clearing_dataset_group_header);
+        meta.quotes_message_clearing_dataset_group_remaining = hdr.quotes_message_clearing_dataset_group_header.num_in_group;
+        transition select(meta.quotes_message_clearing_dataset_group_remaining) {
+            8w0: read_quotes_message_quotes_rep_group;
+            default: parse_quotes_message_clearing_dataset_group;
+        }
+    }
+
+    state parse_quotes_message_clearing_dataset_group {
+        packet.extract(hdr.quotes_message_clearing_dataset_group.next);
+        meta.quotes_message_clearing_dataset_group_remaining = meta.quotes_message_clearing_dataset_group_remaining - 1;
+        transition select(meta.quotes_message_clearing_dataset_group_remaining) {
+            8w0: read_quotes_message_quotes_rep_group;
+            default: parse_quotes_message_clearing_dataset_group;
+        }
+    }
+
+    state read_quotes_message_quotes_rep_group {
+        packet.extract(hdr.quotes_message_quotes_rep_group_header);
+        meta.quotes_message_quotes_rep_group_remaining = hdr.quotes_message_quotes_rep_group_header.num_in_group;
+        transition select(meta.quotes_message_quotes_rep_group_remaining) {
+            8w0: accept;
+            default: parse_quotes_message_quotes_rep_group;
+        }
+    }
+
+    state parse_quotes_message_quotes_rep_group {
+        packet.extract(hdr.quotes_message_quotes_rep_group.next);
+        meta.quotes_message_quotes_rep_group_remaining = meta.quotes_message_quotes_rep_group_remaining - 1;
+        transition select(meta.quotes_message_quotes_rep_group_remaining) {
+            8w0: accept;
+            default: parse_quotes_message_quotes_rep_group;
+        }
     }
 
     state parse_quote_ack_message {
         packet.extract(hdr.quote_ack_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.quote_ack_message_quote_acks_group_remaining = hdr.quote_ack_message.num_in_group;
+        transition select(meta.quote_ack_message_quote_acks_group_remaining) {
+            8w0: accept;
+            default: parse_quote_ack_message_quote_acks_group;
+        }
+    }
+
+    state parse_quote_ack_message_quote_acks_group {
+        packet.extract(hdr.quote_ack_message_quote_acks_group.next);
+        meta.quote_ack_message_quote_acks_group_remaining = meta.quote_ack_message_quote_acks_group_remaining - 1;
+        transition select(meta.quote_ack_message_quote_acks_group_remaining) {
+            8w0: accept;
+            default: parse_quote_ack_message_quote_acks_group;
+        }
     }
 
     state parse_quote_request_message {
         packet.extract(hdr.quote_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_request_message {
         packet.extract(hdr.cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_message {
         packet.extract(hdr.mass_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_ack_message {
         packet.extract(hdr.mass_cancel_ack_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mass_cancel_ack_message_mifid_fields_group_remaining = hdr.mass_cancel_ack_message.num_in_group;
+        transition select(meta.mass_cancel_ack_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_mass_cancel_ack_message_mifid_fields_group;
+        }
+    }
+
+    state parse_mass_cancel_ack_message_mifid_fields_group {
+        packet.extract(hdr.mass_cancel_ack_message_mifid_fields_group.next);
+        meta.mass_cancel_ack_message_mifid_fields_group_remaining = meta.mass_cancel_ack_message_mifid_fields_group_remaining - 1;
+        transition select(meta.mass_cancel_ack_message_mifid_fields_group_remaining) {
+            8w0: accept;
+            default: parse_mass_cancel_ack_message_mifid_fields_group;
+        }
     }
 
     state parse_open_order_request_message {
         packet.extract(hdr.open_order_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ownership_request_ack_message {
         packet.extract(hdr.ownership_request_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ownership_request_message {
         packet.extract(hdr.ownership_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_bust_notification_message {
         packet.extract(hdr.trade_bust_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_collar_breach_confirmation_message {
         packet.extract(hdr.collar_breach_confirmation_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_price_input_message {
         packet.extract(hdr.price_input_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_liquidity_provider_command_message {
         packet.extract(hdr.liquidity_provider_command_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ask_for_quote_message {
         packet.extract(hdr.ask_for_quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_request_for_execution_message {
         packet.extract(hdr.request_for_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_rfq_notification_message {
         packet.extract(hdr.rfq_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_rfq_matching_status_message {
         packet.extract(hdr.rfq_matching_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_rfqlp_matching_status_message {
         packet.extract(hdr.rfqlp_matching_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_user_notification_message {
         packet.extract(hdr.user_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mm_sign_in_message {
         packet.extract(hdr.mm_sign_in_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mm_sign_in_ack_message {
         packet.extract(hdr.mm_sign_in_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_synchronization_list_message {
         packet.extract(hdr.instrument_synchronization_list_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.instrument_synchronization_list_message_instrument_synchronization_group_remaining = hdr.instrument_synchronization_list_message.num_in_group;
+        transition select(meta.instrument_synchronization_list_message_instrument_synchronization_group_remaining) {
+            8w0: accept;
+            default: parse_instrument_synchronization_list_message_instrument_synchronization_group;
+        }
+    }
+
+    state parse_instrument_synchronization_list_message_instrument_synchronization_group {
+        packet.extract(hdr.instrument_synchronization_list_message_instrument_synchronization_group.next);
+        meta.instrument_synchronization_list_message_instrument_synchronization_group_remaining = meta.instrument_synchronization_list_message_instrument_synchronization_group_remaining - 1;
+        transition select(meta.instrument_synchronization_list_message_instrument_synchronization_group_remaining) {
+            8w0: accept;
+            default: parse_instrument_synchronization_list_message_instrument_synchronization_group;
+        }
     }
 
     state parse_synchronization_time_message {
         packet.extract(hdr.synchronization_time_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_definition_request_message {
         packet.extract(hdr.security_definition_request_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.security_definition_request_message_strategy_legs_group_remaining = hdr.security_definition_request_message.num_in_group;
+        transition select(meta.security_definition_request_message_strategy_legs_group_remaining) {
+            8w0: accept;
+            default: parse_security_definition_request_message_strategy_legs_group;
+        }
+    }
+
+    state parse_security_definition_request_message_strategy_legs_group {
+        packet.extract(hdr.security_definition_request_message_strategy_legs_group.next);
+        meta.security_definition_request_message_strategy_legs_group_remaining = meta.security_definition_request_message_strategy_legs_group_remaining - 1;
+        transition select(meta.security_definition_request_message_strategy_legs_group_remaining) {
+            8w0: accept;
+            default: parse_security_definition_request_message_strategy_legs_group;
+        }
     }
 
     state parse_security_definition_ack_message {
         packet.extract(hdr.security_definition_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mm_protection_request_message {
         packet.extract(hdr.mm_protection_request_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mm_protection_request_message_mmp_request_group_remaining = hdr.mm_protection_request_message.num_in_group;
+        transition select(meta.mm_protection_request_message_mmp_request_group_remaining) {
+            8w0: accept;
+            default: parse_mm_protection_request_message_mmp_request_group;
+        }
+    }
+
+    state parse_mm_protection_request_message_mmp_request_group {
+        packet.extract(hdr.mm_protection_request_message_mmp_request_group.next);
+        meta.mm_protection_request_message_mmp_request_group_remaining = meta.mm_protection_request_message_mmp_request_group_remaining - 1;
+        transition select(meta.mm_protection_request_message_mmp_request_group_remaining) {
+            8w0: accept;
+            default: parse_mm_protection_request_message_mmp_request_group;
+        }
     }
 
     state parse_mm_protection_ack_message {
         packet.extract(hdr.mm_protection_ack_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mm_protection_ack_message_mmp_ack_group_remaining = hdr.mm_protection_ack_message.num_in_group;
+        transition select(meta.mm_protection_ack_message_mmp_ack_group_remaining) {
+            8w0: accept;
+            default: parse_mm_protection_ack_message_mmp_ack_group;
+        }
+    }
+
+    state parse_mm_protection_ack_message_mmp_ack_group {
+        packet.extract(hdr.mm_protection_ack_message_mmp_ack_group.next);
+        meta.mm_protection_ack_message_mmp_ack_group_remaining = meta.mm_protection_ack_message_mmp_ack_group_remaining - 1;
+        transition select(meta.mm_protection_ack_message_mmp_ack_group_remaining) {
+            8w0: accept;
+            default: parse_mm_protection_ack_message_mmp_ack_group;
+        }
     }
 
     state parse_new_wholesale_order_message {
         packet.extract(hdr.new_wholesale_order_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.new_wholesale_order_message_wholesale_legs_group_remaining = hdr.new_wholesale_order_message.num_in_group;
+        transition select(meta.new_wholesale_order_message_wholesale_legs_group_remaining) {
+            8w0: read_new_wholesale_order_message_wholesale_client_group;
+            default: parse_new_wholesale_order_message_wholesale_legs_group;
+        }
+    }
+
+    state parse_new_wholesale_order_message_wholesale_legs_group {
+        packet.extract(hdr.new_wholesale_order_message_wholesale_legs_group.next);
+        meta.new_wholesale_order_message_wholesale_legs_group_remaining = meta.new_wholesale_order_message_wholesale_legs_group_remaining - 1;
+        transition select(meta.new_wholesale_order_message_wholesale_legs_group_remaining) {
+            8w0: read_new_wholesale_order_message_wholesale_client_group;
+            default: parse_new_wholesale_order_message_wholesale_legs_group;
+        }
+    }
+
+    state read_new_wholesale_order_message_wholesale_client_group {
+        packet.extract(hdr.new_wholesale_order_message_wholesale_client_group_header);
+        meta.new_wholesale_order_message_wholesale_client_group_remaining = hdr.new_wholesale_order_message_wholesale_client_group_header.num_in_group;
+        transition select(meta.new_wholesale_order_message_wholesale_client_group_remaining) {
+            8w0: accept;
+            default: parse_new_wholesale_order_message_wholesale_client_group;
+        }
+    }
+
+    state parse_new_wholesale_order_message_wholesale_client_group {
+        packet.extract(hdr.new_wholesale_order_message_wholesale_client_group.next);
+        meta.new_wholesale_order_message_wholesale_client_group_remaining = meta.new_wholesale_order_message_wholesale_client_group_remaining - 1;
+        transition select(meta.new_wholesale_order_message_wholesale_client_group_remaining) {
+            8w0: accept;
+            default: parse_new_wholesale_order_message_wholesale_client_group;
+        }
     }
 
     state parse_wholesale_order_ack_message {
         packet.extract(hdr.wholesale_order_ack_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.wholesale_order_ack_message_wholesale_ack_legs_group_remaining = hdr.wholesale_order_ack_message.num_in_group;
+        transition select(meta.wholesale_order_ack_message_wholesale_ack_legs_group_remaining) {
+            8w0: read_wholesale_order_ack_message_wholesale_ack_clearing_group;
+            default: parse_wholesale_order_ack_message_wholesale_ack_legs_group;
+        }
+    }
+
+    state parse_wholesale_order_ack_message_wholesale_ack_legs_group {
+        packet.extract(hdr.wholesale_order_ack_message_wholesale_ack_legs_group.next);
+        meta.wholesale_order_ack_message_wholesale_ack_legs_group_remaining = meta.wholesale_order_ack_message_wholesale_ack_legs_group_remaining - 1;
+        transition select(meta.wholesale_order_ack_message_wholesale_ack_legs_group_remaining) {
+            8w0: read_wholesale_order_ack_message_wholesale_ack_clearing_group;
+            default: parse_wholesale_order_ack_message_wholesale_ack_legs_group;
+        }
+    }
+
+    state read_wholesale_order_ack_message_wholesale_ack_clearing_group {
+        packet.extract(hdr.wholesale_order_ack_message_wholesale_ack_clearing_group_header);
+        meta.wholesale_order_ack_message_wholesale_ack_clearing_group_remaining = hdr.wholesale_order_ack_message_wholesale_ack_clearing_group_header.num_in_group;
+        transition select(meta.wholesale_order_ack_message_wholesale_ack_clearing_group_remaining) {
+            8w0: accept;
+            default: parse_wholesale_order_ack_message_wholesale_ack_clearing_group;
+        }
+    }
+
+    state parse_wholesale_order_ack_message_wholesale_ack_clearing_group {
+        packet.extract(hdr.wholesale_order_ack_message_wholesale_ack_clearing_group.next);
+        meta.wholesale_order_ack_message_wholesale_ack_clearing_group_remaining = meta.wholesale_order_ack_message_wholesale_ack_clearing_group_remaining - 1;
+        transition select(meta.wholesale_order_ack_message_wholesale_ack_clearing_group_remaining) {
+            8w0: accept;
+            default: parse_wholesale_order_ack_message_wholesale_ack_clearing_group;
+        }
     }
 
     state parse_request_for_implied_execution_message {
         packet.extract(hdr.request_for_implied_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cross_order_message {
         packet.extract(hdr.cross_order_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.cross_order_message_new_order_message_free_text_section_group_remaining = hdr.cross_order_message.num_in_group;
+        transition select(meta.cross_order_message_new_order_message_free_text_section_group_remaining) {
+            8w0: read_cross_order_message_mifid_short_codes_group;
+            default: parse_cross_order_message_new_order_message_free_text_section_group;
+        }
+    }
+
+    state parse_cross_order_message_new_order_message_free_text_section_group {
+        packet.extract(hdr.cross_order_message_new_order_message_free_text_section_group.next);
+        meta.cross_order_message_new_order_message_free_text_section_group_remaining = meta.cross_order_message_new_order_message_free_text_section_group_remaining - 1;
+        transition select(meta.cross_order_message_new_order_message_free_text_section_group_remaining) {
+            8w0: read_cross_order_message_mifid_short_codes_group;
+            default: parse_cross_order_message_new_order_message_free_text_section_group;
+        }
+    }
+
+    state read_cross_order_message_mifid_short_codes_group {
+        packet.extract(hdr.cross_order_message_mifid_short_codes_group_header);
+        meta.cross_order_message_mifid_short_codes_group_remaining = hdr.cross_order_message_mifid_short_codes_group_header.num_in_group;
+        transition select(meta.cross_order_message_mifid_short_codes_group_remaining) {
+            8w0: read_cross_order_message_cross_clearing_fields_group;
+            default: parse_cross_order_message_mifid_short_codes_group;
+        }
+    }
+
+    state parse_cross_order_message_mifid_short_codes_group {
+        packet.extract(hdr.cross_order_message_mifid_short_codes_group.next);
+        meta.cross_order_message_mifid_short_codes_group_remaining = meta.cross_order_message_mifid_short_codes_group_remaining - 1;
+        transition select(meta.cross_order_message_mifid_short_codes_group_remaining) {
+            8w0: read_cross_order_message_cross_clearing_fields_group;
+            default: parse_cross_order_message_mifid_short_codes_group;
+        }
+    }
+
+    state read_cross_order_message_cross_clearing_fields_group {
+        packet.extract(hdr.cross_order_message_cross_clearing_fields_group_header);
+        meta.cross_order_message_cross_clearing_fields_group_remaining = hdr.cross_order_message_cross_clearing_fields_group_header.num_in_group;
+        transition select(meta.cross_order_message_cross_clearing_fields_group_remaining) {
+            8w0: read_cross_order_message_cross_strategy_fields_group;
+            default: parse_cross_order_message_cross_clearing_fields_group;
+        }
+    }
+
+    state parse_cross_order_message_cross_clearing_fields_group {
+        packet.extract(hdr.cross_order_message_cross_clearing_fields_group.next);
+        meta.cross_order_message_cross_clearing_fields_group_remaining = meta.cross_order_message_cross_clearing_fields_group_remaining - 1;
+        transition select(meta.cross_order_message_cross_clearing_fields_group_remaining) {
+            8w0: read_cross_order_message_cross_strategy_fields_group;
+            default: parse_cross_order_message_cross_clearing_fields_group;
+        }
+    }
+
+    state read_cross_order_message_cross_strategy_fields_group {
+        packet.extract(hdr.cross_order_message_cross_strategy_fields_group_header);
+        meta.cross_order_message_cross_strategy_fields_group_remaining = hdr.cross_order_message_cross_strategy_fields_group_header.num_in_group;
+        transition select(meta.cross_order_message_cross_strategy_fields_group_remaining) {
+            8w0: accept;
+            default: parse_cross_order_message_cross_strategy_fields_group;
+        }
+    }
+
+    state parse_cross_order_message_cross_strategy_fields_group {
+        packet.extract(hdr.cross_order_message_cross_strategy_fields_group.next);
+        meta.cross_order_message_cross_strategy_fields_group_remaining = meta.cross_order_message_cross_strategy_fields_group_remaining - 1;
+        transition select(meta.cross_order_message_cross_strategy_fields_group_remaining) {
+            8w0: accept;
+            default: parse_cross_order_message_cross_strategy_fields_group;
+        }
     }
 
     state parse_rfq_audit_message {
         packet.extract(hdr.rfq_audit_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.rfq_audit_message_rfq_counterparts_group_remaining = hdr.rfq_audit_message.num_in_group;
+        transition select(meta.rfq_audit_message_rfq_counterparts_group_remaining) {
+            8w0: accept;
+            default: parse_rfq_audit_message_rfq_counterparts_group;
+        }
+    }
+
+    state parse_rfq_audit_message_rfq_counterparts_group {
+        packet.extract(hdr.rfq_audit_message_rfq_counterparts_group.next);
+        meta.rfq_audit_message_rfq_counterparts_group_remaining = meta.rfq_audit_message_rfq_counterparts_group_remaining - 1;
+        transition select(meta.rfq_audit_message_rfq_counterparts_group_remaining) {
+            8w0: accept;
+            default: parse_rfq_audit_message_rfq_counterparts_group;
+        }
     }
 
     state parse_wave_for_liquidity_message {
         packet.extract(hdr.wave_for_liquidity_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_wave_for_liquidity_notification_message {
         packet.extract(hdr.wave_for_liquidity_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_message {
         packet.extract(hdr.logon_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_ack_message {
         packet.extract(hdr.logon_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_reject_message {
         packet.extract(hdr.logon_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_message {
         packet.extract(hdr.logout_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_technical_reject_message {
         packet.extract(hdr.technical_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_declaration_entry_message {
         packet.extract(hdr.declaration_entry_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_declaration_entry_ack_message {
         packet.extract(hdr.declaration_entry_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_declaration_notice_message {
         packet.extract(hdr.declaration_notice_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_declaration_cancel_and_refusal_message {
         packet.extract(hdr.declaration_cancel_and_refusal_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_fund_price_input_message {
         packet.extract(hdr.fund_price_input_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_fund_price_input_ack_message {
         packet.extract(hdr.fund_price_input_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_declaration_entry_reject_message {
         packet.extract(hdr.declaration_entry_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -1856,7 +2701,12 @@ control EuronextOptiqOrderentrygatewayVerifyChecksum(inout headers_t hdr, inout 
 
 control EuronextOptiqOrderentrygatewayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -1874,17 +2724,52 @@ control EuronextOptiqOrderentrygatewayDeparser(packet_out packet, in headers_t h
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.new_order_message);
+        packet.emit(hdr.new_order_message_new_order_message_free_text_section_group);
+        packet.emit(hdr.new_order_message_mifid_short_codes_group_header);
+        packet.emit(hdr.new_order_message_mifid_short_codes_group);
+        packet.emit(hdr.new_order_message_order_optional_fields_group_header);
+        packet.emit(hdr.new_order_message_order_optional_fields_group);
+        packet.emit(hdr.new_order_message_order_clearing_fields_group_header);
+        packet.emit(hdr.new_order_message_order_clearing_fields_group);
+        packet.emit(hdr.new_order_message_additional_infos_group_header);
+        packet.emit(hdr.new_order_message_additional_infos_group);
         packet.emit(hdr.ack_message);
+        packet.emit(hdr.ack_message_mifid_fields_group);
         packet.emit(hdr.fill_message);
+        packet.emit(hdr.fill_message_fill_optional_field_group);
+        packet.emit(hdr.fill_message_fill_strategy_field_group_header);
+        packet.emit(hdr.fill_message_fill_strategy_field_group);
+        packet.emit(hdr.fill_message_mifid_fields_group_header);
+        packet.emit(hdr.fill_message_mifid_fields_group);
+        packet.emit(hdr.fill_message_fill_derivatives_field_group_header);
+        packet.emit(hdr.fill_message_fill_derivatives_field_group);
         packet.emit(hdr.kill_message);
+        packet.emit(hdr.kill_message_mifid_fields_group);
         packet.emit(hdr.cancel_replace_message);
+        packet.emit(hdr.cancel_replace_message_new_order_message_free_text_section_group);
+        packet.emit(hdr.cancel_replace_message_cancel_replace_optional_field_group_header);
+        packet.emit(hdr.cancel_replace_message_cancel_replace_optional_field_group);
+        packet.emit(hdr.cancel_replace_message_cancel_replace_clearing_fields_group_header);
+        packet.emit(hdr.cancel_replace_message_cancel_replace_clearing_fields_group);
+        packet.emit(hdr.cancel_replace_message_additional_infos_group_header);
+        packet.emit(hdr.cancel_replace_message_additional_infos_group);
         packet.emit(hdr.reject_message);
+        packet.emit(hdr.reject_message_collar_fields_group);
+        packet.emit(hdr.reject_message_mifid_fields_group_header);
+        packet.emit(hdr.reject_message_mifid_fields_group);
         packet.emit(hdr.quotes_message);
+        packet.emit(hdr.quotes_message_mifid_short_codes_group);
+        packet.emit(hdr.quotes_message_clearing_dataset_group_header);
+        packet.emit(hdr.quotes_message_clearing_dataset_group);
+        packet.emit(hdr.quotes_message_quotes_rep_group_header);
+        packet.emit(hdr.quotes_message_quotes_rep_group);
         packet.emit(hdr.quote_ack_message);
+        packet.emit(hdr.quote_ack_message_quote_acks_group);
         packet.emit(hdr.quote_request_message);
         packet.emit(hdr.cancel_request_message);
         packet.emit(hdr.mass_cancel_message);
         packet.emit(hdr.mass_cancel_ack_message);
+        packet.emit(hdr.mass_cancel_ack_message_mifid_fields_group);
         packet.emit(hdr.open_order_request_message);
         packet.emit(hdr.ownership_request_ack_message);
         packet.emit(hdr.ownership_request_message);
@@ -1901,16 +2786,34 @@ control EuronextOptiqOrderentrygatewayDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.mm_sign_in_message);
         packet.emit(hdr.mm_sign_in_ack_message);
         packet.emit(hdr.instrument_synchronization_list_message);
+        packet.emit(hdr.instrument_synchronization_list_message_instrument_synchronization_group);
         packet.emit(hdr.synchronization_time_message);
         packet.emit(hdr.security_definition_request_message);
+        packet.emit(hdr.security_definition_request_message_strategy_legs_group);
         packet.emit(hdr.security_definition_ack_message);
         packet.emit(hdr.mm_protection_request_message);
+        packet.emit(hdr.mm_protection_request_message_mmp_request_group);
         packet.emit(hdr.mm_protection_ack_message);
+        packet.emit(hdr.mm_protection_ack_message_mmp_ack_group);
         packet.emit(hdr.new_wholesale_order_message);
+        packet.emit(hdr.new_wholesale_order_message_wholesale_legs_group);
+        packet.emit(hdr.new_wholesale_order_message_wholesale_client_group_header);
+        packet.emit(hdr.new_wholesale_order_message_wholesale_client_group);
         packet.emit(hdr.wholesale_order_ack_message);
+        packet.emit(hdr.wholesale_order_ack_message_wholesale_ack_legs_group);
+        packet.emit(hdr.wholesale_order_ack_message_wholesale_ack_clearing_group_header);
+        packet.emit(hdr.wholesale_order_ack_message_wholesale_ack_clearing_group);
         packet.emit(hdr.request_for_implied_execution_message);
         packet.emit(hdr.cross_order_message);
+        packet.emit(hdr.cross_order_message_new_order_message_free_text_section_group);
+        packet.emit(hdr.cross_order_message_mifid_short_codes_group_header);
+        packet.emit(hdr.cross_order_message_mifid_short_codes_group);
+        packet.emit(hdr.cross_order_message_cross_clearing_fields_group_header);
+        packet.emit(hdr.cross_order_message_cross_clearing_fields_group);
+        packet.emit(hdr.cross_order_message_cross_strategy_fields_group_header);
+        packet.emit(hdr.cross_order_message_cross_strategy_fields_group);
         packet.emit(hdr.rfq_audit_message);
+        packet.emit(hdr.rfq_audit_message_rfq_counterparts_group);
         packet.emit(hdr.wave_for_liquidity_message);
         packet.emit(hdr.wave_for_liquidity_notification_message);
         packet.emit(hdr.logon_message);

@@ -123,6 +123,7 @@ header clear_book_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -152,6 +153,7 @@ parser MemxequitiesMemoirtopofbookParser(packet_in packet, out headers_t hdr, in
 
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_message.template_id) {
             8w1: parse_instrument_directory_message;
             8w2: parse_reg_sho_restriction_message;
@@ -170,56 +172,67 @@ parser MemxequitiesMemoirtopofbookParser(packet_in packet, out headers_t hdr, in
 
     state parse_instrument_directory_message {
         packet.extract(hdr.instrument_directory_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reg_sho_restriction_message {
         packet.extract(hdr.reg_sho_restriction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_trading_status_message {
         packet.extract(hdr.security_trading_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_complete_message {
         packet.extract(hdr.snapshot_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_session_status_message {
         packet.extract(hdr.trading_session_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_bid_offer_message {
         packet.extract(hdr.best_bid_offer_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_bid_message {
         packet.extract(hdr.best_bid_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_offer_message {
         packet.extract(hdr.best_offer_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_bid_short_message {
         packet.extract(hdr.best_bid_short_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_best_offer_short_message {
         packet.extract(hdr.best_offer_short_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_clear_book_message {
         packet.extract(hdr.clear_book_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -232,7 +245,12 @@ control MemxequitiesMemoirtopofbookVerifyChecksum(inout headers_t hdr, inout met
 
 control MemxequitiesMemoirtopofbookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

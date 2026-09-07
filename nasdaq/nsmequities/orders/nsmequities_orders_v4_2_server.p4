@@ -188,6 +188,7 @@ header sequenced_trade_now_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -227,21 +228,25 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_accepted_packet {
         packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_data_packet {
         packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
             8w0x41: parse_accepted_message;
@@ -264,76 +269,91 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_accepted_message {
         packet.extract(hdr.accepted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replaced_message {
         packet.extract(hdr.replaced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_canceled_message {
         packet.extract(hdr.canceled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_aiq_cancelled_message {
         packet.extract(hdr.aiq_cancelled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_executed_message {
         packet.extract(hdr.executed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_broken_trade_message {
         packet.extract(hdr.broken_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_executed_with_reference_price_message {
         packet.extract(hdr.executed_with_reference_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_correction_message {
         packet.extract(hdr.trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_rejected_order_message {
         packet.extract(hdr.rejected_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_pending_message {
         packet.extract(hdr.cancel_pending_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_reject_message {
         packet.extract(hdr.cancel_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_priority_update_message {
         packet.extract(hdr.order_priority_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modified_message {
         packet.extract(hdr.order_modified_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_trade_now_message {
         packet.extract(hdr.sequenced_trade_now_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -346,7 +366,12 @@ control NsmequitiesOrdersServerVerifyChecksum(inout headers_t hdr, inout metadat
 
 control NsmequitiesOrdersServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

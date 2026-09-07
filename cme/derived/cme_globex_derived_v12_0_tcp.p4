@@ -54,6 +54,9 @@ header md_incremental_refresh_spectrum_t {
     bit<1> end_of_event;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_t {
     bit<8> md_entry_type_spectrum_entry_type;
     bit<280> financial_instrument_full_name;
     bit<160> symbol;
@@ -76,6 +79,9 @@ header md_incremental_refresh_ticker_t {
     bit<1> end_of_event;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_incremental_refresh_ticker_incremental_refresh_ticker_group_t {
     bit<8> md_entry_type_ticker_entry_type;
     bit<32> security_id;
     bit<160> symbol;
@@ -105,6 +111,9 @@ header md_snapshot_refresh_spectrum_t {
     bit<32> security_id;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_t {
     bit<8> md_entry_type_spectrum_entry_type;
     bit<64> md_entry_px;
     bit<64> md_entry_size;
@@ -127,6 +136,9 @@ header md_snapshot_refresh_ticker_t {
     bit<32> security_id;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_t {
     bit<8> md_entry_type_ticker_entry_type;
     bit<64> md_entry_px;
     bit<64> md_entry_size;
@@ -142,14 +154,23 @@ header global_day_roll_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_remaining;
+    bit<8> md_incremental_refresh_ticker_incremental_refresh_ticker_group_remaining;
+    bit<8> md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_remaining;
+    bit<8> md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_remaining;
 }
 
 struct headers_t {
     message_header_t message_header;
     md_incremental_refresh_spectrum_t md_incremental_refresh_spectrum;
+    md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_t md_incremental_refresh_spectrum_incremental_refresh_spectrum_group[MAX_MESSAGES];
     md_incremental_refresh_ticker_t md_incremental_refresh_ticker;
+    md_incremental_refresh_ticker_incremental_refresh_ticker_group_t md_incremental_refresh_ticker_incremental_refresh_ticker_group[MAX_MESSAGES];
     md_snapshot_refresh_spectrum_t md_snapshot_refresh_spectrum;
+    md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_t md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group[MAX_MESSAGES];
     md_snapshot_refresh_ticker_t md_snapshot_refresh_ticker;
+    md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_t md_snapshot_refresh_ticker_snapshot_refresh_ticker_group[MAX_MESSAGES];
     global_day_roll_t global_day_roll;
 }
 
@@ -168,26 +189,83 @@ parser CmeGlobexDerivedTcpParser(packet_in packet, out headers_t hdr, inout meta
 
     state parse_md_incremental_refresh_spectrum {
         packet.extract(hdr.md_incremental_refresh_spectrum);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_remaining = hdr.md_incremental_refresh_spectrum.num_in_group;
+        transition select(meta.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_spectrum_incremental_refresh_spectrum_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_spectrum_incremental_refresh_spectrum_group {
+        packet.extract(hdr.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group.next);
+        meta.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_remaining = meta.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_spectrum_incremental_refresh_spectrum_group;
+        }
     }
 
     state parse_md_incremental_refresh_ticker {
         packet.extract(hdr.md_incremental_refresh_ticker);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_ticker_incremental_refresh_ticker_group_remaining = hdr.md_incremental_refresh_ticker.num_in_group;
+        transition select(meta.md_incremental_refresh_ticker_incremental_refresh_ticker_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_ticker_incremental_refresh_ticker_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_ticker_incremental_refresh_ticker_group {
+        packet.extract(hdr.md_incremental_refresh_ticker_incremental_refresh_ticker_group.next);
+        meta.md_incremental_refresh_ticker_incremental_refresh_ticker_group_remaining = meta.md_incremental_refresh_ticker_incremental_refresh_ticker_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_ticker_incremental_refresh_ticker_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_ticker_incremental_refresh_ticker_group;
+        }
     }
 
     state parse_md_snapshot_refresh_spectrum {
         packet.extract(hdr.md_snapshot_refresh_spectrum);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_remaining = hdr.md_snapshot_refresh_spectrum.num_in_group;
+        transition select(meta.md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_remaining) {
+            8w0: accept;
+            default: parse_md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group;
+        }
+    }
+
+    state parse_md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group {
+        packet.extract(hdr.md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group.next);
+        meta.md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_remaining = meta.md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_remaining - 1;
+        transition select(meta.md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_remaining) {
+            8w0: accept;
+            default: parse_md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group;
+        }
     }
 
     state parse_md_snapshot_refresh_ticker {
         packet.extract(hdr.md_snapshot_refresh_ticker);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_remaining = hdr.md_snapshot_refresh_ticker.num_in_group;
+        transition select(meta.md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_remaining) {
+            8w0: accept;
+            default: parse_md_snapshot_refresh_ticker_snapshot_refresh_ticker_group;
+        }
+    }
+
+    state parse_md_snapshot_refresh_ticker_snapshot_refresh_ticker_group {
+        packet.extract(hdr.md_snapshot_refresh_ticker_snapshot_refresh_ticker_group.next);
+        meta.md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_remaining = meta.md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_remaining - 1;
+        transition select(meta.md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_remaining) {
+            8w0: accept;
+            default: parse_md_snapshot_refresh_ticker_snapshot_refresh_ticker_group;
+        }
     }
 
     state parse_global_day_roll {
         packet.extract(hdr.global_day_roll);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -200,7 +278,12 @@ control CmeGlobexDerivedTcpVerifyChecksum(inout headers_t hdr, inout metadata_t 
 
 control CmeGlobexDerivedTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -218,9 +301,13 @@ control CmeGlobexDerivedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.md_incremental_refresh_spectrum);
+        packet.emit(hdr.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group);
         packet.emit(hdr.md_incremental_refresh_ticker);
+        packet.emit(hdr.md_incremental_refresh_ticker_incremental_refresh_ticker_group);
         packet.emit(hdr.md_snapshot_refresh_spectrum);
+        packet.emit(hdr.md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group);
         packet.emit(hdr.md_snapshot_refresh_ticker);
+        packet.emit(hdr.md_snapshot_refresh_ticker_snapshot_refresh_ticker_group);
         packet.emit(hdr.global_day_roll);
     }
 }

@@ -151,6 +151,7 @@ header broken_trade_report_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -199,66 +200,79 @@ parser NtxoptionsTopofmarketParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_timestamp_message {
         packet.extract(hdr.timestamp_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_options_directory_message {
         packet.extract(hdr.options_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_security_open_message {
         packet.extract(hdr.security_open_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_best_bid_and_ask_update_short_form_message {
         packet.extract(hdr.best_bid_and_ask_update_short_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_best_bid_and_ask_update_long_form_message {
         packet.extract(hdr.best_bid_and_ask_update_long_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_best_bid_update_short_form_message {
         packet.extract(hdr.best_bid_update_short_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_best_ask_update_short_form_message {
         packet.extract(hdr.best_ask_update_short_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_best_bid_update_long_form_message {
         packet.extract(hdr.best_bid_update_long_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_best_ask_update_long_form_message {
         packet.extract(hdr.best_ask_update_long_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_report_message {
         packet.extract(hdr.trade_report_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_broken_trade_report_message {
         packet.extract(hdr.broken_trade_report_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -271,7 +285,12 @@ control NtxoptionsTopofmarketVerifyChecksum(inout headers_t hdr, inout metadata_
 
 control NtxoptionsTopofmarketIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

@@ -198,6 +198,7 @@ header heartbeat_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -258,111 +259,133 @@ parser OvernightRetransmissionParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_start_of_spin_message {
         packet.extract(hdr.start_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_spin_message {
         packet.extract(hdr.end_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_session_message {
         packet.extract(hdr.trading_session_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_message {
         packet.extract(hdr.security_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_add_message {
         packet.extract(hdr.order_add_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_update_message {
         packet.extract(hdr.order_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_delete_message {
         packet.extract(hdr.order_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_execution_message {
         packet.extract(hdr.order_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_execution_with_price_message {
         packet.extract(hdr.order_execution_with_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_top_of_book_message {
         packet.extract(hdr.top_of_book_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_system_recovery_event_message {
         packet.extract(hdr.system_recovery_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_request_message {
         packet.extract(hdr.login_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_response_message {
         packet.extract(hdr.login_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_request_message {
         packet.extract(hdr.retransmission_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_response_message {
         packet.extract(hdr.retransmission_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_spin_request_message {
         packet.extract(hdr.spin_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_spin_response_message {
         packet.extract(hdr.spin_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_enhanced_spin_request_message {
         packet.extract(hdr.enhanced_spin_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_enhanced_spin_response_message {
         packet.extract(hdr.enhanced_spin_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_message {
         packet.extract(hdr.heartbeat_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -375,7 +398,12 @@ control OvernightRetransmissionVerifyChecksum(inout headers_t hdr, inout metadat
 
 control OvernightRetransmissionIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

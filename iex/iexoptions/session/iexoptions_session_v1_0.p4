@@ -53,6 +53,9 @@ header gateway_heartbeat_message_t {
     bit<8> keep_alive;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_t {
     bit<8> subsession_type;
     bit<64> subsession_id;
     bit<8> joined;
@@ -90,6 +93,8 @@ header subsession_leave_response_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining;
 }
 
 struct headers_t {
@@ -97,6 +102,7 @@ struct headers_t {
     login_request_message_t login_request_message;
     login_response_message_t login_response_message;
     gateway_heartbeat_message_t gateway_heartbeat_message;
+    gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_t gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group[MAX_MESSAGES];
     terminate_message_t terminate_message;
     sequenced_message_header_message_t sequenced_message_header_message;
     subsession_join_message_t subsession_join_message;
@@ -124,46 +130,68 @@ parser IexoptionsSessionParser(packet_in packet, out headers_t hdr, inout metada
 
     state parse_login_request_message {
         packet.extract(hdr.login_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_response_message {
         packet.extract(hdr.login_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gateway_heartbeat_message {
         packet.extract(hdr.gateway_heartbeat_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining = hdr.gateway_heartbeat_message.num_in_group;
+        transition select(meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining) {
+            8w0: accept;
+            default: parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group;
+        }
+    }
+
+    state parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group {
+        packet.extract(hdr.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group.next);
+        meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining = meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining - 1;
+        transition select(meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining) {
+            8w0: accept;
+            default: parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group;
+        }
     }
 
     state parse_terminate_message {
         packet.extract(hdr.terminate_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_message_header_message {
         packet.extract(hdr.sequenced_message_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_join_message {
         packet.extract(hdr.subsession_join_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_join_response_message {
         packet.extract(hdr.subsession_join_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_leave_message {
         packet.extract(hdr.subsession_leave_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_leave_response_message {
         packet.extract(hdr.subsession_leave_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -176,7 +204,12 @@ control IexoptionsSessionVerifyChecksum(inout headers_t hdr, inout metadata_t me
 
 control IexoptionsSessionIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -196,6 +229,7 @@ control IexoptionsSessionDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.login_request_message);
         packet.emit(hdr.login_response_message);
         packet.emit(hdr.gateway_heartbeat_message);
+        packet.emit(hdr.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group);
         packet.emit(hdr.terminate_message);
         packet.emit(hdr.sequenced_message_header_message);
         packet.emit(hdr.subsession_join_message);

@@ -203,6 +203,7 @@ header retransmit_reject_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -255,91 +256,109 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_instrument_message {
         packet.extract(hdr.instrument_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_status_update_message {
         packet.extract(hdr.trading_status_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_info_message {
         packet.extract(hdr.instrument_info_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_ref_message {
         packet.extract(hdr.instrument_ref_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bid_put_message {
         packet.extract(hdr.bid_put_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ask_put_message {
         packet.extract(hdr.ask_put_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bid_qty_reduced_message {
         packet.extract(hdr.bid_qty_reduced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ask_qty_reduced_message {
         packet.extract(hdr.ask_qty_reduced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bid_delete_message {
         packet.extract(hdr.bid_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ask_delete_message {
         packet.extract(hdr.ask_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_summary_message {
         packet.extract(hdr.trade_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_block_trade_message {
         packet.extract(hdr.block_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_header_message {
         packet.extract(hdr.snapshot_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_trailer_message {
         packet.extract(hdr.snapshot_trailer_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_cycle_message {
         packet.extract(hdr.end_of_cycle_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_request_message {
         packet.extract(hdr.retransmit_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_reject_message {
         packet.extract(hdr.retransmit_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -352,7 +371,12 @@ control DeribitMarketdataapiVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control DeribitMarketdataapiIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

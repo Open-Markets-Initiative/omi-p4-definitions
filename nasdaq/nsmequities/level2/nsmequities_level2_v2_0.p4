@@ -141,6 +141,7 @@ header ipo_quoting_period_update_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -185,56 +186,67 @@ parser NsmequitiesLevel2Parser(packet_in packet, out headers_t hdr, inout metada
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_directory_message {
         packet.extract(hdr.stock_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_trading_action_message {
         packet.extract(hdr.stock_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
         packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_market_participant_position_message {
         packet.extract(hdr.market_participant_position_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_operational_halt_message {
         packet.extract(hdr.operational_halt_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_market_participant_bid_ask_update_message {
         packet.extract(hdr.market_participant_bid_ask_update_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_retail_price_interest_indicator_message {
         packet.extract(hdr.retail_price_interest_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_market_wide_circuit_breaker_decline_level_message {
         packet.extract(hdr.market_wide_circuit_breaker_decline_level_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_market_wide_circuit_breaker_status_message {
         packet.extract(hdr.market_wide_circuit_breaker_status_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_ipo_quoting_period_update_message {
         packet.extract(hdr.ipo_quoting_period_update_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -247,7 +259,12 @@ control NsmequitiesLevel2VerifyChecksum(inout headers_t hdr, inout metadata_t me
 
 control NsmequitiesLevel2Ingress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

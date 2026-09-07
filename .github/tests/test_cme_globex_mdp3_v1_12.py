@@ -10,17 +10,19 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "cme/mdp3/cme_globex_mdp3_v1_12_clienttcp.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_mdp3_v1_12.json")
+PROGRAM_CLIENTTCP = "cme/mdp3/cme_globex_mdp3_v1_12_clienttcp.p4"
+JSON_CLIENTTCP = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_mdp3_v1_12_clienttcp.json")
+PROGRAM_SERVERTCP = "cme/mdp3/cme_globex_mdp3_v1_12_servertcp.p4"
+JSON_SERVERTCP = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_mdp3_v1_12_servertcp.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class CmeGlobexMdp3V112Tests(unittest.TestCase):
+class CmeGlobexMdp3V112ClientTcpTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        subprocess.run([P4C, PROGRAM, "-o", JSON], check=True)
-        cls.switch = switch.Switch(JSON)
+        subprocess.run([P4C, PROGRAM_CLIENTTCP, "-o", JSON_CLIENTTCP], check=True)
+        cls.switch = switch.Switch(JSON_CLIENTTCP)
         cls.switch.start()
 
     @classmethod
@@ -30,6 +32,31 @@ class CmeGlobexMdp3V112Tests(unittest.TestCase):
     def test_marketdatarequesttcp(self):
         for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/MarketDataRequest.Tcp.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_securitylistrequesttcp(self):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SecurityListRequest.Tcp.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_securitystatusrequesttcp(self):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SecurityStatusRequest.Tcp.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_subscriberheartbeattcp(self):
+        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SubscriberHeartbeat.Tcp.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+
+class CmeGlobexMdp3V112ServerTcpTests(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        subprocess.run([P4C, PROGRAM_SERVERTCP, "-o", JSON_SERVERTCP], check=True)
+        cls.switch = switch.Switch(JSON_SERVERTCP)
+        cls.switch.start()
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.switch.stop()
 
     def test_mdincrementalrefreshbooklongqty(self):
         for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/MdIncrementalRefreshBookLongQty.pcap"):
@@ -47,24 +74,12 @@ class CmeGlobexMdp3V112Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/RequestAck.Tcp.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_securitylistrequesttcp(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SecurityListRequest.Tcp.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
     def test_securitystatustcp(self):
         for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SecurityStatus.Tcp.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_securitystatusrequesttcp(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SecurityStatusRequest.Tcp.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
     def test_snapshotfullrefreshtcplongqtytcp(self):
         for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SnapshotFullRefreshTcpLongQty.Tcp.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_subscriberheartbeattcp(self):
-        for payload in payloads.of("omi-data-packets/Cme/Globex.Mdp3.Sbe.v1.12/SubscriberHeartbeat.Tcp.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

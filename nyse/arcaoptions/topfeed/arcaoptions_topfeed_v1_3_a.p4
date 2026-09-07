@@ -252,6 +252,7 @@ header sequence_number_reset_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -302,86 +303,103 @@ parser ArcaoptionsTopfeedParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_outright_quote_message {
         packet.extract(hdr.outright_quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_trade_message {
         packet.extract(hdr.outright_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_trade_cancel_message {
         packet.extract(hdr.outright_trade_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_trade_correction_message {
         packet.extract(hdr.outright_trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_imbalance_message {
         packet.extract(hdr.outright_imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_crossing_rfq_message {
         packet.extract(hdr.outright_crossing_rfq_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_bold_rfq_message {
         packet.extract(hdr.outright_bold_rfq_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_summary_message {
         packet.extract(hdr.outright_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_underlying_status_message {
         packet.extract(hdr.underlying_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_series_status_message {
         packet.extract(hdr.outright_series_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_outright_quote_message {
         packet.extract(hdr.refresh_outright_quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_outright_trade_message {
         packet.extract(hdr.refresh_outright_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_outright_imbalance_message {
         packet.extract(hdr.refresh_outright_imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_underlying_index_mapping_message {
         packet.extract(hdr.underlying_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_series_index_mapping_message {
         packet.extract(hdr.series_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_id_message {
         packet.extract(hdr.stream_id_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -394,7 +412,12 @@ control ArcaoptionsTopfeedVerifyChecksum(inout headers_t hdr, inout metadata_t m
 
 control ArcaoptionsTopfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

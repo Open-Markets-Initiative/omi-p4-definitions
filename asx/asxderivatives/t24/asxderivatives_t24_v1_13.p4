@@ -404,6 +404,7 @@ header volume_and_open_interest_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -486,151 +487,181 @@ parser AsxderivativesT24Parser(packet_in packet, out headers_t hdr, inout metada
 
     state parse_time_message {
         packet.extract(hdr.time_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_future_symbol_directory_message {
         packet.extract(hdr.future_symbol_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_spread_symbol_directory_message {
         packet.extract(hdr.spread_symbol_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_option_symbol_directory_message {
         packet.extract(hdr.option_symbol_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_book_state_message {
         packet.extract(hdr.order_book_state_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_added_message {
         packet.extract(hdr.order_added_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_replaced_message {
         packet.extract(hdr.order_replaced_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_volume_cancelled_message {
         packet.extract(hdr.order_volume_cancelled_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_deleted_message {
         packet.extract(hdr.order_deleted_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_implied_order_added_message {
         packet.extract(hdr.implied_order_added_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_implied_order_replaced_message {
         packet.extract(hdr.implied_order_replaced_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_implied_order_deleted_message {
         packet.extract(hdr.implied_order_deleted_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_custom_market_order_added_message {
         packet.extract(hdr.custom_market_order_added_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_custom_market_order_replaced_message {
         packet.extract(hdr.custom_market_order_replaced_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_custom_market_order_deleted_message {
         packet.extract(hdr.custom_market_order_deleted_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_with_price_message {
         packet.extract(hdr.order_executed_with_price_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_spread_executed_message {
         packet.extract(hdr.spread_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_spread_execution_chain_message {
         packet.extract(hdr.trade_spread_execution_chain_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_custom_market_executed_message {
         packet.extract(hdr.custom_market_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_custom_market_trade_message {
         packet.extract(hdr.custom_market_trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_cancellation_message {
         packet.extract(hdr.trade_cancellation_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_equilibrium_price_auction_info_message {
         packet.extract(hdr.equilibrium_price_auction_info_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_open_high_low_last_trade_adjustment_message {
         packet.extract(hdr.open_high_low_last_trade_adjustment_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_market_settlement_message {
         packet.extract(hdr.market_settlement_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_ad_hoc_text_message {
         packet.extract(hdr.ad_hoc_text_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_request_for_quote_message {
         packet.extract(hdr.request_for_quote_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_anomalous_order_threshold_publish_message {
         packet.extract(hdr.anomalous_order_threshold_publish_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_volume_and_open_interest_message {
         packet.extract(hdr.volume_and_open_interest_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -643,7 +674,12 @@ control AsxderivativesT24VerifyChecksum(inout headers_t hdr, inout metadata_t me
 
 control AsxderivativesT24Ingress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

@@ -349,6 +349,7 @@ header mass_cancel_reject_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -400,51 +401,61 @@ parser MemxequitiesMemoServerParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_login_accepted_message {
         packet.extract(hdr.login_accepted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_message {
         packet.extract(hdr.login_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_start_of_session_message {
         packet.extract(hdr.start_of_session_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_begin_message {
         packet.extract(hdr.replay_begin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_rejected_message {
         packet.extract(hdr.replay_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_complete_message {
         packet.extract(hdr.replay_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_begin_message {
         packet.extract(hdr.stream_begin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_rejected_message {
         packet.extract(hdr.stream_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_complete_message {
         packet.extract(hdr.stream_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_message.template_id) {
             8w5: parse_execution_report_pending_new_message;
             8w6: parse_execution_report_new_message;
@@ -467,76 +478,91 @@ parser MemxequitiesMemoServerParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_execution_report_pending_new_message {
         packet.extract(hdr.execution_report_pending_new_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_new_message {
         packet.extract(hdr.execution_report_new_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_rejected_message {
         packet.extract(hdr.execution_report_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_trade_message {
         packet.extract(hdr.execution_report_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_pending_cancel_message {
         packet.extract(hdr.execution_report_pending_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_pending_mass_cancel_message {
         packet.extract(hdr.pending_mass_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_canceled_message {
         packet.extract(hdr.execution_report_canceled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_done_message {
         packet.extract(hdr.mass_cancel_done_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_pending_replace_message {
         packet.extract(hdr.execution_report_pending_replace_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_replaced_message {
         packet.extract(hdr.execution_report_replaced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_trade_correction_message {
         packet.extract(hdr.execution_report_trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_trade_break_message {
         packet.extract(hdr.execution_report_trade_break_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_restatement_message {
         packet.extract(hdr.execution_report_restatement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_reject_message {
         packet.extract(hdr.order_cancel_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_reject_message {
         packet.extract(hdr.mass_cancel_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -549,7 +575,12 @@ control MemxequitiesMemoServerVerifyChecksum(inout headers_t hdr, inout metadata
 
 control MemxequitiesMemoServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

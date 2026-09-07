@@ -114,6 +114,7 @@ header auction_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -146,26 +147,31 @@ parser IseoptionsOrderfeedMoldudp64Parser(packet_in packet, out headers_t hdr, i
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_derivative_directory_message {
         packet.extract(hdr.derivative_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_message {
         packet.extract(hdr.add_order_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_auction_message {
         packet.extract(hdr.auction_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -178,7 +184,12 @@ control IseoptionsOrderfeedMoldudp64VerifyChecksum(inout headers_t hdr, inout me
 
 control IseoptionsOrderfeedMoldudp64Ingress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

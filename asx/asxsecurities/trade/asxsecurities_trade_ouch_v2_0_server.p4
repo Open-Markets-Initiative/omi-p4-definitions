@@ -137,6 +137,7 @@ header order_executed_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -166,21 +167,25 @@ parser AsxsecuritiesTradeServerParser(packet_in packet, out headers_t hdr, inout
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_accepted_packet {
         packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_data_packet {
         packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x41: parse_order_accepted_message;
             8w0x4a: parse_order_rejected_message;
@@ -193,26 +198,31 @@ parser AsxsecuritiesTradeServerParser(packet_in packet, out headers_t hdr, inout
 
     state parse_order_accepted_message {
         packet.extract(hdr.order_accepted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_rejected_message {
         packet.extract(hdr.order_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_replaced_message {
         packet.extract(hdr.order_replaced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancelled_message {
         packet.extract(hdr.order_cancelled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -225,7 +235,12 @@ control AsxsecuritiesTradeServerVerifyChecksum(inout headers_t hdr, inout metada
 
 control AsxsecuritiesTradeServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

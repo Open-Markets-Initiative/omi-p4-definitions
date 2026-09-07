@@ -67,6 +67,9 @@ header complex_strategy_directory_message_t {
     bit<104> underlying_symbol;
     bit<128> reserved_16;
     bit<8> number_of_legs;
+}
+
+header complex_strategy_directory_message_leg_information_t {
     bit<32> option_id;
     bit<64> security_symbol;
     bit<8> expiration_year;
@@ -220,6 +223,9 @@ header complex_strategy_auction_message_t {
     bit<32> response_size;
     bit<32> reserved_4;
     bit<8> number_of_flex_dac_legs;
+}
+
+header complex_strategy_auction_message_flex_dac_leg_information_t {
     bit<64> reserved_8;
 }
 
@@ -228,6 +234,9 @@ header end_of_replay_sequence_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_strategy_directory_message_leg_information_remaining;
+    bit<8> complex_strategy_auction_message_flex_dac_leg_information_remaining;
 }
 
 struct headers_t {
@@ -238,6 +247,7 @@ struct headers_t {
     sequenced_data_packet_t sequenced_data_packet;
     system_event_message_t system_event_message;
     complex_strategy_directory_message_t complex_strategy_directory_message;
+    complex_strategy_directory_message_leg_information_t complex_strategy_directory_message_leg_information[MAX_MESSAGES];
     strategy_trading_action_message_t strategy_trading_action_message;
     add_order_short_form_message_t add_order_short_form_message;
     add_order_long_form_message_t add_order_long_form_message;
@@ -249,6 +259,7 @@ struct headers_t {
     single_side_update_message_t single_side_update_message;
     complex_strategy_trade_message_t complex_strategy_trade_message;
     complex_strategy_auction_message_t complex_strategy_auction_message;
+    complex_strategy_auction_message_flex_dac_leg_information_t complex_strategy_auction_message_flex_dac_leg_information[MAX_MESSAGES];
     end_of_replay_sequence_message_t end_of_replay_sequence_message;
 }
 
@@ -266,21 +277,25 @@ parser MrxoptionsSpreaddepthofmarketServertcpParser(packet_in packet, out header
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_accepted_packet {
         packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_data_packet {
         packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
             8w0x73: parse_complex_strategy_directory_message;
@@ -302,71 +317,111 @@ parser MrxoptionsSpreaddepthofmarketServertcpParser(packet_in packet, out header
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_strategy_directory_message {
         packet.extract(hdr.complex_strategy_directory_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.complex_strategy_directory_message_leg_information_remaining = hdr.complex_strategy_directory_message.number_of_legs;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: accept;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
+    }
+
+    state parse_complex_strategy_directory_message_leg_information {
+        packet.extract(hdr.complex_strategy_directory_message_leg_information.next);
+        meta.complex_strategy_directory_message_leg_information_remaining = meta.complex_strategy_directory_message_leg_information_remaining - 1;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: accept;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
     }
 
     state parse_strategy_trading_action_message {
         packet.extract(hdr.strategy_trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_add_order_short_form_message {
         packet.extract(hdr.add_order_short_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_add_order_long_form_message {
         packet.extract(hdr.add_order_long_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_side_executed_message {
         packet.extract(hdr.single_side_executed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_side_executed_with_price_message {
         packet.extract(hdr.single_side_executed_with_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_side_replace_short_form_message {
         packet.extract(hdr.single_side_replace_short_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_side_replace_long_form_message {
         packet.extract(hdr.single_side_replace_long_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_side_delete_message {
         packet.extract(hdr.single_side_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_side_update_message {
         packet.extract(hdr.single_side_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_strategy_trade_message {
         packet.extract(hdr.complex_strategy_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_strategy_auction_message {
         packet.extract(hdr.complex_strategy_auction_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.complex_strategy_auction_message_flex_dac_leg_information_remaining = hdr.complex_strategy_auction_message.number_of_flex_dac_legs;
+        transition select(meta.complex_strategy_auction_message_flex_dac_leg_information_remaining) {
+            8w0: accept;
+            default: parse_complex_strategy_auction_message_flex_dac_leg_information;
+        }
+    }
+
+    state parse_complex_strategy_auction_message_flex_dac_leg_information {
+        packet.extract(hdr.complex_strategy_auction_message_flex_dac_leg_information.next);
+        meta.complex_strategy_auction_message_flex_dac_leg_information_remaining = meta.complex_strategy_auction_message_flex_dac_leg_information_remaining - 1;
+        transition select(meta.complex_strategy_auction_message_flex_dac_leg_information_remaining) {
+            8w0: accept;
+            default: parse_complex_strategy_auction_message_flex_dac_leg_information;
+        }
     }
 
     state parse_end_of_replay_sequence_message {
         packet.extract(hdr.end_of_replay_sequence_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -379,7 +434,12 @@ control MrxoptionsSpreaddepthofmarketServertcpVerifyChecksum(inout headers_t hdr
 
 control MrxoptionsSpreaddepthofmarketServertcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -402,6 +462,7 @@ control MrxoptionsSpreaddepthofmarketServertcpDeparser(packet_out packet, in hea
         packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.complex_strategy_directory_message);
+        packet.emit(hdr.complex_strategy_directory_message_leg_information);
         packet.emit(hdr.strategy_trading_action_message);
         packet.emit(hdr.add_order_short_form_message);
         packet.emit(hdr.add_order_long_form_message);
@@ -413,6 +474,7 @@ control MrxoptionsSpreaddepthofmarketServertcpDeparser(packet_out packet, in hea
         packet.emit(hdr.single_side_update_message);
         packet.emit(hdr.complex_strategy_trade_message);
         packet.emit(hdr.complex_strategy_auction_message);
+        packet.emit(hdr.complex_strategy_auction_message_flex_dac_leg_information);
         packet.emit(hdr.end_of_replay_sequence_message);
     }
 }

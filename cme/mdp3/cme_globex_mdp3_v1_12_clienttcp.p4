@@ -64,9 +64,18 @@ header market_data_request_t {
     bit<8> subscription_req_type;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header market_data_request_market_data_request_security_group_t {
     bit<48> security_group;
-    bit<16> block_length_2;
-    bit<8> num_in_group_2;
+}
+
+header market_data_request_market_data_request_related_symbol_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header market_data_request_market_data_request_related_symbol_group_t {
     bit<32> security_id;
 }
 
@@ -75,9 +84,18 @@ header security_list_request_t {
     bit<8> subscription_req_type;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header security_list_request_security_list_request_security_group_t {
     bit<48> security_group;
-    bit<16> block_length_2;
-    bit<8> num_in_group_2;
+}
+
+header security_list_request_security_list_request_related_symbol_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header security_list_request_security_list_request_related_symbol_group_t {
     bit<32> security_id;
 }
 
@@ -86,13 +104,29 @@ header security_status_request_t {
     bit<8> subscription_req_type;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header security_status_request_security_status_request_security_group_t {
     bit<48> security_group;
-    bit<16> block_length_2;
-    bit<8> num_in_group_2;
+}
+
+header security_status_request_security_status_request_related_symbol_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header security_status_request_security_status_request_related_symbol_group_t {
     bit<32> security_id;
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> market_data_request_market_data_request_security_group_remaining;
+    bit<8> market_data_request_market_data_request_related_symbol_group_remaining;
+    bit<8> security_list_request_security_list_request_security_group_remaining;
+    bit<8> security_list_request_security_list_request_related_symbol_group_remaining;
+    bit<8> security_status_request_security_status_request_security_group_remaining;
+    bit<8> security_status_request_security_status_request_related_symbol_group_remaining;
 }
 
 struct headers_t {
@@ -100,8 +134,17 @@ struct headers_t {
     negotiate_t negotiate;
     terminate_t terminate;
     market_data_request_t market_data_request;
+    market_data_request_market_data_request_security_group_t market_data_request_market_data_request_security_group[MAX_MESSAGES];
+    market_data_request_market_data_request_related_symbol_group_header_t market_data_request_market_data_request_related_symbol_group_header;
+    market_data_request_market_data_request_related_symbol_group_t market_data_request_market_data_request_related_symbol_group[MAX_MESSAGES];
     security_list_request_t security_list_request;
+    security_list_request_security_list_request_security_group_t security_list_request_security_list_request_security_group[MAX_MESSAGES];
+    security_list_request_security_list_request_related_symbol_group_header_t security_list_request_security_list_request_related_symbol_group_header;
+    security_list_request_security_list_request_related_symbol_group_t security_list_request_security_list_request_related_symbol_group[MAX_MESSAGES];
     security_status_request_t security_status_request;
+    security_status_request_security_status_request_security_group_t security_status_request_security_status_request_security_group[MAX_MESSAGES];
+    security_status_request_security_status_request_related_symbol_group_header_t security_status_request_security_status_request_related_symbol_group_header;
+    security_status_request_security_status_request_related_symbol_group_t security_status_request_security_status_request_related_symbol_group[MAX_MESSAGES];
 }
 
 parser CmeGlobexMdp3ClienttcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -119,27 +162,125 @@ parser CmeGlobexMdp3ClienttcpParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_negotiate {
         packet.extract(hdr.negotiate);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_terminate {
         packet.extract(hdr.terminate);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_data_request {
         packet.extract(hdr.market_data_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.market_data_request_market_data_request_security_group_remaining = hdr.market_data_request.num_in_group;
+        transition select(meta.market_data_request_market_data_request_security_group_remaining) {
+            8w0: read_market_data_request_market_data_request_related_symbol_group;
+            default: parse_market_data_request_market_data_request_security_group;
+        }
+    }
+
+    state parse_market_data_request_market_data_request_security_group {
+        packet.extract(hdr.market_data_request_market_data_request_security_group.next);
+        meta.market_data_request_market_data_request_security_group_remaining = meta.market_data_request_market_data_request_security_group_remaining - 1;
+        transition select(meta.market_data_request_market_data_request_security_group_remaining) {
+            8w0: read_market_data_request_market_data_request_related_symbol_group;
+            default: parse_market_data_request_market_data_request_security_group;
+        }
+    }
+
+    state read_market_data_request_market_data_request_related_symbol_group {
+        packet.extract(hdr.market_data_request_market_data_request_related_symbol_group_header);
+        meta.market_data_request_market_data_request_related_symbol_group_remaining = hdr.market_data_request_market_data_request_related_symbol_group_header.num_in_group;
+        transition select(meta.market_data_request_market_data_request_related_symbol_group_remaining) {
+            8w0: accept;
+            default: parse_market_data_request_market_data_request_related_symbol_group;
+        }
+    }
+
+    state parse_market_data_request_market_data_request_related_symbol_group {
+        packet.extract(hdr.market_data_request_market_data_request_related_symbol_group.next);
+        meta.market_data_request_market_data_request_related_symbol_group_remaining = meta.market_data_request_market_data_request_related_symbol_group_remaining - 1;
+        transition select(meta.market_data_request_market_data_request_related_symbol_group_remaining) {
+            8w0: accept;
+            default: parse_market_data_request_market_data_request_related_symbol_group;
+        }
     }
 
     state parse_security_list_request {
         packet.extract(hdr.security_list_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.security_list_request_security_list_request_security_group_remaining = hdr.security_list_request.num_in_group;
+        transition select(meta.security_list_request_security_list_request_security_group_remaining) {
+            8w0: read_security_list_request_security_list_request_related_symbol_group;
+            default: parse_security_list_request_security_list_request_security_group;
+        }
+    }
+
+    state parse_security_list_request_security_list_request_security_group {
+        packet.extract(hdr.security_list_request_security_list_request_security_group.next);
+        meta.security_list_request_security_list_request_security_group_remaining = meta.security_list_request_security_list_request_security_group_remaining - 1;
+        transition select(meta.security_list_request_security_list_request_security_group_remaining) {
+            8w0: read_security_list_request_security_list_request_related_symbol_group;
+            default: parse_security_list_request_security_list_request_security_group;
+        }
+    }
+
+    state read_security_list_request_security_list_request_related_symbol_group {
+        packet.extract(hdr.security_list_request_security_list_request_related_symbol_group_header);
+        meta.security_list_request_security_list_request_related_symbol_group_remaining = hdr.security_list_request_security_list_request_related_symbol_group_header.num_in_group;
+        transition select(meta.security_list_request_security_list_request_related_symbol_group_remaining) {
+            8w0: accept;
+            default: parse_security_list_request_security_list_request_related_symbol_group;
+        }
+    }
+
+    state parse_security_list_request_security_list_request_related_symbol_group {
+        packet.extract(hdr.security_list_request_security_list_request_related_symbol_group.next);
+        meta.security_list_request_security_list_request_related_symbol_group_remaining = meta.security_list_request_security_list_request_related_symbol_group_remaining - 1;
+        transition select(meta.security_list_request_security_list_request_related_symbol_group_remaining) {
+            8w0: accept;
+            default: parse_security_list_request_security_list_request_related_symbol_group;
+        }
     }
 
     state parse_security_status_request {
         packet.extract(hdr.security_status_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.security_status_request_security_status_request_security_group_remaining = hdr.security_status_request.num_in_group;
+        transition select(meta.security_status_request_security_status_request_security_group_remaining) {
+            8w0: read_security_status_request_security_status_request_related_symbol_group;
+            default: parse_security_status_request_security_status_request_security_group;
+        }
+    }
+
+    state parse_security_status_request_security_status_request_security_group {
+        packet.extract(hdr.security_status_request_security_status_request_security_group.next);
+        meta.security_status_request_security_status_request_security_group_remaining = meta.security_status_request_security_status_request_security_group_remaining - 1;
+        transition select(meta.security_status_request_security_status_request_security_group_remaining) {
+            8w0: read_security_status_request_security_status_request_related_symbol_group;
+            default: parse_security_status_request_security_status_request_security_group;
+        }
+    }
+
+    state read_security_status_request_security_status_request_related_symbol_group {
+        packet.extract(hdr.security_status_request_security_status_request_related_symbol_group_header);
+        meta.security_status_request_security_status_request_related_symbol_group_remaining = hdr.security_status_request_security_status_request_related_symbol_group_header.num_in_group;
+        transition select(meta.security_status_request_security_status_request_related_symbol_group_remaining) {
+            8w0: accept;
+            default: parse_security_status_request_security_status_request_related_symbol_group;
+        }
+    }
+
+    state parse_security_status_request_security_status_request_related_symbol_group {
+        packet.extract(hdr.security_status_request_security_status_request_related_symbol_group.next);
+        meta.security_status_request_security_status_request_related_symbol_group_remaining = meta.security_status_request_security_status_request_related_symbol_group_remaining - 1;
+        transition select(meta.security_status_request_security_status_request_related_symbol_group_remaining) {
+            8w0: accept;
+            default: parse_security_status_request_security_status_request_related_symbol_group;
+        }
     }
 
 }
@@ -151,7 +292,12 @@ control CmeGlobexMdp3ClienttcpVerifyChecksum(inout headers_t hdr, inout metadata
 
 control CmeGlobexMdp3ClienttcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -171,8 +317,17 @@ control CmeGlobexMdp3ClienttcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.negotiate);
         packet.emit(hdr.terminate);
         packet.emit(hdr.market_data_request);
+        packet.emit(hdr.market_data_request_market_data_request_security_group);
+        packet.emit(hdr.market_data_request_market_data_request_related_symbol_group_header);
+        packet.emit(hdr.market_data_request_market_data_request_related_symbol_group);
         packet.emit(hdr.security_list_request);
+        packet.emit(hdr.security_list_request_security_list_request_security_group);
+        packet.emit(hdr.security_list_request_security_list_request_related_symbol_group_header);
+        packet.emit(hdr.security_list_request_security_list_request_related_symbol_group);
         packet.emit(hdr.security_status_request);
+        packet.emit(hdr.security_status_request_security_status_request_security_group);
+        packet.emit(hdr.security_status_request_security_status_request_related_symbol_group_header);
+        packet.emit(hdr.security_status_request_security_status_request_related_symbol_group);
     }
 }
 

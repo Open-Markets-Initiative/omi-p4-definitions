@@ -258,6 +258,9 @@ header session_close_recap_message_t {
     bit<64> national_best_ask_size;
     bit<8> special_condition;
     bit<16> number_of_market_center_attachments;
+}
+
+header session_close_recap_message_market_center_close_recap_t {
     bit<8> market_center_identifier;
     bit<64> market_center_bid_price;
     bit<64> market_center_bid_size;
@@ -318,6 +321,8 @@ header quote_wipe_out_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> session_close_recap_message_market_center_close_recap_remaining;
 }
 
 struct headers_t {
@@ -337,6 +342,7 @@ struct headers_t {
     market_wide_circuit_breaker_status_message_t market_wide_circuit_breaker_status_message;
     auction_collar_message_t auction_collar_message;
     session_close_recap_message_t session_close_recap_message;
+    session_close_recap_message_market_center_close_recap_t session_close_recap_message_market_center_close_recap[MAX_MESSAGES];
     control__t control_;
     start_of_day_message_t start_of_day_message;
     end_of_day_message_t end_of_day_message;
@@ -359,6 +365,7 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_quote {
         packet.extract(hdr.quote);
+        meta.dispatched = 1;
         transition select(hdr.quote.quote_message_type) {
             8w0x45: parse_quote_short_form_message;
             8w0x46: parse_quote_long_form_message;
@@ -369,21 +376,25 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_quote_short_form_message {
         packet.extract(hdr.quote_short_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_long_form_message {
         packet.extract(hdr.quote_long_form_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_finra_adf_market_participant_quotation_message {
         packet.extract(hdr.finra_adf_market_participant_quotation_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_administrative {
         packet.extract(hdr.administrative);
+        meta.dispatched = 1;
         transition select(hdr.administrative.administrative_message_type) {
             8w0x41: parse_general_administrative_message;
             8w0x48: parse_cross_sro_trading_action_message;
@@ -401,56 +412,80 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_general_administrative_message {
         packet.extract(hdr.general_administrative_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cross_sro_trading_action_message {
         packet.extract(hdr.cross_sro_trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_center_trading_action_message {
         packet.extract(hdr.market_center_trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_issue_symbol_directory_message {
         packet.extract(hdr.issue_symbol_directory_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_regulation_sho_short_sale_price_test_restricted_indicator_message {
         packet.extract(hdr.regulation_sho_short_sale_price_test_restricted_indicator_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_limit_up_limit_down_price_band_message {
         packet.extract(hdr.limit_up_limit_down_price_band_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_wide_circuit_breaker_decline_level_message {
         packet.extract(hdr.market_wide_circuit_breaker_decline_level_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_wide_circuit_breaker_status_message {
         packet.extract(hdr.market_wide_circuit_breaker_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_auction_collar_message {
         packet.extract(hdr.auction_collar_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_session_close_recap_message {
         packet.extract(hdr.session_close_recap_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.session_close_recap_message_market_center_close_recap_remaining = hdr.session_close_recap_message.number_of_market_center_attachments;
+        transition select(meta.session_close_recap_message_market_center_close_recap_remaining) {
+            16w0: accept;
+            default: parse_session_close_recap_message_market_center_close_recap;
+        }
+    }
+
+    state parse_session_close_recap_message_market_center_close_recap {
+        packet.extract(hdr.session_close_recap_message_market_center_close_recap.next);
+        meta.session_close_recap_message_market_center_close_recap_remaining = meta.session_close_recap_message_market_center_close_recap_remaining - 1;
+        transition select(meta.session_close_recap_message_market_center_close_recap_remaining) {
+            16w0: accept;
+            default: parse_session_close_recap_message_market_center_close_recap;
+        }
     }
 
     state parse_control {
         packet.extract(hdr.control_);
+        meta.dispatched = 1;
         transition select(hdr.control_.control_message_type) {
             8w0x49: parse_start_of_day_message;
             8w0x4a: parse_end_of_day_message;
@@ -464,31 +499,37 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_start_of_day_message {
         packet.extract(hdr.start_of_day_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_day_message {
         packet.extract(hdr.end_of_day_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_session_open_message {
         packet.extract(hdr.market_session_open_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_session_close_message {
         packet.extract(hdr.market_session_close_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_transmissions_message {
         packet.extract(hdr.end_of_transmissions_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_wipe_out_message {
         packet.extract(hdr.quote_wipe_out_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -501,7 +542,12 @@ control NasdaqUqdfOutputVerifyChecksum(inout headers_t hdr, inout metadata_t met
 
 control NasdaqUqdfOutputIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -533,6 +579,7 @@ control NasdaqUqdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.market_wide_circuit_breaker_status_message);
         packet.emit(hdr.auction_collar_message);
         packet.emit(hdr.session_close_recap_message);
+        packet.emit(hdr.session_close_recap_message_market_center_close_recap);
         packet.emit(hdr.control_);
         packet.emit(hdr.start_of_day_message);
         packet.emit(hdr.end_of_day_message);

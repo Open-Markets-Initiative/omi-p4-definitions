@@ -81,10 +81,16 @@ header exchange_odd_lot_quote_message_short_form_message_t {
     bit<40> symbol_byte_5;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
+}
+
+header exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_t {
     bit<16> ol_price_short_2;
     bit<16> ol_size;
-    bit<16> ol_price_short_2_2;
-    bit<16> ol_size_2;
+}
+
+header exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_t {
+    bit<16> ol_price_short_2;
+    bit<16> ol_size;
 }
 
 header exchange_odd_lot_quote_message_long_form_message_t {
@@ -95,10 +101,16 @@ header exchange_odd_lot_quote_message_long_form_message_t {
     bit<88> symbol_byte_11;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
+}
+
+header exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_t {
     bit<64> ol_price_long_8;
     bit<16> ol_size;
-    bit<64> ol_price_long_8_2;
-    bit<16> ol_size_2;
+}
+
+header exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_t {
+    bit<64> ol_price_long_8;
+    bit<16> ol_size;
 }
 
 header exchange_combined_quote_message_short_form_message_t {
@@ -115,10 +127,16 @@ header exchange_combined_quote_message_short_form_message_t {
     bit<8> rii;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
+}
+
+header exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_t {
     bit<16> ol_price_short_2;
     bit<16> ol_size;
-    bit<16> ol_price_short_2_2;
-    bit<16> ol_size_2;
+}
+
+header exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_t {
+    bit<16> ol_price_short_2;
+    bit<16> ol_size;
 }
 
 header exchange_combined_quote_message_long_form_message_t {
@@ -135,10 +153,16 @@ header exchange_combined_quote_message_long_form_message_t {
     bit<8> rii;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
+}
+
+header exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_t {
     bit<64> ol_price_long_8;
     bit<16> ol_size;
-    bit<64> ol_price_long_8_2;
-    bit<16> ol_size_2;
+}
+
+header exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_t {
+    bit<64> ol_price_long_8;
+    bit<16> ol_size;
 }
 
 header finra_protected_quote_message_with_bbo_info_message_t {
@@ -188,12 +212,18 @@ header finra_adf_odd_lot_quotation_message_t {
     bit<88> symbol_byte_11;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
+}
+
+header finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_t {
     bit<64> ol_price_long_8;
     bit<16> ol_size;
     bit<32> mpid;
-    bit<64> ol_price_long_8_2;
-    bit<16> ol_size_2;
-    bit<32> mpid_2;
+}
+
+header finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_t {
+    bit<64> ol_price_long_8;
+    bit<16> ol_size;
+    bit<32> mpid;
 }
 
 header finra_adf_combined_quote_message_with_bbo_t {
@@ -219,12 +249,18 @@ header finra_adf_combined_quote_message_with_bbo_t {
     bit<8> bbo_cond;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
+}
+
+header finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_t {
     bit<64> ol_price_long_8;
     bit<16> ol_size;
-    bit<32> mpid_2;
-    bit<64> ol_price_long_8_2;
-    bit<16> ol_size_2;
-    bit<32> mpid_3;
+    bit<32> mpid;
+}
+
+header finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_t {
+    bit<64> ol_price_long_8;
+    bit<16> ol_size;
+    bit<32> mpid;
 }
 
 header inbound_trade_messages_message_t {
@@ -594,6 +630,19 @@ header login_request_packet_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining;
+    bit<16> exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining;
+    bit<16> exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining;
+    bit<16> exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining;
+    bit<16> exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining;
+    bit<16> exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining;
+    bit<16> exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining;
+    bit<16> exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining;
+    bit<16> finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_remaining;
+    bit<16> finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_remaining;
+    bit<16> finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_remaining;
+    bit<16> finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_remaining;
 }
 
 struct headers_t {
@@ -603,13 +652,25 @@ struct headers_t {
     protected_exchange_quote_message_shortform_message_t protected_exchange_quote_message_shortform_message;
     protected_exchange_quote_message_longform_message_t protected_exchange_quote_message_longform_message;
     exchange_odd_lot_quote_message_short_form_message_t exchange_odd_lot_quote_message_short_form_message;
+    exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_t exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment[MAX_MESSAGES];
+    exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_t exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment[MAX_MESSAGES];
     exchange_odd_lot_quote_message_long_form_message_t exchange_odd_lot_quote_message_long_form_message;
+    exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_t exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment[MAX_MESSAGES];
+    exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_t exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment[MAX_MESSAGES];
     exchange_combined_quote_message_short_form_message_t exchange_combined_quote_message_short_form_message;
+    exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_t exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment[MAX_MESSAGES];
+    exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_t exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment[MAX_MESSAGES];
     exchange_combined_quote_message_long_form_message_t exchange_combined_quote_message_long_form_message;
+    exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_t exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment[MAX_MESSAGES];
+    exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_t exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment[MAX_MESSAGES];
     finra_protected_quote_message_with_bbo_info_message_t finra_protected_quote_message_with_bbo_info_message;
     finra_protected_quote_message_without_bbo_info_message_t finra_protected_quote_message_without_bbo_info_message;
     finra_adf_odd_lot_quotation_message_t finra_adf_odd_lot_quotation_message;
+    finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_t finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment[MAX_MESSAGES];
+    finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_t finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment[MAX_MESSAGES];
     finra_adf_combined_quote_message_with_bbo_t finra_adf_combined_quote_message_with_bbo;
+    finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_t finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment[MAX_MESSAGES];
+    finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_t finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment[MAX_MESSAGES];
     inbound_trade_messages_message_t inbound_trade_messages_message;
     regular_trade_report_message_t regular_trade_report_message;
     trade_cancel_error_message_t trade_cancel_error_message;
@@ -663,6 +724,7 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_unsequenced_data_packet {
         packet.extract(hdr.unsequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.unsequenced_data_packet.message_category) {
             8w0x51: parse_inbound_quote_messages_message;
             8w0x54: parse_inbound_trade_messages_message;
@@ -676,6 +738,7 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_inbound_quote_messages_message {
         packet.extract(hdr.inbound_quote_messages_message);
+        meta.dispatched = 1;
         transition select(hdr.inbound_quote_messages_message.inbound_quote_messages_message_type) {
             8w0x51: parse_protected_exchange_quote_message_shortform_message;
             8w0x4c: parse_protected_exchange_quote_message_longform_message;
@@ -693,56 +756,247 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_protected_exchange_quote_message_shortform_message {
         packet.extract(hdr.protected_exchange_quote_message_shortform_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_protected_exchange_quote_message_longform_message {
         packet.extract(hdr.protected_exchange_quote_message_longform_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_exchange_odd_lot_quote_message_short_form_message {
         packet.extract(hdr.exchange_odd_lot_quote_message_short_form_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining = hdr.exchange_odd_lot_quote_message_short_form_message.ol_bid_level_count;
+        transition select(meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining) {
+            16w0: read_exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+            default: parse_exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment;
+        }
+    }
+
+    state parse_exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment {
+        packet.extract(hdr.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment.next);
+        meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining = meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining - 1;
+        transition select(meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining) {
+            16w0: read_exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+            default: parse_exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment;
+        }
+    }
+
+    state read_exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment {
+        meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining = hdr.exchange_odd_lot_quote_message_short_form_message.ol_ask_level_count;
+        transition select(meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+        }
+    }
+
+    state parse_exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment {
+        packet.extract(hdr.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment.next);
+        meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining = meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining - 1;
+        transition select(meta.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+        }
     }
 
     state parse_exchange_odd_lot_quote_message_long_form_message {
         packet.extract(hdr.exchange_odd_lot_quote_message_long_form_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining = hdr.exchange_odd_lot_quote_message_long_form_message.ol_bid_level_count;
+        transition select(meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining) {
+            16w0: read_exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+            default: parse_exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment;
+        }
+    }
+
+    state parse_exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment {
+        packet.extract(hdr.exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment.next);
+        meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining = meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining - 1;
+        transition select(meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining) {
+            16w0: read_exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+            default: parse_exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment;
+        }
+    }
+
+    state read_exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment {
+        meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining = hdr.exchange_odd_lot_quote_message_long_form_message.ol_ask_level_count;
+        transition select(meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+        }
+    }
+
+    state parse_exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment {
+        packet.extract(hdr.exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment.next);
+        meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining = meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining - 1;
+        transition select(meta.exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+        }
     }
 
     state parse_exchange_combined_quote_message_short_form_message {
         packet.extract(hdr.exchange_combined_quote_message_short_form_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining = hdr.exchange_combined_quote_message_short_form_message.ol_bid_level_count;
+        transition select(meta.exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining) {
+            16w0: read_exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+            default: parse_exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment;
+        }
+    }
+
+    state parse_exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment {
+        packet.extract(hdr.exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment.next);
+        meta.exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining = meta.exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining - 1;
+        transition select(meta.exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining) {
+            16w0: read_exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+            default: parse_exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment;
+        }
+    }
+
+    state read_exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment {
+        meta.exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining = hdr.exchange_combined_quote_message_short_form_message.ol_ask_level_count;
+        transition select(meta.exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+        }
+    }
+
+    state parse_exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment {
+        packet.extract(hdr.exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment.next);
+        meta.exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining = meta.exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining - 1;
+        transition select(meta.exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment;
+        }
     }
 
     state parse_exchange_combined_quote_message_long_form_message {
         packet.extract(hdr.exchange_combined_quote_message_long_form_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining = hdr.exchange_combined_quote_message_long_form_message.ol_bid_level_count;
+        transition select(meta.exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining) {
+            16w0: read_exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+            default: parse_exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment;
+        }
+    }
+
+    state parse_exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment {
+        packet.extract(hdr.exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment.next);
+        meta.exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining = meta.exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining - 1;
+        transition select(meta.exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_remaining) {
+            16w0: read_exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+            default: parse_exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment;
+        }
+    }
+
+    state read_exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment {
+        meta.exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining = hdr.exchange_combined_quote_message_long_form_message.ol_ask_level_count;
+        transition select(meta.exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+        }
+    }
+
+    state parse_exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment {
+        packet.extract(hdr.exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment.next);
+        meta.exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining = meta.exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining - 1;
+        transition select(meta.exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment;
+        }
     }
 
     state parse_finra_protected_quote_message_with_bbo_info_message {
         packet.extract(hdr.finra_protected_quote_message_with_bbo_info_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_finra_protected_quote_message_without_bbo_info_message {
         packet.extract(hdr.finra_protected_quote_message_without_bbo_info_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_finra_adf_odd_lot_quotation_message {
         packet.extract(hdr.finra_adf_odd_lot_quotation_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_remaining = hdr.finra_adf_odd_lot_quotation_message.ol_bid_level_count;
+        transition select(meta.finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_remaining) {
+            16w0: read_finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment;
+            default: parse_finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment;
+        }
+    }
+
+    state parse_finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment {
+        packet.extract(hdr.finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment.next);
+        meta.finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_remaining = meta.finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_remaining - 1;
+        transition select(meta.finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_remaining) {
+            16w0: read_finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment;
+            default: parse_finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment;
+        }
+    }
+
+    state read_finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment {
+        meta.finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_remaining = hdr.finra_adf_odd_lot_quotation_message.ol_ask_level_count;
+        transition select(meta.finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment;
+        }
+    }
+
+    state parse_finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment {
+        packet.extract(hdr.finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment.next);
+        meta.finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_remaining = meta.finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_remaining - 1;
+        transition select(meta.finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment;
+        }
     }
 
     state parse_finra_adf_combined_quote_message_with_bbo {
         packet.extract(hdr.finra_adf_combined_quote_message_with_bbo);
-        transition accept;
+        meta.dispatched = 1;
+        meta.finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_remaining = hdr.finra_adf_combined_quote_message_with_bbo.ol_bid_level_count;
+        transition select(meta.finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_remaining) {
+            16w0: read_finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment;
+            default: parse_finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment;
+        }
+    }
+
+    state parse_finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment {
+        packet.extract(hdr.finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment.next);
+        meta.finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_remaining = meta.finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_remaining - 1;
+        transition select(meta.finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_remaining) {
+            16w0: read_finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment;
+            default: parse_finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment;
+        }
+    }
+
+    state read_finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment {
+        meta.finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_remaining = hdr.finra_adf_combined_quote_message_with_bbo.ol_ask_level_count;
+        transition select(meta.finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment;
+        }
+    }
+
+    state parse_finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment {
+        packet.extract(hdr.finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment.next);
+        meta.finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_remaining = meta.finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_remaining - 1;
+        transition select(meta.finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_remaining) {
+            16w0: accept;
+            default: parse_finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment;
+        }
     }
 
     state parse_inbound_trade_messages_message {
         packet.extract(hdr.inbound_trade_messages_message);
+        meta.dispatched = 1;
         transition select(hdr.inbound_trade_messages_message.inbound_trade_messages_message_type) {
             8w0x45: parse_regular_trade_report_message;
             8w0x49: parse_trade_cancel_error_message;
@@ -758,46 +1012,55 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_regular_trade_report_message {
         packet.extract(hdr.regular_trade_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_cancel_error_message {
         packet.extract(hdr.trade_cancel_error_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_correction_message {
         packet.extract(hdr.trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_as_of_trade_report_message {
         packet.extract(hdr.as_of_trade_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_fractional_regular_trade_report_message {
         packet.extract(hdr.fractional_regular_trade_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_fractional_trade_cancel_error_message {
         packet.extract(hdr.fractional_trade_cancel_error_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_fractional_trade_correction_message {
         packet.extract(hdr.fractional_trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_fractional_as_of_trade_report_message {
         packet.extract(hdr.fractional_as_of_trade_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inbound_administrative_messages_message {
         packet.extract(hdr.inbound_administrative_messages_message);
+        meta.dispatched = 1;
         transition select(hdr.inbound_administrative_messages_message.inbound_administrative_messages_message_type) {
             8w0x41: parse_general_administrative_message;
             8w0x4f: parse_trading_action_message;
@@ -815,56 +1078,67 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_general_administrative_message {
         packet.extract(hdr.general_administrative_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_center_trading_action_message {
         packet.extract(hdr.market_center_trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_center_mass_trading_action_message {
         packet.extract(hdr.market_center_mass_trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
         packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_opening_reference_midpoint_price_message {
         packet.extract(hdr.opening_reference_midpoint_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_t_1_adjusted_closing_price_message {
         packet.extract(hdr.t_1_adjusted_closing_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_open_message {
         packet.extract(hdr.market_open_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_closed_message {
         packet.extract(hdr.market_closed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_auction_collar_message {
         packet.extract(hdr.auction_collar_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inbound_control_messages_message {
         packet.extract(hdr.inbound_control_messages_message);
+        meta.dispatched = 1;
         transition select(hdr.inbound_control_messages_message.inbound_control_messages_message_type) {
             8w0x43: parse_sequence_inquiry_message;
             8w0x53: parse_symbol_state_inquiry_message;
@@ -875,21 +1149,25 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_sequence_inquiry_message {
         packet.extract(hdr.sequence_inquiry_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_state_inquiry_message {
         packet.extract(hdr.symbol_state_inquiry_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_participant_reporting_message {
         packet.extract(hdr.end_of_participant_reporting_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_return_administrative_messages_message {
         packet.extract(hdr.return_administrative_messages_message);
+        meta.dispatched = 1;
         transition select(hdr.return_administrative_messages_message.return_administrative_messages_message_type) {
             8w0x41: parse_return_general_administrative_message;
             8w0x4a: parse_return_market_center_trading_action_acknowledgement_message;
@@ -904,41 +1182,49 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_return_general_administrative_message {
         packet.extract(hdr.return_general_administrative_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_return_market_center_trading_action_acknowledgement_message {
         packet.extract(hdr.return_market_center_trading_action_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_return_market_open_message {
         packet.extract(hdr.return_market_open_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_return_market_closed_message {
         packet.extract(hdr.return_market_closed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reject_message {
         packet.extract(hdr.reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequence_acknowledgement_message {
         packet.extract(hdr.sequence_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_participant_input_warning_message {
         packet.extract(hdr.participant_input_warning_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_return_control_messages_message {
         packet.extract(hdr.return_control_messages_message);
+        meta.dispatched = 1;
         transition select(hdr.return_control_messages_message.return_control_messages_message_type) {
             8w0x45: parse_start_of_day_message;
             8w0x46: parse_end_of_day_message;
@@ -950,21 +1236,25 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_start_of_day_message {
         packet.extract(hdr.start_of_day_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_day_message {
         packet.extract(hdr.end_of_day_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequence_inquiry_response_message {
         packet.extract(hdr.sequence_inquiry_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_state_inquiry_response_message {
         packet.extract(hdr.symbol_state_inquiry_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -974,6 +1264,7 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_login_request_packet {
         packet.extract(hdr.login_request_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -986,7 +1277,12 @@ control NasdaqUtpInputClientVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control NasdaqUtpInputClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -1008,13 +1304,25 @@ control NasdaqUtpInputClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.protected_exchange_quote_message_shortform_message);
         packet.emit(hdr.protected_exchange_quote_message_longform_message);
         packet.emit(hdr.exchange_odd_lot_quote_message_short_form_message);
+        packet.emit(hdr.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment);
+        packet.emit(hdr.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment);
         packet.emit(hdr.exchange_odd_lot_quote_message_long_form_message);
+        packet.emit(hdr.exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment);
+        packet.emit(hdr.exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment);
         packet.emit(hdr.exchange_combined_quote_message_short_form_message);
+        packet.emit(hdr.exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment);
+        packet.emit(hdr.exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment);
         packet.emit(hdr.exchange_combined_quote_message_long_form_message);
+        packet.emit(hdr.exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment);
+        packet.emit(hdr.exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment);
         packet.emit(hdr.finra_protected_quote_message_with_bbo_info_message);
         packet.emit(hdr.finra_protected_quote_message_without_bbo_info_message);
         packet.emit(hdr.finra_adf_odd_lot_quotation_message);
+        packet.emit(hdr.finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment);
+        packet.emit(hdr.finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment);
         packet.emit(hdr.finra_adf_combined_quote_message_with_bbo);
+        packet.emit(hdr.finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment);
+        packet.emit(hdr.finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment);
         packet.emit(hdr.inbound_trade_messages_message);
         packet.emit(hdr.regular_trade_report_message);
         packet.emit(hdr.trade_cancel_error_message);

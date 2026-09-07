@@ -108,6 +108,7 @@ header end_of_replay_sequence_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -138,21 +139,25 @@ parser NtxoptionsTradefeedServertcpParser(packet_in packet, out headers_t hdr, i
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_accepted_packet {
         packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_data_packet {
         packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
             8w0x6d: parse_derivative_directory_message;
@@ -166,31 +171,37 @@ parser NtxoptionsTradefeedServertcpParser(packet_in packet, out headers_t hdr, i
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_derivative_directory_message {
         packet.extract(hdr.derivative_directory_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_broken_trade_report_message {
         packet.extract(hdr.broken_trade_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_replay_sequence_message {
         packet.extract(hdr.end_of_replay_sequence_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -203,7 +214,12 @@ control NtxoptionsTradefeedServertcpVerifyChecksum(inout headers_t hdr, inout me
 
 control NtxoptionsTradefeedServertcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

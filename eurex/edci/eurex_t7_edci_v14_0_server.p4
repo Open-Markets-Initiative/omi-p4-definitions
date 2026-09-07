@@ -47,6 +47,9 @@ header delete_order_broadcast_t {
     bit<32> market_segment_id;
     bit<16> no_affected_orders;
     bit<16> pad2v2;
+}
+
+header delete_order_broadcast_affected_ord_grp_comp_t {
     bit<64> affected_order_id;
     bit<64> affected_cl_ord_id;
     bit<64> affected_orig_cl_ord_id;
@@ -153,6 +156,9 @@ header order_exec_report_broadcast_t {
     bit<160> fix_orig_cl_ord_id;
     bit<160> party_end_client_identification;
     bit<56> pad7;
+}
+
+header order_exec_report_broadcast_fills_grp_comp_t {
     bit<64> fill_px;
     bit<64> fill_qty;
     bit<32> fill_match_id;
@@ -164,6 +170,9 @@ header partition_list_notification_t {
     bit<64> sending_time;
     bit<8> no_partitions;
     bit<56> pad7;
+}
+
+header partition_list_notification_partition_grp_comp_t {
     bit<16> partition_id;
     bit<48> pad6;
 }
@@ -193,6 +202,9 @@ header session_list_notification_t {
     bit<64> sending_time;
     bit<16> no_sessions;
     bit<48> pad6;
+}
+
+header session_list_notification_sessions_grp_comp_t {
     bit<32> party_id_session_id;
     bit<32> party_id_executing_unit;
     bit<32> party_id_sponsored_access_unit;
@@ -215,19 +227,28 @@ header session_status_broadcast_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> delete_order_broadcast_affected_ord_grp_comp_remaining;
+    bit<8> order_exec_report_broadcast_fills_grp_comp_remaining;
+    bit<8> partition_list_notification_partition_grp_comp_remaining;
+    bit<16> session_list_notification_sessions_grp_comp_remaining;
 }
 
 struct headers_t {
     message_header_t message_header;
     delete_order_broadcast_t delete_order_broadcast;
+    delete_order_broadcast_affected_ord_grp_comp_t delete_order_broadcast_affected_ord_grp_comp[MAX_MESSAGES];
     forced_logout_notification_t forced_logout_notification;
     heartbeat_notification_t heartbeat_notification;
     logon_response_t logon_response;
     logout_response_t logout_response;
     order_exec_report_broadcast_t order_exec_report_broadcast;
+    order_exec_report_broadcast_fills_grp_comp_t order_exec_report_broadcast_fills_grp_comp[MAX_MESSAGES];
     partition_list_notification_t partition_list_notification;
+    partition_list_notification_partition_grp_comp_t partition_list_notification_partition_grp_comp[MAX_MESSAGES];
     reject_t reject;
     session_list_notification_t session_list_notification;
+    session_list_notification_sessions_grp_comp_t session_list_notification_sessions_grp_comp[MAX_MESSAGES];
     session_status_broadcast_t session_status_broadcast;
 }
 
@@ -251,51 +272,113 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
 
     state parse_delete_order_broadcast {
         packet.extract(hdr.delete_order_broadcast);
-        transition accept;
+        meta.dispatched = 1;
+        meta.delete_order_broadcast_affected_ord_grp_comp_remaining = hdr.delete_order_broadcast.no_affected_orders;
+        transition select(meta.delete_order_broadcast_affected_ord_grp_comp_remaining) {
+            16w0: accept;
+            default: parse_delete_order_broadcast_affected_ord_grp_comp;
+        }
+    }
+
+    state parse_delete_order_broadcast_affected_ord_grp_comp {
+        packet.extract(hdr.delete_order_broadcast_affected_ord_grp_comp.next);
+        meta.delete_order_broadcast_affected_ord_grp_comp_remaining = meta.delete_order_broadcast_affected_ord_grp_comp_remaining - 1;
+        transition select(meta.delete_order_broadcast_affected_ord_grp_comp_remaining) {
+            16w0: accept;
+            default: parse_delete_order_broadcast_affected_ord_grp_comp;
+        }
     }
 
     state parse_forced_logout_notification {
         packet.extract(hdr.forced_logout_notification);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_notification {
         packet.extract(hdr.heartbeat_notification);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_response {
         packet.extract(hdr.logon_response);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_response {
         packet.extract(hdr.logout_response);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_exec_report_broadcast {
         packet.extract(hdr.order_exec_report_broadcast);
-        transition accept;
+        meta.dispatched = 1;
+        meta.order_exec_report_broadcast_fills_grp_comp_remaining = hdr.order_exec_report_broadcast.no_fills;
+        transition select(meta.order_exec_report_broadcast_fills_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_order_exec_report_broadcast_fills_grp_comp;
+        }
+    }
+
+    state parse_order_exec_report_broadcast_fills_grp_comp {
+        packet.extract(hdr.order_exec_report_broadcast_fills_grp_comp.next);
+        meta.order_exec_report_broadcast_fills_grp_comp_remaining = meta.order_exec_report_broadcast_fills_grp_comp_remaining - 1;
+        transition select(meta.order_exec_report_broadcast_fills_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_order_exec_report_broadcast_fills_grp_comp;
+        }
     }
 
     state parse_partition_list_notification {
         packet.extract(hdr.partition_list_notification);
-        transition accept;
+        meta.dispatched = 1;
+        meta.partition_list_notification_partition_grp_comp_remaining = hdr.partition_list_notification.no_partitions;
+        transition select(meta.partition_list_notification_partition_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_partition_list_notification_partition_grp_comp;
+        }
+    }
+
+    state parse_partition_list_notification_partition_grp_comp {
+        packet.extract(hdr.partition_list_notification_partition_grp_comp.next);
+        meta.partition_list_notification_partition_grp_comp_remaining = meta.partition_list_notification_partition_grp_comp_remaining - 1;
+        transition select(meta.partition_list_notification_partition_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_partition_list_notification_partition_grp_comp;
+        }
     }
 
     state parse_reject {
         packet.extract(hdr.reject);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_session_list_notification {
         packet.extract(hdr.session_list_notification);
-        transition accept;
+        meta.dispatched = 1;
+        meta.session_list_notification_sessions_grp_comp_remaining = hdr.session_list_notification.no_sessions;
+        transition select(meta.session_list_notification_sessions_grp_comp_remaining) {
+            16w0: accept;
+            default: parse_session_list_notification_sessions_grp_comp;
+        }
+    }
+
+    state parse_session_list_notification_sessions_grp_comp {
+        packet.extract(hdr.session_list_notification_sessions_grp_comp.next);
+        meta.session_list_notification_sessions_grp_comp_remaining = meta.session_list_notification_sessions_grp_comp_remaining - 1;
+        transition select(meta.session_list_notification_sessions_grp_comp_remaining) {
+            16w0: accept;
+            default: parse_session_list_notification_sessions_grp_comp;
+        }
     }
 
     state parse_session_status_broadcast {
         packet.extract(hdr.session_status_broadcast);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -308,7 +391,12 @@ control EurexT7EdciServerVerifyChecksum(inout headers_t hdr, inout metadata_t me
 
 control EurexT7EdciServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -326,14 +414,18 @@ control EurexT7EdciServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.delete_order_broadcast);
+        packet.emit(hdr.delete_order_broadcast_affected_ord_grp_comp);
         packet.emit(hdr.forced_logout_notification);
         packet.emit(hdr.heartbeat_notification);
         packet.emit(hdr.logon_response);
         packet.emit(hdr.logout_response);
         packet.emit(hdr.order_exec_report_broadcast);
+        packet.emit(hdr.order_exec_report_broadcast_fills_grp_comp);
         packet.emit(hdr.partition_list_notification);
+        packet.emit(hdr.partition_list_notification_partition_grp_comp);
         packet.emit(hdr.reject);
         packet.emit(hdr.session_list_notification);
+        packet.emit(hdr.session_list_notification_sessions_grp_comp);
         packet.emit(hdr.session_status_broadcast);
     }
 }

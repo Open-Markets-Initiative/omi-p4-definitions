@@ -100,6 +100,7 @@ header user_logout_request_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -130,36 +131,43 @@ parser EurexT7EdciClientParser(packet_in packet, out headers_t hdr, inout metada
 
     state parse_heartbeat {
         packet.extract(hdr.heartbeat);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_request {
         packet.extract(hdr.logon_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_request {
         packet.extract(hdr.logout_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_request {
         packet.extract(hdr.retransmit_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_action_request {
         packet.extract(hdr.trading_action_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_user_login_request {
         packet.extract(hdr.user_login_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_user_logout_request {
         packet.extract(hdr.user_logout_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -172,7 +180,12 @@ control EurexT7EdciClientVerifyChecksum(inout headers_t hdr, inout metadata_t me
 
 control EurexT7EdciClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

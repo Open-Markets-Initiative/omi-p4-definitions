@@ -142,6 +142,9 @@ header complex_symbol_definition_message_t {
     bit<16> stream_id;
     bit<16> no_of_legs;
     bit<16> reserved_2;
+}
+
+header complex_symbol_definition_message_leg_definition_t {
     bit<32> symbol_index;
     bit<16> leg_ratio_qty;
     bit<8> side;
@@ -161,6 +164,8 @@ header sequence_number_reset_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> complex_symbol_definition_message_leg_definition_remaining;
 }
 
 struct headers_t {
@@ -173,6 +178,7 @@ struct headers_t {
     refresh_complex_quote_message_t refresh_complex_quote_message;
     refresh_complex_trade_message_t refresh_complex_trade_message;
     complex_symbol_definition_message_t complex_symbol_definition_message;
+    complex_symbol_definition_message_leg_definition_t complex_symbol_definition_message_leg_definition[MAX_MESSAGES];
     stream_id_message_t stream_id_message;
     sequence_number_reset_message_t sequence_number_reset_message;
 }
@@ -197,51 +203,74 @@ parser ArcaoptionsComplexfeedParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_complex_quote_message {
         packet.extract(hdr.complex_quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_trade_message {
         packet.extract(hdr.complex_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_crossing_rfq_message {
         packet.extract(hdr.complex_crossing_rfq_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_cube_rfq_message {
         packet.extract(hdr.complex_cube_rfq_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_status_message {
         packet.extract(hdr.complex_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_complex_quote_message {
         packet.extract(hdr.refresh_complex_quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_complex_trade_message {
         packet.extract(hdr.refresh_complex_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_symbol_definition_message {
         packet.extract(hdr.complex_symbol_definition_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.complex_symbol_definition_message_leg_definition_remaining = hdr.complex_symbol_definition_message.no_of_legs;
+        transition select(meta.complex_symbol_definition_message_leg_definition_remaining) {
+            16w0: accept;
+            default: parse_complex_symbol_definition_message_leg_definition;
+        }
+    }
+
+    state parse_complex_symbol_definition_message_leg_definition {
+        packet.extract(hdr.complex_symbol_definition_message_leg_definition.next);
+        meta.complex_symbol_definition_message_leg_definition_remaining = meta.complex_symbol_definition_message_leg_definition_remaining - 1;
+        transition select(meta.complex_symbol_definition_message_leg_definition_remaining) {
+            16w0: accept;
+            default: parse_complex_symbol_definition_message_leg_definition;
+        }
     }
 
     state parse_stream_id_message {
         packet.extract(hdr.stream_id_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -254,7 +283,12 @@ control ArcaoptionsComplexfeedVerifyChecksum(inout headers_t hdr, inout metadata
 
 control ArcaoptionsComplexfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -279,6 +313,7 @@ control ArcaoptionsComplexfeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.refresh_complex_quote_message);
         packet.emit(hdr.refresh_complex_trade_message);
         packet.emit(hdr.complex_symbol_definition_message);
+        packet.emit(hdr.complex_symbol_definition_message_leg_definition);
         packet.emit(hdr.stream_id_message);
         packet.emit(hdr.sequence_number_reset_message);
     }

@@ -260,6 +260,7 @@ header noii_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -326,111 +327,133 @@ parser NomoptionsIttoMoldudp64Parser(packet_in packet, out headers_t hdr, inout 
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_options_directory_message {
         packet.extract(hdr.options_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_security_open_message {
         packet.extract(hdr.security_open_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_message_short_message_form {
         packet.extract(hdr.add_order_message_short_message_form.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_message_long_form_message {
         packet.extract(hdr.add_order_message_long_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_quote_message_short_form_message {
         packet.extract(hdr.add_quote_message_short_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_quote_message_long_form_message {
         packet.extract(hdr.add_quote_message_long_form_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_single_side_executed_message {
         packet.extract(hdr.single_side_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_single_side_executed_with_price_message {
         packet.extract(hdr.single_side_executed_with_price_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_cancel_message {
         packet.extract(hdr.order_cancel_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_single_side_replace_message_short_form {
         packet.extract(hdr.single_side_replace_message_short_form.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_single_side_replace_message_long_form {
         packet.extract(hdr.single_side_replace_message_long_form.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_single_side_delete_message {
         packet.extract(hdr.single_side_delete_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_single_side_change_message {
         packet.extract(hdr.single_side_change_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_quote_replace_message_short_form {
         packet.extract(hdr.quote_replace_message_short_form.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_quote_replace_message_long_form {
         packet.extract(hdr.quote_replace_message_long_form.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_quote_delete_message {
         packet.extract(hdr.quote_delete_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_options_trade_messages_non_auction {
         packet.extract(hdr.options_trade_messages_non_auction.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_options_cross_trade_message {
         packet.extract(hdr.options_cross_trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_broken_trade_order_executed_message {
         packet.extract(hdr.broken_trade_order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_noii_message {
         packet.extract(hdr.noii_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -443,7 +466,12 @@ control NomoptionsIttoMoldudp64VerifyChecksum(inout headers_t hdr, inout metadat
 
 control NomoptionsIttoMoldudp64Ingress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

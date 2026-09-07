@@ -63,6 +63,9 @@ header md_incremental_refresh_eris_reference_data_and_daily_statistics_t {
     bit<16> batch_total_messages_optional;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_t {
     bit<8> md_update_action_char;
     bit<8> md_entry_type;
     bit<32> rpt_seq;
@@ -138,19 +141,8 @@ header md_incremental_refresh_eris_reference_data_and_daily_statistics_t {
     bit<64> mantissa_22;
     bit<8> exponent_23;
     bit<240> security_description;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
-    bit<208> security_alt_id_50;
-    bit<8> security_alt_id_source_optional;
-    bit<16> block_length_3;
-    bit<8> num_in_group_8_3;
-    bit<8> related_instrument_type;
-    bit<400> related_symbol;
-    bit<208> related_security_group;
-    bit<16> block_length_4;
-    bit<8> num_in_group_8_4;
-    bit<8> event_type_optional;
-    bit<64> event_time_optional;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 header md_news_indices_t {
@@ -159,9 +151,18 @@ header md_news_indices_t {
     bit<16> md_feed_type;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_news_indices_news_indices_related_sym_group_t {
     bit<400> symbol;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
+}
+
+header md_news_indices_lines_of_text_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group_8;
+}
+
+header md_news_indices_lines_of_text_group_t {
     bit<2048> text_500_chunk0;
     bit<1952> text_500_chunk1;
 }
@@ -179,6 +180,9 @@ header md_incremental_refresh_trade_blocks_340_t {
     bit<16> batch_total_messages;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_t {
     bit<8> md_update_action;
     bit<64> security_id;
     bit<32> rpt_seq;
@@ -211,39 +215,8 @@ header md_incremental_refresh_trade_blocks_340_t {
     bit<800> reference_id_100;
     bit<208> strategy_link_id;
     bit<136> leg_ref_id;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
-    bit<400> underlying_symbol;
-    bit<16> year_2;
-    bit<8> month_2;
-    bit<8> day_2;
-    bit<8> week_2;
-    bit<72> underlying_security_type;
-    bit<32> underlying_security_exchange_string_4;
-    bit<16> block_length_3;
-    bit<8> num_in_group_8_3;
-    bit<400> party_id;
-    bit<16> party_role;
-    bit<16> block_length_4;
-    bit<8> num_in_group_8_4;
-    bit<400> leg_symbol;
-    bit<64> leg_security_id;
-    bit<96> leg_security_group;
-    bit<136> leg_id;
-    bit<72> leg_security_type;
-    bit<16> year_3;
-    bit<8> month_3;
-    bit<8> day_3;
-    bit<8> week_3;
-    bit<16> leg_maturity_date;
-    bit<64> leg_strike_price;
-    bit<40> leg_unit_of_measure;
-    bit<64> leg_unit_of_measure_qty;
-    bit<32> leg_security_exchange;
-    bit<16> leg_ratio_qty_u_int_16_null;
-    bit<8> leg_side;
-    bit<8> leg_put_or_call;
-    bit<24> leg_unit_of_measure_currency;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 header quote_request_t {
@@ -259,6 +232,9 @@ header quote_request_t {
     bit<208> quote_req_id;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header quote_request_quote_request_related_sym_group_t {
     bit<400> symbol;
     bit<32> coupon_rate;
     bit<64> order_qty;
@@ -268,10 +244,8 @@ header quote_request_t {
     bit<16> maturity_date;
     bit<32> security_type_4;
     bit<8> quote_type;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
-    bit<8> event_type_optional;
-    bit<64> event_time_optional;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 header md_instrument_definition_indices_t {
@@ -284,10 +258,19 @@ header md_instrument_definition_indices_t {
     bit<16> appl_id;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header md_instrument_definition_indices_inst_attrib_group_t {
     bit<8> inst_attrib_type;
     bit<800> inst_attrib_value;
-    bit<16> block_length_2;
+}
+
+header md_instrument_definition_indices_events_group_header_t {
+    bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_instrument_definition_indices_events_group_t {
     bit<8> event_type_optional;
     bit<64> event_time_optional;
 }
@@ -306,6 +289,9 @@ header md_incremental_refresh_indices_t {
     bit<16> batch_total_messages_optional;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_incremental_refresh_indices_incremental_refresh_indices_group_t {
     bit<8> md_entry_type_indices;
     bit<32> rpt_seq;
     bit<64> mantissa;
@@ -342,6 +328,9 @@ header md_incremental_refresh_trade_blocks_349_t {
     bit<16> trade_date;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_t {
     bit<8> md_update_action;
     bit<64> security_id;
     bit<32> rpt_seq;
@@ -375,39 +364,8 @@ header md_incremental_refresh_trade_blocks_349_t {
     bit<800> reference_id_100;
     bit<208> strategy_link_id;
     bit<136> leg_ref_id;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
-    bit<400> underlying_symbol;
-    bit<16> year_2;
-    bit<8> month_2;
-    bit<8> day_2;
-    bit<8> week_2;
-    bit<72> underlying_security_type;
-    bit<32> underlying_security_exchange_string_4;
-    bit<16> block_length_3;
-    bit<8> num_in_group_8_3;
-    bit<400> party_id;
-    bit<16> party_role;
-    bit<16> block_length_4;
-    bit<8> num_in_group_8_4;
-    bit<400> leg_symbol;
-    bit<64> leg_security_id;
-    bit<96> leg_security_group;
-    bit<136> leg_id;
-    bit<72> leg_security_type;
-    bit<16> year_3;
-    bit<8> month_3;
-    bit<8> day_3;
-    bit<8> week_3;
-    bit<16> leg_maturity_date;
-    bit<64> leg_strike_price;
-    bit<40> leg_unit_of_measure;
-    bit<64> leg_unit_of_measure_qty;
-    bit<32> leg_security_exchange;
-    bit<16> leg_ratio_qty_u_int_16_null;
-    bit<8> leg_side;
-    bit<8> leg_put_or_call;
-    bit<24> leg_unit_of_measure_currency;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 header md_incremental_refresh_eris_351_t {
@@ -423,6 +381,9 @@ header md_incremental_refresh_eris_351_t {
     bit<16> batch_total_messages_optional;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_incremental_refresh_eris_351_eris_original_group_t {
     bit<8> md_update_action_char;
     bit<8> md_entry_type;
     bit<32> rpt_seq;
@@ -442,14 +403,8 @@ header md_incremental_refresh_eris_351_t {
     bit<8> product_optional;
     bit<16> maturity_date;
     bit<400> reference_id_50;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
-    bit<208> security_alt_id_50;
-    bit<8> security_alt_id_source_optional;
-    bit<16> block_length_3;
-    bit<8> num_in_group_8_3;
-    bit<8> event_type_optional;
-    bit<64> event_time_optional;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 header md_incremental_refresh_eris_353_t {
@@ -465,6 +420,9 @@ header md_incremental_refresh_eris_353_t {
     bit<16> batch_total_messages_optional;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_incremental_refresh_eris_353_eris_group_t {
     bit<8> md_update_action_char;
     bit<8> md_entry_type;
     bit<32> rpt_seq;
@@ -485,14 +443,8 @@ header md_incremental_refresh_eris_353_t {
     bit<16> maturity_date;
     bit<400> reference_id_50;
     bit<8> md_quote_type;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
-    bit<208> security_alt_id_50;
-    bit<8> security_alt_id_source_optional;
-    bit<16> block_length_3;
-    bit<8> num_in_group_8_3;
-    bit<8> event_type_optional;
-    bit<64> event_time_optional;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 header md_incremental_refresh_otc_t {
@@ -509,6 +461,9 @@ header md_incremental_refresh_otc_t {
     bit<16> batch_total_messages_optional;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_incremental_refresh_otc_otc_original_group_t {
     bit<8> md_entry_type;
     bit<32> rpt_seq;
     bit<64> md_entry_px_optional;
@@ -547,19 +502,8 @@ header md_incremental_refresh_otc_t {
     bit<16> security_sub_type;
     bit<16> vol_type;
     bit<800> reference_id_100;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
-    bit<400> underlying_symbol;
-    bit<16> year_2;
-    bit<8> month_2;
-    bit<8> day_2;
-    bit<8> week_2;
-    bit<72> underlying_security_type;
-    bit<32> underlying_security_exchange_security_exchange;
-    bit<16> block_length_3;
-    bit<8> num_in_group_8_3;
-    bit<400> security_alt_i_d_string_length_50;
-    bit<8> security_alt_id_source;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 header md_instrument_definition_eris_t {
@@ -579,24 +523,45 @@ header md_instrument_definition_eris_t {
     bit<16> appl_id;
     bit<16> block_length;
     bit<8> num_in_group_8;
+}
+
+header md_instrument_definition_eris_eris_feed_types_group_t {
     bit<24> md_feed_type_3;
     bit<8> market_depth;
-    bit<16> block_length_2;
-    bit<8> num_in_group_8_2;
+}
+
+header md_instrument_definition_eris_events_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group_8;
+}
+
+header md_instrument_definition_eris_events_group_t {
     bit<8> event_type_optional;
     bit<64> event_time_optional;
-    bit<16> block_length_3;
-    bit<8> num_in_group_8_3;
+}
+
+header md_instrument_definition_eris_eris_security_alt_id_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group_8;
+}
+
+header md_instrument_definition_eris_eris_security_alt_id_group_t {
     bit<208> security_alt_id_50;
     bit<8> security_alt_id_source_optional;
-    bit<16> block_length_4;
-    bit<8> num_in_group_8_4;
+}
+
+header md_instrument_definition_eris_eris_legs_group_header_t {
+    bit<16> block_length;
+    bit<8> num_in_group_8;
+}
+
+header md_instrument_definition_eris_eris_legs_group_t {
     bit<40> leg_benchmark_curve_name;
     bit<64> rate_descriptor;
     bit<16> previous_fixing_date;
     bit<24> leg_pay_frequencey;
-    bit<64> mantissa_2;
-    bit<8> exponent_2;
+    bit<64> mantissa;
+    bit<8> exponent;
     bit<400> leg_symbol;
     bit<32> leg_ratio_qty_int_32_null;
     bit<8> leg_side;
@@ -604,15 +569,30 @@ header md_instrument_definition_eris_t {
     bit<64> leg_security_type_4;
     bit<96> leg_security_group;
     bit<8> leg_date_offset;
-    bit<64> mantissa_3;
-    bit<8> exponent_3;
-    bit<16> block_length_5;
-    bit<8> num_in_group_8_5;
-    bit<208> security_alt_id_50_2;
-    bit<8> security_alt_id_source_optional_2;
+    bit<64> mantissa_2;
+    bit<8> exponent_2;
+    bit<16> block_length;
+    bit<8> num_in_group_8;
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_remaining;
+    bit<8> md_news_indices_news_indices_related_sym_group_remaining;
+    bit<8> md_news_indices_lines_of_text_group_remaining;
+    bit<8> md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_remaining;
+    bit<8> quote_request_quote_request_related_sym_group_remaining;
+    bit<16> md_instrument_definition_indices_inst_attrib_group_remaining;
+    bit<8> md_instrument_definition_indices_events_group_remaining;
+    bit<8> md_incremental_refresh_indices_incremental_refresh_indices_group_remaining;
+    bit<8> md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_remaining;
+    bit<8> md_incremental_refresh_eris_351_eris_original_group_remaining;
+    bit<8> md_incremental_refresh_eris_353_eris_group_remaining;
+    bit<8> md_incremental_refresh_otc_otc_original_group_remaining;
+    bit<8> md_instrument_definition_eris_eris_feed_types_group_remaining;
+    bit<8> md_instrument_definition_eris_events_group_remaining;
+    bit<8> md_instrument_definition_eris_eris_security_alt_id_group_remaining;
+    bit<8> md_instrument_definition_eris_eris_legs_group_remaining;
 }
 
 struct headers_t {
@@ -620,16 +600,37 @@ struct headers_t {
     admin_login_t admin_login;
     admin_logout_t admin_logout;
     md_incremental_refresh_eris_reference_data_and_daily_statistics_t md_incremental_refresh_eris_reference_data_and_daily_statistics;
+    md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_t md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group[MAX_MESSAGES];
     md_news_indices_t md_news_indices;
+    md_news_indices_news_indices_related_sym_group_t md_news_indices_news_indices_related_sym_group[MAX_MESSAGES];
+    md_news_indices_lines_of_text_group_header_t md_news_indices_lines_of_text_group_header;
+    md_news_indices_lines_of_text_group_t md_news_indices_lines_of_text_group[MAX_MESSAGES];
     md_incremental_refresh_trade_blocks_340_t md_incremental_refresh_trade_blocks_340;
+    md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_t md_incremental_refresh_trade_blocks_340_trade_blocks_original_group[MAX_MESSAGES];
     quote_request_t quote_request;
+    quote_request_quote_request_related_sym_group_t quote_request_quote_request_related_sym_group[MAX_MESSAGES];
     md_instrument_definition_indices_t md_instrument_definition_indices;
+    md_instrument_definition_indices_inst_attrib_group_t md_instrument_definition_indices_inst_attrib_group[MAX_MESSAGES];
+    md_instrument_definition_indices_events_group_header_t md_instrument_definition_indices_events_group_header;
+    md_instrument_definition_indices_events_group_t md_instrument_definition_indices_events_group[MAX_MESSAGES];
     md_incremental_refresh_indices_t md_incremental_refresh_indices;
+    md_incremental_refresh_indices_incremental_refresh_indices_group_t md_incremental_refresh_indices_incremental_refresh_indices_group[MAX_MESSAGES];
     md_incremental_refresh_trade_blocks_349_t md_incremental_refresh_trade_blocks_349;
+    md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_t md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group[MAX_MESSAGES];
     md_incremental_refresh_eris_351_t md_incremental_refresh_eris_351;
+    md_incremental_refresh_eris_351_eris_original_group_t md_incremental_refresh_eris_351_eris_original_group[MAX_MESSAGES];
     md_incremental_refresh_eris_353_t md_incremental_refresh_eris_353;
+    md_incremental_refresh_eris_353_eris_group_t md_incremental_refresh_eris_353_eris_group[MAX_MESSAGES];
     md_incremental_refresh_otc_t md_incremental_refresh_otc;
+    md_incremental_refresh_otc_otc_original_group_t md_incremental_refresh_otc_otc_original_group[MAX_MESSAGES];
     md_instrument_definition_eris_t md_instrument_definition_eris;
+    md_instrument_definition_eris_eris_feed_types_group_t md_instrument_definition_eris_eris_feed_types_group[MAX_MESSAGES];
+    md_instrument_definition_eris_events_group_header_t md_instrument_definition_eris_events_group_header;
+    md_instrument_definition_eris_events_group_t md_instrument_definition_eris_events_group[MAX_MESSAGES];
+    md_instrument_definition_eris_eris_security_alt_id_group_header_t md_instrument_definition_eris_eris_security_alt_id_group_header;
+    md_instrument_definition_eris_eris_security_alt_id_group_t md_instrument_definition_eris_eris_security_alt_id_group[MAX_MESSAGES];
+    md_instrument_definition_eris_eris_legs_group_header_t md_instrument_definition_eris_eris_legs_group_header;
+    md_instrument_definition_eris_eris_legs_group_t md_instrument_definition_eris_eris_legs_group[MAX_MESSAGES];
 }
 
 parser CmeGlobexStreamlinedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -655,67 +656,313 @@ parser CmeGlobexStreamlinedTcpParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_admin_login {
         packet.extract(hdr.admin_login);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_admin_logout {
         packet.extract(hdr.admin_logout);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_md_incremental_refresh_eris_reference_data_and_daily_statistics {
         packet.extract(hdr.md_incremental_refresh_eris_reference_data_and_daily_statistics);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_remaining = hdr.md_incremental_refresh_eris_reference_data_and_daily_statistics.num_in_group_8;
+        transition select(meta.md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group {
+        packet.extract(hdr.md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group.next);
+        meta.md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_remaining = meta.md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group;
+        }
     }
 
     state parse_md_news_indices {
         packet.extract(hdr.md_news_indices);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_news_indices_news_indices_related_sym_group_remaining = hdr.md_news_indices.num_in_group_8;
+        transition select(meta.md_news_indices_news_indices_related_sym_group_remaining) {
+            8w0: read_md_news_indices_lines_of_text_group;
+            default: parse_md_news_indices_news_indices_related_sym_group;
+        }
+    }
+
+    state parse_md_news_indices_news_indices_related_sym_group {
+        packet.extract(hdr.md_news_indices_news_indices_related_sym_group.next);
+        meta.md_news_indices_news_indices_related_sym_group_remaining = meta.md_news_indices_news_indices_related_sym_group_remaining - 1;
+        transition select(meta.md_news_indices_news_indices_related_sym_group_remaining) {
+            8w0: read_md_news_indices_lines_of_text_group;
+            default: parse_md_news_indices_news_indices_related_sym_group;
+        }
+    }
+
+    state read_md_news_indices_lines_of_text_group {
+        packet.extract(hdr.md_news_indices_lines_of_text_group_header);
+        meta.md_news_indices_lines_of_text_group_remaining = hdr.md_news_indices_lines_of_text_group_header.num_in_group_8;
+        transition select(meta.md_news_indices_lines_of_text_group_remaining) {
+            8w0: accept;
+            default: parse_md_news_indices_lines_of_text_group;
+        }
+    }
+
+    state parse_md_news_indices_lines_of_text_group {
+        packet.extract(hdr.md_news_indices_lines_of_text_group.next);
+        meta.md_news_indices_lines_of_text_group_remaining = meta.md_news_indices_lines_of_text_group_remaining - 1;
+        transition select(meta.md_news_indices_lines_of_text_group_remaining) {
+            8w0: accept;
+            default: parse_md_news_indices_lines_of_text_group;
+        }
     }
 
     state parse_md_incremental_refresh_trade_blocks_340 {
         packet.extract(hdr.md_incremental_refresh_trade_blocks_340);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_remaining = hdr.md_incremental_refresh_trade_blocks_340.num_in_group_8;
+        transition select(meta.md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_trade_blocks_340_trade_blocks_original_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_trade_blocks_340_trade_blocks_original_group {
+        packet.extract(hdr.md_incremental_refresh_trade_blocks_340_trade_blocks_original_group.next);
+        meta.md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_remaining = meta.md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_trade_blocks_340_trade_blocks_original_group;
+        }
     }
 
     state parse_quote_request {
         packet.extract(hdr.quote_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.quote_request_quote_request_related_sym_group_remaining = hdr.quote_request.num_in_group_8;
+        transition select(meta.quote_request_quote_request_related_sym_group_remaining) {
+            8w0: accept;
+            default: parse_quote_request_quote_request_related_sym_group;
+        }
+    }
+
+    state parse_quote_request_quote_request_related_sym_group {
+        packet.extract(hdr.quote_request_quote_request_related_sym_group.next);
+        meta.quote_request_quote_request_related_sym_group_remaining = meta.quote_request_quote_request_related_sym_group_remaining - 1;
+        transition select(meta.quote_request_quote_request_related_sym_group_remaining) {
+            8w0: accept;
+            default: parse_quote_request_quote_request_related_sym_group;
+        }
     }
 
     state parse_md_instrument_definition_indices {
         packet.extract(hdr.md_instrument_definition_indices);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_instrument_definition_indices_inst_attrib_group_remaining = hdr.md_instrument_definition_indices.num_in_group;
+        transition select(meta.md_instrument_definition_indices_inst_attrib_group_remaining) {
+            16w0: read_md_instrument_definition_indices_events_group;
+            default: parse_md_instrument_definition_indices_inst_attrib_group;
+        }
+    }
+
+    state parse_md_instrument_definition_indices_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_indices_inst_attrib_group.next);
+        meta.md_instrument_definition_indices_inst_attrib_group_remaining = meta.md_instrument_definition_indices_inst_attrib_group_remaining - 1;
+        transition select(meta.md_instrument_definition_indices_inst_attrib_group_remaining) {
+            16w0: read_md_instrument_definition_indices_events_group;
+            default: parse_md_instrument_definition_indices_inst_attrib_group;
+        }
+    }
+
+    state read_md_instrument_definition_indices_events_group {
+        packet.extract(hdr.md_instrument_definition_indices_events_group_header);
+        meta.md_instrument_definition_indices_events_group_remaining = hdr.md_instrument_definition_indices_events_group_header.num_in_group_8;
+        transition select(meta.md_instrument_definition_indices_events_group_remaining) {
+            8w0: accept;
+            default: parse_md_instrument_definition_indices_events_group;
+        }
+    }
+
+    state parse_md_instrument_definition_indices_events_group {
+        packet.extract(hdr.md_instrument_definition_indices_events_group.next);
+        meta.md_instrument_definition_indices_events_group_remaining = meta.md_instrument_definition_indices_events_group_remaining - 1;
+        transition select(meta.md_instrument_definition_indices_events_group_remaining) {
+            8w0: accept;
+            default: parse_md_instrument_definition_indices_events_group;
+        }
     }
 
     state parse_md_incremental_refresh_indices {
         packet.extract(hdr.md_incremental_refresh_indices);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_indices_incremental_refresh_indices_group_remaining = hdr.md_incremental_refresh_indices.num_in_group_8;
+        transition select(meta.md_incremental_refresh_indices_incremental_refresh_indices_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_indices_incremental_refresh_indices_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_indices_incremental_refresh_indices_group {
+        packet.extract(hdr.md_incremental_refresh_indices_incremental_refresh_indices_group.next);
+        meta.md_incremental_refresh_indices_incremental_refresh_indices_group_remaining = meta.md_incremental_refresh_indices_incremental_refresh_indices_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_indices_incremental_refresh_indices_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_indices_incremental_refresh_indices_group;
+        }
     }
 
     state parse_md_incremental_refresh_trade_blocks_349 {
         packet.extract(hdr.md_incremental_refresh_trade_blocks_349);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_remaining = hdr.md_incremental_refresh_trade_blocks_349.num_in_group_8;
+        transition select(meta.md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group {
+        packet.extract(hdr.md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group.next);
+        meta.md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_remaining = meta.md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group;
+        }
     }
 
     state parse_md_incremental_refresh_eris_351 {
         packet.extract(hdr.md_incremental_refresh_eris_351);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_eris_351_eris_original_group_remaining = hdr.md_incremental_refresh_eris_351.num_in_group_8;
+        transition select(meta.md_incremental_refresh_eris_351_eris_original_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_eris_351_eris_original_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_eris_351_eris_original_group {
+        packet.extract(hdr.md_incremental_refresh_eris_351_eris_original_group.next);
+        meta.md_incremental_refresh_eris_351_eris_original_group_remaining = meta.md_incremental_refresh_eris_351_eris_original_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_eris_351_eris_original_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_eris_351_eris_original_group;
+        }
     }
 
     state parse_md_incremental_refresh_eris_353 {
         packet.extract(hdr.md_incremental_refresh_eris_353);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_eris_353_eris_group_remaining = hdr.md_incremental_refresh_eris_353.num_in_group_8;
+        transition select(meta.md_incremental_refresh_eris_353_eris_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_eris_353_eris_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_eris_353_eris_group {
+        packet.extract(hdr.md_incremental_refresh_eris_353_eris_group.next);
+        meta.md_incremental_refresh_eris_353_eris_group_remaining = meta.md_incremental_refresh_eris_353_eris_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_eris_353_eris_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_eris_353_eris_group;
+        }
     }
 
     state parse_md_incremental_refresh_otc {
         packet.extract(hdr.md_incremental_refresh_otc);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_otc_otc_original_group_remaining = hdr.md_incremental_refresh_otc.num_in_group_8;
+        transition select(meta.md_incremental_refresh_otc_otc_original_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_otc_otc_original_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_otc_otc_original_group {
+        packet.extract(hdr.md_incremental_refresh_otc_otc_original_group.next);
+        meta.md_incremental_refresh_otc_otc_original_group_remaining = meta.md_incremental_refresh_otc_otc_original_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_otc_otc_original_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_otc_otc_original_group;
+        }
     }
 
     state parse_md_instrument_definition_eris {
         packet.extract(hdr.md_instrument_definition_eris);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_instrument_definition_eris_eris_feed_types_group_remaining = hdr.md_instrument_definition_eris.num_in_group_8;
+        transition select(meta.md_instrument_definition_eris_eris_feed_types_group_remaining) {
+            8w0: read_md_instrument_definition_eris_events_group;
+            default: parse_md_instrument_definition_eris_eris_feed_types_group;
+        }
+    }
+
+    state parse_md_instrument_definition_eris_eris_feed_types_group {
+        packet.extract(hdr.md_instrument_definition_eris_eris_feed_types_group.next);
+        meta.md_instrument_definition_eris_eris_feed_types_group_remaining = meta.md_instrument_definition_eris_eris_feed_types_group_remaining - 1;
+        transition select(meta.md_instrument_definition_eris_eris_feed_types_group_remaining) {
+            8w0: read_md_instrument_definition_eris_events_group;
+            default: parse_md_instrument_definition_eris_eris_feed_types_group;
+        }
+    }
+
+    state read_md_instrument_definition_eris_events_group {
+        packet.extract(hdr.md_instrument_definition_eris_events_group_header);
+        meta.md_instrument_definition_eris_events_group_remaining = hdr.md_instrument_definition_eris_events_group_header.num_in_group_8;
+        transition select(meta.md_instrument_definition_eris_events_group_remaining) {
+            8w0: read_md_instrument_definition_eris_eris_security_alt_id_group;
+            default: parse_md_instrument_definition_eris_events_group;
+        }
+    }
+
+    state parse_md_instrument_definition_eris_events_group {
+        packet.extract(hdr.md_instrument_definition_eris_events_group.next);
+        meta.md_instrument_definition_eris_events_group_remaining = meta.md_instrument_definition_eris_events_group_remaining - 1;
+        transition select(meta.md_instrument_definition_eris_events_group_remaining) {
+            8w0: read_md_instrument_definition_eris_eris_security_alt_id_group;
+            default: parse_md_instrument_definition_eris_events_group;
+        }
+    }
+
+    state read_md_instrument_definition_eris_eris_security_alt_id_group {
+        packet.extract(hdr.md_instrument_definition_eris_eris_security_alt_id_group_header);
+        meta.md_instrument_definition_eris_eris_security_alt_id_group_remaining = hdr.md_instrument_definition_eris_eris_security_alt_id_group_header.num_in_group_8;
+        transition select(meta.md_instrument_definition_eris_eris_security_alt_id_group_remaining) {
+            8w0: read_md_instrument_definition_eris_eris_legs_group;
+            default: parse_md_instrument_definition_eris_eris_security_alt_id_group;
+        }
+    }
+
+    state parse_md_instrument_definition_eris_eris_security_alt_id_group {
+        packet.extract(hdr.md_instrument_definition_eris_eris_security_alt_id_group.next);
+        meta.md_instrument_definition_eris_eris_security_alt_id_group_remaining = meta.md_instrument_definition_eris_eris_security_alt_id_group_remaining - 1;
+        transition select(meta.md_instrument_definition_eris_eris_security_alt_id_group_remaining) {
+            8w0: read_md_instrument_definition_eris_eris_legs_group;
+            default: parse_md_instrument_definition_eris_eris_security_alt_id_group;
+        }
+    }
+
+    state read_md_instrument_definition_eris_eris_legs_group {
+        packet.extract(hdr.md_instrument_definition_eris_eris_legs_group_header);
+        meta.md_instrument_definition_eris_eris_legs_group_remaining = hdr.md_instrument_definition_eris_eris_legs_group_header.num_in_group_8;
+        transition select(meta.md_instrument_definition_eris_eris_legs_group_remaining) {
+            8w0: accept;
+            default: parse_md_instrument_definition_eris_eris_legs_group;
+        }
+    }
+
+    state parse_md_instrument_definition_eris_eris_legs_group {
+        packet.extract(hdr.md_instrument_definition_eris_eris_legs_group.next);
+        meta.md_instrument_definition_eris_eris_legs_group_remaining = meta.md_instrument_definition_eris_eris_legs_group_remaining - 1;
+        transition select(meta.md_instrument_definition_eris_eris_legs_group_remaining) {
+            8w0: accept;
+            default: parse_md_instrument_definition_eris_eris_legs_group;
+        }
     }
 
 }
@@ -727,7 +974,12 @@ control CmeGlobexStreamlinedTcpVerifyChecksum(inout headers_t hdr, inout metadat
 
 control CmeGlobexStreamlinedTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -747,16 +999,37 @@ control CmeGlobexStreamlinedTcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.admin_login);
         packet.emit(hdr.admin_logout);
         packet.emit(hdr.md_incremental_refresh_eris_reference_data_and_daily_statistics);
+        packet.emit(hdr.md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_reference_data_group);
         packet.emit(hdr.md_news_indices);
+        packet.emit(hdr.md_news_indices_news_indices_related_sym_group);
+        packet.emit(hdr.md_news_indices_lines_of_text_group_header);
+        packet.emit(hdr.md_news_indices_lines_of_text_group);
         packet.emit(hdr.md_incremental_refresh_trade_blocks_340);
+        packet.emit(hdr.md_incremental_refresh_trade_blocks_340_trade_blocks_original_group);
         packet.emit(hdr.quote_request);
+        packet.emit(hdr.quote_request_quote_request_related_sym_group);
         packet.emit(hdr.md_instrument_definition_indices);
+        packet.emit(hdr.md_instrument_definition_indices_inst_attrib_group);
+        packet.emit(hdr.md_instrument_definition_indices_events_group_header);
+        packet.emit(hdr.md_instrument_definition_indices_events_group);
         packet.emit(hdr.md_incremental_refresh_indices);
+        packet.emit(hdr.md_incremental_refresh_indices_incremental_refresh_indices_group);
         packet.emit(hdr.md_incremental_refresh_trade_blocks_349);
+        packet.emit(hdr.md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group);
         packet.emit(hdr.md_incremental_refresh_eris_351);
+        packet.emit(hdr.md_incremental_refresh_eris_351_eris_original_group);
         packet.emit(hdr.md_incremental_refresh_eris_353);
+        packet.emit(hdr.md_incremental_refresh_eris_353_eris_group);
         packet.emit(hdr.md_incremental_refresh_otc);
+        packet.emit(hdr.md_incremental_refresh_otc_otc_original_group);
         packet.emit(hdr.md_instrument_definition_eris);
+        packet.emit(hdr.md_instrument_definition_eris_eris_feed_types_group);
+        packet.emit(hdr.md_instrument_definition_eris_events_group_header);
+        packet.emit(hdr.md_instrument_definition_eris_events_group);
+        packet.emit(hdr.md_instrument_definition_eris_eris_security_alt_id_group_header);
+        packet.emit(hdr.md_instrument_definition_eris_eris_security_alt_id_group);
+        packet.emit(hdr.md_instrument_definition_eris_eris_legs_group_header);
+        packet.emit(hdr.md_instrument_definition_eris_eris_legs_group);
     }
 }
 

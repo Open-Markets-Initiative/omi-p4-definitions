@@ -80,6 +80,9 @@ header instrument_summary_message_t {
     bit<64> trade_volume;
     bit<32> no_of_trades;
     bit<32> pad_4;
+}
+
+header instrument_summary_message_md_instrument_entry_grp_t {
     bit<64> md_entry_px;
     bit<64> md_entry_size;
     bit<8> md_entry_type;
@@ -192,10 +195,13 @@ header trade_reversal_message_t {
     bit<64> trd_reg_ts_execution_time;
     bit<8> no_md_entries;
     bit<56> pad_7;
+}
+
+header trade_reversal_message_md_trade_entry_grp_t {
     bit<64> md_entry_px;
     bit<64> md_entry_size;
     bit<8> md_entry_type;
-    bit<56> pad_7_2;
+    bit<56> pad_7;
 }
 
 header execution_summary_message_t {
@@ -250,6 +256,9 @@ header add_complex_instrument_message_t {
     bit<8> implied_market_indicator;
     bit<8> no_legs;
     bit<8> pad_1;
+}
+
+header add_complex_instrument_message_instrmt_leg_grp_t {
     bit<64> leg_security_id;
     bit<32> leg_ratio_qty;
     bit<8> leg_side;
@@ -257,6 +266,10 @@ header add_complex_instrument_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> instrument_summary_message_md_instrument_entry_grp_remaining;
+    bit<8> trade_reversal_message_md_trade_entry_grp_remaining;
+    bit<8> add_complex_instrument_message_instrmt_leg_grp_remaining;
 }
 
 struct headers_t {
@@ -265,6 +278,7 @@ struct headers_t {
     product_summary_message_t product_summary_message;
     snapshot_order_message_t snapshot_order_message;
     instrument_summary_message_t instrument_summary_message;
+    instrument_summary_message_md_instrument_entry_grp_t instrument_summary_message_md_instrument_entry_grp[MAX_MESSAGES];
     auction_best_bid_offer_message_t auction_best_bid_offer_message;
     auction_clearing_price_message_t auction_clearing_price_message;
     top_of_book_message_t top_of_book_message;
@@ -276,12 +290,14 @@ struct headers_t {
     partial_order_execution_message_t partial_order_execution_message;
     full_order_execution_message_t full_order_execution_message;
     trade_reversal_message_t trade_reversal_message;
+    trade_reversal_message_md_trade_entry_grp_t trade_reversal_message_md_trade_entry_grp[MAX_MESSAGES];
     execution_summary_message_t execution_summary_message;
     instrument_info_message_t instrument_info_message;
     lpp_range_message_t lpp_range_message;
     product_state_change_message_t product_state_change_message;
     instrument_state_change_message_t instrument_state_change_message;
     add_complex_instrument_message_t add_complex_instrument_message;
+    add_complex_instrument_message_instrmt_leg_grp_t add_complex_instrument_message_instrmt_leg_grp[MAX_MESSAGES];
 }
 
 parser BseindiaEobiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -315,107 +331,167 @@ parser BseindiaEobiParser(packet_in packet, out headers_t hdr, inout metadata_t 
 
     state parse_heartbeat_message {
         packet.extract(hdr.heartbeat_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_product_summary_message {
         packet.extract(hdr.product_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_order_message {
         packet.extract(hdr.snapshot_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_summary_message {
         packet.extract(hdr.instrument_summary_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.instrument_summary_message_md_instrument_entry_grp_remaining = hdr.instrument_summary_message.no_md_entries;
+        transition select(meta.instrument_summary_message_md_instrument_entry_grp_remaining) {
+            8w0: accept;
+            default: parse_instrument_summary_message_md_instrument_entry_grp;
+        }
+    }
+
+    state parse_instrument_summary_message_md_instrument_entry_grp {
+        packet.extract(hdr.instrument_summary_message_md_instrument_entry_grp.next);
+        meta.instrument_summary_message_md_instrument_entry_grp_remaining = meta.instrument_summary_message_md_instrument_entry_grp_remaining - 1;
+        transition select(meta.instrument_summary_message_md_instrument_entry_grp_remaining) {
+            8w0: accept;
+            default: parse_instrument_summary_message_md_instrument_entry_grp;
+        }
     }
 
     state parse_auction_best_bid_offer_message {
         packet.extract(hdr.auction_best_bid_offer_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_auction_clearing_price_message {
         packet.extract(hdr.auction_clearing_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_top_of_book_message {
         packet.extract(hdr.top_of_book_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_add_message {
         packet.extract(hdr.order_add_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_message {
         packet.extract(hdr.order_modify_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_same_priority_message {
         packet.extract(hdr.order_modify_same_priority_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_delete_message {
         packet.extract(hdr.order_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_mass_delete_message {
         packet.extract(hdr.order_mass_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_partial_order_execution_message {
         packet.extract(hdr.partial_order_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_full_order_execution_message {
         packet.extract(hdr.full_order_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_reversal_message {
         packet.extract(hdr.trade_reversal_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.trade_reversal_message_md_trade_entry_grp_remaining = hdr.trade_reversal_message.no_md_entries;
+        transition select(meta.trade_reversal_message_md_trade_entry_grp_remaining) {
+            8w0: accept;
+            default: parse_trade_reversal_message_md_trade_entry_grp;
+        }
+    }
+
+    state parse_trade_reversal_message_md_trade_entry_grp {
+        packet.extract(hdr.trade_reversal_message_md_trade_entry_grp.next);
+        meta.trade_reversal_message_md_trade_entry_grp_remaining = meta.trade_reversal_message_md_trade_entry_grp_remaining - 1;
+        transition select(meta.trade_reversal_message_md_trade_entry_grp_remaining) {
+            8w0: accept;
+            default: parse_trade_reversal_message_md_trade_entry_grp;
+        }
     }
 
     state parse_execution_summary_message {
         packet.extract(hdr.execution_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_info_message {
         packet.extract(hdr.instrument_info_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_lpp_range_message {
         packet.extract(hdr.lpp_range_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_product_state_change_message {
         packet.extract(hdr.product_state_change_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_state_change_message {
         packet.extract(hdr.instrument_state_change_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_add_complex_instrument_message {
         packet.extract(hdr.add_complex_instrument_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.add_complex_instrument_message_instrmt_leg_grp_remaining = hdr.add_complex_instrument_message.no_legs;
+        transition select(meta.add_complex_instrument_message_instrmt_leg_grp_remaining) {
+            8w0: accept;
+            default: parse_add_complex_instrument_message_instrmt_leg_grp;
+        }
+    }
+
+    state parse_add_complex_instrument_message_instrmt_leg_grp {
+        packet.extract(hdr.add_complex_instrument_message_instrmt_leg_grp.next);
+        meta.add_complex_instrument_message_instrmt_leg_grp_remaining = meta.add_complex_instrument_message_instrmt_leg_grp_remaining - 1;
+        transition select(meta.add_complex_instrument_message_instrmt_leg_grp_remaining) {
+            8w0: accept;
+            default: parse_add_complex_instrument_message_instrmt_leg_grp;
+        }
     }
 
 }
@@ -427,7 +503,12 @@ control BseindiaEobiVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
 
 control BseindiaEobiIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -448,6 +529,7 @@ control BseindiaEobiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.product_summary_message);
         packet.emit(hdr.snapshot_order_message);
         packet.emit(hdr.instrument_summary_message);
+        packet.emit(hdr.instrument_summary_message_md_instrument_entry_grp);
         packet.emit(hdr.auction_best_bid_offer_message);
         packet.emit(hdr.auction_clearing_price_message);
         packet.emit(hdr.top_of_book_message);
@@ -459,12 +541,14 @@ control BseindiaEobiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.partial_order_execution_message);
         packet.emit(hdr.full_order_execution_message);
         packet.emit(hdr.trade_reversal_message);
+        packet.emit(hdr.trade_reversal_message_md_trade_entry_grp);
         packet.emit(hdr.execution_summary_message);
         packet.emit(hdr.instrument_info_message);
         packet.emit(hdr.lpp_range_message);
         packet.emit(hdr.product_state_change_message);
         packet.emit(hdr.instrument_state_change_message);
         packet.emit(hdr.add_complex_instrument_message);
+        packet.emit(hdr.add_complex_instrument_message_instrmt_leg_grp);
     }
 }
 

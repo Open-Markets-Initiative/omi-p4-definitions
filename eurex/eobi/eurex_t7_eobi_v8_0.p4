@@ -55,6 +55,9 @@ header add_complex_instrument_t {
     bit<8> implied_market_indicator;
     bit<8> no_legs;
     bit<8> pad1;
+}
+
+header add_complex_instrument_instrmt_leg_grp_comp_t {
     bit<32> leg_symbol;
     bit<32> pad4;
     bit<64> leg_security_id;
@@ -157,6 +160,9 @@ header instrument_summary_t {
     bit<8> sold_out_indicator;
     bit<8> no_md_entries;
     bit<56> pad7;
+}
+
+header instrument_summary_md_instrument_entry_grp_comp_t {
     bit<64> md_entry_px;
     bit<64> md_entry_size;
     bit<8> md_entry_type;
@@ -177,6 +183,9 @@ header mass_instrument_state_change_t {
     bit<8> last_fragment;
     bit<8> no_related_sym;
     bit<48> pad6;
+}
+
+header mass_instrument_state_change_sec_mass_stat_grp_comp_t {
     bit<64> security_id;
     bit<8> security_status;
     bit<8> security_trading_status;
@@ -322,6 +331,9 @@ header trade_reversal_t {
     bit<8> trade_condition;
     bit<16> pad2;
     bit<8> no_md_entries;
+}
+
+header trade_reversal_md_trade_entry_grp_comp_t {
     bit<64> md_entry_px;
     bit<64> md_entry_size;
     bit<8> md_entry_type;
@@ -329,11 +341,17 @@ header trade_reversal_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> add_complex_instrument_instrmt_leg_grp_comp_remaining;
+    bit<8> instrument_summary_md_instrument_entry_grp_comp_remaining;
+    bit<8> mass_instrument_state_change_sec_mass_stat_grp_comp_remaining;
+    bit<8> trade_reversal_md_trade_entry_grp_comp_remaining;
 }
 
 struct headers_t {
     message_header_comp_t message_header_comp;
     add_complex_instrument_t add_complex_instrument;
+    add_complex_instrument_instrmt_leg_grp_comp_t add_complex_instrument_instrmt_leg_grp_comp[MAX_MESSAGES];
     auction_bbo_t auction_bbo;
     auction_clearing_price_t auction_clearing_price;
     cross_request_t cross_request;
@@ -342,7 +360,9 @@ struct headers_t {
     heartbeat_t heartbeat;
     instrument_state_change_t instrument_state_change;
     instrument_summary_t instrument_summary;
+    instrument_summary_md_instrument_entry_grp_comp_t instrument_summary_md_instrument_entry_grp_comp[MAX_MESSAGES];
     mass_instrument_state_change_t mass_instrument_state_change;
+    mass_instrument_state_change_sec_mass_stat_grp_comp_t mass_instrument_state_change_sec_mass_stat_grp_comp[MAX_MESSAGES];
     order_add_t order_add;
     order_delete_t order_delete;
     order_mass_delete_t order_mass_delete;
@@ -356,6 +376,7 @@ struct headers_t {
     top_of_book_t top_of_book;
     trade_report_t trade_report;
     trade_reversal_t trade_reversal;
+    trade_reversal_md_trade_entry_grp_comp_t trade_reversal_md_trade_entry_grp_comp[MAX_MESSAGES];
 }
 
 parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -391,117 +412,192 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
 
     state parse_add_complex_instrument {
         packet.extract(hdr.add_complex_instrument);
-        transition accept;
+        meta.dispatched = 1;
+        meta.add_complex_instrument_instrmt_leg_grp_comp_remaining = hdr.add_complex_instrument.no_legs;
+        transition select(meta.add_complex_instrument_instrmt_leg_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_add_complex_instrument_instrmt_leg_grp_comp;
+        }
+    }
+
+    state parse_add_complex_instrument_instrmt_leg_grp_comp {
+        packet.extract(hdr.add_complex_instrument_instrmt_leg_grp_comp.next);
+        meta.add_complex_instrument_instrmt_leg_grp_comp_remaining = meta.add_complex_instrument_instrmt_leg_grp_comp_remaining - 1;
+        transition select(meta.add_complex_instrument_instrmt_leg_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_add_complex_instrument_instrmt_leg_grp_comp;
+        }
     }
 
     state parse_auction_bbo {
         packet.extract(hdr.auction_bbo);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_auction_clearing_price {
         packet.extract(hdr.auction_clearing_price);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cross_request {
         packet.extract(hdr.cross_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_summary {
         packet.extract(hdr.execution_summary);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_full_order_execution {
         packet.extract(hdr.full_order_execution);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat {
         packet.extract(hdr.heartbeat);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_state_change {
         packet.extract(hdr.instrument_state_change);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_summary {
         packet.extract(hdr.instrument_summary);
-        transition accept;
+        meta.dispatched = 1;
+        meta.instrument_summary_md_instrument_entry_grp_comp_remaining = hdr.instrument_summary.no_md_entries;
+        transition select(meta.instrument_summary_md_instrument_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_instrument_summary_md_instrument_entry_grp_comp;
+        }
+    }
+
+    state parse_instrument_summary_md_instrument_entry_grp_comp {
+        packet.extract(hdr.instrument_summary_md_instrument_entry_grp_comp.next);
+        meta.instrument_summary_md_instrument_entry_grp_comp_remaining = meta.instrument_summary_md_instrument_entry_grp_comp_remaining - 1;
+        transition select(meta.instrument_summary_md_instrument_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_instrument_summary_md_instrument_entry_grp_comp;
+        }
     }
 
     state parse_mass_instrument_state_change {
         packet.extract(hdr.mass_instrument_state_change);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining = hdr.mass_instrument_state_change.no_related_sym;
+        transition select(meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_mass_instrument_state_change_sec_mass_stat_grp_comp;
+        }
+    }
+
+    state parse_mass_instrument_state_change_sec_mass_stat_grp_comp {
+        packet.extract(hdr.mass_instrument_state_change_sec_mass_stat_grp_comp.next);
+        meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining = meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining - 1;
+        transition select(meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_mass_instrument_state_change_sec_mass_stat_grp_comp;
+        }
     }
 
     state parse_order_add {
         packet.extract(hdr.order_add);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_delete {
         packet.extract(hdr.order_delete);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_mass_delete {
         packet.extract(hdr.order_mass_delete);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify {
         packet.extract(hdr.order_modify);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_same_prio {
         packet.extract(hdr.order_modify_same_prio);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_partial_order_execution {
         packet.extract(hdr.partial_order_execution);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_product_state_change {
         packet.extract(hdr.product_state_change);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_product_summary {
         packet.extract(hdr.product_summary);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_request {
         packet.extract(hdr.quote_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_order {
         packet.extract(hdr.snapshot_order);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_top_of_book {
         packet.extract(hdr.top_of_book);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_report {
         packet.extract(hdr.trade_report);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_reversal {
         packet.extract(hdr.trade_reversal);
-        transition accept;
+        meta.dispatched = 1;
+        meta.trade_reversal_md_trade_entry_grp_comp_remaining = hdr.trade_reversal.no_md_entries;
+        transition select(meta.trade_reversal_md_trade_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_trade_reversal_md_trade_entry_grp_comp;
+        }
+    }
+
+    state parse_trade_reversal_md_trade_entry_grp_comp {
+        packet.extract(hdr.trade_reversal_md_trade_entry_grp_comp.next);
+        meta.trade_reversal_md_trade_entry_grp_comp_remaining = meta.trade_reversal_md_trade_entry_grp_comp_remaining - 1;
+        transition select(meta.trade_reversal_md_trade_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_trade_reversal_md_trade_entry_grp_comp;
+        }
     }
 
 }
@@ -513,7 +609,12 @@ control EurexT7EobiVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
 
 control EurexT7EobiIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -531,6 +632,7 @@ control EurexT7EobiDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header_comp);
         packet.emit(hdr.add_complex_instrument);
+        packet.emit(hdr.add_complex_instrument_instrmt_leg_grp_comp);
         packet.emit(hdr.auction_bbo);
         packet.emit(hdr.auction_clearing_price);
         packet.emit(hdr.cross_request);
@@ -539,7 +641,9 @@ control EurexT7EobiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.heartbeat);
         packet.emit(hdr.instrument_state_change);
         packet.emit(hdr.instrument_summary);
+        packet.emit(hdr.instrument_summary_md_instrument_entry_grp_comp);
         packet.emit(hdr.mass_instrument_state_change);
+        packet.emit(hdr.mass_instrument_state_change_sec_mass_stat_grp_comp);
         packet.emit(hdr.order_add);
         packet.emit(hdr.order_delete);
         packet.emit(hdr.order_mass_delete);
@@ -553,6 +657,7 @@ control EurexT7EobiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.top_of_book);
         packet.emit(hdr.trade_report);
         packet.emit(hdr.trade_reversal);
+        packet.emit(hdr.trade_reversal_md_trade_entry_grp_comp);
     }
 }
 

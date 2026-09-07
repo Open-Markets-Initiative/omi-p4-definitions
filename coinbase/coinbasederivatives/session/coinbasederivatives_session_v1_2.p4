@@ -89,6 +89,7 @@ header reject_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -123,46 +124,55 @@ parser CoinbasederivativesSessionParser(packet_in packet, out headers_t hdr, ino
 
     state parse_logon_message {
         packet.extract(hdr.logon_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_conf_message {
         packet.extract(hdr.logon_conf_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_message {
         packet.extract(hdr.logout_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logged_out_message {
         packet.extract(hdr.logged_out_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_message {
         packet.extract(hdr.heartbeat_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_test_request_message {
         packet.extract(hdr.test_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_resend_request_message {
         packet.extract(hdr.resend_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gap_fill_message {
         packet.extract(hdr.gap_fill_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reject_message {
         packet.extract(hdr.reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -175,7 +185,12 @@ control CoinbasederivativesSessionVerifyChecksum(inout headers_t hdr, inout meta
 
 control CoinbasederivativesSessionIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

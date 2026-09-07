@@ -57,6 +57,7 @@ header stream_request_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -82,21 +83,25 @@ parser MemxequitiesCommonheaderClientParser(packet_in packet, out headers_t hdr,
 
     state parse_login_request_message {
         packet.extract(hdr.login_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_request_message {
         packet.extract(hdr.replay_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_all_request_message {
         packet.extract(hdr.replay_all_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_request_message {
         packet.extract(hdr.stream_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -113,7 +118,12 @@ control MemxequitiesCommonheaderClientVerifyChecksum(inout headers_t hdr, inout 
 
 control MemxequitiesCommonheaderClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

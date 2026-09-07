@@ -544,6 +544,7 @@ header cp_order_rate_threshold_state_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -640,51 +641,61 @@ parser MemxoptionsRiskcontrolServerParser(packet_in packet, out headers_t hdr, i
 
     state parse_login_accepted_message {
         packet.extract(hdr.login_accepted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_message {
         packet.extract(hdr.login_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_start_of_session_message {
         packet.extract(hdr.start_of_session_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_begin_message {
         packet.extract(hdr.replay_begin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_rejected_message {
         packet.extract(hdr.replay_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_complete_message {
         packet.extract(hdr.replay_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_begin_message {
         packet.extract(hdr.stream_begin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_rejected_message {
         packet.extract(hdr.stream_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_complete_message {
         packet.extract(hdr.stream_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_message.template_id) {
             8w1: parse_risk_settings_query_message;
             8w2: parse_active_risk_threshold_change_request_message;
@@ -752,301 +763,361 @@ parser MemxoptionsRiskcontrolServerParser(packet_in packet, out headers_t hdr, i
 
     state parse_risk_settings_query_message {
         packet.extract(hdr.risk_settings_query_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_threshold_change_request_message {
         packet.extract(hdr.active_risk_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_acknowledgement_request_message {
         packet.extract(hdr.active_risk_acknowledgement_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_volume_threshold_change_request_message {
         packet.extract(hdr.cp_volume_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_executed_notional_threshold_change_request_message {
         packet.extract(hdr.cp_executed_notional_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_total_executions_threshold_change_request_message {
         packet.extract(hdr.cp_total_executions_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_percent_outstanding_contracts_threshold_change_request_message {
         packet.extract(hdr.cp_percent_outstanding_contracts_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_breach_count_threshold_change_request_message {
         packet.extract(hdr.cp_breach_count_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_manual_cp_breach_trigger_request_message {
         packet.extract(hdr.manual_cp_breach_trigger_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_clear_breach_request_message {
         packet.extract(hdr.cp_clear_breach_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_allow_iso_orders_change_request_message {
         packet.extract(hdr.single_order_allow_iso_orders_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_allow_orders_in_crossed_market_change_request_message {
         packet.extract(hdr.single_order_allow_orders_in_crossed_market_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_max_notional_change_request_message {
         packet.extract(hdr.single_order_max_notional_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_max_contracts_change_request_message {
         packet.extract(hdr.single_order_max_contracts_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_allow_market_orders_change_request_message {
         packet.extract(hdr.single_order_allow_market_orders_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_restricted_underlier_change_request_message {
         packet.extract(hdr.single_order_restricted_underlier_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_gross_notional_threshold_change_request_message {
         packet.extract(hdr.cp_gross_notional_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_market_order_gross_notional_threshold_change_request_message {
         packet.extract(hdr.cp_market_order_gross_notional_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_net_notional_threshold_change_request_message {
         packet.extract(hdr.cp_net_notional_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_market_order_net_notional_threshold_change_request_message {
         packet.extract(hdr.cp_market_order_net_notional_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_duplicate_order_threshold_change_request_message {
         packet.extract(hdr.cp_duplicate_order_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_order_rate_threshold_change_request_message {
         packet.extract(hdr.cp_order_rate_threshold_change_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_clear_all_breaches_request_message {
         packet.extract(hdr.cp_clear_all_breaches_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_clear_all_breaches_by_efid_or_underlier_request_message {
         packet.extract(hdr.cp_clear_all_breaches_by_efid_or_underlier_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_acknowledge_all_request_message {
         packet.extract(hdr.active_risk_acknowledge_all_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_threshold_state_message {
         packet.extract(hdr.active_risk_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_threshold_change_rejected_message {
         packet.extract(hdr.active_risk_threshold_change_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_acknowledged_message {
         packet.extract(hdr.active_risk_acknowledged_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_acknowledge_rejected_message {
         packet.extract(hdr.active_risk_acknowledge_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_active_risk_quantity_update_notification_message {
         packet.extract(hdr.active_risk_quantity_update_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_volume_threshold_state_message {
         packet.extract(hdr.cp_volume_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_executed_notional_threshold_state_message {
         packet.extract(hdr.cp_executed_notional_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_total_executions_threshold_state_message {
         packet.extract(hdr.cp_total_executions_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_percent_outstanding_contracts_threshold_state_message {
         packet.extract(hdr.cp_percent_outstanding_contracts_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_breach_count_threshold_state_message {
         packet.extract(hdr.cp_breach_count_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_manual_cp_breach_trigger_pending_message {
         packet.extract(hdr.manual_cp_breach_trigger_pending_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_manual_cp_breach_trigger_done_message {
         packet.extract(hdr.manual_cp_breach_trigger_done_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_threshold_update_rejected_message {
         packet.extract(hdr.risk_threshold_update_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_passive_risk_threshold_notification_message {
         packet.extract(hdr.passive_risk_threshold_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_allow_iso_orders_state_message {
         packet.extract(hdr.single_order_allow_iso_orders_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_allow_orders_in_crossed_market_state_message {
         packet.extract(hdr.single_order_allow_orders_in_crossed_market_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_max_notional_threshold_state_message {
         packet.extract(hdr.single_order_max_notional_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_max_contracts_threshold_state_message {
         packet.extract(hdr.single_order_max_contracts_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_allow_market_orders_state_message {
         packet.extract(hdr.single_order_allow_market_orders_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_single_order_restricted_underlier_state_message {
         packet.extract(hdr.single_order_restricted_underlier_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_settings_query_done_message {
         packet.extract(hdr.risk_settings_query_done_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_settings_query_rejected_message {
         packet.extract(hdr.risk_settings_query_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_manual_cp_breach_trigger_rejected_message {
         packet.extract(hdr.manual_cp_breach_trigger_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_breach_clear_rejected_message {
         packet.extract(hdr.breach_clear_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_breach_cleared_message {
         packet.extract(hdr.breach_cleared_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_breach_clear_all_accepted_message {
         packet.extract(hdr.breach_clear_all_accepted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_breach_clear_all_rejected_message {
         packet.extract(hdr.breach_clear_all_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_breach_clear_all_by_efid_or_underlier_accepted_message {
         packet.extract(hdr.breach_clear_all_by_efid_or_underlier_accepted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_breach_clear_all_by_efid_or_underlier_rejected_message {
         packet.extract(hdr.breach_clear_all_by_efid_or_underlier_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_gross_notional_threshold_state_message {
         packet.extract(hdr.cp_gross_notional_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_market_order_gross_notional_threshold_state_message {
         packet.extract(hdr.cp_market_order_gross_notional_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_net_notional_threshold_state_message {
         packet.extract(hdr.cp_net_notional_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_market_order_net_notional_threshold_state_message {
         packet.extract(hdr.cp_market_order_net_notional_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_duplicate_order_threshold_state_message {
         packet.extract(hdr.cp_duplicate_order_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cp_order_rate_threshold_state_message {
         packet.extract(hdr.cp_order_rate_threshold_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -1059,7 +1130,12 @@ control MemxoptionsRiskcontrolServerVerifyChecksum(inout headers_t hdr, inout me
 
 control MemxoptionsRiskcontrolServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

@@ -75,6 +75,7 @@ header stream_complete_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -110,46 +111,55 @@ parser MemxequitiesCommonheaderServerParser(packet_in packet, out headers_t hdr,
 
     state parse_login_accepted_message {
         packet.extract(hdr.login_accepted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_message {
         packet.extract(hdr.login_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_start_of_session_message {
         packet.extract(hdr.start_of_session_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_begin_message {
         packet.extract(hdr.replay_begin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_rejected_message {
         packet.extract(hdr.replay_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_complete_message {
         packet.extract(hdr.replay_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_begin_message {
         packet.extract(hdr.stream_begin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_rejected_message {
         packet.extract(hdr.stream_rejected_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_complete_message {
         packet.extract(hdr.stream_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -166,7 +176,12 @@ control MemxequitiesCommonheaderServerVerifyChecksum(inout headers_t hdr, inout 
 
 control MemxequitiesCommonheaderServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

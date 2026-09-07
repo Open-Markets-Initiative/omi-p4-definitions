@@ -74,6 +74,7 @@ header ma_c_book_entry_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -98,21 +99,25 @@ parser AquisequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_snapshot_start_message {
         packet.extract(hdr.snapshot_start_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_book_status_message {
         packet.extract(hdr.book_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_book_entry_message {
         packet.extract(hdr.book_entry_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ma_c_book_entry_message {
         packet.extract(hdr.ma_c_book_entry_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -125,7 +130,12 @@ control AquisequitiesSnapshotVerifyChecksum(inout headers_t hdr, inout metadata_
 
 control AquisequitiesSnapshotIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

@@ -47,6 +47,9 @@ header md_incremental_refresh_btec_t {
     bit<64> transact_time;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_incremental_refresh_btec_incremental_refresh_btec_group_t {
     bit<8> md_update_action;
     bit<8> md_entry_type;
     bit<64> mantissa;
@@ -65,11 +68,14 @@ header md_incremental_refresh_btec_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> md_incremental_refresh_btec_incremental_refresh_btec_group_remaining;
 }
 
 struct headers_t {
     message_header_t message_header;
     md_incremental_refresh_btec_t md_incremental_refresh_btec;
+    md_incremental_refresh_btec_incremental_refresh_btec_group_t md_incremental_refresh_btec_incremental_refresh_btec_group[MAX_MESSAGES];
 }
 
 parser CmeGlobexBrokertecustTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -83,7 +89,21 @@ parser CmeGlobexBrokertecustTcpParser(packet_in packet, out headers_t hdr, inout
 
     state parse_md_incremental_refresh_btec {
         packet.extract(hdr.md_incremental_refresh_btec);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_btec_incremental_refresh_btec_group_remaining = hdr.md_incremental_refresh_btec.num_in_group;
+        transition select(meta.md_incremental_refresh_btec_incremental_refresh_btec_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_btec_incremental_refresh_btec_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_btec_incremental_refresh_btec_group {
+        packet.extract(hdr.md_incremental_refresh_btec_incremental_refresh_btec_group.next);
+        meta.md_incremental_refresh_btec_incremental_refresh_btec_group_remaining = meta.md_incremental_refresh_btec_incremental_refresh_btec_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_btec_incremental_refresh_btec_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_btec_incremental_refresh_btec_group;
+        }
     }
 
 }
@@ -95,7 +115,12 @@ control CmeGlobexBrokertecustTcpVerifyChecksum(inout headers_t hdr, inout metada
 
 control CmeGlobexBrokertecustTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -113,6 +138,7 @@ control CmeGlobexBrokertecustTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.md_incremental_refresh_btec);
+        packet.emit(hdr.md_incremental_refresh_btec_incremental_refresh_btec_group);
     }
 }
 

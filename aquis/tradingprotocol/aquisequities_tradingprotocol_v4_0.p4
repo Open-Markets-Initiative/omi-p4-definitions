@@ -312,6 +312,7 @@ header ioi_firmup_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -366,96 +367,115 @@ parser AquisequitiesTradingprotocolParser(packet_in packet, out headers_t hdr, i
 
     state parse_login_message {
         packet.extract(hdr.login_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_response_message {
         packet.extract(hdr.login_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_message {
         packet.extract(hdr.logout_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_add_message {
         packet.extract(hdr.order_add_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_add_extended_message {
         packet.extract(hdr.order_add_extended_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_message {
         packet.extract(hdr.order_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_message {
         packet.extract(hdr.order_modify_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_extended_message {
         packet.extract(hdr.order_modify_extended_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_add_response_message {
         packet.extract(hdr.order_add_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_response_message {
         packet.extract(hdr.order_cancel_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_response_message {
         packet.extract(hdr.order_modify_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_iceberg_order_refresh_message {
         packet.extract(hdr.iceberg_order_refresh_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_capture_message {
         packet.extract(hdr.trade_capture_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_capture_response_message {
         packet.extract(hdr.trade_capture_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_bust_message {
         packet.extract(hdr.trade_bust_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ioi_add_message {
         packet.extract(hdr.ioi_add_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ioi_invite_message {
         packet.extract(hdr.ioi_invite_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ioi_firmup_message {
         packet.extract(hdr.ioi_firmup_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -468,7 +488,12 @@ control AquisequitiesTradingprotocolVerifyChecksum(inout headers_t hdr, inout me
 
 control AquisequitiesTradingprotocolIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

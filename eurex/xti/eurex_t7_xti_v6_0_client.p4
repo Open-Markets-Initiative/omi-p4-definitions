@@ -211,6 +211,9 @@ header mass_quote_request_t {
     bit<8> party_id_investment_decision_maker_qualifier;
     bit<8> executing_trader_qualifier;
     bit<48> pad6;
+}
+
+header mass_quote_request_quote_entry_grp_comp_t {
     bit<64> security_id;
     bit<64> bid_px;
     bit<64> offer_px;
@@ -459,6 +462,8 @@ header user_logout_request_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> mass_quote_request_quote_entry_grp_comp_remaining;
 }
 
 struct headers_t {
@@ -476,6 +481,7 @@ struct headers_t {
     logon_request_t logon_request;
     logout_request_t logout_request;
     mass_quote_request_t mass_quote_request;
+    mass_quote_request_quote_entry_grp_comp_t mass_quote_request_quote_entry_grp_comp[MAX_MESSAGES];
     modify_order_single_request_t modify_order_single_request;
     modify_order_single_short_request_t modify_order_single_short_request;
     new_order_single_request_t new_order_single_request;
@@ -525,126 +531,164 @@ parser EurexT7XtiClientParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_cross_request {
         packet.extract(hdr.cross_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_all_order_request {
         packet.extract(hdr.delete_all_order_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_all_quote_request {
         packet.extract(hdr.delete_all_quote_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_order_single_request {
         packet.extract(hdr.delete_order_single_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_enter_best_quote_request {
         packet.extract(hdr.enter_best_quote_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gateway_request {
         packet.extract(hdr.gateway_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat {
         packet.extract(hdr.heartbeat);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inquire_enrichment_rule_id_list_request {
         packet.extract(hdr.inquire_enrichment_rule_id_list_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inquire_session_list_request {
         packet.extract(hdr.inquire_session_list_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_inquire_user_request {
         packet.extract(hdr.inquire_user_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_request {
         packet.extract(hdr.logon_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_request {
         packet.extract(hdr.logout_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_quote_request {
         packet.extract(hdr.mass_quote_request);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mass_quote_request_quote_entry_grp_comp_remaining = hdr.mass_quote_request.no_quote_entries;
+        transition select(meta.mass_quote_request_quote_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_mass_quote_request_quote_entry_grp_comp;
+        }
+    }
+
+    state parse_mass_quote_request_quote_entry_grp_comp {
+        packet.extract(hdr.mass_quote_request_quote_entry_grp_comp.next);
+        meta.mass_quote_request_quote_entry_grp_comp_remaining = meta.mass_quote_request_quote_entry_grp_comp_remaining - 1;
+        transition select(meta.mass_quote_request_quote_entry_grp_comp_remaining) {
+            8w0: accept;
+            default: parse_mass_quote_request_quote_entry_grp_comp;
+        }
     }
 
     state parse_modify_order_single_request {
         packet.extract(hdr.modify_order_single_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_modify_order_single_short_request {
         packet.extract(hdr.modify_order_single_short_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_single_request {
         packet.extract(hdr.new_order_single_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_single_short_request {
         packet.extract(hdr.new_order_single_short_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_activation_request {
         packet.extract(hdr.quote_activation_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_rfq_request {
         packet.extract(hdr.rfq_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_me_message_request {
         packet.extract(hdr.retransmit_me_message_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmit_request {
         packet.extract(hdr.retransmit_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subscribe_request {
         packet.extract(hdr.subscribe_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unsubscribe_request {
         packet.extract(hdr.unsubscribe_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_user_login_request {
         packet.extract(hdr.user_login_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_user_logout_request {
         packet.extract(hdr.user_logout_request);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -657,7 +701,12 @@ control EurexT7XtiClientVerifyChecksum(inout headers_t hdr, inout metadata_t met
 
 control EurexT7XtiClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -687,6 +736,7 @@ control EurexT7XtiClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.logon_request);
         packet.emit(hdr.logout_request);
         packet.emit(hdr.mass_quote_request);
+        packet.emit(hdr.mass_quote_request_quote_entry_grp_comp);
         packet.emit(hdr.modify_order_single_request);
         packet.emit(hdr.modify_order_single_short_request);
         packet.emit(hdr.new_order_single_request);

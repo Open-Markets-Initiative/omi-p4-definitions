@@ -116,6 +116,7 @@ header ipo_quoting_period_update_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -152,36 +153,43 @@ parser NsmequitiesNoiviewParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_directory_message {
         packet.extract(hdr.stock_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_trading_action_message {
         packet.extract(hdr.stock_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_reg_sho_restriction_message {
         packet.extract(hdr.reg_sho_restriction_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_noii_message {
         packet.extract(hdr.noii_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_cross_trade_message {
         packet.extract(hdr.cross_trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_ipo_quoting_period_update_message {
         packet.extract(hdr.ipo_quoting_period_update_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -194,7 +202,12 @@ control NsmequitiesNoiviewVerifyChecksum(inout headers_t hdr, inout metadata_t m
 
 control NsmequitiesNoiviewIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

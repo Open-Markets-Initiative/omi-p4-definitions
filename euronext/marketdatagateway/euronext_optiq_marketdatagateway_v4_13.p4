@@ -80,6 +80,9 @@ header market_update_message_t {
     bit<64> event_time;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header market_update_message_market_updates_group_t {
     bit<8> update_type;
     bit<32> symbol_index;
     bit<16> number_of_orders;
@@ -94,6 +97,9 @@ header order_update_message_t {
     bit<64> event_time;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header order_update_message_order_updates_group_t {
     bit<32> symbol_index;
     bit<8> action_type;
     bit<64> order_priority;
@@ -112,6 +118,9 @@ header price_update_message_t {
     bit<64> event_time;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header price_update_message_price_updates_group_t {
     bit<8> price_type;
     bit<32> symbol_index;
     bit<64> price;
@@ -192,6 +201,9 @@ header market_status_change_message_t {
     bit<8> emm;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header market_status_change_message_market_states_group_t {
     bit<8> change_type;
     bit<32> symbol_index;
     bit<64> event_time;
@@ -225,6 +237,9 @@ header timetable_message_t {
     bit<32> symbol_index_optional;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header timetable_message_timetables_group_t {
     bit<64> phase_time;
     bit<8> phase_id;
     bit<1> no_qualifier;
@@ -306,12 +321,15 @@ header standing_data_message_t {
     bit<64> threshold_lis_post_trade_eod;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header standing_data_message_emm_pattern_rep_group_t {
     bit<8> emm;
     bit<16> pattern_id;
     bit<16> tick_size_index_id;
     bit<8> market_model;
-    bit<64> lot_size_optional_2;
-    bit<8> inst_unit_exp_2;
+    bit<64> lot_size_optional;
+    bit<8> inst_unit_exp;
     bit<8> anonymous;
 }
 
@@ -335,6 +353,9 @@ header statistics_message_t {
     bit<32> symbol_index;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header statistics_message_new_stats_group_t {
     bit<8> stats_update_type;
     bit<64> stats_update_value;
 }
@@ -373,6 +394,9 @@ header strategy_standing_data_message_t {
     bit<48> cfi_optional;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header strategy_standing_data_message_strategy_standing_data_group_t {
     bit<32> leg_symbol_index;
     bit<64> leg_price;
     bit<32> leg_ratio;
@@ -434,6 +458,9 @@ header contract_standing_data_message_t {
     bit<8> pricing_algorithm;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header contract_standing_data_message_contract_emm_properties_group_t {
     bit<8> emm_optional;
     bit<16> tick_size_index_id;
     bit<16> pattern_id;
@@ -513,6 +540,9 @@ header outright_standing_data_message_t {
     bit<64> trading_unit;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header outright_standing_data_message_outright_rep_group_t {
     bit<8> emm;
 }
 
@@ -523,6 +553,9 @@ header long_order_update_message_t {
     bit<64> event_time;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header long_order_update_message_long_order_updates_group_t {
     bit<32> symbol_index;
     bit<8> action_type;
     bit<64> order_priority;
@@ -546,6 +579,9 @@ header lis_package_structure_message_t {
     bit<8> strategy_code;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header lis_package_structure_message_package_components_group_t {
     bit<32> leg_symbol_index;
     bit<32> leg_ratio;
     bit<64> leg_last_px;
@@ -676,6 +712,9 @@ header bf_instrument_reference_message_t {
     bit<8> ratio_multiplier_decimals;
     bit<8> block_length_short;
     bit<8> num_in_group;
+}
+
+header bf_instrument_reference_message_interest_payment_date_rep_group_t {
     bit<16> interest_payment_date;
 }
 
@@ -733,6 +772,20 @@ header end_of_snapshot_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> market_update_message_market_updates_group_remaining;
+    bit<8> order_update_message_order_updates_group_remaining;
+    bit<8> price_update_message_price_updates_group_remaining;
+    bit<8> market_status_change_message_market_states_group_remaining;
+    bit<8> timetable_message_timetables_group_remaining;
+    bit<8> standing_data_message_emm_pattern_rep_group_remaining;
+    bit<8> statistics_message_new_stats_group_remaining;
+    bit<8> strategy_standing_data_message_strategy_standing_data_group_remaining;
+    bit<8> contract_standing_data_message_contract_emm_properties_group_remaining;
+    bit<8> outright_standing_data_message_outright_rep_group_remaining;
+    bit<8> long_order_update_message_long_order_updates_group_remaining;
+    bit<8> lis_package_structure_message_package_components_group_remaining;
+    bit<8> bf_instrument_reference_message_interest_payment_date_rep_group_remaining;
 }
 
 struct headers_t {
@@ -742,24 +795,37 @@ struct headers_t {
     health_status_message_t health_status_message;
     technical_notification_message_t technical_notification_message;
     market_update_message_t market_update_message;
+    market_update_message_market_updates_group_t market_update_message_market_updates_group[MAX_MESSAGES];
     order_update_message_t order_update_message;
+    order_update_message_order_updates_group_t order_update_message_order_updates_group[MAX_MESSAGES];
     price_update_message_t price_update_message;
+    price_update_message_price_updates_group_t price_update_message_price_updates_group[MAX_MESSAGES];
     full_trade_information_message_t full_trade_information_message;
     market_status_change_message_t market_status_change_message;
+    market_status_change_message_market_states_group_t market_status_change_message_market_states_group[MAX_MESSAGES];
     timetable_message_t timetable_message;
+    timetable_message_timetables_group_t timetable_message_timetables_group[MAX_MESSAGES];
     standing_data_message_t standing_data_message;
+    standing_data_message_emm_pattern_rep_group_t standing_data_message_emm_pattern_rep_group[MAX_MESSAGES];
     real_time_index_message_t real_time_index_message;
     statistics_message_t statistics_message;
+    statistics_message_new_stats_group_t statistics_message_new_stats_group[MAX_MESSAGES];
     index_summary_message_t index_summary_message;
     strategy_standing_data_message_t strategy_standing_data_message;
+    strategy_standing_data_message_strategy_standing_data_group_t strategy_standing_data_message_strategy_standing_data_group[MAX_MESSAGES];
     contract_standing_data_message_t contract_standing_data_message;
+    contract_standing_data_message_contract_emm_properties_group_t contract_standing_data_message_contract_emm_properties_group[MAX_MESSAGES];
     outright_standing_data_message_t outright_standing_data_message;
+    outright_standing_data_message_outright_rep_group_t outright_standing_data_message_outright_rep_group[MAX_MESSAGES];
     long_order_update_message_t long_order_update_message;
+    long_order_update_message_long_order_updates_group_t long_order_update_message_long_order_updates_group[MAX_MESSAGES];
     lis_package_structure_message_t lis_package_structure_message;
+    lis_package_structure_message_package_components_group_t lis_package_structure_message_package_components_group[MAX_MESSAGES];
     apa_quotes_message_t apa_quotes_message;
     apa_standing_data_message_t apa_standing_data_message;
     apa_full_trade_information_message_t apa_full_trade_information_message;
     bf_instrument_reference_message_t bf_instrument_reference_message;
+    bf_instrument_reference_message_interest_payment_date_rep_group_t bf_instrument_reference_message_interest_payment_date_rep_group[MAX_MESSAGES];
     bf_trade_message_t bf_trade_message;
     bfnav_message_t bfnav_message;
     bf_instrument_suspension_message_t bf_instrument_suspension_message;
@@ -805,141 +871,338 @@ parser EuronextOptiqMarketdatagatewayParser(packet_in packet, out headers_t hdr,
 
     state parse_start_of_day_message {
         packet.extract(hdr.start_of_day_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_day_message {
         packet.extract(hdr.end_of_day_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_health_status_message {
         packet.extract(hdr.health_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_technical_notification_message {
         packet.extract(hdr.technical_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_update_message {
         packet.extract(hdr.market_update_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.market_update_message_market_updates_group_remaining = hdr.market_update_message.num_in_group;
+        transition select(meta.market_update_message_market_updates_group_remaining) {
+            8w0: accept;
+            default: parse_market_update_message_market_updates_group;
+        }
+    }
+
+    state parse_market_update_message_market_updates_group {
+        packet.extract(hdr.market_update_message_market_updates_group.next);
+        meta.market_update_message_market_updates_group_remaining = meta.market_update_message_market_updates_group_remaining - 1;
+        transition select(meta.market_update_message_market_updates_group_remaining) {
+            8w0: accept;
+            default: parse_market_update_message_market_updates_group;
+        }
     }
 
     state parse_order_update_message {
         packet.extract(hdr.order_update_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.order_update_message_order_updates_group_remaining = hdr.order_update_message.num_in_group;
+        transition select(meta.order_update_message_order_updates_group_remaining) {
+            8w0: accept;
+            default: parse_order_update_message_order_updates_group;
+        }
+    }
+
+    state parse_order_update_message_order_updates_group {
+        packet.extract(hdr.order_update_message_order_updates_group.next);
+        meta.order_update_message_order_updates_group_remaining = meta.order_update_message_order_updates_group_remaining - 1;
+        transition select(meta.order_update_message_order_updates_group_remaining) {
+            8w0: accept;
+            default: parse_order_update_message_order_updates_group;
+        }
     }
 
     state parse_price_update_message {
         packet.extract(hdr.price_update_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.price_update_message_price_updates_group_remaining = hdr.price_update_message.num_in_group;
+        transition select(meta.price_update_message_price_updates_group_remaining) {
+            8w0: accept;
+            default: parse_price_update_message_price_updates_group;
+        }
+    }
+
+    state parse_price_update_message_price_updates_group {
+        packet.extract(hdr.price_update_message_price_updates_group.next);
+        meta.price_update_message_price_updates_group_remaining = meta.price_update_message_price_updates_group_remaining - 1;
+        transition select(meta.price_update_message_price_updates_group_remaining) {
+            8w0: accept;
+            default: parse_price_update_message_price_updates_group;
+        }
     }
 
     state parse_full_trade_information_message {
         packet.extract(hdr.full_trade_information_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_status_change_message {
         packet.extract(hdr.market_status_change_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.market_status_change_message_market_states_group_remaining = hdr.market_status_change_message.num_in_group;
+        transition select(meta.market_status_change_message_market_states_group_remaining) {
+            8w0: accept;
+            default: parse_market_status_change_message_market_states_group;
+        }
+    }
+
+    state parse_market_status_change_message_market_states_group {
+        packet.extract(hdr.market_status_change_message_market_states_group.next);
+        meta.market_status_change_message_market_states_group_remaining = meta.market_status_change_message_market_states_group_remaining - 1;
+        transition select(meta.market_status_change_message_market_states_group_remaining) {
+            8w0: accept;
+            default: parse_market_status_change_message_market_states_group;
+        }
     }
 
     state parse_timetable_message {
         packet.extract(hdr.timetable_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.timetable_message_timetables_group_remaining = hdr.timetable_message.num_in_group;
+        transition select(meta.timetable_message_timetables_group_remaining) {
+            8w0: accept;
+            default: parse_timetable_message_timetables_group;
+        }
+    }
+
+    state parse_timetable_message_timetables_group {
+        packet.extract(hdr.timetable_message_timetables_group.next);
+        meta.timetable_message_timetables_group_remaining = meta.timetable_message_timetables_group_remaining - 1;
+        transition select(meta.timetable_message_timetables_group_remaining) {
+            8w0: accept;
+            default: parse_timetable_message_timetables_group;
+        }
     }
 
     state parse_standing_data_message {
         packet.extract(hdr.standing_data_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.standing_data_message_emm_pattern_rep_group_remaining = hdr.standing_data_message.num_in_group;
+        transition select(meta.standing_data_message_emm_pattern_rep_group_remaining) {
+            8w0: accept;
+            default: parse_standing_data_message_emm_pattern_rep_group;
+        }
+    }
+
+    state parse_standing_data_message_emm_pattern_rep_group {
+        packet.extract(hdr.standing_data_message_emm_pattern_rep_group.next);
+        meta.standing_data_message_emm_pattern_rep_group_remaining = meta.standing_data_message_emm_pattern_rep_group_remaining - 1;
+        transition select(meta.standing_data_message_emm_pattern_rep_group_remaining) {
+            8w0: accept;
+            default: parse_standing_data_message_emm_pattern_rep_group;
+        }
     }
 
     state parse_real_time_index_message {
         packet.extract(hdr.real_time_index_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_statistics_message {
         packet.extract(hdr.statistics_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.statistics_message_new_stats_group_remaining = hdr.statistics_message.num_in_group;
+        transition select(meta.statistics_message_new_stats_group_remaining) {
+            8w0: accept;
+            default: parse_statistics_message_new_stats_group;
+        }
+    }
+
+    state parse_statistics_message_new_stats_group {
+        packet.extract(hdr.statistics_message_new_stats_group.next);
+        meta.statistics_message_new_stats_group_remaining = meta.statistics_message_new_stats_group_remaining - 1;
+        transition select(meta.statistics_message_new_stats_group_remaining) {
+            8w0: accept;
+            default: parse_statistics_message_new_stats_group;
+        }
     }
 
     state parse_index_summary_message {
         packet.extract(hdr.index_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_strategy_standing_data_message {
         packet.extract(hdr.strategy_standing_data_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.strategy_standing_data_message_strategy_standing_data_group_remaining = hdr.strategy_standing_data_message.num_in_group;
+        transition select(meta.strategy_standing_data_message_strategy_standing_data_group_remaining) {
+            8w0: accept;
+            default: parse_strategy_standing_data_message_strategy_standing_data_group;
+        }
+    }
+
+    state parse_strategy_standing_data_message_strategy_standing_data_group {
+        packet.extract(hdr.strategy_standing_data_message_strategy_standing_data_group.next);
+        meta.strategy_standing_data_message_strategy_standing_data_group_remaining = meta.strategy_standing_data_message_strategy_standing_data_group_remaining - 1;
+        transition select(meta.strategy_standing_data_message_strategy_standing_data_group_remaining) {
+            8w0: accept;
+            default: parse_strategy_standing_data_message_strategy_standing_data_group;
+        }
     }
 
     state parse_contract_standing_data_message {
         packet.extract(hdr.contract_standing_data_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.contract_standing_data_message_contract_emm_properties_group_remaining = hdr.contract_standing_data_message.num_in_group;
+        transition select(meta.contract_standing_data_message_contract_emm_properties_group_remaining) {
+            8w0: accept;
+            default: parse_contract_standing_data_message_contract_emm_properties_group;
+        }
+    }
+
+    state parse_contract_standing_data_message_contract_emm_properties_group {
+        packet.extract(hdr.contract_standing_data_message_contract_emm_properties_group.next);
+        meta.contract_standing_data_message_contract_emm_properties_group_remaining = meta.contract_standing_data_message_contract_emm_properties_group_remaining - 1;
+        transition select(meta.contract_standing_data_message_contract_emm_properties_group_remaining) {
+            8w0: accept;
+            default: parse_contract_standing_data_message_contract_emm_properties_group;
+        }
     }
 
     state parse_outright_standing_data_message {
         packet.extract(hdr.outright_standing_data_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.outright_standing_data_message_outright_rep_group_remaining = hdr.outright_standing_data_message.num_in_group;
+        transition select(meta.outright_standing_data_message_outright_rep_group_remaining) {
+            8w0: accept;
+            default: parse_outright_standing_data_message_outright_rep_group;
+        }
+    }
+
+    state parse_outright_standing_data_message_outright_rep_group {
+        packet.extract(hdr.outright_standing_data_message_outright_rep_group.next);
+        meta.outright_standing_data_message_outright_rep_group_remaining = meta.outright_standing_data_message_outright_rep_group_remaining - 1;
+        transition select(meta.outright_standing_data_message_outright_rep_group_remaining) {
+            8w0: accept;
+            default: parse_outright_standing_data_message_outright_rep_group;
+        }
     }
 
     state parse_long_order_update_message {
         packet.extract(hdr.long_order_update_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.long_order_update_message_long_order_updates_group_remaining = hdr.long_order_update_message.num_in_group;
+        transition select(meta.long_order_update_message_long_order_updates_group_remaining) {
+            8w0: accept;
+            default: parse_long_order_update_message_long_order_updates_group;
+        }
+    }
+
+    state parse_long_order_update_message_long_order_updates_group {
+        packet.extract(hdr.long_order_update_message_long_order_updates_group.next);
+        meta.long_order_update_message_long_order_updates_group_remaining = meta.long_order_update_message_long_order_updates_group_remaining - 1;
+        transition select(meta.long_order_update_message_long_order_updates_group_remaining) {
+            8w0: accept;
+            default: parse_long_order_update_message_long_order_updates_group;
+        }
     }
 
     state parse_lis_package_structure_message {
         packet.extract(hdr.lis_package_structure_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.lis_package_structure_message_package_components_group_remaining = hdr.lis_package_structure_message.num_in_group;
+        transition select(meta.lis_package_structure_message_package_components_group_remaining) {
+            8w0: accept;
+            default: parse_lis_package_structure_message_package_components_group;
+        }
+    }
+
+    state parse_lis_package_structure_message_package_components_group {
+        packet.extract(hdr.lis_package_structure_message_package_components_group.next);
+        meta.lis_package_structure_message_package_components_group_remaining = meta.lis_package_structure_message_package_components_group_remaining - 1;
+        transition select(meta.lis_package_structure_message_package_components_group_remaining) {
+            8w0: accept;
+            default: parse_lis_package_structure_message_package_components_group;
+        }
     }
 
     state parse_apa_quotes_message {
         packet.extract(hdr.apa_quotes_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_apa_standing_data_message {
         packet.extract(hdr.apa_standing_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_apa_full_trade_information_message {
         packet.extract(hdr.apa_full_trade_information_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bf_instrument_reference_message {
         packet.extract(hdr.bf_instrument_reference_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.bf_instrument_reference_message_interest_payment_date_rep_group_remaining = hdr.bf_instrument_reference_message.num_in_group;
+        transition select(meta.bf_instrument_reference_message_interest_payment_date_rep_group_remaining) {
+            8w0: accept;
+            default: parse_bf_instrument_reference_message_interest_payment_date_rep_group;
+        }
+    }
+
+    state parse_bf_instrument_reference_message_interest_payment_date_rep_group {
+        packet.extract(hdr.bf_instrument_reference_message_interest_payment_date_rep_group.next);
+        meta.bf_instrument_reference_message_interest_payment_date_rep_group_remaining = meta.bf_instrument_reference_message_interest_payment_date_rep_group_remaining - 1;
+        transition select(meta.bf_instrument_reference_message_interest_payment_date_rep_group_remaining) {
+            8w0: accept;
+            default: parse_bf_instrument_reference_message_interest_payment_date_rep_group;
+        }
     }
 
     state parse_bf_trade_message {
         packet.extract(hdr.bf_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bfnav_message {
         packet.extract(hdr.bfnav_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bf_instrument_suspension_message {
         packet.extract(hdr.bf_instrument_suspension_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_start_of_snapshot_message {
         packet.extract(hdr.start_of_snapshot_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_snapshot_message {
         packet.extract(hdr.end_of_snapshot_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -952,7 +1215,12 @@ control EuronextOptiqMarketdatagatewayVerifyChecksum(inout headers_t hdr, inout 
 
 control EuronextOptiqMarketdatagatewayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -974,24 +1242,37 @@ control EuronextOptiqMarketdatagatewayDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.health_status_message);
         packet.emit(hdr.technical_notification_message);
         packet.emit(hdr.market_update_message);
+        packet.emit(hdr.market_update_message_market_updates_group);
         packet.emit(hdr.order_update_message);
+        packet.emit(hdr.order_update_message_order_updates_group);
         packet.emit(hdr.price_update_message);
+        packet.emit(hdr.price_update_message_price_updates_group);
         packet.emit(hdr.full_trade_information_message);
         packet.emit(hdr.market_status_change_message);
+        packet.emit(hdr.market_status_change_message_market_states_group);
         packet.emit(hdr.timetable_message);
+        packet.emit(hdr.timetable_message_timetables_group);
         packet.emit(hdr.standing_data_message);
+        packet.emit(hdr.standing_data_message_emm_pattern_rep_group);
         packet.emit(hdr.real_time_index_message);
         packet.emit(hdr.statistics_message);
+        packet.emit(hdr.statistics_message_new_stats_group);
         packet.emit(hdr.index_summary_message);
         packet.emit(hdr.strategy_standing_data_message);
+        packet.emit(hdr.strategy_standing_data_message_strategy_standing_data_group);
         packet.emit(hdr.contract_standing_data_message);
+        packet.emit(hdr.contract_standing_data_message_contract_emm_properties_group);
         packet.emit(hdr.outright_standing_data_message);
+        packet.emit(hdr.outright_standing_data_message_outright_rep_group);
         packet.emit(hdr.long_order_update_message);
+        packet.emit(hdr.long_order_update_message_long_order_updates_group);
         packet.emit(hdr.lis_package_structure_message);
+        packet.emit(hdr.lis_package_structure_message_package_components_group);
         packet.emit(hdr.apa_quotes_message);
         packet.emit(hdr.apa_standing_data_message);
         packet.emit(hdr.apa_full_trade_information_message);
         packet.emit(hdr.bf_instrument_reference_message);
+        packet.emit(hdr.bf_instrument_reference_message_interest_payment_date_rep_group);
         packet.emit(hdr.bf_trade_message);
         packet.emit(hdr.bfnav_message);
         packet.emit(hdr.bf_instrument_suspension_message);

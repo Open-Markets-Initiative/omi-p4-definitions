@@ -88,6 +88,7 @@ header heartbeat_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -120,31 +121,37 @@ parser NsefoMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t met
 
     state parse_order_message {
         packet.extract(hdr.order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_spread_order_message {
         packet.extract(hdr.spread_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_spread_trade_message {
         packet.extract(hdr.spread_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_cancel_message {
         packet.extract(hdr.trade_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_message {
         packet.extract(hdr.heartbeat_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -157,7 +164,12 @@ control NsefoMtbtVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
 
 control NsefoMtbtIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

@@ -140,6 +140,7 @@ header trade_correct_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -176,51 +177,61 @@ parser CixatsCixaspenMarketdatafeedParser(packet_in packet, out headers_t hdr, i
 
     state parse_market_event_message {
         packet.extract(hdr.market_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_information_message {
         packet.extract(hdr.symbol_information_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_state_message {
         packet.extract(hdr.symbol_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_add_message {
         packet.extract(hdr.new_order_add_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_partial_cancel_message {
         packet.extract(hdr.order_partial_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_all_message {
         packet.extract(hdr.order_cancel_all_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_cancel_message {
         packet.extract(hdr.trade_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_correct_message {
         packet.extract(hdr.trade_correct_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -233,7 +244,12 @@ control CixatsCixaspenMarketdatafeedVerifyChecksum(inout headers_t hdr, inout me
 
 control CixatsCixaspenMarketdatafeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

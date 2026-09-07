@@ -152,6 +152,7 @@ header system_recovery_event_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -192,61 +193,73 @@ parser OvernightDepthofbookParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_start_of_spin_message {
         packet.extract(hdr.start_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_end_of_spin_message {
         packet.extract(hdr.end_of_spin_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_session_message {
         packet.extract(hdr.trading_session_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_message {
         packet.extract(hdr.security_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_add_message {
         packet.extract(hdr.order_add_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_update_message {
         packet.extract(hdr.order_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_delete_message {
         packet.extract(hdr.order_delete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_execution_message {
         packet.extract(hdr.order_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_execution_with_price_message {
         packet.extract(hdr.order_execution_with_price_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_system_recovery_event_message {
         packet.extract(hdr.system_recovery_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -259,7 +272,12 @@ control OvernightDepthofbookVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control OvernightDepthofbookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

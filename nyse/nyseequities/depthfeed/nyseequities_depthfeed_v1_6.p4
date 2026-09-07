@@ -101,12 +101,12 @@ header delta_message_t {
     bit<32> symbol_index;
     bit<32> symbol_seq_num;
     bit<8> update_count;
+}
+
+header delta_message_price_point_t {
     bit<32> price;
     bit<8> side;
     bit<8> participants;
-    bit<16> market_id;
-    bit<16> number_of_orders;
-    bit<32> volume;
 }
 
 header imbalance_message_t {
@@ -137,6 +137,8 @@ header imbalance_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> delta_message_price_point_remaining;
 }
 
 struct headers_t {
@@ -146,6 +148,7 @@ struct headers_t {
     symbol_clear_message_t symbol_clear_message;
     security_status_message_t security_status_message;
     delta_message_t delta_message;
+    delta_message_price_point_t delta_message_price_point[MAX_MESSAGES];
     imbalance_message_t imbalance_message;
 }
 
@@ -165,31 +168,50 @@ parser NyseequitiesDepthfeedParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_message {
         packet.extract(hdr.symbol_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_clear_message {
         packet.extract(hdr.symbol_clear_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_status_message {
         packet.extract(hdr.security_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delta_message {
         packet.extract(hdr.delta_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.delta_message_price_point_remaining = hdr.delta_message.update_count;
+        transition select(meta.delta_message_price_point_remaining) {
+            8w0: accept;
+            default: parse_delta_message_price_point;
+        }
+    }
+
+    state parse_delta_message_price_point {
+        packet.extract(hdr.delta_message_price_point.next);
+        meta.delta_message_price_point_remaining = meta.delta_message_price_point_remaining - 1;
+        transition select(meta.delta_message_price_point_remaining) {
+            8w0: accept;
+            default: parse_delta_message_price_point;
+        }
     }
 
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -202,7 +224,12 @@ control NyseequitiesDepthfeedVerifyChecksum(inout headers_t hdr, inout metadata_
 
 control NyseequitiesDepthfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -224,6 +251,7 @@ control NyseequitiesDepthfeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.symbol_clear_message);
         packet.emit(hdr.security_status_message);
         packet.emit(hdr.delta_message);
+        packet.emit(hdr.delta_message_price_point);
         packet.emit(hdr.imbalance_message);
     }
 }

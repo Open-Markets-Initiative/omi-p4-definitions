@@ -52,6 +52,7 @@ header replay_response_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -74,16 +75,19 @@ parser AquisequitiesReplayParser(packet_in packet, out headers_t hdr, inout meta
 
     state parse_login_message {
         packet.extract(hdr.login_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_request_message {
         packet.extract(hdr.replay_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_response_message {
         packet.extract(hdr.replay_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -96,7 +100,12 @@ control AquisequitiesReplayVerifyChecksum(inout headers_t hdr, inout metadata_t 
 
 control AquisequitiesReplayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

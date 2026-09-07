@@ -311,6 +311,7 @@ header event_resend_reject_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -380,41 +381,49 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
 
     state parse_logon_message {
         packet.extract(hdr.logon_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_conf_message {
         packet.extract(hdr.logon_conf_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_message {
         packet.extract(hdr.logout_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logged_out_message {
         packet.extract(hdr.logged_out_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_message {
         packet.extract(hdr.heartbeat_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_test_request_message {
         packet.extract(hdr.test_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_resend_request_message {
         packet.extract(hdr.resend_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gap_fill_message {
         packet.extract(hdr.gap_fill_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -455,146 +464,175 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
 
     state parse_ping_message {
         packet.extract(hdr.ping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_pong_message {
         packet.extract(hdr.pong_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_info_request_message {
         packet.extract(hdr.instrument_info_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_info_message {
         packet.extract(hdr.instrument_info_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_set_account_message {
         packet.extract(hdr.set_account_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_set_trader_message {
         packet.extract(hdr.set_trader_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_set_ack_message {
         packet.extract(hdr.set_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_message {
         packet.extract(hdr.new_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_entered_message {
         packet.extract(hdr.order_entered_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replace_order_message {
         packet.extract(hdr.replace_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_order_message {
         packet.extract(hdr.stream_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_reject_message {
         packet.extract(hdr.order_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_replaced_message {
         packet.extract(hdr.order_replaced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_order_message {
         packet.extract(hdr.cancel_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_canceled_message {
         packet.extract(hdr.order_canceled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_order_reject_message {
         packet.extract(hdr.cancel_order_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_order_message {
         packet.extract(hdr.mass_cancel_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_order_ack_message {
         packet.extract(hdr.mass_cancel_order_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_order_reject_message {
         packet.extract(hdr.mass_cancel_order_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unlock_trading_message {
         packet.extract(hdr.unlock_trading_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unlock_trading_ack_message {
         packet.extract(hdr.unlock_trading_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unlock_trading_reject_message {
         packet.extract(hdr.unlock_trading_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_filled_message {
         packet.extract(hdr.order_filled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_spread_order_filled_message {
         packet.extract(hdr.spread_order_filled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_last_exec_id_request_message {
         packet.extract(hdr.last_exec_id_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_last_exec_id_message {
         packet.extract(hdr.last_exec_id_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_event_resend_request_message {
         packet.extract(hdr.event_resend_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_event_resend_complete_message {
         packet.extract(hdr.event_resend_complete_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_event_resend_reject_message {
         packet.extract(hdr.event_resend_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -607,7 +645,12 @@ control CoinbasederivativesOrdersapiVerifyChecksum(inout headers_t hdr, inout me
 
 control CoinbasederivativesOrdersapiIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

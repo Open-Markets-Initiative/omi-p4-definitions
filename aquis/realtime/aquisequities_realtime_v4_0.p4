@@ -171,6 +171,7 @@ header ma_c_update_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -207,51 +208,61 @@ parser AquisequitiesRealtimeParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_order_add {
         packet.extract(hdr.order_add);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel {
         packet.extract(hdr.order_cancel);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify {
         packet.extract(hdr.order_modify);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade {
         packet.extract(hdr.trade);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_bust_message {
         packet.extract(hdr.trade_bust_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_tick_table_data_message {
         packet.extract(hdr.tick_table_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_definition_message {
         packet.extract(hdr.security_definition_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_status_message {
         packet.extract(hdr.security_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ao_d_update_message {
         packet.extract(hdr.ao_d_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_ma_c_update_message {
         packet.extract(hdr.ma_c_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -264,7 +275,12 @@ control AquisequitiesRealtimeVerifyChecksum(inout headers_t hdr, inout metadata_
 
 control AquisequitiesRealtimeIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

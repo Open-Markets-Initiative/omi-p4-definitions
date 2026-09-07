@@ -128,6 +128,7 @@ header mass_cancel_request_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -158,26 +159,31 @@ parser MemxequitiesMemoClientParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_login_request_message {
         packet.extract(hdr.login_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_request_message {
         packet.extract(hdr.replay_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replay_all_request_message {
         packet.extract(hdr.replay_all_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_request_message {
         packet.extract(hdr.stream_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unsequenced_message {
         packet.extract(hdr.unsequenced_message);
+        meta.dispatched = 1;
         transition select(hdr.unsequenced_message.template_id) {
             8w1: parse_new_order_single_message;
             8w2: parse_order_cancel_replace_request_message;
@@ -189,21 +195,25 @@ parser MemxequitiesMemoClientParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_new_order_single_message {
         packet.extract(hdr.new_order_single_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_replace_request_message {
         packet.extract(hdr.order_cancel_replace_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_request_message {
         packet.extract(hdr.order_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_request_message {
         packet.extract(hdr.mass_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -216,7 +226,12 @@ control MemxequitiesMemoClientVerifyChecksum(inout headers_t hdr, inout metadata
 
 control MemxequitiesMemoClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

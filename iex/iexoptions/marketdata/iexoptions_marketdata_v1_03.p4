@@ -255,6 +255,7 @@ header snapshot_header_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -323,131 +324,157 @@ parser IexoptionsMarketdataParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_underlying_ref_data_message {
         packet.extract(hdr.underlying_ref_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_mapping_message {
         packet.extract(hdr.symbol_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_clear_message {
         packet.extract(hdr.instrument_clear_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_status_message {
         packet.extract(hdr.trading_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_auction_summary_message {
         packet.extract(hdr.options_auction_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_auction_width_update_message {
         packet.extract(hdr.options_auction_width_update_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_liquidity_event_notification_message {
         packet.extract(hdr.liquidity_event_notification_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_liquidity_event_execution_message {
         packet.extract(hdr.liquidity_event_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_liquidity_event_cancel_message {
         packet.extract(hdr.liquidity_event_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_add_order_non_customer_message {
         packet.extract(hdr.add_order_non_customer_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_add_order_customer_message {
         packet.extract(hdr.add_order_customer_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_modify_order_message {
         packet.extract(hdr.modify_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_delete_order_message {
         packet.extract(hdr.delete_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_execution_message {
         packet.extract(hdr.order_execution_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_deep_trade_break_message {
         packet.extract(hdr.deep_trade_break_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_update_no_customer_interest_message {
         packet.extract(hdr.quote_update_no_customer_interest_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_update_customer_interest_message {
         packet.extract(hdr.quote_update_customer_interest_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_correction_message {
         packet.extract(hdr.trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_tops_trade_break_message {
         packet.extract(hdr.tops_trade_break_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_message {
         packet.extract(hdr.heartbeat_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_packet_message {
         packet.extract(hdr.sequenced_packet_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_session_shutdown_message {
         packet.extract(hdr.session_shutdown_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_request_message {
         packet.extract(hdr.retransmission_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_response_message {
         packet.extract(hdr.retransmission_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_snapshot_header_message {
         packet.extract(hdr.snapshot_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -460,7 +487,12 @@ control IexoptionsMarketdataVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control IexoptionsMarketdataIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

@@ -168,6 +168,7 @@ header imbalance_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -208,61 +209,73 @@ parser NyseequitiesImbalancesfeedParser(packet_in packet, out headers_t hdr, ino
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_message {
         packet.extract(hdr.symbol_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_retransmission_request_message {
         packet.extract(hdr.retransmission_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_request_response_message {
         packet.extract(hdr.request_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_response_message {
         packet.extract(hdr.heartbeat_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_request_message {
         packet.extract(hdr.symbol_index_mapping_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_request_message {
         packet.extract(hdr.refresh_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_message_unavailable_message {
         packet.extract(hdr.message_unavailable_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_clear_message {
         packet.extract(hdr.symbol_clear_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_status_message {
         packet.extract(hdr.security_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_header_message {
         packet.extract(hdr.refresh_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -275,7 +288,12 @@ control NyseequitiesImbalancesfeedVerifyChecksum(inout headers_t hdr, inout meta
 
 control NyseequitiesImbalancesfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

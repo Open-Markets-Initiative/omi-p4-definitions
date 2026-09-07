@@ -93,6 +93,7 @@ header trade_now_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -120,16 +121,19 @@ parser NtxequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_request_packet {
         packet.extract(hdr.login_request_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unsequenced_data_packet {
         packet.extract(hdr.unsequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.unsequenced_data_packet.unsequenced_message_type) {
             8w0x4f: parse_enter_order_message;
             8w0x55: parse_replace_order_message;
@@ -142,26 +146,31 @@ parser NtxequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_enter_order_message {
         packet.extract(hdr.enter_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replace_order_message {
         packet.extract(hdr.replace_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_order_message {
         packet.extract(hdr.cancel_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_modify_order_message {
         packet.extract(hdr.modify_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_now_message {
         packet.extract(hdr.trade_now_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -174,7 +183,12 @@ control NtxequitiesOrdersClientVerifyChecksum(inout headers_t hdr, inout metadat
 
 control NtxequitiesOrdersClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

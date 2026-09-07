@@ -38,6 +38,7 @@ header message_header_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {

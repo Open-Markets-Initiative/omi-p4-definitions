@@ -41,21 +41,40 @@ header message_header_t {
     bit<1> test;
     bit<8> messages;
     bit<32> packet_milli;
+}
+
+header message_header_message_t {
     bit<16> message_size;
     bit<8> message_type;
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> message_header_message_remaining;
 }
 
 struct headers_t {
     message_header_t message_header;
+    message_header_message_t message_header_message[MAX_MESSAGES];
 }
 
 parser LinkatsHeadersParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
-        transition accept;
+        meta.message_header_message_remaining = hdr.message_header.messages;
+        transition select(meta.message_header_message_remaining) {
+            8w0: accept;
+            default: parse_message_header_message;
+        }
+    }
+
+    state parse_message_header_message {
+        packet.extract(hdr.message_header_message.next);
+        meta.message_header_message_remaining = meta.message_header_message_remaining - 1;
+        transition select(meta.message_header_message_remaining) {
+            8w0: accept;
+            default: parse_message_header_message;
+        }
     }
 
 }
@@ -84,6 +103,7 @@ control LinkatsHeadersComputeChecksum(inout headers_t hdr, inout metadata_t meta
 control LinkatsHeadersDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
+        packet.emit(hdr.message_header_message);
     }
 }
 

@@ -56,6 +56,9 @@ header complex_strategy_directory_message_t {
     bit<104> underlying_symbol;
     bit<128> reserved_16;
     bit<8> number_of_legs;
+}
+
+header complex_strategy_directory_message_leg_information_t {
     bit<32> option_id;
     bit<64> security_symbol;
     bit<8> expiration_year;
@@ -115,10 +118,16 @@ header complex_strategy_auction_message_t {
     bit<32> response_size;
     bit<32> reserved_4;
     bit<8> number_of_flex_dac_legs;
+}
+
+header complex_strategy_auction_message_flex_dac_leg_information_t {
     bit<64> reserved_8;
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_strategy_directory_message_leg_information_remaining;
+    bit<8> complex_strategy_auction_message_flex_dac_leg_information_remaining;
 }
 
 struct headers_t {
@@ -126,9 +135,11 @@ struct headers_t {
     message_t message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     complex_strategy_directory_message_t complex_strategy_directory_message[MAX_MESSAGES];
+    complex_strategy_directory_message_leg_information_t complex_strategy_directory_message_leg_information[MAX_MESSAGES];
     strategy_trading_action_message_t strategy_trading_action_message[MAX_MESSAGES];
     complex_add_order_message_t complex_add_order_message[MAX_MESSAGES];
     complex_strategy_auction_message_t complex_strategy_auction_message[MAX_MESSAGES];
+    complex_strategy_auction_message_flex_dac_leg_information_t complex_strategy_auction_message_flex_dac_leg_information[MAX_MESSAGES];
 }
 
 parser MrxoptionsSpreadordersMoldudp64Parser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -151,27 +162,58 @@ parser MrxoptionsSpreadordersMoldudp64Parser(packet_in packet, out headers_t hdr
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_strategy_directory_message {
         packet.extract(hdr.complex_strategy_directory_message.next);
-        transition parse_message;
+        meta.dispatched = 1;
+        meta.complex_strategy_directory_message_leg_information_remaining = hdr.complex_strategy_directory_message.last.number_of_legs;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
+    }
+
+    state parse_complex_strategy_directory_message_leg_information {
+        packet.extract(hdr.complex_strategy_directory_message_leg_information.next);
+        meta.complex_strategy_directory_message_leg_information_remaining = meta.complex_strategy_directory_message_leg_information_remaining - 1;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
     }
 
     state parse_strategy_trading_action_message {
         packet.extract(hdr.strategy_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_add_order_message {
         packet.extract(hdr.complex_add_order_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_strategy_auction_message {
         packet.extract(hdr.complex_strategy_auction_message.next);
-        transition parse_message;
+        meta.dispatched = 1;
+        meta.complex_strategy_auction_message_flex_dac_leg_information_remaining = hdr.complex_strategy_auction_message.last.number_of_flex_dac_legs;
+        transition select(meta.complex_strategy_auction_message_flex_dac_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_auction_message_flex_dac_leg_information;
+        }
+    }
+
+    state parse_complex_strategy_auction_message_flex_dac_leg_information {
+        packet.extract(hdr.complex_strategy_auction_message_flex_dac_leg_information.next);
+        meta.complex_strategy_auction_message_flex_dac_leg_information_remaining = meta.complex_strategy_auction_message_flex_dac_leg_information_remaining - 1;
+        transition select(meta.complex_strategy_auction_message_flex_dac_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_auction_message_flex_dac_leg_information;
+        }
     }
 
 }
@@ -183,7 +225,12 @@ control MrxoptionsSpreadordersMoldudp64VerifyChecksum(inout headers_t hdr, inout
 
 control MrxoptionsSpreadordersMoldudp64Ingress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -203,9 +250,11 @@ control MrxoptionsSpreadordersMoldudp64Deparser(packet_out packet, in headers_t 
         packet.emit(hdr.message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.complex_strategy_directory_message);
+        packet.emit(hdr.complex_strategy_directory_message_leg_information);
         packet.emit(hdr.strategy_trading_action_message);
         packet.emit(hdr.complex_add_order_message);
         packet.emit(hdr.complex_strategy_auction_message);
+        packet.emit(hdr.complex_strategy_auction_message_flex_dac_leg_information);
     }
 }
 

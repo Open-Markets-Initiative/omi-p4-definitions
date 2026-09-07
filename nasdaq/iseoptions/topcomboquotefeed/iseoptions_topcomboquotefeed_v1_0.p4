@@ -59,6 +59,9 @@ header complex_strategy_directory_message_t {
     bit<8> source;
     bit<104> underlying_symbol;
     bit<8> number_of_legs;
+}
+
+header complex_strategy_directory_message_leg_information_t {
     bit<32> option_id;
     bit<48> security_symbol;
     bit<8> leg_id;
@@ -142,6 +145,8 @@ header complex_strategy_ticker_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_strategy_directory_message_leg_information_remaining;
 }
 
 struct headers_t {
@@ -149,6 +154,7 @@ struct headers_t {
     message_t message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     complex_strategy_directory_message_t complex_strategy_directory_message[MAX_MESSAGES];
+    complex_strategy_directory_message_leg_information_t complex_strategy_directory_message_leg_information[MAX_MESSAGES];
     strategy_open_closed_message_t strategy_open_closed_message[MAX_MESSAGES];
     strategy_trading_action_message_t strategy_trading_action_message[MAX_MESSAGES];
     strategy_best_bid_and_ask_update_t strategy_best_bid_and_ask_update[MAX_MESSAGES];
@@ -180,41 +186,62 @@ parser IseoptionsTopcomboquotefeedParser(packet_in packet, out headers_t hdr, in
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_strategy_directory_message {
         packet.extract(hdr.complex_strategy_directory_message.next);
-        transition parse_message;
+        meta.dispatched = 1;
+        meta.complex_strategy_directory_message_leg_information_remaining = hdr.complex_strategy_directory_message.last.number_of_legs;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
+    }
+
+    state parse_complex_strategy_directory_message_leg_information {
+        packet.extract(hdr.complex_strategy_directory_message_leg_information.next);
+        meta.complex_strategy_directory_message_leg_information_remaining = meta.complex_strategy_directory_message_leg_information_remaining - 1;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
     }
 
     state parse_strategy_open_closed_message {
         packet.extract(hdr.strategy_open_closed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_strategy_trading_action_message {
         packet.extract(hdr.strategy_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_strategy_best_bid_and_ask_update {
         packet.extract(hdr.strategy_best_bid_and_ask_update.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_strategy_best_bid_update {
         packet.extract(hdr.strategy_best_bid_update.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_strategy_best_ask_update {
         packet.extract(hdr.strategy_best_ask_update.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_strategy_ticker_message {
         packet.extract(hdr.complex_strategy_ticker_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -227,7 +254,12 @@ control IseoptionsTopcomboquotefeedVerifyChecksum(inout headers_t hdr, inout met
 
 control IseoptionsTopcomboquotefeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -247,6 +279,7 @@ control IseoptionsTopcomboquotefeedDeparser(packet_out packet, in headers_t hdr)
         packet.emit(hdr.message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.complex_strategy_directory_message);
+        packet.emit(hdr.complex_strategy_directory_message_leg_information);
         packet.emit(hdr.strategy_open_closed_message);
         packet.emit(hdr.strategy_trading_action_message);
         packet.emit(hdr.strategy_best_bid_and_ask_update);

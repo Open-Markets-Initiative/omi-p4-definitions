@@ -73,6 +73,7 @@ header nois_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -103,21 +104,25 @@ parser NsmequitiesNoisParser(packet_in packet, out headers_t hdr, inout metadata
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_directory {
         packet.extract(hdr.stock_directory.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_trading_action {
         packet.extract(hdr.stock_trading_action.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_nois_message {
         packet.extract(hdr.nois_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -130,7 +135,12 @@ control NsmequitiesNoisVerifyChecksum(inout headers_t hdr, inout metadata_t meta
 
 control NsmequitiesNoisIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

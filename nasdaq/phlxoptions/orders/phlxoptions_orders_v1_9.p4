@@ -73,6 +73,9 @@ header complex_order_strategy_message_t {
     bit<104> underlying_symbol;
     bit<8> action_;
     bit<8> number_of_legs;
+}
+
+header complex_order_strategy_message_complex_order_strategy_leg_t {
     bit<32> option_id;
     bit<40> security_symbol;
     bit<5> day;
@@ -165,6 +168,9 @@ header complex_order_message_t {
     bit<8> customer_firm_indicator;
     bit<104> underlying_symbol;
     bit<8> number_of_legs;
+}
+
+header complex_order_message_complex_order_leg_t {
     bit<8> leg_open_close_indicator;
     bit<32> option_id;
     bit<40> security_symbol;
@@ -173,7 +179,7 @@ header complex_order_message_t {
     bit<7> year;
     bit<32> explicit_strike_price;
     bit<8> option_type;
-    bit<8> side_2;
+    bit<8> side;
     bit<32> leg_ratio;
 }
 
@@ -209,6 +215,9 @@ header complex_auction_notification_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_order_strategy_message_complex_order_strategy_leg_remaining;
+    bit<8> complex_order_message_complex_order_leg_remaining;
 }
 
 struct headers_t {
@@ -217,12 +226,14 @@ struct headers_t {
     system_event_message_t system_event_message[MAX_MESSAGES];
     options_directory_message_t options_directory_message[MAX_MESSAGES];
     complex_order_strategy_message_t complex_order_strategy_message[MAX_MESSAGES];
+    complex_order_strategy_message_complex_order_strategy_leg_t complex_order_strategy_message_complex_order_strategy_leg[MAX_MESSAGES];
     security_trading_action_message_t security_trading_action_message[MAX_MESSAGES];
     complex_trading_action_message_t complex_trading_action_message[MAX_MESSAGES];
     security_open_closed_message_t security_open_closed_message[MAX_MESSAGES];
     strategy_open_closed_message_t strategy_open_closed_message[MAX_MESSAGES];
     simple_order_message_t simple_order_message[MAX_MESSAGES];
     complex_order_message_t complex_order_message[MAX_MESSAGES];
+    complex_order_message_complex_order_leg_t complex_order_message_complex_order_leg[MAX_MESSAGES];
     auction_notification_message_t auction_notification_message[MAX_MESSAGES];
     complex_auction_notification_message_t complex_auction_notification_message[MAX_MESSAGES];
 }
@@ -253,56 +264,93 @@ parser PhlxoptionsOrdersParser(packet_in packet, out headers_t hdr, inout metada
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_options_directory_message {
         packet.extract(hdr.options_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_order_strategy_message {
         packet.extract(hdr.complex_order_strategy_message.next);
-        transition parse_message;
+        meta.dispatched = 1;
+        meta.complex_order_strategy_message_complex_order_strategy_leg_remaining = hdr.complex_order_strategy_message.last.number_of_legs;
+        transition select(meta.complex_order_strategy_message_complex_order_strategy_leg_remaining) {
+            8w0: parse_message;
+            default: parse_complex_order_strategy_message_complex_order_strategy_leg;
+        }
+    }
+
+    state parse_complex_order_strategy_message_complex_order_strategy_leg {
+        packet.extract(hdr.complex_order_strategy_message_complex_order_strategy_leg.next);
+        meta.complex_order_strategy_message_complex_order_strategy_leg_remaining = meta.complex_order_strategy_message_complex_order_strategy_leg_remaining - 1;
+        transition select(meta.complex_order_strategy_message_complex_order_strategy_leg_remaining) {
+            8w0: parse_message;
+            default: parse_complex_order_strategy_message_complex_order_strategy_leg;
+        }
     }
 
     state parse_security_trading_action_message {
         packet.extract(hdr.security_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_trading_action_message {
         packet.extract(hdr.complex_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_security_open_closed_message {
         packet.extract(hdr.security_open_closed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_strategy_open_closed_message {
         packet.extract(hdr.strategy_open_closed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_simple_order_message {
         packet.extract(hdr.simple_order_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_order_message {
         packet.extract(hdr.complex_order_message.next);
-        transition parse_message;
+        meta.dispatched = 1;
+        meta.complex_order_message_complex_order_leg_remaining = hdr.complex_order_message.last.number_of_legs;
+        transition select(meta.complex_order_message_complex_order_leg_remaining) {
+            8w0: parse_message;
+            default: parse_complex_order_message_complex_order_leg;
+        }
+    }
+
+    state parse_complex_order_message_complex_order_leg {
+        packet.extract(hdr.complex_order_message_complex_order_leg.next);
+        meta.complex_order_message_complex_order_leg_remaining = meta.complex_order_message_complex_order_leg_remaining - 1;
+        transition select(meta.complex_order_message_complex_order_leg_remaining) {
+            8w0: parse_message;
+            default: parse_complex_order_message_complex_order_leg;
+        }
     }
 
     state parse_auction_notification_message {
         packet.extract(hdr.auction_notification_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_complex_auction_notification_message {
         packet.extract(hdr.complex_auction_notification_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -315,7 +363,12 @@ control PhlxoptionsOrdersVerifyChecksum(inout headers_t hdr, inout metadata_t me
 
 control PhlxoptionsOrdersIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -336,12 +389,14 @@ control PhlxoptionsOrdersDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.options_directory_message);
         packet.emit(hdr.complex_order_strategy_message);
+        packet.emit(hdr.complex_order_strategy_message_complex_order_strategy_leg);
         packet.emit(hdr.security_trading_action_message);
         packet.emit(hdr.complex_trading_action_message);
         packet.emit(hdr.security_open_closed_message);
         packet.emit(hdr.strategy_open_closed_message);
         packet.emit(hdr.simple_order_message);
         packet.emit(hdr.complex_order_message);
+        packet.emit(hdr.complex_order_message_complex_order_leg);
         packet.emit(hdr.auction_notification_message);
         packet.emit(hdr.complex_auction_notification_message);
     }

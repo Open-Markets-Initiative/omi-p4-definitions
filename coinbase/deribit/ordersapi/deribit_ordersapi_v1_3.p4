@@ -145,6 +145,9 @@ header mass_quote_request_message_t {
     bit<7> reserved_7;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header mass_quote_request_message_mass_quote_request_message_quotes_group_t {
     bit<64> instrument_id;
     bit<64> bid_price_optional;
     bit<64> ask_price_optional;
@@ -157,14 +160,14 @@ header mass_quote_request_message_t {
     bit<1> post_only_reject;
     bit<1> market_limit;
     bit<1> mmp;
-    bit<1> reset_mmp_2;
+    bit<1> reset_mmp;
     bit<10> reserved_10;
     bit<1> cancel_on_disconnect_2;
     bit<1> post_only_2;
     bit<1> post_only_reject_2;
     bit<1> market_limit_2;
     bit<1> mmp_2;
-    bit<1> reset_mmp_3;
+    bit<1> reset_mmp_2;
     bit<10> reserved_10_2;
 }
 
@@ -212,17 +215,26 @@ header new_order_response_message_t {
     bit<8> cancel_reason;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header new_order_response_message_new_order_response_message_fills_group_t {
     bit<64> match_id;
     bit<64> fill_price;
-    bit<64> mantissa_4;
-    bit<8> exponent_4;
-    bit<16> block_length_2;
-    bit<16> num_in_group_2;
-    bit<64> match_id_2;
+    bit<64> mantissa;
+    bit<8> exponent;
+}
+
+header new_order_response_message_new_order_response_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header new_order_response_message_new_order_response_message_legs_group_t {
+    bit<64> match_id;
     bit<64> fill_id;
-    bit<64> fill_price_2;
-    bit<64> mantissa_5;
-    bit<8> exponent_5;
+    bit<64> fill_price;
+    bit<64> mantissa;
+    bit<8> exponent;
     bit<8> leg_side;
 }
 
@@ -257,17 +269,26 @@ header amend_order_response_message_t {
     bit<8> cancel_reason;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header amend_order_response_message_amend_order_response_message_fills_group_t {
     bit<64> match_id;
     bit<64> fill_price;
-    bit<64> mantissa_4;
-    bit<8> exponent_4;
-    bit<16> block_length_2;
-    bit<16> num_in_group_2;
-    bit<64> match_id_2;
+    bit<64> mantissa;
+    bit<8> exponent;
+}
+
+header amend_order_response_message_amend_order_response_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header amend_order_response_message_amend_order_response_message_legs_group_t {
+    bit<64> match_id;
     bit<64> fill_id;
-    bit<64> fill_price_2;
-    bit<64> mantissa_5;
-    bit<8> exponent_5;
+    bit<64> fill_price;
+    bit<64> mantissa;
+    bit<8> exponent;
     bit<8> leg_side;
 }
 
@@ -314,6 +335,9 @@ header mass_quote_response_message_t {
     bit<64> receive_time;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header mass_quote_response_message_mass_quote_response_message_quotes_group_t {
     bit<64> instrument_id;
     bit<64> bid_order_id;
     bit<64> ask_order_id;
@@ -331,27 +355,45 @@ header mass_quote_response_message_t {
     bit<8> ask_status;
     bit<8> bid_reject_reason;
     bit<8> ask_reject_reason;
-    bit<16> block_length_2;
-    bit<16> num_in_group_2;
+}
+
+header mass_quote_response_message_mass_quote_response_message_bid_fills_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header mass_quote_response_message_mass_quote_response_message_bid_fills_group_t {
     bit<64> match_id;
-    bit<64> instrument_id_2;
+    bit<64> instrument_id;
     bit<64> fill_price;
-    bit<64> mantissa_5;
-    bit<8> exponent_5;
-    bit<16> block_length_3;
-    bit<16> num_in_group_3;
-    bit<64> match_id_2;
-    bit<64> instrument_id_3;
-    bit<64> fill_price_2;
-    bit<64> mantissa_6;
-    bit<8> exponent_6;
-    bit<16> block_length_4;
-    bit<16> num_in_group_4;
-    bit<64> match_id_3;
+    bit<64> mantissa;
+    bit<8> exponent;
+}
+
+header mass_quote_response_message_mass_quote_response_message_ask_fills_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header mass_quote_response_message_mass_quote_response_message_ask_fills_group_t {
+    bit<64> match_id;
+    bit<64> instrument_id;
+    bit<64> fill_price;
+    bit<64> mantissa;
+    bit<8> exponent;
+}
+
+header mass_quote_response_message_mass_quote_response_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header mass_quote_response_message_mass_quote_response_message_legs_group_t {
+    bit<64> match_id;
     bit<64> fill_id;
-    bit<64> fill_price_3;
-    bit<64> mantissa_7;
-    bit<8> exponent_7;
+    bit<64> fill_price;
+    bit<64> mantissa;
+    bit<8> exponent;
     bit<8> leg_side;
 }
 
@@ -414,6 +456,9 @@ header order_filled_message_t {
     bit<64> exec_id;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header order_filled_message_order_filled_message_fills_group_t {
     bit<64> client_order_id;
     bit<64> order_id;
     bit<64> instrument_id;
@@ -427,13 +472,19 @@ header order_filled_message_t {
     bit<1> is_quote;
     bit<1> is_fully_filled;
     bit<6> reserved_6;
-    bit<16> block_length_2;
-    bit<16> num_in_group_2;
-    bit<64> match_id_2;
+}
+
+header order_filled_message_order_filled_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header order_filled_message_order_filled_message_legs_group_t {
+    bit<64> match_id;
     bit<64> fill_id;
-    bit<64> price_2;
-    bit<64> mantissa_3;
-    bit<8> exponent_3;
+    bit<64> price;
+    bit<64> mantissa;
+    bit<8> exponent;
     bit<8> leg_side;
 }
 
@@ -444,6 +495,9 @@ header orders_canceled_message_t {
     bit<7> reserved_7;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header orders_canceled_message_orders_canceled_message_orders_group_t {
     bit<64> client_order_id;
     bit<64> order_id;
     bit<64> instrument_id;
@@ -451,7 +505,7 @@ header orders_canceled_message_t {
     bit<8> exponent;
     bit<8> cancel_reason;
     bit<1> is_quote;
-    bit<7> reserved_7_2;
+    bit<7> reserved_7;
 }
 
 header order_placed_message_t {
@@ -473,17 +527,26 @@ header order_placed_message_t {
     bit<64> correlation_id;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header order_placed_message_order_placed_message_fills_group_t {
     bit<64> match_id;
     bit<64> fill_price;
-    bit<64> mantissa_4;
-    bit<8> exponent_4;
-    bit<16> block_length_2;
-    bit<16> num_in_group_2;
-    bit<64> match_id_2;
+    bit<64> mantissa;
+    bit<8> exponent;
+}
+
+header order_placed_message_order_placed_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header order_placed_message_order_placed_message_legs_group_t {
+    bit<64> match_id;
     bit<64> fill_id;
-    bit<64> fill_price_2;
-    bit<64> mantissa_5;
-    bit<8> exponent_5;
+    bit<64> fill_price;
+    bit<64> mantissa;
+    bit<8> exponent;
     bit<8> leg_side;
 }
 
@@ -493,6 +556,9 @@ header mass_quote_orders_placed_message_t {
     bit<64> mmp_group_id;
     bit<16> block_length;
     bit<16> num_in_group;
+}
+
+header mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_t {
     bit<64> client_order_id;
     bit<64> order_id;
     bit<64> instrument_id;
@@ -506,20 +572,32 @@ header mass_quote_orders_placed_message_t {
     bit<8> side;
     bit<8> status;
     bit<8> cancel_reason;
-    bit<16> block_length_2;
-    bit<16> num_in_group_2;
+}
+
+header mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_t {
     bit<64> match_id;
     bit<64> order_id_fill_id;
     bit<64> fill_price;
-    bit<64> mantissa_4;
-    bit<8> exponent_4;
-    bit<16> block_length_3;
-    bit<16> num_in_group_3;
-    bit<64> match_id_2;
+    bit<64> mantissa;
+    bit<8> exponent;
+}
+
+header mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_header_t {
+    bit<16> block_length;
+    bit<16> num_in_group;
+}
+
+header mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_t {
+    bit<64> match_id;
     bit<64> fill_id;
-    bit<64> fill_price_2;
-    bit<64> mantissa_5;
-    bit<8> exponent_5;
+    bit<64> fill_price;
+    bit<64> mantissa;
+    bit<8> exponent;
     bit<8> leg_side;
 }
 
@@ -560,6 +638,24 @@ header orders_mmp_unfrozen_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> mass_quote_request_message_mass_quote_request_message_quotes_group_remaining;
+    bit<16> new_order_response_message_new_order_response_message_fills_group_remaining;
+    bit<16> new_order_response_message_new_order_response_message_legs_group_remaining;
+    bit<16> amend_order_response_message_amend_order_response_message_fills_group_remaining;
+    bit<16> amend_order_response_message_amend_order_response_message_legs_group_remaining;
+    bit<16> mass_quote_response_message_mass_quote_response_message_quotes_group_remaining;
+    bit<16> mass_quote_response_message_mass_quote_response_message_bid_fills_group_remaining;
+    bit<16> mass_quote_response_message_mass_quote_response_message_ask_fills_group_remaining;
+    bit<16> mass_quote_response_message_mass_quote_response_message_legs_group_remaining;
+    bit<16> order_filled_message_order_filled_message_fills_group_remaining;
+    bit<16> order_filled_message_order_filled_message_legs_group_remaining;
+    bit<16> orders_canceled_message_orders_canceled_message_orders_group_remaining;
+    bit<16> order_placed_message_order_placed_message_fills_group_remaining;
+    bit<16> order_placed_message_order_placed_message_legs_group_remaining;
+    bit<16> mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_remaining;
+    bit<16> mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_remaining;
+    bit<16> mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_remaining;
 }
 
 struct headers_t {
@@ -578,17 +674,31 @@ struct headers_t {
     cancel_order_request_message_t cancel_order_request_message;
     cancel_order_by_id_request_message_t cancel_order_by_id_request_message;
     mass_quote_request_message_t mass_quote_request_message;
+    mass_quote_request_message_mass_quote_request_message_quotes_group_t mass_quote_request_message_mass_quote_request_message_quotes_group[MAX_MESSAGES];
     mass_cancel_request_message_t mass_cancel_request_message;
     mass_quote_cancel_request_message_t mass_quote_cancel_request_message;
     get_mass_quote_mmp_status_request_message_t get_mass_quote_mmp_status_request_message;
     get_orders_mmp_status_request_message_t get_orders_mmp_status_request_message;
     new_order_response_message_t new_order_response_message;
+    new_order_response_message_new_order_response_message_fills_group_t new_order_response_message_new_order_response_message_fills_group[MAX_MESSAGES];
+    new_order_response_message_new_order_response_message_legs_group_header_t new_order_response_message_new_order_response_message_legs_group_header;
+    new_order_response_message_new_order_response_message_legs_group_t new_order_response_message_new_order_response_message_legs_group[MAX_MESSAGES];
     new_order_reject_message_t new_order_reject_message;
     amend_order_response_message_t amend_order_response_message;
+    amend_order_response_message_amend_order_response_message_fills_group_t amend_order_response_message_amend_order_response_message_fills_group[MAX_MESSAGES];
+    amend_order_response_message_amend_order_response_message_legs_group_header_t amend_order_response_message_amend_order_response_message_legs_group_header;
+    amend_order_response_message_amend_order_response_message_legs_group_t amend_order_response_message_amend_order_response_message_legs_group[MAX_MESSAGES];
     amend_order_reject_message_t amend_order_reject_message;
     cancel_order_response_message_t cancel_order_response_message;
     cancel_order_reject_message_t cancel_order_reject_message;
     mass_quote_response_message_t mass_quote_response_message;
+    mass_quote_response_message_mass_quote_response_message_quotes_group_t mass_quote_response_message_mass_quote_response_message_quotes_group[MAX_MESSAGES];
+    mass_quote_response_message_mass_quote_response_message_bid_fills_group_header_t mass_quote_response_message_mass_quote_response_message_bid_fills_group_header;
+    mass_quote_response_message_mass_quote_response_message_bid_fills_group_t mass_quote_response_message_mass_quote_response_message_bid_fills_group[MAX_MESSAGES];
+    mass_quote_response_message_mass_quote_response_message_ask_fills_group_header_t mass_quote_response_message_mass_quote_response_message_ask_fills_group_header;
+    mass_quote_response_message_mass_quote_response_message_ask_fills_group_t mass_quote_response_message_mass_quote_response_message_ask_fills_group[MAX_MESSAGES];
+    mass_quote_response_message_mass_quote_response_message_legs_group_header_t mass_quote_response_message_mass_quote_response_message_legs_group_header;
+    mass_quote_response_message_mass_quote_response_message_legs_group_t mass_quote_response_message_mass_quote_response_message_legs_group[MAX_MESSAGES];
     mass_quote_reject_message_t mass_quote_reject_message;
     mass_cancel_response_message_t mass_cancel_response_message;
     mass_cancel_reject_message_t mass_cancel_reject_message;
@@ -597,9 +707,21 @@ struct headers_t {
     get_orders_mmp_status_response_message_t get_orders_mmp_status_response_message;
     get_orders_mmp_status_reject_message_t get_orders_mmp_status_reject_message;
     order_filled_message_t order_filled_message;
+    order_filled_message_order_filled_message_fills_group_t order_filled_message_order_filled_message_fills_group[MAX_MESSAGES];
+    order_filled_message_order_filled_message_legs_group_header_t order_filled_message_order_filled_message_legs_group_header;
+    order_filled_message_order_filled_message_legs_group_t order_filled_message_order_filled_message_legs_group[MAX_MESSAGES];
     orders_canceled_message_t orders_canceled_message;
+    orders_canceled_message_orders_canceled_message_orders_group_t orders_canceled_message_orders_canceled_message_orders_group[MAX_MESSAGES];
     order_placed_message_t order_placed_message;
+    order_placed_message_order_placed_message_fills_group_t order_placed_message_order_placed_message_fills_group[MAX_MESSAGES];
+    order_placed_message_order_placed_message_legs_group_header_t order_placed_message_order_placed_message_legs_group_header;
+    order_placed_message_order_placed_message_legs_group_t order_placed_message_order_placed_message_legs_group[MAX_MESSAGES];
     mass_quote_orders_placed_message_t mass_quote_orders_placed_message;
+    mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_t mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group[MAX_MESSAGES];
+    mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_header_t mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_header;
+    mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_t mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group[MAX_MESSAGES];
+    mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_header_t mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_header;
+    mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_t mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group[MAX_MESSAGES];
     mass_quote_mmp_triggered_message_t mass_quote_mmp_triggered_message;
     orders_mmp_triggered_message_t orders_mmp_triggered_message;
     mass_quote_mmp_unfrozen_message_t mass_quote_mmp_unfrozen_message;
@@ -656,201 +778,507 @@ parser DeribitOrdersapiParser(packet_in packet, out headers_t hdr, inout metadat
 
     state parse_logon_message {
         packet.extract(hdr.logon_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logon_conf_message {
         packet.extract(hdr.logon_conf_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logout_message {
         packet.extract(hdr.logout_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_logged_out_message {
         packet.extract(hdr.logged_out_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_message {
         packet.extract(hdr.heartbeat_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_test_request_message {
         packet.extract(hdr.test_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_resend_request_message {
         packet.extract(hdr.resend_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gap_fill_message {
         packet.extract(hdr.gap_fill_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reject_message {
         packet.extract(hdr.reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_request_message {
         packet.extract(hdr.new_order_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_amend_order_request_message {
         packet.extract(hdr.amend_order_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_order_request_message {
         packet.extract(hdr.cancel_order_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_order_by_id_request_message {
         packet.extract(hdr.cancel_order_by_id_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_quote_request_message {
         packet.extract(hdr.mass_quote_request_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mass_quote_request_message_mass_quote_request_message_quotes_group_remaining = hdr.mass_quote_request_message.num_in_group;
+        transition select(meta.mass_quote_request_message_mass_quote_request_message_quotes_group_remaining) {
+            16w0: accept;
+            default: parse_mass_quote_request_message_mass_quote_request_message_quotes_group;
+        }
+    }
+
+    state parse_mass_quote_request_message_mass_quote_request_message_quotes_group {
+        packet.extract(hdr.mass_quote_request_message_mass_quote_request_message_quotes_group.next);
+        meta.mass_quote_request_message_mass_quote_request_message_quotes_group_remaining = meta.mass_quote_request_message_mass_quote_request_message_quotes_group_remaining - 1;
+        transition select(meta.mass_quote_request_message_mass_quote_request_message_quotes_group_remaining) {
+            16w0: accept;
+            default: parse_mass_quote_request_message_mass_quote_request_message_quotes_group;
+        }
     }
 
     state parse_mass_cancel_request_message {
         packet.extract(hdr.mass_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_quote_cancel_request_message {
         packet.extract(hdr.mass_quote_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_get_mass_quote_mmp_status_request_message {
         packet.extract(hdr.get_mass_quote_mmp_status_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_get_orders_mmp_status_request_message {
         packet.extract(hdr.get_orders_mmp_status_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_response_message {
         packet.extract(hdr.new_order_response_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.new_order_response_message_new_order_response_message_fills_group_remaining = hdr.new_order_response_message.num_in_group;
+        transition select(meta.new_order_response_message_new_order_response_message_fills_group_remaining) {
+            16w0: read_new_order_response_message_new_order_response_message_legs_group;
+            default: parse_new_order_response_message_new_order_response_message_fills_group;
+        }
+    }
+
+    state parse_new_order_response_message_new_order_response_message_fills_group {
+        packet.extract(hdr.new_order_response_message_new_order_response_message_fills_group.next);
+        meta.new_order_response_message_new_order_response_message_fills_group_remaining = meta.new_order_response_message_new_order_response_message_fills_group_remaining - 1;
+        transition select(meta.new_order_response_message_new_order_response_message_fills_group_remaining) {
+            16w0: read_new_order_response_message_new_order_response_message_legs_group;
+            default: parse_new_order_response_message_new_order_response_message_fills_group;
+        }
+    }
+
+    state read_new_order_response_message_new_order_response_message_legs_group {
+        packet.extract(hdr.new_order_response_message_new_order_response_message_legs_group_header);
+        meta.new_order_response_message_new_order_response_message_legs_group_remaining = hdr.new_order_response_message_new_order_response_message_legs_group_header.num_in_group;
+        transition select(meta.new_order_response_message_new_order_response_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_new_order_response_message_new_order_response_message_legs_group;
+        }
+    }
+
+    state parse_new_order_response_message_new_order_response_message_legs_group {
+        packet.extract(hdr.new_order_response_message_new_order_response_message_legs_group.next);
+        meta.new_order_response_message_new_order_response_message_legs_group_remaining = meta.new_order_response_message_new_order_response_message_legs_group_remaining - 1;
+        transition select(meta.new_order_response_message_new_order_response_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_new_order_response_message_new_order_response_message_legs_group;
+        }
     }
 
     state parse_new_order_reject_message {
         packet.extract(hdr.new_order_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_amend_order_response_message {
         packet.extract(hdr.amend_order_response_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.amend_order_response_message_amend_order_response_message_fills_group_remaining = hdr.amend_order_response_message.num_in_group;
+        transition select(meta.amend_order_response_message_amend_order_response_message_fills_group_remaining) {
+            16w0: read_amend_order_response_message_amend_order_response_message_legs_group;
+            default: parse_amend_order_response_message_amend_order_response_message_fills_group;
+        }
+    }
+
+    state parse_amend_order_response_message_amend_order_response_message_fills_group {
+        packet.extract(hdr.amend_order_response_message_amend_order_response_message_fills_group.next);
+        meta.amend_order_response_message_amend_order_response_message_fills_group_remaining = meta.amend_order_response_message_amend_order_response_message_fills_group_remaining - 1;
+        transition select(meta.amend_order_response_message_amend_order_response_message_fills_group_remaining) {
+            16w0: read_amend_order_response_message_amend_order_response_message_legs_group;
+            default: parse_amend_order_response_message_amend_order_response_message_fills_group;
+        }
+    }
+
+    state read_amend_order_response_message_amend_order_response_message_legs_group {
+        packet.extract(hdr.amend_order_response_message_amend_order_response_message_legs_group_header);
+        meta.amend_order_response_message_amend_order_response_message_legs_group_remaining = hdr.amend_order_response_message_amend_order_response_message_legs_group_header.num_in_group;
+        transition select(meta.amend_order_response_message_amend_order_response_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_amend_order_response_message_amend_order_response_message_legs_group;
+        }
+    }
+
+    state parse_amend_order_response_message_amend_order_response_message_legs_group {
+        packet.extract(hdr.amend_order_response_message_amend_order_response_message_legs_group.next);
+        meta.amend_order_response_message_amend_order_response_message_legs_group_remaining = meta.amend_order_response_message_amend_order_response_message_legs_group_remaining - 1;
+        transition select(meta.amend_order_response_message_amend_order_response_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_amend_order_response_message_amend_order_response_message_legs_group;
+        }
     }
 
     state parse_amend_order_reject_message {
         packet.extract(hdr.amend_order_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_order_response_message {
         packet.extract(hdr.cancel_order_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_cancel_order_reject_message {
         packet.extract(hdr.cancel_order_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_quote_response_message {
         packet.extract(hdr.mass_quote_response_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mass_quote_response_message_mass_quote_response_message_quotes_group_remaining = hdr.mass_quote_response_message.num_in_group;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_quotes_group_remaining) {
+            16w0: read_mass_quote_response_message_mass_quote_response_message_bid_fills_group;
+            default: parse_mass_quote_response_message_mass_quote_response_message_quotes_group;
+        }
+    }
+
+    state parse_mass_quote_response_message_mass_quote_response_message_quotes_group {
+        packet.extract(hdr.mass_quote_response_message_mass_quote_response_message_quotes_group.next);
+        meta.mass_quote_response_message_mass_quote_response_message_quotes_group_remaining = meta.mass_quote_response_message_mass_quote_response_message_quotes_group_remaining - 1;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_quotes_group_remaining) {
+            16w0: read_mass_quote_response_message_mass_quote_response_message_bid_fills_group;
+            default: parse_mass_quote_response_message_mass_quote_response_message_quotes_group;
+        }
+    }
+
+    state read_mass_quote_response_message_mass_quote_response_message_bid_fills_group {
+        packet.extract(hdr.mass_quote_response_message_mass_quote_response_message_bid_fills_group_header);
+        meta.mass_quote_response_message_mass_quote_response_message_bid_fills_group_remaining = hdr.mass_quote_response_message_mass_quote_response_message_bid_fills_group_header.num_in_group;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_bid_fills_group_remaining) {
+            16w0: read_mass_quote_response_message_mass_quote_response_message_ask_fills_group;
+            default: parse_mass_quote_response_message_mass_quote_response_message_bid_fills_group;
+        }
+    }
+
+    state parse_mass_quote_response_message_mass_quote_response_message_bid_fills_group {
+        packet.extract(hdr.mass_quote_response_message_mass_quote_response_message_bid_fills_group.next);
+        meta.mass_quote_response_message_mass_quote_response_message_bid_fills_group_remaining = meta.mass_quote_response_message_mass_quote_response_message_bid_fills_group_remaining - 1;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_bid_fills_group_remaining) {
+            16w0: read_mass_quote_response_message_mass_quote_response_message_ask_fills_group;
+            default: parse_mass_quote_response_message_mass_quote_response_message_bid_fills_group;
+        }
+    }
+
+    state read_mass_quote_response_message_mass_quote_response_message_ask_fills_group {
+        packet.extract(hdr.mass_quote_response_message_mass_quote_response_message_ask_fills_group_header);
+        meta.mass_quote_response_message_mass_quote_response_message_ask_fills_group_remaining = hdr.mass_quote_response_message_mass_quote_response_message_ask_fills_group_header.num_in_group;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_ask_fills_group_remaining) {
+            16w0: read_mass_quote_response_message_mass_quote_response_message_legs_group;
+            default: parse_mass_quote_response_message_mass_quote_response_message_ask_fills_group;
+        }
+    }
+
+    state parse_mass_quote_response_message_mass_quote_response_message_ask_fills_group {
+        packet.extract(hdr.mass_quote_response_message_mass_quote_response_message_ask_fills_group.next);
+        meta.mass_quote_response_message_mass_quote_response_message_ask_fills_group_remaining = meta.mass_quote_response_message_mass_quote_response_message_ask_fills_group_remaining - 1;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_ask_fills_group_remaining) {
+            16w0: read_mass_quote_response_message_mass_quote_response_message_legs_group;
+            default: parse_mass_quote_response_message_mass_quote_response_message_ask_fills_group;
+        }
+    }
+
+    state read_mass_quote_response_message_mass_quote_response_message_legs_group {
+        packet.extract(hdr.mass_quote_response_message_mass_quote_response_message_legs_group_header);
+        meta.mass_quote_response_message_mass_quote_response_message_legs_group_remaining = hdr.mass_quote_response_message_mass_quote_response_message_legs_group_header.num_in_group;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_mass_quote_response_message_mass_quote_response_message_legs_group;
+        }
+    }
+
+    state parse_mass_quote_response_message_mass_quote_response_message_legs_group {
+        packet.extract(hdr.mass_quote_response_message_mass_quote_response_message_legs_group.next);
+        meta.mass_quote_response_message_mass_quote_response_message_legs_group_remaining = meta.mass_quote_response_message_mass_quote_response_message_legs_group_remaining - 1;
+        transition select(meta.mass_quote_response_message_mass_quote_response_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_mass_quote_response_message_mass_quote_response_message_legs_group;
+        }
     }
 
     state parse_mass_quote_reject_message {
         packet.extract(hdr.mass_quote_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_response_message {
         packet.extract(hdr.mass_cancel_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_reject_message {
         packet.extract(hdr.mass_cancel_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_get_mass_quote_mmp_status_response_message {
         packet.extract(hdr.get_mass_quote_mmp_status_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_get_mass_quote_mmp_status_reject_message {
         packet.extract(hdr.get_mass_quote_mmp_status_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_get_orders_mmp_status_response_message {
         packet.extract(hdr.get_orders_mmp_status_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_get_orders_mmp_status_reject_message {
         packet.extract(hdr.get_orders_mmp_status_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_filled_message {
         packet.extract(hdr.order_filled_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.order_filled_message_order_filled_message_fills_group_remaining = hdr.order_filled_message.num_in_group;
+        transition select(meta.order_filled_message_order_filled_message_fills_group_remaining) {
+            16w0: read_order_filled_message_order_filled_message_legs_group;
+            default: parse_order_filled_message_order_filled_message_fills_group;
+        }
+    }
+
+    state parse_order_filled_message_order_filled_message_fills_group {
+        packet.extract(hdr.order_filled_message_order_filled_message_fills_group.next);
+        meta.order_filled_message_order_filled_message_fills_group_remaining = meta.order_filled_message_order_filled_message_fills_group_remaining - 1;
+        transition select(meta.order_filled_message_order_filled_message_fills_group_remaining) {
+            16w0: read_order_filled_message_order_filled_message_legs_group;
+            default: parse_order_filled_message_order_filled_message_fills_group;
+        }
+    }
+
+    state read_order_filled_message_order_filled_message_legs_group {
+        packet.extract(hdr.order_filled_message_order_filled_message_legs_group_header);
+        meta.order_filled_message_order_filled_message_legs_group_remaining = hdr.order_filled_message_order_filled_message_legs_group_header.num_in_group;
+        transition select(meta.order_filled_message_order_filled_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_order_filled_message_order_filled_message_legs_group;
+        }
+    }
+
+    state parse_order_filled_message_order_filled_message_legs_group {
+        packet.extract(hdr.order_filled_message_order_filled_message_legs_group.next);
+        meta.order_filled_message_order_filled_message_legs_group_remaining = meta.order_filled_message_order_filled_message_legs_group_remaining - 1;
+        transition select(meta.order_filled_message_order_filled_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_order_filled_message_order_filled_message_legs_group;
+        }
     }
 
     state parse_orders_canceled_message {
         packet.extract(hdr.orders_canceled_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.orders_canceled_message_orders_canceled_message_orders_group_remaining = hdr.orders_canceled_message.num_in_group;
+        transition select(meta.orders_canceled_message_orders_canceled_message_orders_group_remaining) {
+            16w0: accept;
+            default: parse_orders_canceled_message_orders_canceled_message_orders_group;
+        }
+    }
+
+    state parse_orders_canceled_message_orders_canceled_message_orders_group {
+        packet.extract(hdr.orders_canceled_message_orders_canceled_message_orders_group.next);
+        meta.orders_canceled_message_orders_canceled_message_orders_group_remaining = meta.orders_canceled_message_orders_canceled_message_orders_group_remaining - 1;
+        transition select(meta.orders_canceled_message_orders_canceled_message_orders_group_remaining) {
+            16w0: accept;
+            default: parse_orders_canceled_message_orders_canceled_message_orders_group;
+        }
     }
 
     state parse_order_placed_message {
         packet.extract(hdr.order_placed_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.order_placed_message_order_placed_message_fills_group_remaining = hdr.order_placed_message.num_in_group;
+        transition select(meta.order_placed_message_order_placed_message_fills_group_remaining) {
+            16w0: read_order_placed_message_order_placed_message_legs_group;
+            default: parse_order_placed_message_order_placed_message_fills_group;
+        }
+    }
+
+    state parse_order_placed_message_order_placed_message_fills_group {
+        packet.extract(hdr.order_placed_message_order_placed_message_fills_group.next);
+        meta.order_placed_message_order_placed_message_fills_group_remaining = meta.order_placed_message_order_placed_message_fills_group_remaining - 1;
+        transition select(meta.order_placed_message_order_placed_message_fills_group_remaining) {
+            16w0: read_order_placed_message_order_placed_message_legs_group;
+            default: parse_order_placed_message_order_placed_message_fills_group;
+        }
+    }
+
+    state read_order_placed_message_order_placed_message_legs_group {
+        packet.extract(hdr.order_placed_message_order_placed_message_legs_group_header);
+        meta.order_placed_message_order_placed_message_legs_group_remaining = hdr.order_placed_message_order_placed_message_legs_group_header.num_in_group;
+        transition select(meta.order_placed_message_order_placed_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_order_placed_message_order_placed_message_legs_group;
+        }
+    }
+
+    state parse_order_placed_message_order_placed_message_legs_group {
+        packet.extract(hdr.order_placed_message_order_placed_message_legs_group.next);
+        meta.order_placed_message_order_placed_message_legs_group_remaining = meta.order_placed_message_order_placed_message_legs_group_remaining - 1;
+        transition select(meta.order_placed_message_order_placed_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_order_placed_message_order_placed_message_legs_group;
+        }
     }
 
     state parse_mass_quote_orders_placed_message {
         packet.extract(hdr.mass_quote_orders_placed_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_remaining = hdr.mass_quote_orders_placed_message.num_in_group;
+        transition select(meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_remaining) {
+            16w0: read_mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group;
+            default: parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group;
+        }
+    }
+
+    state parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group {
+        packet.extract(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group.next);
+        meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_remaining = meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_remaining - 1;
+        transition select(meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group_remaining) {
+            16w0: read_mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group;
+            default: parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group;
+        }
+    }
+
+    state read_mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group {
+        packet.extract(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_header);
+        meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_remaining = hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_header.num_in_group;
+        transition select(meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_remaining) {
+            16w0: read_mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group;
+            default: parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group;
+        }
+    }
+
+    state parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group {
+        packet.extract(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group.next);
+        meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_remaining = meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_remaining - 1;
+        transition select(meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_remaining) {
+            16w0: read_mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group;
+            default: parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group;
+        }
+    }
+
+    state read_mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group {
+        packet.extract(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_header);
+        meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_remaining = hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_header.num_in_group;
+        transition select(meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group;
+        }
+    }
+
+    state parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group {
+        packet.extract(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group.next);
+        meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_remaining = meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_remaining - 1;
+        transition select(meta.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_remaining) {
+            16w0: accept;
+            default: parse_mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group;
+        }
     }
 
     state parse_mass_quote_mmp_triggered_message {
         packet.extract(hdr.mass_quote_mmp_triggered_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_orders_mmp_triggered_message {
         packet.extract(hdr.orders_mmp_triggered_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_quote_mmp_unfrozen_message {
         packet.extract(hdr.mass_quote_mmp_unfrozen_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_orders_mmp_unfrozen_message {
         packet.extract(hdr.orders_mmp_unfrozen_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -863,7 +1291,12 @@ control DeribitOrdersapiVerifyChecksum(inout headers_t hdr, inout metadata_t met
 
 control DeribitOrdersapiIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -894,17 +1327,31 @@ control DeribitOrdersapiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.cancel_order_request_message);
         packet.emit(hdr.cancel_order_by_id_request_message);
         packet.emit(hdr.mass_quote_request_message);
+        packet.emit(hdr.mass_quote_request_message_mass_quote_request_message_quotes_group);
         packet.emit(hdr.mass_cancel_request_message);
         packet.emit(hdr.mass_quote_cancel_request_message);
         packet.emit(hdr.get_mass_quote_mmp_status_request_message);
         packet.emit(hdr.get_orders_mmp_status_request_message);
         packet.emit(hdr.new_order_response_message);
+        packet.emit(hdr.new_order_response_message_new_order_response_message_fills_group);
+        packet.emit(hdr.new_order_response_message_new_order_response_message_legs_group_header);
+        packet.emit(hdr.new_order_response_message_new_order_response_message_legs_group);
         packet.emit(hdr.new_order_reject_message);
         packet.emit(hdr.amend_order_response_message);
+        packet.emit(hdr.amend_order_response_message_amend_order_response_message_fills_group);
+        packet.emit(hdr.amend_order_response_message_amend_order_response_message_legs_group_header);
+        packet.emit(hdr.amend_order_response_message_amend_order_response_message_legs_group);
         packet.emit(hdr.amend_order_reject_message);
         packet.emit(hdr.cancel_order_response_message);
         packet.emit(hdr.cancel_order_reject_message);
         packet.emit(hdr.mass_quote_response_message);
+        packet.emit(hdr.mass_quote_response_message_mass_quote_response_message_quotes_group);
+        packet.emit(hdr.mass_quote_response_message_mass_quote_response_message_bid_fills_group_header);
+        packet.emit(hdr.mass_quote_response_message_mass_quote_response_message_bid_fills_group);
+        packet.emit(hdr.mass_quote_response_message_mass_quote_response_message_ask_fills_group_header);
+        packet.emit(hdr.mass_quote_response_message_mass_quote_response_message_ask_fills_group);
+        packet.emit(hdr.mass_quote_response_message_mass_quote_response_message_legs_group_header);
+        packet.emit(hdr.mass_quote_response_message_mass_quote_response_message_legs_group);
         packet.emit(hdr.mass_quote_reject_message);
         packet.emit(hdr.mass_cancel_response_message);
         packet.emit(hdr.mass_cancel_reject_message);
@@ -913,9 +1360,21 @@ control DeribitOrdersapiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.get_orders_mmp_status_response_message);
         packet.emit(hdr.get_orders_mmp_status_reject_message);
         packet.emit(hdr.order_filled_message);
+        packet.emit(hdr.order_filled_message_order_filled_message_fills_group);
+        packet.emit(hdr.order_filled_message_order_filled_message_legs_group_header);
+        packet.emit(hdr.order_filled_message_order_filled_message_legs_group);
         packet.emit(hdr.orders_canceled_message);
+        packet.emit(hdr.orders_canceled_message_orders_canceled_message_orders_group);
         packet.emit(hdr.order_placed_message);
+        packet.emit(hdr.order_placed_message_order_placed_message_fills_group);
+        packet.emit(hdr.order_placed_message_order_placed_message_legs_group_header);
+        packet.emit(hdr.order_placed_message_order_placed_message_legs_group);
         packet.emit(hdr.mass_quote_orders_placed_message);
+        packet.emit(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_orders_group);
+        packet.emit(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_header);
+        packet.emit(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group);
+        packet.emit(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group_header);
+        packet.emit(hdr.mass_quote_orders_placed_message_mass_quote_orders_placed_message_legs_group);
         packet.emit(hdr.mass_quote_mmp_triggered_message);
         packet.emit(hdr.orders_mmp_triggered_message);
         packet.emit(hdr.mass_quote_mmp_unfrozen_message);

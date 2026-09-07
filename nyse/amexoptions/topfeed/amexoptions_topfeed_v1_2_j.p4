@@ -131,6 +131,9 @@ header complex_series_index_mapping_message_t {
     bit<16> market_id;
     bit<8> system_id;
     bit<16> no_of_legs;
+}
+
+header complex_series_index_mapping_message_complex_series_index_mapping_leg_t {
     bit<32> symbol_index;
     bit<16> leg_ratio_qty;
     bit<8> leg_side;
@@ -287,6 +290,8 @@ header outright_series_summary_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> complex_series_index_mapping_message_complex_series_index_mapping_leg_remaining;
 }
 
 struct headers_t {
@@ -299,6 +304,7 @@ struct headers_t {
     outright_series_index_mapping_message_t outright_series_index_mapping_message;
     options_status_message_t options_status_message;
     complex_series_index_mapping_message_t complex_series_index_mapping_message;
+    complex_series_index_mapping_message_complex_series_index_mapping_leg_t complex_series_index_mapping_message_complex_series_index_mapping_leg[MAX_MESSAGES];
     retransmission_request_message_t retransmission_request_message;
     refresh_header_message_t refresh_header_message;
     refresh_request_message_t refresh_request_message;
@@ -347,111 +353,146 @@ parser AmexoptionsTopfeedParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_source_time_reference_message {
         packet.extract(hdr.source_time_reference_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_message {
         packet.extract(hdr.symbol_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_clear_message {
         packet.extract(hdr.symbol_clear_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_status_message {
         packet.extract(hdr.security_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_series_index_mapping_message {
         packet.extract(hdr.outright_series_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_status_message {
         packet.extract(hdr.options_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_series_index_mapping_message {
         packet.extract(hdr.complex_series_index_mapping_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.complex_series_index_mapping_message_complex_series_index_mapping_leg_remaining = hdr.complex_series_index_mapping_message.no_of_legs;
+        transition select(meta.complex_series_index_mapping_message_complex_series_index_mapping_leg_remaining) {
+            16w0: accept;
+            default: parse_complex_series_index_mapping_message_complex_series_index_mapping_leg;
+        }
+    }
+
+    state parse_complex_series_index_mapping_message_complex_series_index_mapping_leg {
+        packet.extract(hdr.complex_series_index_mapping_message_complex_series_index_mapping_leg.next);
+        meta.complex_series_index_mapping_message_complex_series_index_mapping_leg_remaining = meta.complex_series_index_mapping_message_complex_series_index_mapping_leg_remaining - 1;
+        transition select(meta.complex_series_index_mapping_message_complex_series_index_mapping_leg_remaining) {
+            16w0: accept;
+            default: parse_complex_series_index_mapping_message_complex_series_index_mapping_leg;
+        }
     }
 
     state parse_retransmission_request_message {
         packet.extract(hdr.retransmission_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_header_message {
         packet.extract(hdr.refresh_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_request_message {
         packet.extract(hdr.refresh_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_symbol_index_mapping_request_message {
         packet.extract(hdr.symbol_index_mapping_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_message_unavailable_message {
         packet.extract(hdr.message_unavailable_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_request_response_message {
         packet.extract(hdr.request_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_heartbeat_response_message {
         packet.extract(hdr.heartbeat_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_quote_message {
         packet.extract(hdr.options_quote_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_trade_message {
         packet.extract(hdr.options_trade_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_trade_cancel_message {
         packet.extract(hdr.options_trade_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_trade_correction_message {
         packet.extract(hdr.options_trade_correction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_imbalance_message {
         packet.extract(hdr.options_imbalance_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_series_rfq_message {
         packet.extract(hdr.series_rfq_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_series_summary_message {
         packet.extract(hdr.outright_series_summary_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -464,7 +505,12 @@ control AmexoptionsTopfeedVerifyChecksum(inout headers_t hdr, inout metadata_t m
 
 control AmexoptionsTopfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -489,6 +535,7 @@ control AmexoptionsTopfeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.outright_series_index_mapping_message);
         packet.emit(hdr.options_status_message);
         packet.emit(hdr.complex_series_index_mapping_message);
+        packet.emit(hdr.complex_series_index_mapping_message_complex_series_index_mapping_leg);
         packet.emit(hdr.retransmission_request_message);
         packet.emit(hdr.refresh_header_message);
         packet.emit(hdr.refresh_request_message);

@@ -183,6 +183,7 @@ header sequence_number_reset_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -219,51 +220,61 @@ parser ArcaoptionsDeepfeedParser(packet_in packet, out headers_t hdr, inout meta
 
     state parse_outright_market_depth_buy_message {
         packet.extract(hdr.outright_market_depth_buy_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_market_depth_sell_message {
         packet.extract(hdr.outright_market_depth_sell_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_underlying_status_message {
         packet.extract(hdr.underlying_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_outright_series_status_message {
         packet.extract(hdr.outright_series_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_outright_market_depth_buy_message {
         packet.extract(hdr.refresh_outright_market_depth_buy_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_refresh_outright_market_depth_sell_message {
         packet.extract(hdr.refresh_outright_market_depth_sell_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_underlying_index_mapping_message {
         packet.extract(hdr.underlying_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_series_index_mapping_message {
         packet.extract(hdr.series_index_mapping_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_stream_id_message {
         packet.extract(hdr.stream_id_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequence_number_reset_message {
         packet.extract(hdr.sequence_number_reset_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -276,7 +287,12 @@ control ArcaoptionsDeepfeedVerifyChecksum(inout headers_t hdr, inout metadata_t 
 
 control ArcaoptionsDeepfeedIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

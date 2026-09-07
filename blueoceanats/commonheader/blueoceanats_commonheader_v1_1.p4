@@ -40,6 +40,9 @@ header common_header_t {
 
 header sequenced_message_t {
     bit<16> message_count;
+}
+
+header sequenced_message_message_t {
     bit<16> message_length;
     bit<16> block_length;
     bit<8> template_id;
@@ -48,11 +51,14 @@ header sequenced_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<16> sequenced_message_message_remaining;
 }
 
 struct headers_t {
     common_header_t common_header;
     sequenced_message_t sequenced_message;
+    sequenced_message_message_t sequenced_message_message[MAX_MESSAGES];
 }
 
 parser BlueoceanatsCommonheaderParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -66,7 +72,21 @@ parser BlueoceanatsCommonheaderParser(packet_in packet, out headers_t hdr, inout
 
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.sequenced_message_message_remaining = hdr.sequenced_message.message_count;
+        transition select(meta.sequenced_message_message_remaining) {
+            16w0: accept;
+            default: parse_sequenced_message_message;
+        }
+    }
+
+    state parse_sequenced_message_message {
+        packet.extract(hdr.sequenced_message_message.next);
+        meta.sequenced_message_message_remaining = meta.sequenced_message_message_remaining - 1;
+        transition select(meta.sequenced_message_message_remaining) {
+            16w0: accept;
+            default: parse_sequenced_message_message;
+        }
     }
 
 }
@@ -78,7 +98,12 @@ control BlueoceanatsCommonheaderVerifyChecksum(inout headers_t hdr, inout metada
 
 control BlueoceanatsCommonheaderIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -96,6 +121,7 @@ control BlueoceanatsCommonheaderDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.common_header);
         packet.emit(hdr.sequenced_message);
+        packet.emit(hdr.sequenced_message_message);
     }
 }
 

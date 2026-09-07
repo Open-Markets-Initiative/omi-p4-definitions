@@ -5,9 +5,9 @@
 
 | Division | [Protocol][Omi.Bse.Protocol.Definitions] | [Encoding][Omi.Encoding.Definitions] | Version | Date | Size | [Status][Omi.Glossary.Status] | [Testing][Omi.Glossary.Testing] | [Documentation][Omi.Bse.Specifications] |
 | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
-| [BseIndia][BseIndia.Exchange] | [Eobi][Bse.BseIndia.Eobi] | [Fbe][Omi.Encoding.Fbe] | [1.4][Bse.BseIndia.Eobi.Fbe.v1.4.Definition] | 7/14/2025 | 478 | [Active][Omi.Glossary.Status.Active] | [Verified][Omi.Glossary.Testing.Verified] | [url][Bse.BseIndia.Eobi.Fbe.v1.4.Url] - [pdf][Bse.BseIndia.Eobi.Fbe.v1.4.Pdf] |
-| [BseIndia][BseIndia.Exchange] | [Eti][Bse.BseIndia.Eti] | [Fbe][Omi.Encoding.Fbe] | [1.6.14][Bse.BseIndia.Eti.Fbe.v1.6.14.Definition] | 3/30/2026 | 823 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Bse.BseIndia.Eti.Fbe.v1.6.14.Url] - [pdf][Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf] - [xml][Bse.BseIndia.Eti.Fbe.v1.6.14.Xml] |
-| [BseIndia][BseIndia.Exchange] | [Eti][Bse.BseIndia.Eti] | [Fbe][Omi.Encoding.Fbe] | [1.6.14][Bse.BseIndia.Eti.Fbe.v1.6.14.Definition] | 3/30/2026 | 1805 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Bse.BseIndia.Eti.Fbe.v1.6.14.Url] - [pdf][Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf] - [xml][Bse.BseIndia.Eti.Fbe.v1.6.14.Xml] |
+| [BseIndia][BseIndia.Exchange] | [Eobi][Bse.BseIndia.Eobi] | [Fbe][Omi.Encoding.Fbe] | [1.4][Bse.BseIndia.Eobi.Fbe.v1.4.Definition] | 7/14/2025 | 562 | [Active][Omi.Glossary.Status.Active] | [Verified][Omi.Glossary.Testing.Verified] | [url][Bse.BseIndia.Eobi.Fbe.v1.4.Url] - [pdf][Bse.BseIndia.Eobi.Fbe.v1.4.Pdf] |
+| [BseIndia][BseIndia.Exchange] | [Eti][Bse.BseIndia.Eti] | [Fbe][Omi.Encoding.Fbe] | [1.6.14][Bse.BseIndia.Eti.Fbe.v1.6.14.Definition] | 3/30/2026 | 932 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Bse.BseIndia.Eti.Fbe.v1.6.14.Url] - [pdf][Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf] - [xml][Bse.BseIndia.Eti.Fbe.v1.6.14.Xml] |
+| [BseIndia][BseIndia.Exchange] | [Eti][Bse.BseIndia.Eti] | [Fbe][Omi.Encoding.Fbe] | [1.6.14][Bse.BseIndia.Eti.Fbe.v1.6.14.Definition] | 3/30/2026 | 2316 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Bse.BseIndia.Eti.Fbe.v1.6.14.Url] - [pdf][Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf] - [xml][Bse.BseIndia.Eti.Fbe.v1.6.14.Xml] |
 
 
 Bse: [website](https://www.bseindia.com "Go to BSE Limited")

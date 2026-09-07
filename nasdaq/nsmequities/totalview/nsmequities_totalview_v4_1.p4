@@ -171,6 +171,7 @@ header retail_price_improvement_indicator_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -227,86 +228,103 @@ parser NsmequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_timestamp_message {
         packet.extract(hdr.timestamp_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_directory_message {
         packet.extract(hdr.stock_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
         packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_market_participant_position_message {
         packet.extract(hdr.market_participant_position_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_message {
         packet.extract(hdr.add_order_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_add_order_with_mpid_message {
         packet.extract(hdr.add_order_with_mpid_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_executed_with_price_message {
         packet.extract(hdr.order_executed_with_price_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_cancel_message {
         packet.extract(hdr.order_cancel_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_delete_message {
         packet.extract(hdr.order_delete_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_order_replace_message {
         packet.extract(hdr.order_replace_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_cross_trade_message {
         packet.extract(hdr.cross_trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_broken_trade_message {
         packet.extract(hdr.broken_trade_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_net_order_imbalance_indicator_message {
         packet.extract(hdr.net_order_imbalance_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_retail_price_improvement_indicator_message {
         packet.extract(hdr.retail_price_improvement_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -319,7 +337,12 @@ control NsmequitiesTotalviewVerifyChecksum(inout headers_t hdr, inout metadata_t
 
 control NsmequitiesTotalviewIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

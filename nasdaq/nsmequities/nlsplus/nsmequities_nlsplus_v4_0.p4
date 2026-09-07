@@ -191,6 +191,7 @@ header operational_halt_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -241,71 +242,85 @@ parser NsmequitiesNlsplusParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_report_message {
         packet.extract(hdr.trade_report_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_cancel_error_message {
         packet.extract(hdr.trade_cancel_error_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_correction_message {
         packet.extract(hdr.trade_correction_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_trading_action_message {
         packet.extract(hdr.stock_trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
         packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_directory_message {
         packet.extract(hdr.stock_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_adjusted_closing_price_message {
         packet.extract(hdr.adjusted_closing_price_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_end_of_day_trade_summary_message {
         packet.extract(hdr.end_of_day_trade_summary_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_ipo_information_message {
         packet.extract(hdr.ipo_information_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_mwcb_decline_level_message {
         packet.extract(hdr.mwcb_decline_level_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_mwcb_status_message {
         packet.extract(hdr.mwcb_status_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_ipo_quoting_period_update_message {
         packet.extract(hdr.ipo_quoting_period_update_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_operational_halt_message {
         packet.extract(hdr.operational_halt_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -318,7 +333,12 @@ control NsmequitiesNlsplusVerifyChecksum(inout headers_t hdr, inout metadata_t m
 
 control NsmequitiesNlsplusIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

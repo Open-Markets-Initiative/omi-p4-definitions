@@ -280,6 +280,7 @@ header quick_acknowledgement_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -321,26 +322,31 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
 
     state parse_board_lot_in_trimmed_message {
         packet.extract(hdr.board_lot_in_trimmed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_cancel_trimmed_message {
         packet.extract(hdr.order_modify_cancel_trimmed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_confirmation_trimmed_message {
         packet.extract(hdr.order_confirmation_trimmed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_confirmation_trimmed_message {
         packet.extract(hdr.trade_confirmation_trimmed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quick_acknowledgement_message {
         packet.extract(hdr.quick_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -353,7 +359,12 @@ control NsefoOrderentryVerifyChecksum(inout headers_t hdr, inout metadata_t meta
 
 control NsefoOrderentryIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

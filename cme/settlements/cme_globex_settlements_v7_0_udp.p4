@@ -45,6 +45,9 @@ header md_incremental_refresh_settle_t {
     bit<64> transact_time;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_incremental_refresh_settle_incremental_refresh_settle_group_t {
     bit<8> md_update_action;
     bit<8> md_entry_type;
     bit<64> product_guid;
@@ -88,6 +91,9 @@ header md_incremental_refresh_voi_t {
     bit<64> transact_time;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_incremental_refresh_voi_incremental_refresh_voi_group_t {
     bit<64> product_guid;
     bit<96> clearing_product_code;
     bit<48> security_type;
@@ -120,6 +126,9 @@ header md_incremental_refresh_high_low_t {
     bit<64> transact_time;
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_incremental_refresh_high_low_incremental_refresh_high_low_group_t {
     bit<64> product_guid;
     bit<96> clearing_product_code;
     bit<48> security_type;
@@ -152,13 +161,20 @@ header md_incremental_refresh_high_low_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> md_incremental_refresh_settle_incremental_refresh_settle_group_remaining;
+    bit<8> md_incremental_refresh_voi_incremental_refresh_voi_group_remaining;
+    bit<8> md_incremental_refresh_high_low_incremental_refresh_high_low_group_remaining;
 }
 
 struct headers_t {
     message_header_t message_header;
     md_incremental_refresh_settle_t md_incremental_refresh_settle;
+    md_incremental_refresh_settle_incremental_refresh_settle_group_t md_incremental_refresh_settle_incremental_refresh_settle_group[MAX_MESSAGES];
     md_incremental_refresh_voi_t md_incremental_refresh_voi;
+    md_incremental_refresh_voi_incremental_refresh_voi_group_t md_incremental_refresh_voi_incremental_refresh_voi_group[MAX_MESSAGES];
     md_incremental_refresh_high_low_t md_incremental_refresh_high_low;
+    md_incremental_refresh_high_low_incremental_refresh_high_low_group_t md_incremental_refresh_high_low_incremental_refresh_high_low_group[MAX_MESSAGES];
 }
 
 parser CmeGlobexSettlementsUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -174,17 +190,59 @@ parser CmeGlobexSettlementsUdpParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_md_incremental_refresh_settle {
         packet.extract(hdr.md_incremental_refresh_settle);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_settle_incremental_refresh_settle_group_remaining = hdr.md_incremental_refresh_settle.num_in_group;
+        transition select(meta.md_incremental_refresh_settle_incremental_refresh_settle_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_settle_incremental_refresh_settle_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_settle_incremental_refresh_settle_group {
+        packet.extract(hdr.md_incremental_refresh_settle_incremental_refresh_settle_group.next);
+        meta.md_incremental_refresh_settle_incremental_refresh_settle_group_remaining = meta.md_incremental_refresh_settle_incremental_refresh_settle_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_settle_incremental_refresh_settle_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_settle_incremental_refresh_settle_group;
+        }
     }
 
     state parse_md_incremental_refresh_voi {
         packet.extract(hdr.md_incremental_refresh_voi);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_voi_incremental_refresh_voi_group_remaining = hdr.md_incremental_refresh_voi.num_in_group;
+        transition select(meta.md_incremental_refresh_voi_incremental_refresh_voi_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_voi_incremental_refresh_voi_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_voi_incremental_refresh_voi_group {
+        packet.extract(hdr.md_incremental_refresh_voi_incremental_refresh_voi_group.next);
+        meta.md_incremental_refresh_voi_incremental_refresh_voi_group_remaining = meta.md_incremental_refresh_voi_incremental_refresh_voi_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_voi_incremental_refresh_voi_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_voi_incremental_refresh_voi_group;
+        }
     }
 
     state parse_md_incremental_refresh_high_low {
         packet.extract(hdr.md_incremental_refresh_high_low);
-        transition accept;
+        meta.dispatched = 1;
+        meta.md_incremental_refresh_high_low_incremental_refresh_high_low_group_remaining = hdr.md_incremental_refresh_high_low.num_in_group;
+        transition select(meta.md_incremental_refresh_high_low_incremental_refresh_high_low_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_high_low_incremental_refresh_high_low_group;
+        }
+    }
+
+    state parse_md_incremental_refresh_high_low_incremental_refresh_high_low_group {
+        packet.extract(hdr.md_incremental_refresh_high_low_incremental_refresh_high_low_group.next);
+        meta.md_incremental_refresh_high_low_incremental_refresh_high_low_group_remaining = meta.md_incremental_refresh_high_low_incremental_refresh_high_low_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_high_low_incremental_refresh_high_low_group_remaining) {
+            8w0: accept;
+            default: parse_md_incremental_refresh_high_low_incremental_refresh_high_low_group;
+        }
     }
 
 }
@@ -196,7 +254,12 @@ control CmeGlobexSettlementsUdpVerifyChecksum(inout headers_t hdr, inout metadat
 
 control CmeGlobexSettlementsUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -214,8 +277,11 @@ control CmeGlobexSettlementsUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.md_incremental_refresh_settle);
+        packet.emit(hdr.md_incremental_refresh_settle_incremental_refresh_settle_group);
         packet.emit(hdr.md_incremental_refresh_voi);
+        packet.emit(hdr.md_incremental_refresh_voi_incremental_refresh_voi_group);
         packet.emit(hdr.md_incremental_refresh_high_low);
+        packet.emit(hdr.md_incremental_refresh_high_low_incremental_refresh_high_low_group);
     }
 }
 

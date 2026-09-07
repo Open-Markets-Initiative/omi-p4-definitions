@@ -48,6 +48,7 @@ header login_request_packet_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -68,11 +69,13 @@ parser NasdaqUtpSnapshotClientParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_request_packet {
         packet.extract(hdr.login_request_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -85,7 +88,12 @@ control NasdaqUtpSnapshotClientVerifyChecksum(inout headers_t hdr, inout metadat
 
 control NasdaqUtpSnapshotClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

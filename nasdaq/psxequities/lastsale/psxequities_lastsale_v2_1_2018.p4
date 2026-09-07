@@ -172,6 +172,7 @@ header operational_halt_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -220,66 +221,79 @@ parser PsxequitiesLastsaleParser(packet_in packet, out headers_t hdr, inout meta
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_report_message {
         packet.extract(hdr.trade_report_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_next_shares_trade_report_message {
         packet.extract(hdr.next_shares_trade_report_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_cancel_error_message {
         packet.extract(hdr.trade_cancel_error_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_cancel_error_for_next_shares_message {
         packet.extract(hdr.trade_cancel_error_for_next_shares_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_correction_message {
         packet.extract(hdr.trade_correction_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trade_correction_for_next_shares_message {
         packet.extract(hdr.trade_correction_for_next_shares_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_trading_action_message {
         packet.extract(hdr.trading_action_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
         packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_stock_directory_message {
         packet.extract(hdr.stock_directory_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_mwcb_decline_level_message {
         packet.extract(hdr.mwcb_decline_level_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_mwcb_breach_message {
         packet.extract(hdr.mwcb_breach_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
     state parse_operational_halt_message {
         packet.extract(hdr.operational_halt_message.next);
+        meta.dispatched = 1;
         transition parse_message;
     }
 
@@ -292,7 +306,12 @@ control PsxequitiesLastsaleVerifyChecksum(inout headers_t hdr, inout metadata_t 
 
 control PsxequitiesLastsaleIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

@@ -139,6 +139,7 @@ header order_replaced_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -174,21 +175,25 @@ parser JnxequitiesPtsServertcpParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_debug_packet {
         packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_accepted_packet {
         packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_data_packet {
         packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x54: parse_seconds_message;
             8w0x53: parse_system_event_message;
@@ -207,56 +212,67 @@ parser JnxequitiesPtsServertcpParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_seconds_message {
         packet.extract(hdr.seconds_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_price_tick_size_message {
         packet.extract(hdr.price_tick_size_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_orderbook_directory_message {
         packet.extract(hdr.orderbook_directory_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_state_message {
         packet.extract(hdr.trading_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_short_selling_price_restriction_state_message {
         packet.extract(hdr.short_selling_price_restriction_state_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_added_without_attributes_message {
         packet.extract(hdr.order_added_without_attributes_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_added_with_attributes_message {
         packet.extract(hdr.order_added_with_attributes_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_deleted_message {
         packet.extract(hdr.order_deleted_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_replaced_message {
         packet.extract(hdr.order_replaced_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -269,7 +285,12 @@ control JnxequitiesPtsServertcpVerifyChecksum(inout headers_t hdr, inout metadat
 
 control JnxequitiesPtsServertcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

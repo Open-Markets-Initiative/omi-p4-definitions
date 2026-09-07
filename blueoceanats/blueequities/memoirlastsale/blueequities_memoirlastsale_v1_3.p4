@@ -118,6 +118,7 @@ header trade_correct_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
 }
 
 struct headers_t {
@@ -143,6 +144,7 @@ parser BlueequitiesMemoirlastsaleParser(packet_in packet, out headers_t hdr, ino
 
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
+        meta.dispatched = 1;
         transition select(hdr.sequenced_message.template_id) {
             8w1: parse_instrument_directory_message;
             8w2: parse_reg_sho_restriction_message;
@@ -157,36 +159,43 @@ parser BlueequitiesMemoirlastsaleParser(packet_in packet, out headers_t hdr, ino
 
     state parse_instrument_directory_message {
         packet.extract(hdr.instrument_directory_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_reg_sho_restriction_message {
         packet.extract(hdr.reg_sho_restriction_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_security_trading_status_message {
         packet.extract(hdr.security_trading_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trading_session_status_message {
         packet.extract(hdr.trading_session_status_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_report_message {
         packet.extract(hdr.trade_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_cancel_message {
         packet.extract(hdr.trade_cancel_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_correct_message {
         packet.extract(hdr.trade_correct_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -199,7 +208,12 @@ control BlueequitiesMemoirlastsaleVerifyChecksum(inout headers_t hdr, inout meta
 
 control BlueequitiesMemoirlastsaleIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 

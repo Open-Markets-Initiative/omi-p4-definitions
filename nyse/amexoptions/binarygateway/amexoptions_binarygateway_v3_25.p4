@@ -606,12 +606,17 @@ header complex_series_request_acknowledgement_message_t {
     bit<32> symbol_id;
     bit<8> side_u_81;
     bit<8> repeating_groups;
+}
+
+header complex_series_request_acknowledgement_message_leg_group_t {
     bit<32> leg_symbol_id;
     bit<16> leg_ratio_qty;
     bit<8> leg_side;
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_series_request_acknowledgement_message_leg_group_remaining;
 }
 
 struct headers_t {
@@ -646,6 +651,7 @@ struct headers_t {
     risk_control_acknowledgement_message_t risk_control_acknowledgement_message;
     risk_control_alert_message_t risk_control_alert_message;
     complex_series_request_acknowledgement_message_t complex_series_request_acknowledgement_message;
+    complex_series_request_acknowledgement_message_leg_group_t complex_series_request_acknowledgement_message_leg_group[MAX_MESSAGES];
 }
 
 parser AmexoptionsBinarygatewayParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -688,152 +694,195 @@ parser AmexoptionsBinarygatewayParser(packet_in packet, out headers_t hdr, inout
 
     state parse_session_configuration_request_message {
         packet.extract(hdr.session_configuration_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_message {
         packet.extract(hdr.new_order_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_request_message {
         packet.extract(hdr.order_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_modify_request_message {
         packet.extract(hdr.order_modify_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_bulk_quote_type_243_message {
         packet.extract(hdr.new_bulk_quote_type_243_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_bulk_quote_type_259_message {
         packet.extract(hdr.new_bulk_quote_type_259_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_order_cross_message {
         packet.extract(hdr.new_order_cross_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bulk_cancel_request_type_223_message {
         packet.extract(hdr.bulk_cancel_request_type_223_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bulk_cancel_request_type_224_message {
         packet.extract(hdr.bulk_cancel_request_type_224_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_limit_update_request_message {
         packet.extract(hdr.risk_limit_update_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_action_request_message {
         packet.extract(hdr.risk_action_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_complex_series_request_message {
         packet.extract(hdr.new_complex_series_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_underlying_symbol_reference_data_message {
         packet.extract(hdr.underlying_symbol_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_series_reference_data_message {
         packet.extract(hdr.series_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_minimum_price_variant_class_reference_data_message {
         packet.extract(hdr.minimum_price_variant_class_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_minimum_price_variant_level_reference_data_message {
         packet.extract(hdr.minimum_price_variant_level_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mpid_configuration_message {
         packet.extract(hdr.mpid_configuration_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_options_market_maker_symbol_appointment_reference_data_message {
         packet.extract(hdr.options_market_maker_symbol_appointment_reference_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_session_configuration_acknowledgement_message {
         packet.extract(hdr.session_configuration_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_and_cancel_replace_acknowledgement_message {
         packet.extract(hdr.order_and_cancel_replace_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bulk_quote_acknowledgment_type_294_message {
         packet.extract(hdr.bulk_quote_acknowledgment_type_294_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bulk_quote_acknowledgment_message {
         packet.extract(hdr.bulk_quote_acknowledgment_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_single_complex_modify_cancel_request_acknowledgment_and_urout_message {
         packet.extract(hdr.order_single_complex_modify_cancel_request_acknowledgment_and_urout_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_priority_update_acknowledgment_message {
         packet.extract(hdr.order_priority_update_acknowledgment_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_execution_report_message {
         packet.extract(hdr.execution_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_bust_correct_message {
         packet.extract(hdr.trade_bust_correct_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_application_layer_reject_message {
         packet.extract(hdr.application_layer_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_control_acknowledgement_message {
         packet.extract(hdr.risk_control_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_control_alert_message {
         packet.extract(hdr.risk_control_alert_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_complex_series_request_acknowledgement_message {
         packet.extract(hdr.complex_series_request_acknowledgement_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.complex_series_request_acknowledgement_message_leg_group_remaining = hdr.complex_series_request_acknowledgement_message.repeating_groups;
+        transition select(meta.complex_series_request_acknowledgement_message_leg_group_remaining) {
+            8w0: accept;
+            default: parse_complex_series_request_acknowledgement_message_leg_group;
+        }
+    }
+
+    state parse_complex_series_request_acknowledgement_message_leg_group {
+        packet.extract(hdr.complex_series_request_acknowledgement_message_leg_group.next);
+        meta.complex_series_request_acknowledgement_message_leg_group_remaining = meta.complex_series_request_acknowledgement_message_leg_group_remaining - 1;
+        transition select(meta.complex_series_request_acknowledgement_message_leg_group_remaining) {
+            8w0: accept;
+            default: parse_complex_series_request_acknowledgement_message_leg_group;
+        }
     }
 
 }
@@ -845,7 +894,12 @@ control AmexoptionsBinarygatewayVerifyChecksum(inout headers_t hdr, inout metada
 
 control AmexoptionsBinarygatewayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -892,6 +946,7 @@ control AmexoptionsBinarygatewayDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.risk_control_acknowledgement_message);
         packet.emit(hdr.risk_control_alert_message);
         packet.emit(hdr.complex_series_request_acknowledgement_message);
+        packet.emit(hdr.complex_series_request_acknowledgement_message_leg_group);
     }
 }
 

@@ -53,6 +53,9 @@ header gateway_heartbeat_message_t {
     bit<8> keep_alive;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_t {
     bit<8> subsession_type;
     bit<64> subsession_id;
     bit<8> joined;
@@ -158,6 +161,9 @@ header new_bulk_quote_message_t {
     bit<8> time_in_force;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_t {
     bit<32> instrument_id_instrument_id;
     bit<8> side;
     bit<32> price_price_4_optional;
@@ -185,6 +191,9 @@ header purge_request_message_t {
     bit<8> bulk_action;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header purge_request_message_purge_request_message_custom_group_ids_group_t {
     bit<16> custom_group_id_uint_16;
 }
 
@@ -275,6 +284,9 @@ header bulk_quote_ack_message_t {
     bit<8> throttle_indicator;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_t {
     bit<32> instrument_id_instrument_id;
     bit<8> side;
     bit<64> order_id;
@@ -336,6 +348,9 @@ header purge_ack_message_t {
     bit<8> throttle_indicator;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
+}
+
+header purge_ack_message_purge_ack_message_custom_group_ids_group_t {
     bit<16> custom_group_id_uint_16;
 }
 
@@ -519,6 +534,12 @@ header risk_control_alert_message_t {
 }
 
 struct metadata_t {
+    bit<1> dispatched;
+    bit<8> gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining;
+    bit<8> new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_remaining;
+    bit<8> purge_request_message_purge_request_message_custom_group_ids_group_remaining;
+    bit<8> bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_remaining;
+    bit<8> purge_ack_message_purge_ack_message_custom_group_ids_group_remaining;
 }
 
 struct headers_t {
@@ -526,6 +547,7 @@ struct headers_t {
     login_request_message_t login_request_message;
     login_response_message_t login_response_message;
     gateway_heartbeat_message_t gateway_heartbeat_message;
+    gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_t gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group[MAX_MESSAGES];
     terminate_message_t terminate_message;
     sequenced_message_header_message_t sequenced_message_header_message;
     subsession_join_message_t subsession_join_message;
@@ -536,17 +558,21 @@ struct headers_t {
     order_cancel_replace_request_message_t order_cancel_replace_request_message;
     order_cancel_request_message_t order_cancel_request_message;
     new_bulk_quote_message_t new_bulk_quote_message;
+    new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_t new_bulk_quote_message_new_bulk_quote_message_quote_updates_group[MAX_MESSAGES];
     mass_cancel_request_message_t mass_cancel_request_message;
     purge_request_message_t purge_request_message;
+    purge_request_message_purge_request_message_custom_group_ids_group_t purge_request_message_purge_request_message_custom_group_ids_group[MAX_MESSAGES];
     order_ack_message_t order_ack_message;
     unsolicited_modify_ack_message_t unsolicited_modify_ack_message;
     order_cancel_ack_message_t order_cancel_ack_message;
     mass_cancel_ack_message_t mass_cancel_ack_message;
     bulk_quote_ack_message_t bulk_quote_ack_message;
+    bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_t bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group[MAX_MESSAGES];
     new_ioc_quote_ack_message_t new_ioc_quote_ack_message;
     quote_restated_message_t quote_restated_message;
     quote_canceled_message_t quote_canceled_message;
     purge_ack_message_t purge_ack_message;
+    purge_ack_message_purge_ack_message_custom_group_ids_group_t purge_ack_message_purge_ack_message_custom_group_ids_group[MAX_MESSAGES];
     execution_report_message_t execution_report_message;
     trade_bust_correct_message_t trade_bust_correct_message;
     application_layer_reject_message_t application_layer_reject_message;
@@ -588,46 +614,68 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
 
     state parse_login_request_message {
         packet.extract(hdr.login_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_login_response_message {
         packet.extract(hdr.login_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_gateway_heartbeat_message {
         packet.extract(hdr.gateway_heartbeat_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining = hdr.gateway_heartbeat_message.num_in_group;
+        transition select(meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining) {
+            8w0: accept;
+            default: parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group;
+        }
+    }
+
+    state parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group {
+        packet.extract(hdr.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group.next);
+        meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining = meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining - 1;
+        transition select(meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining) {
+            8w0: accept;
+            default: parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group;
+        }
     }
 
     state parse_terminate_message {
         packet.extract(hdr.terminate_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_sequenced_message_header_message {
         packet.extract(hdr.sequenced_message_header_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_join_message {
         packet.extract(hdr.subsession_join_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_join_response_message {
         packet.extract(hdr.subsession_join_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_leave_message {
         packet.extract(hdr.subsession_leave_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_subsession_leave_response_message {
         packet.extract(hdr.subsession_leave_response_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -666,136 +714,215 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
 
     state parse_new_order_single_message {
         packet.extract(hdr.new_order_single_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_replace_request_message {
         packet.extract(hdr.order_cancel_replace_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_request_message {
         packet.extract(hdr.order_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_new_bulk_quote_message {
         packet.extract(hdr.new_bulk_quote_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_remaining = hdr.new_bulk_quote_message.num_in_group;
+        transition select(meta.new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_remaining) {
+            8w0: accept;
+            default: parse_new_bulk_quote_message_new_bulk_quote_message_quote_updates_group;
+        }
+    }
+
+    state parse_new_bulk_quote_message_new_bulk_quote_message_quote_updates_group {
+        packet.extract(hdr.new_bulk_quote_message_new_bulk_quote_message_quote_updates_group.next);
+        meta.new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_remaining = meta.new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_remaining - 1;
+        transition select(meta.new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_remaining) {
+            8w0: accept;
+            default: parse_new_bulk_quote_message_new_bulk_quote_message_quote_updates_group;
+        }
     }
 
     state parse_mass_cancel_request_message {
         packet.extract(hdr.mass_cancel_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_purge_request_message {
         packet.extract(hdr.purge_request_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.purge_request_message_purge_request_message_custom_group_ids_group_remaining = hdr.purge_request_message.num_in_group;
+        transition select(meta.purge_request_message_purge_request_message_custom_group_ids_group_remaining) {
+            8w0: accept;
+            default: parse_purge_request_message_purge_request_message_custom_group_ids_group;
+        }
+    }
+
+    state parse_purge_request_message_purge_request_message_custom_group_ids_group {
+        packet.extract(hdr.purge_request_message_purge_request_message_custom_group_ids_group.next);
+        meta.purge_request_message_purge_request_message_custom_group_ids_group_remaining = meta.purge_request_message_purge_request_message_custom_group_ids_group_remaining - 1;
+        transition select(meta.purge_request_message_purge_request_message_custom_group_ids_group_remaining) {
+            8w0: accept;
+            default: parse_purge_request_message_purge_request_message_custom_group_ids_group;
+        }
     }
 
     state parse_order_ack_message {
         packet.extract(hdr.order_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_unsolicited_modify_ack_message {
         packet.extract(hdr.unsolicited_modify_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_order_cancel_ack_message {
         packet.extract(hdr.order_cancel_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_ack_message {
         packet.extract(hdr.mass_cancel_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_bulk_quote_ack_message {
         packet.extract(hdr.bulk_quote_ack_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_remaining = hdr.bulk_quote_ack_message.num_in_group;
+        transition select(meta.bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_remaining) {
+            8w0: accept;
+            default: parse_bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group;
+        }
+    }
+
+    state parse_bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group {
+        packet.extract(hdr.bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group.next);
+        meta.bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_remaining = meta.bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_remaining - 1;
+        transition select(meta.bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_remaining) {
+            8w0: accept;
+            default: parse_bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group;
+        }
     }
 
     state parse_new_ioc_quote_ack_message {
         packet.extract(hdr.new_ioc_quote_ack_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_restated_message {
         packet.extract(hdr.quote_restated_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_quote_canceled_message {
         packet.extract(hdr.quote_canceled_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_purge_ack_message {
         packet.extract(hdr.purge_ack_message);
-        transition accept;
+        meta.dispatched = 1;
+        meta.purge_ack_message_purge_ack_message_custom_group_ids_group_remaining = hdr.purge_ack_message.num_in_group;
+        transition select(meta.purge_ack_message_purge_ack_message_custom_group_ids_group_remaining) {
+            8w0: accept;
+            default: parse_purge_ack_message_purge_ack_message_custom_group_ids_group;
+        }
+    }
+
+    state parse_purge_ack_message_purge_ack_message_custom_group_ids_group {
+        packet.extract(hdr.purge_ack_message_purge_ack_message_custom_group_ids_group.next);
+        meta.purge_ack_message_purge_ack_message_custom_group_ids_group_remaining = meta.purge_ack_message_purge_ack_message_custom_group_ids_group_remaining - 1;
+        transition select(meta.purge_ack_message_purge_ack_message_custom_group_ids_group_remaining) {
+            8w0: accept;
+            default: parse_purge_ack_message_purge_ack_message_custom_group_ids_group;
+        }
     }
 
     state parse_execution_report_message {
         packet.extract(hdr.execution_report_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_trade_bust_correct_message {
         packet.extract(hdr.trade_bust_correct_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_application_layer_reject_message {
         packet.extract(hdr.application_layer_reject_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_limit_update_request_message {
         packet.extract(hdr.risk_limit_update_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_action_request_message {
         packet.extract(hdr.risk_action_request_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_underlying_ref_data_message {
         packet.extract(hdr.underlying_ref_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_instrument_ref_data_message {
         packet.extract(hdr.instrument_ref_data_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mpid_configuration_acknowledgement_message {
         packet.extract(hdr.mpid_configuration_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_market_maker_symbol_appointment_message {
         packet.extract(hdr.market_maker_symbol_appointment_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_session_configuration_acknowledgement_message {
         packet.extract(hdr.session_configuration_acknowledgement_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_control_acknowledgment_message {
         packet.extract(hdr.risk_control_acknowledgment_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_risk_control_alert_message {
         packet.extract(hdr.risk_control_alert_message);
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -808,7 +935,12 @@ control IexoptionsBinaryorderentryVerifyChecksum(inout headers_t hdr, inout meta
 
 control IexoptionsBinaryorderentryIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
-        standard_metadata.egress_spec = FORWARD_PORT;
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
     }
 }
 
@@ -828,6 +960,7 @@ control IexoptionsBinaryorderentryDeparser(packet_out packet, in headers_t hdr) 
         packet.emit(hdr.login_request_message);
         packet.emit(hdr.login_response_message);
         packet.emit(hdr.gateway_heartbeat_message);
+        packet.emit(hdr.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group);
         packet.emit(hdr.terminate_message);
         packet.emit(hdr.sequenced_message_header_message);
         packet.emit(hdr.subsession_join_message);
@@ -838,17 +971,21 @@ control IexoptionsBinaryorderentryDeparser(packet_out packet, in headers_t hdr) 
         packet.emit(hdr.order_cancel_replace_request_message);
         packet.emit(hdr.order_cancel_request_message);
         packet.emit(hdr.new_bulk_quote_message);
+        packet.emit(hdr.new_bulk_quote_message_new_bulk_quote_message_quote_updates_group);
         packet.emit(hdr.mass_cancel_request_message);
         packet.emit(hdr.purge_request_message);
+        packet.emit(hdr.purge_request_message_purge_request_message_custom_group_ids_group);
         packet.emit(hdr.order_ack_message);
         packet.emit(hdr.unsolicited_modify_ack_message);
         packet.emit(hdr.order_cancel_ack_message);
         packet.emit(hdr.mass_cancel_ack_message);
         packet.emit(hdr.bulk_quote_ack_message);
+        packet.emit(hdr.bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group);
         packet.emit(hdr.new_ioc_quote_ack_message);
         packet.emit(hdr.quote_restated_message);
         packet.emit(hdr.quote_canceled_message);
         packet.emit(hdr.purge_ack_message);
+        packet.emit(hdr.purge_ack_message_purge_ack_message_custom_group_ids_group);
         packet.emit(hdr.execution_report_message);
         packet.emit(hdr.trade_bust_correct_message);
         packet.emit(hdr.application_layer_reject_message);
