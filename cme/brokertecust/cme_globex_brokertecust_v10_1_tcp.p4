@@ -83,6 +83,7 @@ parser CmeGlobexBrokertecustTcpParser(packet_in packet, out headers_t hdr, inout
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
             16w0x9501: parse_md_incremental_refresh_btec;
+            16w0x9b01: parse_admin_heartbeat;
             default: accept;
         }
     }
@@ -104,6 +105,11 @@ parser CmeGlobexBrokertecustTcpParser(packet_in packet, out headers_t hdr, inout
             8w0: accept;
             default: parse_md_incremental_refresh_btec_incremental_refresh_btec_group;
         }
+    }
+
+    state parse_admin_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

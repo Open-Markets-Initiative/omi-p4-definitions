@@ -56,7 +56,7 @@ header logout_message_t {
 }
 
 header order_add_message_t {
-    bit<16> security_id_u_162;
+    bit<16> security_id_short;
     bit<8> order_type;
     bit<8> time_in_force;
     bit<8> side;
@@ -81,7 +81,7 @@ header order_add_message_t {
 }
 
 header order_add_extended_message_t {
-    bit<16> security_id_u_162;
+    bit<16> security_id_short;
     bit<8> order_type;
     bit<8> time_in_force;
     bit<8> side;
@@ -110,9 +110,9 @@ header order_add_extended_message_t {
     bit<1> routetolit;
     bit<3> routing;
     bit<2> reserved_2;
-    bit<64> reserved_u_648;
+    bit<64> reserved_long;
     bit<64> designated_order_id;
-    bit<16> reserved_u_162;
+    bit<16> reserved_short;
     bit<64> peg_difference;
 }
 
@@ -176,7 +176,7 @@ header order_modify_extended_message_t {
     bit<8> order_capacity;
     bit<32> display_quantity;
     bit<32> min_qty;
-    bit<64> reserved_u_648;
+    bit<64> reserved_long;
 }
 
 header order_add_response_message_t {
@@ -221,7 +221,7 @@ header iceberg_order_refresh_message_t {
 header trade_capture_message_t {
     bit<32> quantity;
     bit<64> price;
-    bit<32> security_id_u_324;
+    bit<32> security_id_long;
     bit<8> trade_capture_type;
     bit<1> reserved_1;
     bit<1> algo_trade_flag;
@@ -246,7 +246,7 @@ header trade_message_t {
     bit<32> trade_ref;
     bit<8> ccp_code;
     bit<8> liq_indicator;
-    bit<16> security_id_u_162;
+    bit<16> security_id_short;
     bit<64> timestamp;
     bit<64> user_tag;
     bit<6> reserved_6;
@@ -264,7 +264,7 @@ header trade_bust_message_t {
 }
 
 header ioi_add_message_t {
-    bit<16> security_id_u_162;
+    bit<16> security_id_short;
     bit<8> ioi_order_type;
     bit<8> time_in_force;
     bit<8> side;
@@ -344,6 +344,8 @@ parser AquisequitiesTradingprotocolParser(packet_in packet, out headers_t hdr, i
         transition select(hdr.message_header.msg_type) {
             8w1: parse_login_message;
             8w2: parse_login_response_message;
+            8w0: parse_heartbeat;
+            8w3: parse_logout_request_message;
             8w4: parse_logout_message;
             8w5: parse_order_add_message;
             8w21: parse_order_add_extended_message;
@@ -373,6 +375,16 @@ parser AquisequitiesTradingprotocolParser(packet_in packet, out headers_t hdr, i
 
     state parse_login_response_message {
         packet.extract(hdr.login_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_logout_request_message {
         meta.dispatched = 1;
         transition accept;
     }

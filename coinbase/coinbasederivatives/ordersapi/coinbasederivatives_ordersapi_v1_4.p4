@@ -366,6 +366,7 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
     }
 
     state parse_session_message {
+        meta.dispatched = 1;
         transition select(hdr.flags.template_id) {
             16w0x6400: parse_logon_message;
             16w0xc800: parse_logon_conf_message;
@@ -428,6 +429,7 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
     }
 
     state parse_order_message {
+        meta.dispatched = 1;
         transition select(hdr.flags.template_id) {
             16w0x6600: parse_ping_message;
             16w0xca00: parse_pong_message;

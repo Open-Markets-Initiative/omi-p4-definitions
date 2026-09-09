@@ -1736,6 +1736,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
             16w0x400: parse_channel_reset;
+            16w0xc00: parse_admin_heartbeat;
             16w0xf00: parse_admin_login;
             16w0x1000: parse_admin_logout;
             16w0x1e00: parse_security_status;
@@ -1791,6 +1792,11 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
             8w0: accept;
             default: parse_channel_reset_channel_reset_group;
         }
+    }
+
+    state parse_admin_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_admin_login {

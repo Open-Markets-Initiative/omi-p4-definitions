@@ -118,6 +118,8 @@ parser IexoptionsSessionParser(packet_in packet, out headers_t hdr, inout metada
             16w0x100: parse_login_request_message;
             16w0x200: parse_login_response_message;
             16w0x300: parse_gateway_heartbeat_message;
+            16w0x400: parse_client_heartbeat_message;
+            16w0x500: parse_logout_request_message;
             16w0x600: parse_terminate_message;
             16w0x700: parse_sequenced_message_header_message;
             16w0x800: parse_subsession_join_message;
@@ -157,6 +159,16 @@ parser IexoptionsSessionParser(packet_in packet, out headers_t hdr, inout metada
             8w0: accept;
             default: parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group;
         }
+    }
+
+    state parse_client_heartbeat_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_logout_request_message {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_terminate_message {

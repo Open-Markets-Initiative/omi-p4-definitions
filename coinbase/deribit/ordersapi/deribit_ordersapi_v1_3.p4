@@ -55,12 +55,10 @@ header logon_conf_message_t {
 
 header logout_message_t {
     bit<8> reason_length;
-    bit<8> reason_data;
 }
 
 header logged_out_message_t {
     bit<8> reason_length;
-    bit<8> reason_data;
 }
 
 header heartbeat_message_t {
@@ -84,7 +82,6 @@ header reject_message_t {
     bit<64> ref_sequence_number;
     bit<8> reason_reject_reason;
     bit<8> details_length;
-    bit<8> details_data;
 }
 
 header new_order_request_message_t {
@@ -247,7 +244,6 @@ header new_order_reject_message_t {
     bit<64> instrument_id;
     bit<8> reason_order_reject_reason;
     bit<8> details_length;
-    bit<8> details_data;
 }
 
 header amend_order_response_message_t {
@@ -301,7 +297,6 @@ header amend_order_reject_message_t {
     bit<64> instrument_id;
     bit<8> reason_order_reject_reason;
     bit<8> details_length;
-    bit<8> details_data;
 }
 
 header cancel_order_response_message_t {
@@ -323,7 +318,6 @@ header cancel_order_reject_message_t {
     bit<64> instrument_id;
     bit<8> reason_cancel_order_reject_reason;
     bit<8> details_length;
-    bit<8> details_data;
 }
 
 header mass_quote_response_message_t {
@@ -405,7 +399,6 @@ header mass_quote_reject_message_t {
     bit<64> mmp_group_id;
     bit<8> reason_mass_quote_reject_reason;
     bit<8> details_length;
-    bit<8> details_data;
 }
 
 header mass_cancel_response_message_t {
@@ -422,7 +415,6 @@ header mass_cancel_reject_message_t {
     bit<64> correlation_id;
     bit<8> reason_mass_cancel_reject_reason;
     bit<8> details_length;
-    bit<8> details_data;
 }
 
 header get_mass_quote_mmp_status_response_message_t {

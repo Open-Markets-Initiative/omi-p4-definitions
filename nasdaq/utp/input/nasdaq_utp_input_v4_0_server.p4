@@ -50,11 +50,11 @@ header protected_exchange_quote_message_shortform_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<40> symbol_byte_5;
-    bit<16> bid_short_2;
-    bit<16> bid_size_short_2;
-    bit<16> ask_short_2;
-    bit<16> ask_size_short_2;
+    bit<40> symbol_short;
+    bit<16> bid_short;
+    bit<16> bid_size_short;
+    bit<16> ask_short;
+    bit<16> ask_size_short;
     bit<8> cond;
     bit<8> rii;
 }
@@ -64,11 +64,11 @@ header protected_exchange_quote_message_longform_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
-    bit<64> bid_long_8;
-    bit<32> bid_size_int_4;
-    bit<64> ask_long_8;
-    bit<32> ask_size_int_4;
+    bit<88> symbol_long;
+    bit<64> bid_long;
+    bit<32> bid_size_long;
+    bit<64> ask_long;
+    bit<32> ask_size_long;
     bit<8> cond;
     bit<8> rii;
 }
@@ -78,18 +78,18 @@ header exchange_odd_lot_quote_message_short_form_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<40> symbol_byte_5;
+    bit<40> symbol_short;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
 }
 
 header exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_t {
-    bit<16> ol_price_short_2;
+    bit<16> ol_price_short;
     bit<16> ol_size;
 }
 
 header exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_t {
-    bit<16> ol_price_short_2;
+    bit<16> ol_price_short;
     bit<16> ol_size;
 }
 
@@ -98,18 +98,18 @@ header exchange_odd_lot_quote_message_long_form_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
 }
 
 header exchange_odd_lot_quote_message_long_form_message_odd_lot_bid_long_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
 }
 
 header exchange_odd_lot_quote_message_long_form_message_odd_lot_ask_long_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
 }
 
@@ -118,11 +118,11 @@ header exchange_combined_quote_message_short_form_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<40> symbol_byte_5;
-    bit<16> bid_short_2;
-    bit<16> bid_size_short_2;
-    bit<16> ask_short_2;
-    bit<16> ask_size_short_2;
+    bit<40> symbol_short;
+    bit<16> bid_short;
+    bit<16> bid_size_short;
+    bit<16> ask_short;
+    bit<16> ask_size_short;
     bit<8> cond;
     bit<8> rii;
     bit<16> ol_bid_level_count;
@@ -130,12 +130,12 @@ header exchange_combined_quote_message_short_form_message_t {
 }
 
 header exchange_combined_quote_message_short_form_message_odd_lot_bid_short_form_attachment_t {
-    bit<16> ol_price_short_2;
+    bit<16> ol_price_short;
     bit<16> ol_size;
 }
 
 header exchange_combined_quote_message_short_form_message_odd_lot_ask_short_form_attachment_t {
-    bit<16> ol_price_short_2;
+    bit<16> ol_price_short;
     bit<16> ol_size;
 }
 
@@ -144,11 +144,11 @@ header exchange_combined_quote_message_long_form_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
-    bit<64> bid_long_8;
-    bit<32> bid_size_int_4;
-    bit<64> ask_long_8;
-    bit<32> ask_size_int_4;
+    bit<88> symbol_long;
+    bit<64> bid_long;
+    bit<32> bid_size_long;
+    bit<64> ask_long;
+    bit<32> ask_size_long;
     bit<8> cond;
     bit<8> rii;
     bit<16> ol_bid_level_count;
@@ -156,12 +156,12 @@ header exchange_combined_quote_message_long_form_message_t {
 }
 
 header exchange_combined_quote_message_long_form_message_odd_lot_bid_long_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
 }
 
 header exchange_combined_quote_message_long_form_message_odd_lot_ask_long_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
 }
 
@@ -171,11 +171,11 @@ header finra_protected_quote_message_with_bbo_info_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
-    bit<64> bid_long_8;
-    bit<32> bid_size_int_4;
-    bit<64> ask_long_8;
-    bit<32> ask_size_int_4;
+    bit<88> symbol_long;
+    bit<64> bid_long;
+    bit<32> bid_size_long;
+    bit<64> ask_long;
+    bit<32> ask_size_long;
     bit<8> cond;
     bit<32> mpid;
     bit<64> bbo_bid;
@@ -193,11 +193,11 @@ header finra_protected_quote_message_without_bbo_info_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
-    bit<64> bid_long_8;
-    bit<32> bid_size_int_4;
-    bit<64> ask_long_8;
-    bit<32> ask_size_int_4;
+    bit<88> symbol_long;
+    bit<64> bid_long;
+    bit<32> bid_size_long;
+    bit<64> ask_long;
+    bit<32> ask_size_long;
     bit<8> cond;
     bit<32> mpid;
     bit<8> bbo_indicator;
@@ -209,19 +209,19 @@ header finra_adf_odd_lot_quotation_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<16> ol_bid_level_count;
     bit<16> ol_ask_level_count;
 }
 
 header finra_adf_odd_lot_quotation_message_odd_lot_bid_adf_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
     bit<32> mpid;
 }
 
 header finra_adf_odd_lot_quotation_message_odd_lot_ask_adf_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
     bit<32> mpid;
 }
@@ -232,11 +232,11 @@ header finra_adf_combined_quote_message_with_bbo_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
-    bit<64> bid_long_8;
-    bit<32> bid_size_int_4;
-    bit<64> ask_long_8;
-    bit<32> ask_size_int_4;
+    bit<88> symbol_long;
+    bit<64> bid_long;
+    bit<32> bid_size_long;
+    bit<64> ask_long;
+    bit<32> ask_size_long;
     bit<8> cond;
     bit<32> mpid;
     bit<8> rii;
@@ -252,13 +252,13 @@ header finra_adf_combined_quote_message_with_bbo_t {
 }
 
 header finra_adf_combined_quote_message_with_bbo_odd_lot_bid_adf_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
     bit<32> mpid;
 }
 
 header finra_adf_combined_quote_message_with_bbo_odd_lot_ask_adf_form_attachment_t {
-    bit<64> ol_price_long_8;
+    bit<64> ol_price_long;
     bit<16> ol_size;
     bit<32> mpid;
 }
@@ -273,14 +273,14 @@ header regular_trade_report_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> trade_id;
     bit<8> tt_exempt;
     bit<32> trcond;
     bit<16> ssday;
     bit<8> side;
     bit<64> price;
-    bit<32> volume_int_4;
+    bit<32> volume;
 }
 
 header trade_cancel_error_message_t {
@@ -289,7 +289,7 @@ header trade_cancel_error_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<8> cancel_type;
     bit<32> orig_trade_id;
     bit<8> orig_tt_exempt;
@@ -297,7 +297,7 @@ header trade_cancel_error_message_t {
     bit<16> orig_ssday;
     bit<8> orig_side;
     bit<64> orig_price;
-    bit<32> orig_volume_int_4;
+    bit<32> orig_volume;
 }
 
 header trade_correction_message_t {
@@ -306,7 +306,7 @@ header trade_correction_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> trade_id;
     bit<32> orig_trade_id;
     bit<8> orig_tt_exempt;
@@ -314,12 +314,12 @@ header trade_correction_message_t {
     bit<16> orig_ssday;
     bit<8> side;
     bit<64> orig_price;
-    bit<32> orig_volume_int_4;
+    bit<32> orig_volume;
     bit<8> new_tt_exempt;
     bit<32> new_trcond;
     bit<16> new_ssday;
     bit<64> new_price;
-    bit<32> new_volume_int_4;
+    bit<32> new_volume;
 }
 
 header as_of_trade_report_message_t {
@@ -327,14 +327,14 @@ header as_of_trade_report_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> trade_id;
     bit<8> tt_exempt;
     bit<32> trcond;
     bit<16> ssday;
     bit<8> side;
     bit<64> price;
-    bit<32> volume_int_4;
+    bit<32> volume;
     bit<64> trade_time;
     bit<8> reversal;
 }
@@ -345,14 +345,14 @@ header fractional_regular_trade_report_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> trade_id;
     bit<8> tt_exempt;
     bit<32> trcond;
     bit<16> ssday;
     bit<8> side;
     bit<64> price;
-    bit<64> volume_long_8;
+    bit<64> volume_fractional;
 }
 
 header fractional_trade_cancel_error_message_t {
@@ -361,7 +361,7 @@ header fractional_trade_cancel_error_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<8> cancel_type;
     bit<32> orig_trade_id;
     bit<8> orig_tt_exempt;
@@ -369,7 +369,7 @@ header fractional_trade_cancel_error_message_t {
     bit<16> orig_ssday;
     bit<8> orig_side;
     bit<64> orig_price;
-    bit<64> orig_volume_long_8;
+    bit<64> orig_volume_fractional;
 }
 
 header fractional_trade_correction_message_t {
@@ -378,7 +378,7 @@ header fractional_trade_correction_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<64> timestamp_2;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> trade_id;
     bit<32> orig_trade_id;
     bit<8> orig_tt_exempt;
@@ -386,12 +386,12 @@ header fractional_trade_correction_message_t {
     bit<16> orig_ssday;
     bit<8> side;
     bit<64> orig_price;
-    bit<64> orig_volume_long_8;
+    bit<64> orig_volume_fractional;
     bit<8> new_tt_exempt;
     bit<32> new_trcond;
     bit<16> new_ssday;
     bit<64> new_price;
-    bit<64> new_volume_long_8;
+    bit<64> new_volume_fractional;
 }
 
 header fractional_as_of_trade_report_message_t {
@@ -399,14 +399,14 @@ header fractional_as_of_trade_report_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> trade_id;
     bit<8> tt_exempt;
     bit<32> trcond;
     bit<16> ssday;
     bit<8> side;
     bit<64> price;
-    bit<64> volume_long_8;
+    bit<64> volume_fractional;
     bit<64> trade_time;
     bit<8> reversal;
 }
@@ -428,7 +428,7 @@ header trading_action_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<8> action_;
     bit<32> action_sequence;
     bit<64> action_time;
@@ -440,7 +440,7 @@ header market_center_trading_action_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<8> action_;
     bit<64> action_time;
 }
@@ -461,7 +461,7 @@ header reg_sho_short_sale_price_test_restricted_indicator_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<8> action_;
 }
 
@@ -470,7 +470,7 @@ header opening_reference_midpoint_price_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<64> price;
 }
 
@@ -479,7 +479,7 @@ header t_1_adjusted_closing_price_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<64> price;
 }
 
@@ -502,7 +502,7 @@ header auction_collar_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> action_sequence;
     bit<64> collar_reference_price;
     bit<64> collar_up_price;
@@ -526,7 +526,7 @@ header symbol_state_inquiry_message_t {
     bit<64> timestamp_1;
     bit<64> feed_sequence;
     bit<64> part_token;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
 }
 
 header end_of_participant_reporting_message_t {
@@ -549,7 +549,7 @@ header return_general_administrative_message_t {
 header return_market_center_trading_action_acknowledgement_message_t {
     bit<16> orig;
     bit<64> sip_time;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<8> action_;
     bit<64> action_time;
 }
@@ -586,7 +586,7 @@ header participant_input_warning_message_t {
     bit<64> feed_sequence;
     bit<64> part_token;
     bit<16> warning_code;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<8> ol_attachmen_type;
     bit<16> ol_attachment_count;
 }
@@ -616,7 +616,7 @@ header sequence_inquiry_response_message_t {
 header symbol_state_inquiry_response_message_t {
     bit<16> orig;
     bit<64> sip_time;
-    bit<88> symbol_byte_11;
+    bit<88> symbol_long;
     bit<32> next_trade_id;
     bit<32> next_action_sequence;
     bit<8> symbol_state;
@@ -722,6 +722,8 @@ parser NasdaqUtpInputServerParser(packet_in packet, out headers_t hdr, inout met
             8w0x2b: parse_debug_packet;
             8w0x41: parse_login_accepted_packet;
             8w0x4a: parse_login_rejected_packet;
+            8w0x48: parse_server_heartbeat_packet;
+            8w0x5a: parse_end_of_session_packet;
             default: accept;
         }
     }
@@ -1263,6 +1265,7 @@ parser NasdaqUtpInputServerParser(packet_in packet, out headers_t hdr, inout met
     }
 
     state parse_debug_packet {
+        meta.dispatched = 1;
         transition accept;
     }
 
@@ -1274,6 +1277,16 @@ parser NasdaqUtpInputServerParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_login_rejected_packet {
         packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session_packet {
         meta.dispatched = 1;
         transition accept;
     }

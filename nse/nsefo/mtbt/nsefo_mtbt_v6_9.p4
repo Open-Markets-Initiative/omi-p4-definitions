@@ -38,7 +38,25 @@ header stream_header_t {
     bit<8> message_type;
 }
 
-header order_message_t {
+header new_order_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header order_modification_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header order_cancellation_message_t {
     bit<64> timestamp;
     bit<64> order_id;
     bit<32> token;
@@ -56,7 +74,25 @@ header trade_message_t {
     bit<32> trade_quantity;
 }
 
-header spread_order_message_t {
+header new_spread_order_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header spread_order_modification_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header spread_order_cancellation_message_t {
     bit<64> timestamp;
     bit<64> order_id;
     bit<32> token;
@@ -71,7 +107,7 @@ header spread_trade_message_t {
     bit<64> sell_order_id;
     bit<32> token;
     bit<32> trade_price;
-    bit<32> trade_quantity;
+    bit<32> quantity;
 }
 
 header trade_cancel_message_t {
@@ -93,9 +129,13 @@ struct metadata_t {
 
 struct headers_t {
     stream_header_t stream_header;
-    order_message_t order_message;
+    new_order_message_t new_order_message;
+    order_modification_message_t order_modification_message;
+    order_cancellation_message_t order_cancellation_message;
     trade_message_t trade_message;
-    spread_order_message_t spread_order_message;
+    new_spread_order_message_t new_spread_order_message;
+    spread_order_modification_message_t spread_order_modification_message;
+    spread_order_cancellation_message_t spread_order_cancellation_message;
     spread_trade_message_t spread_trade_message;
     trade_cancel_message_t trade_cancel_message;
     heartbeat_message_t heartbeat_message;
@@ -105,13 +145,13 @@ parser NsefoMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t met
     state start {
         packet.extract(hdr.stream_header);
         transition select(hdr.stream_header.message_type) {
-            8w0x4e: parse_order_message;
-            8w0x4d: parse_order_message;
-            8w0x58: parse_order_message;
+            8w0x4e: parse_new_order_message;
+            8w0x4d: parse_order_modification_message;
+            8w0x58: parse_order_cancellation_message;
             8w0x54: parse_trade_message;
-            8w0x47: parse_spread_order_message;
-            8w0x48: parse_spread_order_message;
-            8w0x4a: parse_spread_order_message;
+            8w0x47: parse_new_spread_order_message;
+            8w0x48: parse_spread_order_modification_message;
+            8w0x4a: parse_spread_order_cancellation_message;
             8w0x4b: parse_spread_trade_message;
             8w0x43: parse_trade_cancel_message;
             8w0x5a: parse_heartbeat_message;
@@ -119,8 +159,20 @@ parser NsefoMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t met
         }
     }
 
-    state parse_order_message {
-        packet.extract(hdr.order_message);
+    state parse_new_order_message {
+        packet.extract(hdr.new_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_modification_message {
+        packet.extract(hdr.order_modification_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_cancellation_message {
+        packet.extract(hdr.order_cancellation_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -131,8 +183,20 @@ parser NsefoMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t met
         transition accept;
     }
 
-    state parse_spread_order_message {
-        packet.extract(hdr.spread_order_message);
+    state parse_new_spread_order_message {
+        packet.extract(hdr.new_spread_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_spread_order_modification_message {
+        packet.extract(hdr.spread_order_modification_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_spread_order_cancellation_message {
+        packet.extract(hdr.spread_order_cancellation_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -186,9 +250,13 @@ control NsefoMtbtComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
 control NsefoMtbtDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.stream_header);
-        packet.emit(hdr.order_message);
+        packet.emit(hdr.new_order_message);
+        packet.emit(hdr.order_modification_message);
+        packet.emit(hdr.order_cancellation_message);
         packet.emit(hdr.trade_message);
-        packet.emit(hdr.spread_order_message);
+        packet.emit(hdr.new_spread_order_message);
+        packet.emit(hdr.spread_order_modification_message);
+        packet.emit(hdr.spread_order_cancellation_message);
         packet.emit(hdr.spread_trade_message);
         packet.emit(hdr.trade_cancel_message);
         packet.emit(hdr.heartbeat_message);

@@ -148,6 +148,7 @@ parser A2xA2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout meta
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.msg_type) {
+            8w1: parse_heartbeat_message;
             8w2: parse_order_add_message;
             8w3: parse_order_cancel_message;
             8w4: parse_order_modify_message;
@@ -160,6 +161,11 @@ parser A2xA2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout meta
             8w16: parse_market_at_close;
             default: accept;
         }
+    }
+
+    state parse_heartbeat_message {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_order_add_message {

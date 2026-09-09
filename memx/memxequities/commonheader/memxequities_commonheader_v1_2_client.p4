@@ -106,6 +106,7 @@ parser MemxequitiesCommonheaderClientParser(packet_in packet, out headers_t hdr,
     }
 
     state parse_unsequenced_message {
+        meta.dispatched = 1;
         transition accept;
     }
 

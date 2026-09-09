@@ -88,16 +88,16 @@ header best_bid_and_ask_update_short_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<16> bid_market_order_size_integer_2;
-    bit<16> bid_price_integer_2;
-    bit<16> bid_size_integer_2;
-    bit<16> bid_cust_size_integer_2;
-    bit<16> bid_pro_cust_size_integer_2;
-    bit<16> ask_market_order_size_integer_2;
-    bit<16> ask_price_integer_2;
-    bit<16> ask_size_integer_2;
-    bit<16> ask_cust_size_integer_2;
-    bit<16> ask_pro_cust_size_integer_2;
+    bit<16> bid_market_order_size_short;
+    bit<16> bid_price_short;
+    bit<16> bid_size_short;
+    bit<16> bid_cust_size_short;
+    bit<16> bid_procust_size_short;
+    bit<16> ask_market_order_size_short;
+    bit<16> ask_price_short;
+    bit<16> ask_size_short;
+    bit<16> ask_cust_size_short;
+    bit<16> ask_procust_size_short;
 }
 
 header best_bid_and_ask_update_long_form_message_t {
@@ -105,16 +105,16 @@ header best_bid_and_ask_update_long_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<32> bid_market_order_size_integer_4;
-    bit<32> bid_price_integer_4;
-    bit<32> bid_size_integer_4;
-    bit<32> bid_cust_size_integer_4;
-    bit<32> bid_pro_cust_size_integer_4;
-    bit<32> ask_market_order_size_integer_4;
-    bit<32> ask_price_integer_4;
-    bit<32> ask_size_integer_4;
-    bit<32> ask_cust_size_integer_4;
-    bit<32> ask_pro_cust_size_integer_4;
+    bit<32> bid_market_order_size_long;
+    bit<32> bid_price_long;
+    bit<32> bid_size_long;
+    bit<32> bid_cust_size_long;
+    bit<32> bid_procust_size_long;
+    bit<32> ask_market_order_size_long;
+    bit<32> ask_price_long;
+    bit<32> ask_size_long;
+    bit<32> ask_cust_size_long;
+    bit<32> ask_procust_size_long;
 }
 
 header best_bid_update_short_form_message_t {
@@ -122,11 +122,11 @@ header best_bid_update_short_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<16> market_order_size_integer_2;
-    bit<16> price_integer_2;
-    bit<16> size_integer_2;
-    bit<16> cust_size_integer_2;
-    bit<16> pro_cust_size_integer_2;
+    bit<16> market_order_size_short;
+    bit<16> price_short;
+    bit<16> size_short;
+    bit<16> cust_size_short;
+    bit<16> procust_size_short;
 }
 
 header best_ask_update_short_form_message_t {
@@ -134,11 +134,11 @@ header best_ask_update_short_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<16> market_order_size_integer_2;
-    bit<16> price_integer_2;
-    bit<16> size_integer_2;
-    bit<16> cust_size_integer_2;
-    bit<16> pro_cust_size_integer_2;
+    bit<16> market_order_size_short;
+    bit<16> price_short;
+    bit<16> size_short;
+    bit<16> cust_size_short;
+    bit<16> procust_size_short;
 }
 
 header best_bid_update_long_form_message_t {
@@ -146,11 +146,11 @@ header best_bid_update_long_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<32> market_order_size_integer_4;
-    bit<32> price_integer_4;
-    bit<32> size_integer_4;
-    bit<32> cust_size_integer_4;
-    bit<32> pro_cust_size_integer_4;
+    bit<32> market_order_size_long;
+    bit<32> price_long;
+    bit<32> size_long;
+    bit<32> cust_size_long;
+    bit<32> procust_size_long;
 }
 
 header best_ask_update_long_form_message_t {
@@ -158,11 +158,11 @@ header best_ask_update_long_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<32> market_order_size_integer_4;
-    bit<32> price_integer_4;
-    bit<32> size_integer_4;
-    bit<32> cust_size_integer_4;
-    bit<32> pro_cust_size_integer_4;
+    bit<32> market_order_size_long;
+    bit<32> price_long;
+    bit<32> size_long;
+    bit<32> cust_size_long;
+    bit<32> procust_size_long;
 }
 
 header end_of_replay_sequence_message_t {
@@ -199,6 +199,8 @@ parser MrxoptionsTopofmarketServertcpParser(packet_in packet, out headers_t hdr,
             8w0x41: parse_login_accepted_packet;
             8w0x4a: parse_login_rejected_packet;
             8w0x53: parse_sequenced_data_packet;
+            8w0x48: parse_server_heartbeat_packet;
+            8w0x5a: parse_end_of_session_packet;
             default: accept;
         }
     }
@@ -295,6 +297,16 @@ parser MrxoptionsTopofmarketServertcpParser(packet_in packet, out headers_t hdr,
 
     state parse_end_of_replay_sequence_message {
         packet.extract(hdr.end_of_replay_sequence_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session_packet {
         meta.dispatched = 1;
         transition accept;
     }

@@ -87,12 +87,18 @@ parser A2xA2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout m
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.msg_type) {
+            8w1: parse_heartbeat_message;
             8w10: parse_snapshot_start_message;
             8w11: parse_book_status_message;
             8w12: parse_book_entry_message;
             8w18: parse_market_at_close_book_entry_message;
             default: accept;
         }
+    }
+
+    state parse_heartbeat_message {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_snapshot_start_message {

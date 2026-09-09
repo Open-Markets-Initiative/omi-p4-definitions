@@ -45,14 +45,6 @@ header broadcast_error_notification_t {
     bit<8> ref_appl_id;
     bit<8> session_status;
     bit<32> pad4;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header debt_inquiry_response_t {
@@ -304,14 +296,6 @@ header forced_logout_notification_t {
     bit<64> sending_time;
     bit<16> var_text_len;
     bit<48> pad6;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header gateway_response_t {
@@ -617,14 +601,6 @@ header multi_leg_order_reject_t {
     bit<32> session_reject_reason;
     bit<16> var_text_len;
     bit<16> pad2;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header new_order_nr_response_t {
@@ -705,14 +681,6 @@ header news_broadcast_t {
     bit<16> var_text_len;
     bit<2048> headline;
     bit<48> pad6;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header order_exec_notification_t {
@@ -1043,14 +1011,6 @@ header reject_t {
     bit<16> var_text_len;
     bit<8> session_status;
     bit<8> pad1;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header retransmit_me_message_response_t {
@@ -1103,14 +1063,6 @@ header risk_collateral_alert_admin_broadcast_t {
     bit<96> client_code;
     bit<64> business_unit_symbol;
     bit<24> pad3;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header risk_collateral_alert_broadcast_t {
@@ -1136,14 +1088,6 @@ header risk_collateral_alert_broadcast_t {
     bit<96> client_code;
     bit<64> business_unit_symbol;
     bit<24> pad3;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header risk_notification_broadcast_t {
@@ -1209,14 +1153,6 @@ header session_registration_response_t {
     bit<8> pad1;
     bit<16> var_text_len;
     bit<32> pad4_2;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header subscribe_response_t {

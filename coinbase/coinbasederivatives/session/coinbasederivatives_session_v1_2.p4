@@ -79,7 +79,6 @@ header resend_request_message_t {
 
 header gap_fill_message_t {
     bit<32> new_sequence_number;
-    bit<32> padding;
 }
 
 header reject_message_t {

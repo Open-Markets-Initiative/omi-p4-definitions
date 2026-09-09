@@ -1164,12 +1164,15 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
             16w1601: parse_system_information_out_message;
             16w2400: parse_gateway_router_request_message;
             16w2401: parse_gateway_router_response_message;
+            16w2320: parse_sign_off_request_in_message;
             16w7300: parse_update_local_database_in_message;
             16w7307: parse_update_local_database_header_message;
             16w7308: parse_update_local_database_trailer_message;
             16w7000: parse_download_request_message;
             16w7304: parse_update_local_database_data_message;
+            16w7011: parse_header_record_message;
             16w7021: parse_message_record_message;
+            16w7031: parse_trailer_record_message;
             16w2000: parse_order_entry_message;
             16w2012: parse_order_entry_message;
             16w2040: parse_order_entry_message;
@@ -1230,8 +1233,10 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
             16w7732: parse_global_indices_message;
             16w7733: parse_global_contracts_message;
             16w23008: parse_secure_box_registration_request_in_message;
+            16w23009: parse_secure_box_registration_response_out_message;
             16w23000: parse_box_sign_on_request_in_message;
             16w23001: parse_box_sign_on_request_out_message;
+            16w23506: parse_heartbeat_message;
             16w20322: parse_box_sign_off_message;
             16w5294: parse_contingency_broadcast_message;
             16w5716: parse_branch_order_value_limit_update_message;
@@ -1310,6 +1315,11 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
         transition accept;
     }
 
+    state parse_sign_off_request_in_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_update_local_database_in_message {
         packet.extract(hdr.update_local_database_in_message);
         meta.dispatched = 1;
@@ -1340,8 +1350,18 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
         transition accept;
     }
 
+    state parse_header_record_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_message_record_message {
         packet.extract(hdr.message_record_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_trailer_record_message {
         meta.dispatched = 1;
         transition accept;
     }
@@ -1506,6 +1526,11 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
         transition accept;
     }
 
+    state parse_secure_box_registration_response_out_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_box_sign_on_request_in_message {
         packet.extract(hdr.box_sign_on_request_in_message);
         meta.dispatched = 1;
@@ -1514,6 +1539,11 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
 
     state parse_box_sign_on_request_out_message {
         packet.extract(hdr.box_sign_on_request_out_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_heartbeat_message {
         meta.dispatched = 1;
         transition accept;
     }
@@ -1603,6 +1633,7 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     }
 
     state parse_order_cancellation_confirmation_message {
+        meta.dispatched = 1;
         transition select(hdr.message_header.message_length) {
             16w316: parse_order_entry_body;
             16w480: parse_spread_order_body;

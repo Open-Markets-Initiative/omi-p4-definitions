@@ -315,6 +315,8 @@ parser IexoptionsMarketdataParser(packet_in packet, out headers_t hdr, inout met
             16w0x2c01: parse_heartbeat_message;
             16w0x2d01: parse_sequenced_packet_message;
             16w0x2e01: parse_session_shutdown_message;
+            16w0x9001: parse_server_heartbeat_message;
+            16w0x9101: parse_client_heartbeat_message;
             16w0x9201: parse_retransmission_request_message;
             16w0x9301: parse_retransmission_response_message;
             16w0x5902: parse_snapshot_header_message;
@@ -456,6 +458,16 @@ parser IexoptionsMarketdataParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_session_shutdown_message {
         packet.extract(hdr.session_shutdown_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_client_heartbeat_message {
         meta.dispatched = 1;
         transition accept;
     }

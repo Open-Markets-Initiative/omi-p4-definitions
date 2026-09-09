@@ -139,14 +139,6 @@ header forced_logout_notification_t {
     bit<16> pad2;
     bit<64> sending_time;
     bit<16> var_text_len;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header heartbeat_notification_t {
@@ -168,14 +160,6 @@ header legal_notification_broadcast_t {
     bit<64> transact_time;
     bit<16> var_text_len;
     bit<8> user_status;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header logon_response_t {
@@ -356,14 +340,6 @@ header reject_t {
     bit<32> session_reject_reason;
     bit<16> var_text_len;
     bit<8> session_status;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header retransmit_response_t {

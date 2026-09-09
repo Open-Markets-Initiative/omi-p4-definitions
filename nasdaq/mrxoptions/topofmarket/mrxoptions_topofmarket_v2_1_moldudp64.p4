@@ -77,16 +77,16 @@ header best_bid_and_ask_update_short_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<16> bid_market_order_size_integer_2;
-    bit<16> bid_price_integer_2;
-    bit<16> bid_size_integer_2;
-    bit<16> bid_cust_size_integer_2;
-    bit<16> bid_pro_cust_size_integer_2;
-    bit<16> ask_market_order_size_integer_2;
-    bit<16> ask_price_integer_2;
-    bit<16> ask_size_integer_2;
-    bit<16> ask_cust_size_integer_2;
-    bit<16> ask_pro_cust_size_integer_2;
+    bit<16> bid_market_order_size_short;
+    bit<16> bid_price_short;
+    bit<16> bid_size_short;
+    bit<16> bid_cust_size_short;
+    bit<16> bid_procust_size_short;
+    bit<16> ask_market_order_size_short;
+    bit<16> ask_price_short;
+    bit<16> ask_size_short;
+    bit<16> ask_cust_size_short;
+    bit<16> ask_procust_size_short;
 }
 
 header best_bid_and_ask_update_long_form_message_t {
@@ -94,16 +94,16 @@ header best_bid_and_ask_update_long_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<32> bid_market_order_size_integer_4;
-    bit<32> bid_price_integer_4;
-    bit<32> bid_size_integer_4;
-    bit<32> bid_cust_size_integer_4;
-    bit<32> bid_pro_cust_size_integer_4;
-    bit<32> ask_market_order_size_integer_4;
-    bit<32> ask_price_integer_4;
-    bit<32> ask_size_integer_4;
-    bit<32> ask_cust_size_integer_4;
-    bit<32> ask_pro_cust_size_integer_4;
+    bit<32> bid_market_order_size_long;
+    bit<32> bid_price_long;
+    bit<32> bid_size_long;
+    bit<32> bid_cust_size_long;
+    bit<32> bid_procust_size_long;
+    bit<32> ask_market_order_size_long;
+    bit<32> ask_price_long;
+    bit<32> ask_size_long;
+    bit<32> ask_cust_size_long;
+    bit<32> ask_procust_size_long;
 }
 
 header best_bid_update_short_form_message_t {
@@ -111,11 +111,11 @@ header best_bid_update_short_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<16> market_order_size_integer_2;
-    bit<16> price_integer_2;
-    bit<16> size_integer_2;
-    bit<16> cust_size_integer_2;
-    bit<16> pro_cust_size_integer_2;
+    bit<16> market_order_size_short;
+    bit<16> price_short;
+    bit<16> size_short;
+    bit<16> cust_size_short;
+    bit<16> procust_size_short;
 }
 
 header best_ask_update_short_form_message_t {
@@ -123,11 +123,11 @@ header best_ask_update_short_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<16> market_order_size_integer_2;
-    bit<16> price_integer_2;
-    bit<16> size_integer_2;
-    bit<16> cust_size_integer_2;
-    bit<16> pro_cust_size_integer_2;
+    bit<16> market_order_size_short;
+    bit<16> price_short;
+    bit<16> size_short;
+    bit<16> cust_size_short;
+    bit<16> procust_size_short;
 }
 
 header best_bid_update_long_form_message_t {
@@ -135,11 +135,11 @@ header best_bid_update_long_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<32> market_order_size_integer_4;
-    bit<32> price_integer_4;
-    bit<32> size_integer_4;
-    bit<32> cust_size_integer_4;
-    bit<32> pro_cust_size_integer_4;
+    bit<32> market_order_size_long;
+    bit<32> price_long;
+    bit<32> size_long;
+    bit<32> cust_size_long;
+    bit<32> procust_size_long;
 }
 
 header best_ask_update_long_form_message_t {
@@ -147,11 +147,11 @@ header best_ask_update_long_form_message_t {
     bit<64> timestamp;
     bit<32> instrument_id;
     bit<8> quote_condition;
-    bit<32> market_order_size_integer_4;
-    bit<32> price_integer_4;
-    bit<32> size_integer_4;
-    bit<32> cust_size_integer_4;
-    bit<32> pro_cust_size_integer_4;
+    bit<32> market_order_size_long;
+    bit<32> price_long;
+    bit<32> size_long;
+    bit<32> cust_size_long;
+    bit<32> procust_size_long;
 }
 
 struct metadata_t {
@@ -175,7 +175,21 @@ struct headers_t {
 parser MrxoptionsTopofmarketMoldudp64Parser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.udp_packet_header);
-        transition parse_message;
+        transition select(hdr.udp_packet_header.message_count) {
+            16w0: parse_heartbeat;
+            16w65535: parse_end_of_session;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_message {

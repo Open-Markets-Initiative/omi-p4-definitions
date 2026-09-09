@@ -598,10 +598,13 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
     }
 
     state parse_session_message {
+        meta.dispatched = 1;
         transition select(hdr.message_header.template_id) {
             16w0x100: parse_login_request_message;
             16w0x200: parse_login_response_message;
             16w0x300: parse_gateway_heartbeat_message;
+            16w0x400: parse_client_heartbeat_message;
+            16w0x500: parse_logout_request_message;
             16w0x600: parse_terminate_message;
             16w0x700: parse_sequenced_message_header_message;
             16w0x800: parse_subsession_join_message;
@@ -643,6 +646,16 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
         }
     }
 
+    state parse_client_heartbeat_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_logout_request_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_terminate_message {
         packet.extract(hdr.terminate_message);
         meta.dispatched = 1;
@@ -680,6 +693,7 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
     }
 
     state parse_business_message {
+        meta.dispatched = 1;
         transition select(hdr.message_header.template_id) {
             16w0x100: parse_new_order_single_message;
             16w0x200: parse_order_cancel_replace_request_message;

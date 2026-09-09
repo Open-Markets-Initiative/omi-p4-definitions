@@ -659,6 +659,7 @@ parser AmexoptionsBinarygatewayParser(packet_in packet, out headers_t hdr, inout
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.seq_msg_type) {
             16w0x2002: parse_session_configuration_request_message;
+            16w0x8202: parse_sequenced_filler_message;
             16w0x4802: parse_new_order_message;
             16w0x5002: parse_order_cancel_request_message;
             16w0x5102: parse_order_modify_request_message;
@@ -694,6 +695,11 @@ parser AmexoptionsBinarygatewayParser(packet_in packet, out headers_t hdr, inout
 
     state parse_session_configuration_request_message {
         packet.extract(hdr.session_configuration_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_sequenced_filler_message {
         meta.dispatched = 1;
         transition accept;
     }

@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nse NseCd Mtbt Binary v6.5
+// P4_16 (v1model) definition for: Nse NseCm Mtbt Binary v6.8
 // 
 // Protocol:
 //   Organization: National Stock Exchange of India Ltd
 //   Protocol: Multicast Tick By Tick
 //   Encoding: Binary
-//   Version: 6.5
-//   Date: 8/3/2026
-//   Specification: Realtime_CM_CD_TBT_ver_6.5.pdf
+//   Version: 6.8
+//   Date: 12/1/2025
+//   Specification: MTBT_CM_NNF_PROTOCOL_6_8_20260401172216.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -38,7 +38,25 @@ header stream_header_t {
     bit<8> message_type;
 }
 
-header order_message_t {
+header new_order_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header order_modification_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header order_cancellation_message_t {
     bit<64> timestamp;
     bit<64> order_id;
     bit<32> token;
@@ -56,7 +74,25 @@ header trade_message_t {
     bit<32> trade_quantity;
 }
 
-header spread_order_message_t {
+header new_spread_order_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header spread_order_modification_message_t {
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> token;
+    bit<8> order_type;
+    bit<32> price;
+    bit<32> quantity;
+}
+
+header spread_order_cancellation_message_t {
     bit<64> timestamp;
     bit<64> order_id;
     bit<32> token;
@@ -93,25 +129,29 @@ struct metadata_t {
 
 struct headers_t {
     stream_header_t stream_header;
-    order_message_t order_message;
+    new_order_message_t new_order_message;
+    order_modification_message_t order_modification_message;
+    order_cancellation_message_t order_cancellation_message;
     trade_message_t trade_message;
-    spread_order_message_t spread_order_message;
+    new_spread_order_message_t new_spread_order_message;
+    spread_order_modification_message_t spread_order_modification_message;
+    spread_order_cancellation_message_t spread_order_cancellation_message;
     spread_trade_message_t spread_trade_message;
     trade_cancel_message_t trade_cancel_message;
     heartbeat_message_t heartbeat_message;
 }
 
-parser NsecdMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NsecmMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.stream_header);
         transition select(hdr.stream_header.message_type) {
-            8w0x4e: parse_order_message;
-            8w0x4d: parse_order_message;
-            8w0x58: parse_order_message;
+            8w0x4e: parse_new_order_message;
+            8w0x4d: parse_order_modification_message;
+            8w0x58: parse_order_cancellation_message;
             8w0x54: parse_trade_message;
-            8w0x47: parse_spread_order_message;
-            8w0x48: parse_spread_order_message;
-            8w0x4a: parse_spread_order_message;
+            8w0x47: parse_new_spread_order_message;
+            8w0x48: parse_spread_order_modification_message;
+            8w0x4a: parse_spread_order_cancellation_message;
             8w0x4b: parse_spread_trade_message;
             8w0x43: parse_trade_cancel_message;
             8w0x5a: parse_heartbeat_message;
@@ -119,8 +159,20 @@ parser NsecdMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t met
         }
     }
 
-    state parse_order_message {
-        packet.extract(hdr.order_message);
+    state parse_new_order_message {
+        packet.extract(hdr.new_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_modification_message {
+        packet.extract(hdr.order_modification_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_cancellation_message {
+        packet.extract(hdr.order_cancellation_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -131,8 +183,20 @@ parser NsecdMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t met
         transition accept;
     }
 
-    state parse_spread_order_message {
-        packet.extract(hdr.spread_order_message);
+    state parse_new_spread_order_message {
+        packet.extract(hdr.new_spread_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_spread_order_modification_message {
+        packet.extract(hdr.spread_order_modification_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_spread_order_cancellation_message {
+        packet.extract(hdr.spread_order_cancellation_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -157,12 +221,12 @@ parser NsecdMtbtParser(packet_in packet, out headers_t hdr, inout metadata_t met
 
 }
 
-control NsecdMtbtVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NsecmMtbtVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NsecdMtbtIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NsecmMtbtIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -173,22 +237,26 @@ control NsecdMtbtIngress(inout headers_t hdr, inout metadata_t meta, inout stand
     }
 }
 
-control NsecdMtbtEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NsecmMtbtEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control NsecdMtbtComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NsecmMtbtComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NsecdMtbtDeparser(packet_out packet, in headers_t hdr) {
+control NsecmMtbtDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.stream_header);
-        packet.emit(hdr.order_message);
+        packet.emit(hdr.new_order_message);
+        packet.emit(hdr.order_modification_message);
+        packet.emit(hdr.order_cancellation_message);
         packet.emit(hdr.trade_message);
-        packet.emit(hdr.spread_order_message);
+        packet.emit(hdr.new_spread_order_message);
+        packet.emit(hdr.spread_order_modification_message);
+        packet.emit(hdr.spread_order_cancellation_message);
         packet.emit(hdr.spread_trade_message);
         packet.emit(hdr.trade_cancel_message);
         packet.emit(hdr.heartbeat_message);
@@ -196,10 +264,10 @@ control NsecdMtbtDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    NsecdMtbtParser(),
-    NsecdMtbtVerifyChecksum(),
-    NsecdMtbtIngress(),
-    NsecdMtbtEgress(),
-    NsecdMtbtComputeChecksum(),
-    NsecdMtbtDeparser()
+    NsecmMtbtParser(),
+    NsecmMtbtVerifyChecksum(),
+    NsecmMtbtIngress(),
+    NsecmMtbtEgress(),
+    NsecmMtbtComputeChecksum(),
+    NsecmMtbtDeparser()
 ) main;

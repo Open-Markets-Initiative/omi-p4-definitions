@@ -47,13 +47,9 @@ header negotiate_message_t {
     bit<32> entering_firm;
     bit<32> onbehalf_firm;
     bit<8> credentials_length;
-    bit<8> credentials_data;
     bit<8> client_ip_length;
-    bit<8> client_ip_data;
     bit<8> client_app_name_length;
-    bit<8> client_app_name_data;
     bit<8> client_app_version_length;
-    bit<8> client_app_version_data;
 }
 
 header negotiate_response_message_t {
@@ -83,7 +79,6 @@ header establish_message_t {
     bit<8> offset_33_padding_1;
     bit<64> cod_timeout_window;
     bit<8> credentials_length;
-    bit<8> credentials_data;
 }
 
 header establish_ack_message_t {
@@ -162,7 +157,6 @@ header simple_new_order_message_t {
     bit<16> prefix;
     bit<32> document;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header simple_modify_order_message_t {
@@ -190,7 +184,6 @@ header simple_modify_order_message_t {
     bit<16> prefix;
     bit<32> document;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header new_order_single_message_t {
@@ -224,9 +217,7 @@ header new_order_single_message_t {
     bit<16> prefix;
     bit<32> document;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header order_cancel_replace_request_message_t {
@@ -263,9 +254,7 @@ header order_cancel_replace_request_message_t {
     bit<16> prefix;
     bit<32> document;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header order_cancel_request_message_t {
@@ -286,9 +275,7 @@ header order_cancel_request_message_t {
     bit<40> entering_trader;
     bit<40> executing_trader_optional;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header new_order_cross_message_t {
@@ -348,9 +335,7 @@ header execution_report_new_message_t {
     bit<64> max_floor;
     bit<64> crossid_optional;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header execution_report_modify_message_t {
@@ -385,9 +370,7 @@ header execution_report_modify_message_t {
     bit<64> min_qty;
     bit<64> max_floor;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header execution_report_cancel_message_t {
@@ -422,9 +405,7 @@ header execution_report_cancel_message_t {
     bit<64> min_qty;
     bit<64> max_floor;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header execution_report_trade_message_t {
@@ -461,9 +442,7 @@ header execution_report_trade_message_t {
     bit<16> crossed_indicator;
     bit<64> order_qty;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header execution_report_reject_message_t {
@@ -494,11 +473,8 @@ header execution_report_reject_message_t {
     bit<64> crossid_optional;
     bit<16> crossed_indicator;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
     bit<8> text_length;
-    bit<8> text_data;
 }
 
 header execution_report_forward_message_t {
@@ -532,9 +508,7 @@ header execution_report_forward_message_t {
     bit<64> fixed_rate_optional;
     bit<64> order_qty;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header business_message_reject_message_t {
@@ -549,9 +523,7 @@ header business_message_reject_message_t {
     bit<64> business_reject_ref_id;
     bit<32> business_reject_reason;
     bit<8> memo_length;
-    bit<8> memo_data;
     bit<8> text_length;
-    bit<8> text_data;
 }
 
 header security_definition_request_message_t {
@@ -648,13 +620,9 @@ header quote_status_report_message_t {
     bit<8> execute_underlying_trade;
     bit<16> days_to_settlement_optional;
     bit<8> quote_req_id_length;
-    bit<8> quote_req_id_data;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
     bit<8> text_length;
-    bit<8> text_data;
 }
 
 header quote_message_t {
@@ -679,11 +647,8 @@ header quote_message_t {
     bit<8> execute_underlying_trade;
     bit<16> days_to_settlement;
     bit<8> quote_req_id_length;
-    bit<8> quote_req_id_data;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header quote_cancel_message_t {
@@ -700,11 +665,8 @@ header quote_cancel_message_t {
     bit<40> entering_trader;
     bit<40> executing_trader;
     bit<8> quote_req_id_length;
-    bit<8> quote_req_id_data;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header quote_request_reject_message_t {
@@ -768,9 +730,7 @@ header position_maintenance_request_message_t {
     bit<40> entering_trader;
     bit<64> long_qty;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header position_maintenance_report_message_t {
@@ -825,9 +785,7 @@ header allocation_instruction_message_t {
     bit<32> alloc_account;
     bit<64> alloc_qty;
     bit<8> desk_id_length;
-    bit<8> desk_id_data;
     bit<8> memo_length;
-    bit<8> memo_data;
 }
 
 header allocation_report_message_t {
@@ -893,7 +851,6 @@ header order_mass_action_report_message_t {
     bit<16> prefix;
     bit<32> document;
     bit<8> text_length;
-    bit<8> text_data;
 }
 
 struct metadata_t {

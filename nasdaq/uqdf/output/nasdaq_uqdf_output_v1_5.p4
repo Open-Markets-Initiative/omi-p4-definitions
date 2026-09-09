@@ -40,7 +40,7 @@ header message_header_t {
     bit<8> message_category;
 }
 
-header quote_t {
+header quote_message_t {
     bit<8> quote_message_type;
 }
 
@@ -84,7 +84,7 @@ header quote_long_form_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<64> finra_timestamp;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<64> bid_price;
     bit<32> bid_size;
     bit<64> ask_price;
@@ -121,7 +121,7 @@ header finra_adf_market_participant_quotation_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<64> finra_timestamp;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<64> bid_price;
     bit<32> bid_size;
     bit<64> ask_price;
@@ -130,7 +130,7 @@ header finra_adf_market_participant_quotation_message_t {
     bit<32> finra_market_participant;
 }
 
-header administrative_t {
+header administrative_message_t {
     bit<8> administrative_message_type;
 }
 
@@ -149,7 +149,7 @@ header cross_sro_trading_action_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<8> trading_action_code;
     bit<32> trading_action_sequence_number;
     bit<64> action_timestamp;
@@ -162,7 +162,7 @@ header market_center_trading_action_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<8> trading_action_code;
     bit<64> action_timestamp;
     bit<8> market_center_identifier;
@@ -174,7 +174,7 @@ header issue_symbol_directory_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<88> old_symbol;
     bit<240> issue_name;
     bit<8> issue_type;
@@ -192,7 +192,7 @@ header regulation_sho_short_sale_price_test_restricted_indicator_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<88> symbol;
+    bit<40> symbol_short;
     bit<8> reg_sho_action;
 }
 
@@ -202,7 +202,7 @@ header limit_up_limit_down_price_band_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<8> luld_price_band_indicator;
     bit<64> luld_timestamp;
     bit<64> limit_down_price;
@@ -235,7 +235,7 @@ header auction_collar_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<32> trading_action_sequence_number;
     bit<64> collar_reference_price;
     bit<64> collar_up_price;
@@ -249,7 +249,7 @@ header session_close_recap_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<88> symbol;
+    bit<88> symbol_long;
     bit<8> national_best_bid_market_center;
     bit<64> national_best_bid_price;
     bit<64> national_best_bid_size;
@@ -268,7 +268,7 @@ header session_close_recap_message_market_center_close_recap_t {
     bit<64> market_center_ask_size;
 }
 
-header control__t {
+header control_message_t {
     bit<8> control_message_type;
 }
 
@@ -327,11 +327,11 @@ struct metadata_t {
 
 struct headers_t {
     message_header_t message_header;
-    quote_t quote;
+    quote_message_t quote_message;
     quote_short_form_message_t quote_short_form_message;
     quote_long_form_message_t quote_long_form_message;
     finra_adf_market_participant_quotation_message_t finra_adf_market_participant_quotation_message;
-    administrative_t administrative;
+    administrative_message_t administrative_message;
     general_administrative_message_t general_administrative_message;
     cross_sro_trading_action_message_t cross_sro_trading_action_message;
     market_center_trading_action_message_t market_center_trading_action_message;
@@ -343,7 +343,7 @@ struct headers_t {
     auction_collar_message_t auction_collar_message;
     session_close_recap_message_t session_close_recap_message;
     session_close_recap_message_market_center_close_recap_t session_close_recap_message_market_center_close_recap[MAX_MESSAGES];
-    control__t control_;
+    control_message_t control_message;
     start_of_day_message_t start_of_day_message;
     end_of_day_message_t end_of_day_message;
     market_session_open_message_t market_session_open_message;
@@ -356,17 +356,17 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_category) {
-            8w0x51: parse_quote;
-            8w0x41: parse_administrative;
-            8w0x43: parse_control;
+            8w0x51: parse_quote_message;
+            8w0x41: parse_administrative_message;
+            8w0x43: parse_control_message;
             default: accept;
         }
     }
 
-    state parse_quote {
-        packet.extract(hdr.quote);
+    state parse_quote_message {
+        packet.extract(hdr.quote_message);
         meta.dispatched = 1;
-        transition select(hdr.quote.quote_message_type) {
+        transition select(hdr.quote_message.quote_message_type) {
             8w0x45: parse_quote_short_form_message;
             8w0x46: parse_quote_long_form_message;
             8w0x4d: parse_finra_adf_market_participant_quotation_message;
@@ -392,10 +392,10 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         transition accept;
     }
 
-    state parse_administrative {
-        packet.extract(hdr.administrative);
+    state parse_administrative_message {
+        packet.extract(hdr.administrative_message);
         meta.dispatched = 1;
-        transition select(hdr.administrative.administrative_message_type) {
+        transition select(hdr.administrative_message.administrative_message_type) {
             8w0x41: parse_general_administrative_message;
             8w0x48: parse_cross_sro_trading_action_message;
             8w0x4b: parse_market_center_trading_action_message;
@@ -483,10 +483,10 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         }
     }
 
-    state parse_control {
-        packet.extract(hdr.control_);
+    state parse_control_message {
+        packet.extract(hdr.control_message);
         meta.dispatched = 1;
-        transition select(hdr.control_.control_message_type) {
+        transition select(hdr.control_message.control_message_type) {
             8w0x49: parse_start_of_day_message;
             8w0x4a: parse_end_of_day_message;
             8w0x4f: parse_market_session_open_message;
@@ -564,11 +564,11 @@ control NasdaqUqdfOutputComputeChecksum(inout headers_t hdr, inout metadata_t me
 control NasdaqUqdfOutputDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
-        packet.emit(hdr.quote);
+        packet.emit(hdr.quote_message);
         packet.emit(hdr.quote_short_form_message);
         packet.emit(hdr.quote_long_form_message);
         packet.emit(hdr.finra_adf_market_participant_quotation_message);
-        packet.emit(hdr.administrative);
+        packet.emit(hdr.administrative_message);
         packet.emit(hdr.general_administrative_message);
         packet.emit(hdr.cross_sro_trading_action_message);
         packet.emit(hdr.market_center_trading_action_message);
@@ -580,7 +580,7 @@ control NasdaqUqdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.auction_collar_message);
         packet.emit(hdr.session_close_recap_message);
         packet.emit(hdr.session_close_recap_message_market_center_close_recap);
-        packet.emit(hdr.control_);
+        packet.emit(hdr.control_message);
         packet.emit(hdr.start_of_day_message);
         packet.emit(hdr.end_of_day_message);
         packet.emit(hdr.market_session_open_message);

@@ -146,9 +146,21 @@ parser MemxequitiesMemoirtopofbookParser(packet_in packet, out headers_t hdr, in
     state start {
         packet.extract(hdr.common_header);
         transition select(hdr.common_header.message_type) {
+            8w0: parse_heartbeat;
+            8w1: parse_session_shutdown;
             8w2: parse_sequenced_message;
             default: accept;
         }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_session_shutdown {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_sequenced_message {

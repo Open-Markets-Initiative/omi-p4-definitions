@@ -613,11 +613,14 @@ parser TexasequitiesBinarygatewayParser(packet_in packet, out headers_t hdr, ino
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.seq_msg_type) {
             16w0x2002: parse_session_configuration_request_message;
+            16w0x8202: parse_sequenced_filler_message;
             16w0x4002: parse_new_order_single_and_cancel_replace_request_message;
             16w0x8002: parse_order_cancel_request_message;
             16w0x7002: parse_order_modify_request_message;
             16w0x8102: parse_bulk_cancel_request_message;
             16w0x4603: parse_symbol_subscription_request_message;
+            16w0x4303: parse_tg_begin_message;
+            16w0x4403: parse_tg_end_message;
             16w0x5403: parse_manual_action_response_message;
             16w0x3003: parse_risk_limit_update_request_message;
             16w0x3103: parse_risk_action_request_message;
@@ -652,6 +655,11 @@ parser TexasequitiesBinarygatewayParser(packet_in packet, out headers_t hdr, ino
         transition accept;
     }
 
+    state parse_sequenced_filler_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_new_order_single_and_cancel_replace_request_message {
         packet.extract(hdr.new_order_single_and_cancel_replace_request_message);
         meta.dispatched = 1;
@@ -678,6 +686,16 @@ parser TexasequitiesBinarygatewayParser(packet_in packet, out headers_t hdr, ino
 
     state parse_symbol_subscription_request_message {
         packet.extract(hdr.symbol_subscription_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_tg_begin_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_tg_end_message {
         meta.dispatched = 1;
         transition accept;
     }

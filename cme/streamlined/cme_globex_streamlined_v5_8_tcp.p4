@@ -637,6 +637,7 @@ parser CmeGlobexStreamlinedTcpParser(packet_in packet, out headers_t hdr, inout 
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
+            16w0x3801: parse_admin_heartbeat;
             16w0x3b01: parse_admin_login;
             16w0x3c01: parse_admin_logout;
             16w0x4d01: parse_md_incremental_refresh_eris_reference_data_and_daily_statistics;
@@ -652,6 +653,11 @@ parser CmeGlobexStreamlinedTcpParser(packet_in packet, out headers_t hdr, inout 
             16w0x6b01: parse_md_instrument_definition_eris;
             default: accept;
         }
+    }
+
+    state parse_admin_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_admin_login {

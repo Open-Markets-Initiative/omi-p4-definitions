@@ -184,7 +184,15 @@ struct headers_t {
 parser IexequitiesDeepParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.iextp_header);
-        transition parse_message;
+        transition select(hdr.iextp_header.message_count) {
+            16w0x0: parse_heartbeat;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_message {

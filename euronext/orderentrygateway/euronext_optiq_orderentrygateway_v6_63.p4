@@ -1911,6 +1911,8 @@ parser EuronextOptiqOrderentrygatewayParser(packet_in packet, out headers_t hdr,
             16w0x6500: parse_logon_ack_message;
             16w0x6600: parse_logon_reject_message;
             16w0x6700: parse_logout_message;
+            16w0x6a00: parse_heartbeat_message;
+            16w0x6b00: parse_test_request_message;
             16w0x6c00: parse_technical_reject_message;
             16w0x2800: parse_declaration_entry_message;
             16w0x2900: parse_declaration_entry_ack_message;
@@ -2783,6 +2785,16 @@ parser EuronextOptiqOrderentrygatewayParser(packet_in packet, out headers_t hdr,
 
     state parse_logout_message {
         packet.extract(hdr.logout_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_heartbeat_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_test_request_message {
         meta.dispatched = 1;
         transition accept;
     }

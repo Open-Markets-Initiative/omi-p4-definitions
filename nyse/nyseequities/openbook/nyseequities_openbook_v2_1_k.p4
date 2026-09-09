@@ -156,8 +156,10 @@ parser NyseequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_type) {
             16w1: parse_sequence_number_reset_message;
+            16w2: parse_heartbeat_message;
             16w5: parse_unavailable_message;
             16w10: parse_request_response_message;
+            16w19: parse_heartbeat_subscription_message;
             16w20: parse_retransmission_request_message;
             16w22: parse_book_refresh_request_message;
             16w24: parse_heartbeat_response_message;
@@ -176,6 +178,11 @@ parser NyseequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
         transition accept;
     }
 
+    state parse_heartbeat_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_unavailable_message {
         packet.extract(hdr.unavailable_message);
         meta.dispatched = 1;
@@ -184,6 +191,11 @@ parser NyseequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_request_response_message {
         packet.extract(hdr.request_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_heartbeat_subscription_message {
         meta.dispatched = 1;
         transition accept;
     }

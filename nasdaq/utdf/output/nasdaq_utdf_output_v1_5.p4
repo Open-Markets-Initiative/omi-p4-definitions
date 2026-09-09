@@ -40,7 +40,7 @@ header message_header_t {
     bit<8> message_category;
 }
 
-header trade_t {
+header trade_message_t {
     bit<8> trade_message_type;
 }
 
@@ -51,7 +51,7 @@ header trade_report_message_short_form_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<64> finra_timestamp;
-    bit<40> symbol;
+    bit<40> symbol_short;
     bit<64> trade_id;
     bit<16> trade_price_short;
     bit<16> trade_volume_short;
@@ -71,7 +71,7 @@ header trade_report_message_long_form_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<64> finra_timestamp;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<64> trade_id;
     bit<64> trade_price;
     bit<32> trade_volume;
@@ -92,7 +92,7 @@ header trade_cancel_error_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<64> finra_timestamp;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<8> trade_cancellation_type;
     bit<64> original_trade_id;
     bit<64> original_trade_price;
@@ -122,7 +122,7 @@ header trade_correction_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<64> finra_timestamp;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<64> original_trade_id;
     bit<64> original_trade_price;
     bit<32> original_volume;
@@ -160,7 +160,7 @@ header prior_day_as_of_trade_message_t {
     bit<64> participant_timestamp;
     bit<64> participant_token;
     bit<64> finra_timestamp;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<64> trade_id;
     bit<64> trade_price;
     bit<32> trade_volume;
@@ -174,7 +174,7 @@ header prior_day_as_of_trade_message_t {
     bit<64> timestamp_of_trade;
 }
 
-header administrative_t {
+header administrative_message_t {
     bit<8> administrative_message_type;
 }
 
@@ -193,7 +193,7 @@ header cross_sro_trading_action_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<8> trading_action_code;
     bit<32> trading_action_sequence_number;
     bit<64> action_timestamp;
@@ -206,7 +206,7 @@ header market_center_trading_action_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<8> trading_action_code;
     bit<64> action_timestamp;
     bit<8> market_center_identifier;
@@ -218,7 +218,7 @@ header issue_symbol_directory_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<88> old_symbol;
     bit<240> issue_name;
     bit<8> issue_type;
@@ -236,7 +236,7 @@ header regulation_sho_short_sale_price_test_restricted_indicator_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<40> symbol;
+    bit<40> symbol_short;
     bit<8> reg_sho_action;
 }
 
@@ -246,7 +246,7 @@ header limit_up_limit_down_price_band_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<8> luld_price_band_indicator;
     bit<64> luld_timestamp;
     bit<64> limit_down_price;
@@ -279,7 +279,7 @@ header auction_collar_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<32> trading_action_sequence_number;
     bit<64> collar_reference_price;
     bit<64> collar_up_price;
@@ -293,7 +293,7 @@ header closing_trade_summary_report_message_t {
     bit<64> sip_timestamp;
     bit<64> participant_timestamp;
     bit<64> participant_token;
-    bit<40> symbol;
+    bit<88> symbol_long;
     bit<64> daily_consolidated_high_price;
     bit<64> daily_consolidated_low_price;
     bit<64> daily_consolidated_closing_price;
@@ -312,7 +312,7 @@ header closing_trade_summary_report_message_market_center_closing_price_and_volu
     bit<64> market_participant_low_price;
 }
 
-header volume_t {
+header volume_message_t {
     bit<8> volume_message_type;
 }
 
@@ -331,7 +331,7 @@ header total_consolidated_and_market_center_volume_message_market_center_volume_
     bit<64> current_market_center_volume;
 }
 
-header control__t {
+header control_message_t {
     bit<8> control_message_type;
 }
 
@@ -399,13 +399,13 @@ struct metadata_t {
 
 struct headers_t {
     message_header_t message_header;
-    trade_t trade;
+    trade_message_t trade_message;
     trade_report_message_short_form_message_t trade_report_message_short_form_message;
     trade_report_message_long_form_message_t trade_report_message_long_form_message;
     trade_cancel_error_message_t trade_cancel_error_message;
     trade_correction_message_t trade_correction_message;
     prior_day_as_of_trade_message_t prior_day_as_of_trade_message;
-    administrative_t administrative;
+    administrative_message_t administrative_message;
     general_administrative_message_t general_administrative_message;
     cross_sro_trading_action_message_t cross_sro_trading_action_message;
     market_center_trading_action_message_t market_center_trading_action_message;
@@ -417,10 +417,10 @@ struct headers_t {
     auction_collar_message_t auction_collar_message;
     closing_trade_summary_report_message_t closing_trade_summary_report_message;
     closing_trade_summary_report_message_market_center_closing_price_and_volume_summary_t closing_trade_summary_report_message_market_center_closing_price_and_volume_summary[MAX_MESSAGES];
-    volume_t volume;
+    volume_message_t volume_message;
     total_consolidated_and_market_center_volume_message_t total_consolidated_and_market_center_volume_message;
     total_consolidated_and_market_center_volume_message_market_center_volume_attachment_t total_consolidated_and_market_center_volume_message_market_center_volume_attachment[MAX_MESSAGES];
-    control__t control_;
+    control_message_t control_message;
     start_of_day_message_t start_of_day_message;
     end_of_day_message_t end_of_day_message;
     market_session_open_message_t market_session_open_message;
@@ -434,18 +434,18 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_category) {
-            8w0x54: parse_trade;
-            8w0x41: parse_administrative;
-            8w0x56: parse_volume;
-            8w0x43: parse_control;
+            8w0x54: parse_trade_message;
+            8w0x41: parse_administrative_message;
+            8w0x56: parse_volume_message;
+            8w0x43: parse_control_message;
             default: accept;
         }
     }
 
-    state parse_trade {
-        packet.extract(hdr.trade);
+    state parse_trade_message {
+        packet.extract(hdr.trade_message);
         meta.dispatched = 1;
-        transition select(hdr.trade.trade_message_type) {
+        transition select(hdr.trade_message.trade_message_type) {
             8w0x41: parse_trade_report_message_short_form_message;
             8w0x57: parse_trade_report_message_long_form_message;
             8w0x5a: parse_trade_cancel_error_message;
@@ -485,10 +485,10 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         transition accept;
     }
 
-    state parse_administrative {
-        packet.extract(hdr.administrative);
+    state parse_administrative_message {
+        packet.extract(hdr.administrative_message);
         meta.dispatched = 1;
-        transition select(hdr.administrative.administrative_message_type) {
+        transition select(hdr.administrative_message.administrative_message_type) {
             8w0x41: parse_general_administrative_message;
             8w0x48: parse_cross_sro_trading_action_message;
             8w0x4b: parse_market_center_trading_action_message;
@@ -576,10 +576,10 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         }
     }
 
-    state parse_volume {
-        packet.extract(hdr.volume);
+    state parse_volume_message {
+        packet.extract(hdr.volume_message);
         meta.dispatched = 1;
-        transition select(hdr.volume.volume_message_type) {
+        transition select(hdr.volume_message.volume_message_type) {
             8w0x4d: parse_total_consolidated_and_market_center_volume_message;
             default: accept;
         }
@@ -604,10 +604,10 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         }
     }
 
-    state parse_control {
-        packet.extract(hdr.control_);
+    state parse_control_message {
+        packet.extract(hdr.control_message);
         meta.dispatched = 1;
-        transition select(hdr.control_.control_message_type) {
+        transition select(hdr.control_message.control_message_type) {
             8w0x49: parse_start_of_day_message;
             8w0x4a: parse_end_of_day_message;
             8w0x4f: parse_market_session_open_message;
@@ -692,13 +692,13 @@ control NasdaqUtdfOutputComputeChecksum(inout headers_t hdr, inout metadata_t me
 control NasdaqUtdfOutputDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
-        packet.emit(hdr.trade);
+        packet.emit(hdr.trade_message);
         packet.emit(hdr.trade_report_message_short_form_message);
         packet.emit(hdr.trade_report_message_long_form_message);
         packet.emit(hdr.trade_cancel_error_message);
         packet.emit(hdr.trade_correction_message);
         packet.emit(hdr.prior_day_as_of_trade_message);
-        packet.emit(hdr.administrative);
+        packet.emit(hdr.administrative_message);
         packet.emit(hdr.general_administrative_message);
         packet.emit(hdr.cross_sro_trading_action_message);
         packet.emit(hdr.market_center_trading_action_message);
@@ -710,10 +710,10 @@ control NasdaqUtdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.auction_collar_message);
         packet.emit(hdr.closing_trade_summary_report_message);
         packet.emit(hdr.closing_trade_summary_report_message_market_center_closing_price_and_volume_summary);
-        packet.emit(hdr.volume);
+        packet.emit(hdr.volume_message);
         packet.emit(hdr.total_consolidated_and_market_center_volume_message);
         packet.emit(hdr.total_consolidated_and_market_center_volume_message_market_center_volume_attachment);
-        packet.emit(hdr.control_);
+        packet.emit(hdr.control_message);
         packet.emit(hdr.start_of_day_message);
         packet.emit(hdr.end_of_day_message);
         packet.emit(hdr.market_session_open_message);

@@ -300,14 +300,6 @@ header broadcast_error_notification_t {
     bit<8> ref_appl_id;
     bit<8> session_status;
     bit<32> pad4;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header clip_deletion_notification_t {
@@ -657,14 +649,6 @@ header forced_logout_notification_t {
     bit<64> sending_time;
     bit<16> var_text_len;
     bit<48> pad6;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header forced_user_logout_notification_t {
@@ -674,14 +658,6 @@ header forced_user_logout_notification_t {
     bit<16> var_text_len;
     bit<8> user_status;
     bit<8> pad1;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header heartbeat_notification_t {
@@ -790,14 +766,6 @@ header legal_notification_broadcast_t {
     bit<16> var_text_len;
     bit<8> user_status;
     bit<40> pad5;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header logon_response_t {
@@ -1030,14 +998,6 @@ header news_broadcast_t {
     bit<16> var_text_len;
     bit<2048> headline;
     bit<48> pad6;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header order_exec_notification_t {
@@ -1468,14 +1428,6 @@ header reject_t {
     bit<16> var_text_len;
     bit<8> session_status;
     bit<8> pad1;
-    bit<2048> var_text_chunk0;
-    bit<2048> var_text_chunk1;
-    bit<2048> var_text_chunk2;
-    bit<2048> var_text_chunk3;
-    bit<2048> var_text_chunk4;
-    bit<2048> var_text_chunk5;
-    bit<2048> var_text_chunk6;
-    bit<1664> var_text_chunk7;
 }
 
 header retransmit_me_message_response_t {

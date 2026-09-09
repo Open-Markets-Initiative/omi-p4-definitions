@@ -271,6 +271,8 @@ parser IseoptionsSpreaddepthofmarketServertcpParser(packet_in packet, out header
             8w0x41: parse_login_accepted_packet;
             8w0x4a: parse_login_rejected_packet;
             8w0x53: parse_sequenced_data_packet;
+            8w0x48: parse_server_heartbeat_packet;
+            8w0x5a: parse_end_of_session_packet;
             default: accept;
         }
     }
@@ -421,6 +423,16 @@ parser IseoptionsSpreaddepthofmarketServertcpParser(packet_in packet, out header
 
     state parse_end_of_replay_sequence_message {
         packet.extract(hdr.end_of_replay_sequence_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session_packet {
         meta.dispatched = 1;
         transition accept;
     }

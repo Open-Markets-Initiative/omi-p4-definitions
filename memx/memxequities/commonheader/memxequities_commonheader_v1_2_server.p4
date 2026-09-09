@@ -164,6 +164,7 @@ parser MemxequitiesCommonheaderServerParser(packet_in packet, out headers_t hdr,
     }
 
     state parse_sequenced_message {
+        meta.dispatched = 1;
         transition accept;
     }
 

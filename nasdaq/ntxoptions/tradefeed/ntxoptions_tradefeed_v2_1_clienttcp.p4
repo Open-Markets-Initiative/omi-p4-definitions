@@ -69,6 +69,8 @@ parser NtxoptionsTradefeedClienttcpParser(packet_in packet, out headers_t hdr, i
             8w0x2b: parse_debug_packet;
             8w0x4c: parse_login_request_packet;
             8w0x55: parse_unsequenced_data_packet;
+            8w0x52: parse_client_heartbeat_packet;
+            8w0x4f: parse_logout_request_packet;
             default: accept;
         }
     }
@@ -87,6 +89,16 @@ parser NtxoptionsTradefeedClienttcpParser(packet_in packet, out headers_t hdr, i
 
     state parse_unsequenced_data_packet {
         packet.extract(hdr.unsequenced_data_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_client_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_logout_request_packet {
         meta.dispatched = 1;
         transition accept;
     }

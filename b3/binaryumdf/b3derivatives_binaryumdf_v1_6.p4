@@ -199,11 +199,8 @@ header news_5_message_t {
     bit<64> orig_time;
     bit<32> total_text_length;
     bit<16> headline_length;
-    bit<8> headline_data;
     bit<16> text_length;
-    bit<8> text_data;
     bit<16> url_link_length;
-    bit<8> url_link_data;
 }
 
 header empty_book_message_t {
@@ -701,6 +698,7 @@ parser B3derivativesBinaryumdfParser(packet_in packet, out headers_t hdr, inout 
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
+            16w0x100: parse_sequence_reset_message;
             16w0x200: parse_sequence_message;
             16w0x300: parse_security_status_3_message;
             16w0xa00: parse_security_group_phase_10_message;
@@ -729,6 +727,11 @@ parser B3derivativesBinaryumdfParser(packet_in packet, out headers_t hdr, inout 
             16w0x4700: parse_snapshot_full_refresh_orders_mb_o_71_message;
             default: accept;
         }
+    }
+
+    state parse_sequence_reset_message {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_sequence_message {

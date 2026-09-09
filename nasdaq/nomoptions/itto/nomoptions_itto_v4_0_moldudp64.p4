@@ -106,9 +106,9 @@ header add_quote_message_short_form_message_t {
     bit<64> ask_reference_number;
     bit<32> option_id;
     bit<16> bid_price_short;
-    bit<16> bid_size_integer_2;
+    bit<16> bid_size_short;
     bit<16> ask_price_short;
-    bit<16> ask_size_integer_2;
+    bit<16> ask_size_short;
 }
 
 header add_quote_message_long_form_message_t {
@@ -118,9 +118,9 @@ header add_quote_message_long_form_message_t {
     bit<64> ask_reference_number;
     bit<32> option_id;
     bit<32> bid;
-    bit<32> bid_size_integer_4;
+    bit<32> bid_size_long;
     bit<32> ask;
-    bit<32> ask_size_integer_4;
+    bit<32> ask_size_long;
 }
 
 header single_side_executed_message_t {
@@ -191,9 +191,9 @@ header quote_replace_message_short_form_t {
     bit<64> original_ask_reference_number;
     bit<64> ask_reference_number;
     bit<16> bid_price_short;
-    bit<16> bid_size_integer_2;
+    bit<16> bid_size_short;
     bit<16> ask_price_short;
-    bit<16> ask_size_integer_2;
+    bit<16> ask_size_short;
 }
 
 header quote_replace_message_long_form_t {
@@ -204,9 +204,9 @@ header quote_replace_message_long_form_t {
     bit<64> original_ask_reference_number;
     bit<64> ask_reference_number;
     bit<32> bid_price_long;
-    bit<32> bid_size_integer_4;
+    bit<32> bid_size_long;
     bit<32> ask_price_long;
-    bit<32> ask_size_integer_4;
+    bit<32> ask_size_long;
 }
 
 header quote_delete_message_t {
@@ -293,7 +293,21 @@ struct headers_t {
 parser NomoptionsIttoMoldudp64Parser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.udp_packet_header);
-        transition parse_message;
+        transition select(hdr.udp_packet_header.message_count) {
+            16w0: parse_heartbeat;
+            16w65535: parse_end_of_session;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_message {

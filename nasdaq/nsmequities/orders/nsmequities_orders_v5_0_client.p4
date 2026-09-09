@@ -150,6 +150,8 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
             8w0x2b: parse_debug_packet;
             8w0x4c: parse_login_request_packet;
             8w0x55: parse_unsequenced_data_packet;
+            8w0x52: parse_client_heartbeat;
+            8w0x4f: parse_logout_request;
             default: accept;
         }
     }
@@ -185,11 +187,71 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
     state parse_enter_order_message {
         packet.extract(hdr.enter_order_message);
         meta.dispatched = 1;
+        transition select(hdr.enter_order_message.enter_order_optional_field) {
+            8w2: parse_firm;
+            8w3: parse_min_qty;
+            8w4: parse_customer_type;
+            8w5: parse_max_floor;
+            default: accept;
+        }
+    }
+
+    state parse_firm {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_min_qty {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_customer_type {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_max_floor {
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_replace_order_message {
         packet.extract(hdr.replace_order_message);
+        meta.dispatched = 1;
+        transition select(hdr.replace_order_message.replace_order_optional_field) {
+            8w3: parse_min_qty;
+            8w5: parse_max_floor;
+            8w6: parse_price_type;
+            8w12: parse_post_only;
+            8w15: parse_expire_time;
+            8w16: parse_trade_now;
+            8w17: parse_handle_inst;
+            default: accept;
+        }
+    }
+
+    state parse_price_type {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_post_only {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_expire_time {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_trade_now {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_handle_inst {
         meta.dispatched = 1;
         transition accept;
     }
@@ -209,11 +271,34 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
     state parse_account_query_message {
         packet.extract(hdr.account_query_message);
         meta.dispatched = 1;
+        transition select(hdr.account_query_message.account_query_optional_field) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
+    }
+
+    state parse_user_ref_idx {
+        meta.dispatched = 1;
         transition accept;
     }
 
     state parse_mass_cancel_request_message {
         packet.extract(hdr.mass_cancel_request_message);
+        meta.dispatched = 1;
+        transition select(hdr.mass_cancel_request_message.mass_cancel_request_optional_field) {
+            8w27: parse_side;
+            8w24: parse_group_id;
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
+    }
+
+    state parse_side {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_group_id {
         meta.dispatched = 1;
         transition accept;
     }
@@ -221,11 +306,27 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
     state parse_disable_order_entry_request_message {
         packet.extract(hdr.disable_order_entry_request_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(hdr.disable_order_entry_request_message.disable_order_entry_request_optional_field) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_enable_order_entry_request_message {
         packet.extract(hdr.enable_order_entry_request_message);
+        meta.dispatched = 1;
+        transition select(hdr.enable_order_entry_request_message.enable_order_entry_request_optional_field) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
+    }
+
+    state parse_client_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_logout_request {
         meta.dispatched = 1;
         transition accept;
     }

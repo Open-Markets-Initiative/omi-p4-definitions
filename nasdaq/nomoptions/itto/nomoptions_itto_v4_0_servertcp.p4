@@ -117,9 +117,9 @@ header add_quote_message_short_form_message_t {
     bit<64> ask_reference_number;
     bit<32> option_id;
     bit<16> bid_price_short;
-    bit<16> bid_size_integer_2;
+    bit<16> bid_size_short;
     bit<16> ask_price_short;
-    bit<16> ask_size_integer_2;
+    bit<16> ask_size_short;
 }
 
 header add_quote_message_long_form_message_t {
@@ -129,9 +129,9 @@ header add_quote_message_long_form_message_t {
     bit<64> ask_reference_number;
     bit<32> option_id;
     bit<32> bid;
-    bit<32> bid_size_integer_4;
+    bit<32> bid_size_long;
     bit<32> ask;
-    bit<32> ask_size_integer_4;
+    bit<32> ask_size_long;
 }
 
 header single_side_executed_message_t {
@@ -202,9 +202,9 @@ header quote_replace_message_short_form_t {
     bit<64> original_ask_reference_number;
     bit<64> ask_reference_number;
     bit<16> bid_price_short;
-    bit<16> bid_size_integer_2;
+    bit<16> bid_size_short;
     bit<16> ask_price_short;
-    bit<16> ask_size_integer_2;
+    bit<16> ask_size_short;
 }
 
 header quote_replace_message_long_form_t {
@@ -215,9 +215,9 @@ header quote_replace_message_long_form_t {
     bit<64> original_ask_reference_number;
     bit<64> ask_reference_number;
     bit<32> bid_price_long;
-    bit<32> bid_size_integer_4;
+    bit<32> bid_size_long;
     bit<32> ask_price_long;
-    bit<32> ask_size_integer_4;
+    bit<32> ask_size_long;
 }
 
 header quote_delete_message_t {
@@ -312,6 +312,8 @@ parser NomoptionsIttoServertcpParser(packet_in packet, out headers_t hdr, inout 
             8w0x41: parse_login_accepted_packet;
             8w0x4a: parse_login_rejected_packet;
             8w0x53: parse_sequenced_data_packet;
+            8w0x48: parse_server_heartbeat_packet;
+            8w0x5a: parse_end_of_session_packet;
             default: accept;
         }
     }
@@ -492,6 +494,16 @@ parser NomoptionsIttoServertcpParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_noii_message {
         packet.extract(hdr.noii_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session_packet {
         meta.dispatched = 1;
         transition accept;
     }

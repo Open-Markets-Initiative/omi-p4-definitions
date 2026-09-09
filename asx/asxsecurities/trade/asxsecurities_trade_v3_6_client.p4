@@ -126,6 +126,8 @@ parser AsxsecuritiesTradeClientParser(packet_in packet, out headers_t hdr, inout
             8w0x2b: parse_debug_packet;
             8w0x4c: parse_login_request_packet;
             8w0x55: parse_unsequenced_data_packet;
+            8w0x52: parse_client_heartbeat;
+            8w0x4f: parse_logout_request;
             default: accept;
         }
     }
@@ -174,6 +176,16 @@ parser AsxsecuritiesTradeClientParser(packet_in packet, out headers_t hdr, inout
 
     state parse_cancel_by_order_id_message {
         packet.extract(hdr.cancel_by_order_id_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_client_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_logout_request {
         meta.dispatched = 1;
         transition accept;
     }

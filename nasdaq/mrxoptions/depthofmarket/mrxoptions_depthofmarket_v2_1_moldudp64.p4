@@ -290,7 +290,21 @@ struct headers_t {
 parser MrxoptionsDepthofmarketMoldudp64Parser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.udp_packet_header);
-        transition parse_message;
+        transition select(hdr.udp_packet_header.message_count) {
+            16w0: parse_heartbeat;
+            16w65535: parse_end_of_session;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition accept;
     }
 
     state parse_message {
