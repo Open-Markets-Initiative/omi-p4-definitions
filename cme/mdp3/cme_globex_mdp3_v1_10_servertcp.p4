@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header server_technical_header_t {
     bit<16> encoding_type;
     bit<32> message_sequence_number;
     bit<64> tcp_sending_time;
@@ -1231,7 +1231,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    server_technical_header_t server_technical_header;
     channel_reset_t channel_reset;
     channel_reset_channel_reset_group_t channel_reset_channel_reset_group[MAX_MESSAGES];
     admin_login_t admin_login;
@@ -1329,8 +1329,8 @@ struct headers_t {
 
 parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.server_technical_header);
+        transition select(hdr.server_technical_header.template_id) {
             16w0x400: parse_channel_reset;
             16w0xc00: parse_admin_heartbeat;
             16w0xf00: parse_admin_login;
@@ -2234,7 +2234,7 @@ control CmeGlobexMdp3ServertcpComputeChecksum(inout headers_t hdr, inout metadat
 
 control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.server_technical_header);
         packet.emit(hdr.channel_reset);
         packet.emit(hdr.channel_reset_channel_reset_group);
         packet.emit(hdr.admin_login);

@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<8> channel_id;
     bit<8> reserved;
     bit<16> sequence_version;
@@ -772,7 +772,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
     sequence_message_t sequence_message;
     empty_book_message_t empty_book_message;
     channel_reset_11_message_t channel_reset_11_message;
@@ -816,8 +816,8 @@ struct headers_t {
 
 parser B3derivativesBinaryumdfParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.template_id) {
             16w0x100: parse_sequence_reset_message;
             16w0x200: parse_sequence_message;
             16w0x900: parse_empty_book_message;
@@ -1165,7 +1165,7 @@ control B3derivativesBinaryumdfComputeChecksum(inout headers_t hdr, inout metada
 
 control B3derivativesBinaryumdfDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
         packet.emit(hdr.sequence_message);
         packet.emit(hdr.empty_book_message);
         packet.emit(hdr.channel_reset_11_message);

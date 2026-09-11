@@ -51,6 +51,10 @@ header unsequenced_data_packet_t {
     bit<8> unsequenced_message_type;
 }
 
+header unsequenced_data_packet_unsequenced_message_t {
+    varbit<2048> unsequenced_message;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
@@ -60,6 +64,7 @@ struct headers_t {
     debug_packet_t debug_packet;
     login_request_packet_t login_request_packet;
     unsequenced_data_packet_t unsequenced_data_packet;
+    unsequenced_data_packet_unsequenced_message_t unsequenced_data_packet_unsequenced_message;
 }
 
 parser IseoptionsTopofmarketClienttcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -90,6 +95,7 @@ parser IseoptionsTopofmarketClienttcpParser(packet_in packet, out headers_t hdr,
     state parse_unsequenced_data_packet {
         packet.extract(hdr.unsequenced_data_packet);
         meta.dispatched = 1;
+        packet.extract(hdr.unsequenced_data_packet_unsequenced_message, (bit<32>)hdr.client_tcp_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -137,6 +143,7 @@ control IseoptionsTopofmarketClienttcpDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.debug_packet);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
+        packet.emit(hdr.unsequenced_data_packet_unsequenced_message);
     }
 }
 

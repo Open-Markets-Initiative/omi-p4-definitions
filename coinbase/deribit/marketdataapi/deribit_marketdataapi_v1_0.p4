@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_flags_t {
+header packet_header_t {
     bit<64> sending_time;
     bit<64> seq_num;
     bit<32> channel_id;
@@ -40,12 +40,15 @@ header message_flags_t {
     bit<1> retransmit;
     bit<13> reserved_bits;
     bit<16> message_count;
+}
+
+header md_message_t {
     bit<16> message_length;
     bit<16> template_id;
     bit<16> schema_version;
     bit<1> start_of_transaction;
     bit<1> end_of_transaction;
-    bit<14> reserved_bits_2;
+    bit<14> reserved_bits;
     bit<64> transact_time;
 }
 
@@ -225,35 +228,49 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_flags_t message_flags;
-    instrument_definition_message_t instrument_definition_message;
+    packet_header_t packet_header;
+    md_message_t md_message[MAX_MESSAGES];
+    instrument_definition_message_t instrument_definition_message[MAX_MESSAGES];
     instrument_definition_message_instrument_definition_message_large_tick_sizes_group_t instrument_definition_message_instrument_definition_message_large_tick_sizes_group[MAX_MESSAGES];
     instrument_definition_message_instrument_definition_message_legs_group_header_t instrument_definition_message_instrument_definition_message_legs_group_header;
     instrument_definition_message_instrument_definition_message_legs_group_t instrument_definition_message_instrument_definition_message_legs_group[MAX_MESSAGES];
-    index_definition_message_t index_definition_message;
-    instrument_info_message_t instrument_info_message;
-    instrument_ref_message_t instrument_ref_message;
-    instrument_status_update_message_t instrument_status_update_message;
-    bid_put_message_t bid_put_message;
-    ask_put_message_t ask_put_message;
-    bid_qty_reduced_message_t bid_qty_reduced_message;
-    ask_qty_reduced_message_t ask_qty_reduced_message;
-    bid_delete_message_t bid_delete_message;
-    ask_delete_message_t ask_delete_message;
-    trade_summary_message_t trade_summary_message;
-    trade_message_t trade_message;
-    block_trade_message_t block_trade_message;
-    snapshot_header_message_t snapshot_header_message;
-    snapshot_trailer_message_t snapshot_trailer_message;
-    end_of_cycle_message_t end_of_cycle_message;
-    retransmit_request_message_t retransmit_request_message;
-    retransmit_reject_message_t retransmit_reject_message;
+    index_definition_message_t index_definition_message[MAX_MESSAGES];
+    instrument_info_message_t instrument_info_message[MAX_MESSAGES];
+    instrument_ref_message_t instrument_ref_message[MAX_MESSAGES];
+    instrument_status_update_message_t instrument_status_update_message[MAX_MESSAGES];
+    bid_put_message_t bid_put_message[MAX_MESSAGES];
+    ask_put_message_t ask_put_message[MAX_MESSAGES];
+    bid_qty_reduced_message_t bid_qty_reduced_message[MAX_MESSAGES];
+    ask_qty_reduced_message_t ask_qty_reduced_message[MAX_MESSAGES];
+    bid_delete_message_t bid_delete_message[MAX_MESSAGES];
+    ask_delete_message_t ask_delete_message[MAX_MESSAGES];
+    trade_summary_message_t trade_summary_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
+    block_trade_message_t block_trade_message[MAX_MESSAGES];
+    snapshot_header_message_t snapshot_header_message[MAX_MESSAGES];
+    snapshot_trailer_message_t snapshot_trailer_message[MAX_MESSAGES];
+    end_of_cycle_message_t end_of_cycle_message[MAX_MESSAGES];
+    retransmit_request_message_t retransmit_request_message[MAX_MESSAGES];
+    retransmit_reject_message_t retransmit_reject_message[MAX_MESSAGES];
 }
 
 parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_flags);
-        transition select(hdr.message_flags.template_id) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
+            16w0x0: parse_heartbeat;
+            default: parse_md_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_md_message {
+        packet.extract(hdr.md_message.next);
+        transition select(hdr.md_message.last.template_id) {
             16w0xa00: parse_instrument_definition_message;
             16w0xb00: parse_index_definition_message;
             16w0xe00: parse_instrument_info_message;
@@ -278,9 +295,9 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
     }
 
     state parse_instrument_definition_message {
-        packet.extract(hdr.instrument_definition_message);
+        packet.extract(hdr.instrument_definition_message.next);
         meta.dispatched = 1;
-        meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining = hdr.instrument_definition_message.num_in_group;
+        meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining = hdr.instrument_definition_message.last.num_in_group;
         transition select(meta.instrument_definition_message_instrument_definition_message_large_tick_sizes_group_remaining) {
             16w0: read_instrument_definition_message_instrument_definition_message_legs_group;
             default: parse_instrument_definition_message_instrument_definition_message_large_tick_sizes_group;
@@ -300,7 +317,7 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
         packet.extract(hdr.instrument_definition_message_instrument_definition_message_legs_group_header);
         meta.instrument_definition_message_instrument_definition_message_legs_group_remaining = hdr.instrument_definition_message_instrument_definition_message_legs_group_header.num_in_group;
         transition select(meta.instrument_definition_message_instrument_definition_message_legs_group_remaining) {
-            16w0: accept;
+            16w0: parse_md_message;
             default: parse_instrument_definition_message_instrument_definition_message_legs_group;
         }
     }
@@ -309,117 +326,117 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
         packet.extract(hdr.instrument_definition_message_instrument_definition_message_legs_group.next);
         meta.instrument_definition_message_instrument_definition_message_legs_group_remaining = meta.instrument_definition_message_instrument_definition_message_legs_group_remaining - 1;
         transition select(meta.instrument_definition_message_instrument_definition_message_legs_group_remaining) {
-            16w0: accept;
+            16w0: parse_md_message;
             default: parse_instrument_definition_message_instrument_definition_message_legs_group;
         }
     }
 
     state parse_index_definition_message {
-        packet.extract(hdr.index_definition_message);
+        packet.extract(hdr.index_definition_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_instrument_info_message {
-        packet.extract(hdr.instrument_info_message);
+        packet.extract(hdr.instrument_info_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_instrument_ref_message {
-        packet.extract(hdr.instrument_ref_message);
+        packet.extract(hdr.instrument_ref_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_instrument_status_update_message {
-        packet.extract(hdr.instrument_status_update_message);
+        packet.extract(hdr.instrument_status_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_bid_put_message {
-        packet.extract(hdr.bid_put_message);
+        packet.extract(hdr.bid_put_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_ask_put_message {
-        packet.extract(hdr.ask_put_message);
+        packet.extract(hdr.ask_put_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_bid_qty_reduced_message {
-        packet.extract(hdr.bid_qty_reduced_message);
+        packet.extract(hdr.bid_qty_reduced_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_ask_qty_reduced_message {
-        packet.extract(hdr.ask_qty_reduced_message);
+        packet.extract(hdr.ask_qty_reduced_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_bid_delete_message {
-        packet.extract(hdr.bid_delete_message);
+        packet.extract(hdr.bid_delete_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_ask_delete_message {
-        packet.extract(hdr.ask_delete_message);
+        packet.extract(hdr.ask_delete_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_trade_summary_message {
-        packet.extract(hdr.trade_summary_message);
+        packet.extract(hdr.trade_summary_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_trade_message {
-        packet.extract(hdr.trade_message);
+        packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_block_trade_message {
-        packet.extract(hdr.block_trade_message);
+        packet.extract(hdr.block_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_snapshot_header_message {
-        packet.extract(hdr.snapshot_header_message);
+        packet.extract(hdr.snapshot_header_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_snapshot_trailer_message {
-        packet.extract(hdr.snapshot_trailer_message);
+        packet.extract(hdr.snapshot_trailer_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_end_of_cycle_message {
-        packet.extract(hdr.end_of_cycle_message);
+        packet.extract(hdr.end_of_cycle_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_retransmit_request_message {
-        packet.extract(hdr.retransmit_request_message);
+        packet.extract(hdr.retransmit_request_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
     state parse_retransmit_reject_message {
-        packet.extract(hdr.retransmit_reject_message);
+        packet.extract(hdr.retransmit_reject_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_md_message;
     }
 
 }
@@ -452,7 +469,8 @@ control DeribitMarketdataapiComputeChecksum(inout headers_t hdr, inout metadata_
 
 control DeribitMarketdataapiDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_flags);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.md_message);
         packet.emit(hdr.instrument_definition_message);
         packet.emit(hdr.instrument_definition_message_instrument_definition_message_large_tick_sizes_group);
         packet.emit(hdr.instrument_definition_message_instrument_definition_message_legs_group_header);

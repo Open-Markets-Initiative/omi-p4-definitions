@@ -1613,6 +1613,30 @@ header user_logout_response_t {
     bit<32> pad4;
 }
 
+header broadcast_error_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header forced_logout_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header forced_user_logout_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header legal_notification_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header news_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header reject_var_text_t {
+    varbit<2048> var_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<8> add_complex_instrument_response_instrmt_leg_grp_comp_remaining;
@@ -1744,6 +1768,12 @@ struct headers_t {
     unsubscribe_response_t unsubscribe_response;
     user_login_response_t user_login_response;
     user_logout_response_t user_logout_response;
+    broadcast_error_notification_var_text_t broadcast_error_notification_var_text;
+    forced_logout_notification_var_text_t forced_logout_notification_var_text;
+    forced_user_logout_notification_var_text_t forced_user_logout_notification_var_text;
+    legal_notification_broadcast_var_text_t legal_notification_broadcast_var_text;
+    news_broadcast_var_text_t news_broadcast_var_text;
+    reject_var_text_t reject_var_text;
 }
 
 parser EurexT7EtiServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -1843,6 +1873,7 @@ parser EurexT7EtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_broadcast_error_notification {
         packet.extract(hdr.broadcast_error_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.broadcast_error_notification_var_text, (bit<32>)hdr.broadcast_error_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -1961,12 +1992,14 @@ parser EurexT7EtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_forced_logout_notification {
         packet.extract(hdr.forced_logout_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.forced_logout_notification_var_text, (bit<32>)hdr.forced_logout_notification.var_text_len * 8);
         transition accept;
     }
 
     state parse_forced_user_logout_notification {
         packet.extract(hdr.forced_user_logout_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.forced_user_logout_notification_var_text, (bit<32>)hdr.forced_user_logout_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -2061,6 +2094,7 @@ parser EurexT7EtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_legal_notification_broadcast {
         packet.extract(hdr.legal_notification_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.legal_notification_broadcast_var_text, (bit<32>)hdr.legal_notification_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -2128,6 +2162,7 @@ parser EurexT7EtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_news_broadcast {
         packet.extract(hdr.news_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.news_broadcast_var_text, (bit<32>)hdr.news_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -2351,6 +2386,7 @@ parser EurexT7EtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_reject {
         packet.extract(hdr.reject);
         meta.dispatched = 1;
+        packet.extract(hdr.reject_var_text, (bit<32>)hdr.reject.var_text_len * 8);
         transition accept;
     }
 
@@ -2684,6 +2720,7 @@ control EurexT7EtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.add_complex_instrument_response_instrmt_leg_grp_comp);
         packet.emit(hdr.add_flexible_instrument_response);
         packet.emit(hdr.broadcast_error_notification);
+        packet.emit(hdr.broadcast_error_notification_var_text);
         packet.emit(hdr.cross_request_response);
         packet.emit(hdr.delete_all_order_broadcast);
         packet.emit(hdr.delete_all_order_broadcast_not_affected_orders_grp_comp);
@@ -2699,7 +2736,9 @@ control EurexT7EtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.delete_order_nr_response);
         packet.emit(hdr.delete_order_response);
         packet.emit(hdr.forced_logout_notification);
+        packet.emit(hdr.forced_logout_notification_var_text);
         packet.emit(hdr.forced_user_logout_notification);
+        packet.emit(hdr.forced_user_logout_notification_var_text);
         packet.emit(hdr.gateway_response);
         packet.emit(hdr.heartbeat_notification);
         packet.emit(hdr.inquire_enrichment_rule_id_list_response);
@@ -2711,6 +2750,7 @@ control EurexT7EtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.inquire_user_response);
         packet.emit(hdr.inquire_user_response_party_details_grp_comp);
         packet.emit(hdr.legal_notification_broadcast);
+        packet.emit(hdr.legal_notification_broadcast_var_text);
         packet.emit(hdr.logon_response);
         packet.emit(hdr.logout_response);
         packet.emit(hdr.mm_parameter_definition_response);
@@ -2721,6 +2761,7 @@ control EurexT7EtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.new_order_nr_response);
         packet.emit(hdr.new_order_response);
         packet.emit(hdr.news_broadcast);
+        packet.emit(hdr.news_broadcast_var_text);
         packet.emit(hdr.order_exec_notification);
         packet.emit(hdr.order_exec_notification_fills_grp_comp);
         packet.emit(hdr.order_exec_notification_instrmnt_leg_exec_grp_comp);
@@ -2742,6 +2783,7 @@ control EurexT7EtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.quote_execution_report_quote_leg_exec_grp_comp);
         packet.emit(hdr.rfq_response);
         packet.emit(hdr.reject);
+        packet.emit(hdr.reject_var_text);
         packet.emit(hdr.retransmit_me_message_response);
         packet.emit(hdr.retransmit_response);
         packet.emit(hdr.risk_notification_broadcast);

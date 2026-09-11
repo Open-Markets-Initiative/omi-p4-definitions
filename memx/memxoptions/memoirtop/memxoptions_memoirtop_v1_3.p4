@@ -40,6 +40,9 @@ header common_header_t {
 
 header sequenced_message_t {
     bit<16> message_count;
+}
+
+header sequenced_message_message_t {
     bit<16> message_length;
     bit<16> block_length;
     bit<8> template_id;
@@ -164,19 +167,20 @@ struct metadata_t {
 struct headers_t {
     common_header_t common_header;
     sequenced_message_t sequenced_message;
-    instrument_directory_message_t instrument_directory_message;
-    instrument_trading_status_message_t instrument_trading_status_message;
-    trading_session_status_message_t trading_session_status_message;
-    broken_trade_message_t broken_trade_message;
-    corrected_trade_message_t corrected_trade_message;
-    snapshot_complete_message_t snapshot_complete_message;
-    best_bid_offer_message_t best_bid_offer_message;
-    best_bid_message_t best_bid_message;
-    best_offer_message_t best_offer_message;
-    best_bid_short_message_t best_bid_short_message;
-    best_offer_short_message_t best_offer_short_message;
-    trade_message_t trade_message;
-    clear_book_message_t clear_book_message;
+    sequenced_message_message_t sequenced_message_message[MAX_MESSAGES];
+    instrument_directory_message_t instrument_directory_message[MAX_MESSAGES];
+    instrument_trading_status_message_t instrument_trading_status_message[MAX_MESSAGES];
+    trading_session_status_message_t trading_session_status_message[MAX_MESSAGES];
+    broken_trade_message_t broken_trade_message[MAX_MESSAGES];
+    corrected_trade_message_t corrected_trade_message[MAX_MESSAGES];
+    snapshot_complete_message_t snapshot_complete_message[MAX_MESSAGES];
+    best_bid_offer_message_t best_bid_offer_message[MAX_MESSAGES];
+    best_bid_message_t best_bid_message[MAX_MESSAGES];
+    best_offer_message_t best_offer_message[MAX_MESSAGES];
+    best_bid_short_message_t best_bid_short_message[MAX_MESSAGES];
+    best_offer_short_message_t best_offer_short_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
+    clear_book_message_t clear_book_message[MAX_MESSAGES];
 }
 
 parser MemxoptionsMemoirtopParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -203,7 +207,15 @@ parser MemxoptionsMemoirtopParser(packet_in packet, out headers_t hdr, inout met
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
         meta.dispatched = 1;
-        transition select(hdr.sequenced_message.template_id) {
+        transition select(hdr.sequenced_message.message_count) {
+            16w0: accept;
+            default: parse_sequenced_message_message;
+        }
+    }
+
+    state parse_sequenced_message_message {
+        packet.extract(hdr.sequenced_message_message.next);
+        transition select(hdr.sequenced_message_message.last.template_id) {
             8w1: parse_instrument_directory_message;
             8w2: parse_instrument_trading_status_message;
             8w3: parse_trading_session_status_message;
@@ -222,81 +234,81 @@ parser MemxoptionsMemoirtopParser(packet_in packet, out headers_t hdr, inout met
     }
 
     state parse_instrument_directory_message {
-        packet.extract(hdr.instrument_directory_message);
+        packet.extract(hdr.instrument_directory_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_instrument_trading_status_message {
-        packet.extract(hdr.instrument_trading_status_message);
+        packet.extract(hdr.instrument_trading_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_trading_session_status_message {
-        packet.extract(hdr.trading_session_status_message);
+        packet.extract(hdr.trading_session_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_broken_trade_message {
-        packet.extract(hdr.broken_trade_message);
+        packet.extract(hdr.broken_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_corrected_trade_message {
-        packet.extract(hdr.corrected_trade_message);
+        packet.extract(hdr.corrected_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_snapshot_complete_message {
-        packet.extract(hdr.snapshot_complete_message);
+        packet.extract(hdr.snapshot_complete_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_best_bid_offer_message {
-        packet.extract(hdr.best_bid_offer_message);
+        packet.extract(hdr.best_bid_offer_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_best_bid_message {
-        packet.extract(hdr.best_bid_message);
+        packet.extract(hdr.best_bid_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_best_offer_message {
-        packet.extract(hdr.best_offer_message);
+        packet.extract(hdr.best_offer_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_best_bid_short_message {
-        packet.extract(hdr.best_bid_short_message);
+        packet.extract(hdr.best_bid_short_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_best_offer_short_message {
-        packet.extract(hdr.best_offer_short_message);
+        packet.extract(hdr.best_offer_short_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_trade_message {
-        packet.extract(hdr.trade_message);
+        packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_clear_book_message {
-        packet.extract(hdr.clear_book_message);
+        packet.extract(hdr.clear_book_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
 }
@@ -331,6 +343,7 @@ control MemxoptionsMemoirtopDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.common_header);
         packet.emit(hdr.sequenced_message);
+        packet.emit(hdr.sequenced_message_message);
         packet.emit(hdr.instrument_directory_message);
         packet.emit(hdr.instrument_trading_status_message);
         packet.emit(hdr.trading_session_status_message);

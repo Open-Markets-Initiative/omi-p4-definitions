@@ -31,13 +31,16 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_size;
     bit<8> delivery_flag;
     bit<8> message_count;
     bit<32> sequence_number;
     bit<32> timestamp;
     bit<32> nanoseconds;
+}
+
+header packet_header_message_t {
     bit<16> message_size;
     bit<16> message_type;
 }
@@ -256,30 +259,39 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    outright_quote_message_t outright_quote_message;
-    outright_trade_message_t outright_trade_message;
-    outright_trade_cancel_message_t outright_trade_cancel_message;
-    outright_trade_correction_message_t outright_trade_correction_message;
-    outright_imbalance_message_t outright_imbalance_message;
-    outright_crossing_rfq_message_t outright_crossing_rfq_message;
-    outright_bold_rfq_message_t outright_bold_rfq_message;
-    outright_summary_message_t outright_summary_message;
-    underlying_status_message_t underlying_status_message;
-    outright_series_status_message_t outright_series_status_message;
-    refresh_outright_quote_message_t refresh_outright_quote_message;
-    refresh_outright_trade_message_t refresh_outright_trade_message;
-    refresh_outright_imbalance_message_t refresh_outright_imbalance_message;
-    underlying_index_mapping_message_t underlying_index_mapping_message;
-    series_index_mapping_message_t series_index_mapping_message;
-    stream_id_message_t stream_id_message;
-    sequence_number_reset_message_t sequence_number_reset_message;
+    packet_header_t packet_header;
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    outright_quote_message_t outright_quote_message[MAX_MESSAGES];
+    outright_trade_message_t outright_trade_message[MAX_MESSAGES];
+    outright_trade_cancel_message_t outright_trade_cancel_message[MAX_MESSAGES];
+    outright_trade_correction_message_t outright_trade_correction_message[MAX_MESSAGES];
+    outright_imbalance_message_t outright_imbalance_message[MAX_MESSAGES];
+    outright_crossing_rfq_message_t outright_crossing_rfq_message[MAX_MESSAGES];
+    outright_bold_rfq_message_t outright_bold_rfq_message[MAX_MESSAGES];
+    outright_summary_message_t outright_summary_message[MAX_MESSAGES];
+    underlying_status_message_t underlying_status_message[MAX_MESSAGES];
+    outright_series_status_message_t outright_series_status_message[MAX_MESSAGES];
+    refresh_outright_quote_message_t refresh_outright_quote_message[MAX_MESSAGES];
+    refresh_outright_trade_message_t refresh_outright_trade_message[MAX_MESSAGES];
+    refresh_outright_imbalance_message_t refresh_outright_imbalance_message[MAX_MESSAGES];
+    underlying_index_mapping_message_t underlying_index_mapping_message[MAX_MESSAGES];
+    series_index_mapping_message_t series_index_mapping_message[MAX_MESSAGES];
+    stream_id_message_t stream_id_message[MAX_MESSAGES];
+    sequence_number_reset_message_t sequence_number_reset_message[MAX_MESSAGES];
 }
 
 parser AmexoptionsTopfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
+            8w0: accept;
+            default: parse_packet_header_message;
+        }
+    }
+
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.message_type) {
             16w0x9101: parse_outright_quote_message;
             16w0x9701: parse_outright_trade_message;
             16w0x9901: parse_outright_trade_cancel_message;
@@ -302,105 +314,105 @@ parser AmexoptionsTopfeedParser(packet_in packet, out headers_t hdr, inout metad
     }
 
     state parse_outright_quote_message {
-        packet.extract(hdr.outright_quote_message);
+        packet.extract(hdr.outright_quote_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_trade_message {
-        packet.extract(hdr.outright_trade_message);
+        packet.extract(hdr.outright_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_trade_cancel_message {
-        packet.extract(hdr.outright_trade_cancel_message);
+        packet.extract(hdr.outright_trade_cancel_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_trade_correction_message {
-        packet.extract(hdr.outright_trade_correction_message);
+        packet.extract(hdr.outright_trade_correction_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_imbalance_message {
-        packet.extract(hdr.outright_imbalance_message);
+        packet.extract(hdr.outright_imbalance_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_crossing_rfq_message {
-        packet.extract(hdr.outright_crossing_rfq_message);
+        packet.extract(hdr.outright_crossing_rfq_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_bold_rfq_message {
-        packet.extract(hdr.outright_bold_rfq_message);
+        packet.extract(hdr.outright_bold_rfq_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_summary_message {
-        packet.extract(hdr.outright_summary_message);
+        packet.extract(hdr.outright_summary_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_underlying_status_message {
-        packet.extract(hdr.underlying_status_message);
+        packet.extract(hdr.underlying_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_series_status_message {
-        packet.extract(hdr.outright_series_status_message);
+        packet.extract(hdr.outright_series_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_refresh_outright_quote_message {
-        packet.extract(hdr.refresh_outright_quote_message);
+        packet.extract(hdr.refresh_outright_quote_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_refresh_outright_trade_message {
-        packet.extract(hdr.refresh_outright_trade_message);
+        packet.extract(hdr.refresh_outright_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_refresh_outright_imbalance_message {
-        packet.extract(hdr.refresh_outright_imbalance_message);
+        packet.extract(hdr.refresh_outright_imbalance_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_underlying_index_mapping_message {
-        packet.extract(hdr.underlying_index_mapping_message);
+        packet.extract(hdr.underlying_index_mapping_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_series_index_mapping_message {
-        packet.extract(hdr.series_index_mapping_message);
+        packet.extract(hdr.series_index_mapping_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_stream_id_message {
-        packet.extract(hdr.stream_id_message);
+        packet.extract(hdr.stream_id_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_sequence_number_reset_message {
-        packet.extract(hdr.sequence_number_reset_message);
+        packet.extract(hdr.sequence_number_reset_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
 }
@@ -433,7 +445,8 @@ control AmexoptionsTopfeedComputeChecksum(inout headers_t hdr, inout metadata_t 
 
 control AmexoptionsTopfeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.outright_quote_message);
         packet.emit(hdr.outright_trade_message);
         packet.emit(hdr.outright_trade_cancel_message);

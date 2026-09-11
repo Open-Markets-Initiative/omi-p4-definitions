@@ -31,16 +31,19 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_size;
     bit<32> seq_num;
-    bit<1> heartbeat;
-    bit<1> seq_num_reset;
-    bit<4> reserved_4;
-    bit<1> replay;
     bit<1> test;
+    bit<1> replay;
+    bit<4> reserved_4;
+    bit<1> seq_num_reset;
+    bit<1> heartbeat;
     bit<8> messages;
     bit<32> packet_milli;
+}
+
+header message_t {
     bit<16> message_size;
     bit<8> message_type;
 }
@@ -156,25 +159,39 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    start_of_spin_message_t start_of_spin_message;
-    end_of_spin_message_t end_of_spin_message;
-    trading_session_message_t trading_session_message;
-    security_message_t security_message;
-    order_add_message_t order_add_message;
-    order_update_message_t order_update_message;
-    order_delete_message_t order_delete_message;
-    order_execution_message_t order_execution_message;
-    order_execution_with_price_message_t order_execution_with_price_message;
-    trade_message_t trade_message;
-    imbalance_message_t imbalance_message;
-    system_recovery_event_message_t system_recovery_event_message;
+    packet_header_t packet_header;
+    message_t message[MAX_MESSAGES];
+    start_of_spin_message_t start_of_spin_message[MAX_MESSAGES];
+    end_of_spin_message_t end_of_spin_message[MAX_MESSAGES];
+    trading_session_message_t trading_session_message[MAX_MESSAGES];
+    security_message_t security_message[MAX_MESSAGES];
+    order_add_message_t order_add_message[MAX_MESSAGES];
+    order_update_message_t order_update_message[MAX_MESSAGES];
+    order_delete_message_t order_delete_message[MAX_MESSAGES];
+    order_execution_message_t order_execution_message[MAX_MESSAGES];
+    order_execution_with_price_message_t order_execution_with_price_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
+    imbalance_message_t imbalance_message[MAX_MESSAGES];
+    system_recovery_event_message_t system_recovery_event_message[MAX_MESSAGES];
 }
 
 parser OvernightDepthofbookParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.heartbeat) {
+            1w1: parse_heartbeat_packet;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_message {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             8w11: parse_start_of_spin_message;
             8w12: parse_end_of_spin_message;
             8w20: parse_trading_session_message;
@@ -192,75 +209,75 @@ parser OvernightDepthofbookParser(packet_in packet, out headers_t hdr, inout met
     }
 
     state parse_start_of_spin_message {
-        packet.extract(hdr.start_of_spin_message);
+        packet.extract(hdr.start_of_spin_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_end_of_spin_message {
-        packet.extract(hdr.end_of_spin_message);
+        packet.extract(hdr.end_of_spin_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_trading_session_message {
-        packet.extract(hdr.trading_session_message);
+        packet.extract(hdr.trading_session_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_security_message {
-        packet.extract(hdr.security_message);
+        packet.extract(hdr.security_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_order_add_message {
-        packet.extract(hdr.order_add_message);
+        packet.extract(hdr.order_add_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_order_update_message {
-        packet.extract(hdr.order_update_message);
+        packet.extract(hdr.order_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_order_delete_message {
-        packet.extract(hdr.order_delete_message);
+        packet.extract(hdr.order_delete_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_order_execution_message {
-        packet.extract(hdr.order_execution_message);
+        packet.extract(hdr.order_execution_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_order_execution_with_price_message {
-        packet.extract(hdr.order_execution_with_price_message);
+        packet.extract(hdr.order_execution_with_price_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_trade_message {
-        packet.extract(hdr.trade_message);
+        packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_imbalance_message {
-        packet.extract(hdr.imbalance_message);
+        packet.extract(hdr.imbalance_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_system_recovery_event_message {
-        packet.extract(hdr.system_recovery_event_message);
+        packet.extract(hdr.system_recovery_event_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
 }
@@ -293,7 +310,8 @@ control OvernightDepthofbookComputeChecksum(inout headers_t hdr, inout metadata_
 
 control OvernightDepthofbookDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.start_of_spin_message);
         packet.emit(hdr.end_of_spin_message);
         packet.emit(hdr.trading_session_message);

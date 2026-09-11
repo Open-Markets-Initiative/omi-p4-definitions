@@ -40,6 +40,9 @@ header common_header_t {
 
 header sequenced_message_t {
     bit<16> message_count;
+}
+
+header sequenced_message_message_t {
     bit<16> message_length;
     bit<16> block_length;
     bit<8> template_id;
@@ -124,13 +127,14 @@ struct metadata_t {
 struct headers_t {
     common_header_t common_header;
     sequenced_message_t sequenced_message;
-    instrument_directory_message_t instrument_directory_message;
-    reg_sho_restriction_message_t reg_sho_restriction_message;
-    security_trading_status_message_t security_trading_status_message;
-    trading_session_status_message_t trading_session_status_message;
-    trade_report_message_t trade_report_message;
-    trade_cancel_message_t trade_cancel_message;
-    trade_correct_message_t trade_correct_message;
+    sequenced_message_message_t sequenced_message_message[MAX_MESSAGES];
+    instrument_directory_message_t instrument_directory_message[MAX_MESSAGES];
+    reg_sho_restriction_message_t reg_sho_restriction_message[MAX_MESSAGES];
+    security_trading_status_message_t security_trading_status_message[MAX_MESSAGES];
+    trading_session_status_message_t trading_session_status_message[MAX_MESSAGES];
+    trade_report_message_t trade_report_message[MAX_MESSAGES];
+    trade_cancel_message_t trade_cancel_message[MAX_MESSAGES];
+    trade_correct_message_t trade_correct_message[MAX_MESSAGES];
 }
 
 parser MemxequitiesMemoirlastsaleParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -157,7 +161,15 @@ parser MemxequitiesMemoirlastsaleParser(packet_in packet, out headers_t hdr, ino
     state parse_sequenced_message {
         packet.extract(hdr.sequenced_message);
         meta.dispatched = 1;
-        transition select(hdr.sequenced_message.template_id) {
+        transition select(hdr.sequenced_message.message_count) {
+            16w0: accept;
+            default: parse_sequenced_message_message;
+        }
+    }
+
+    state parse_sequenced_message_message {
+        packet.extract(hdr.sequenced_message_message.next);
+        transition select(hdr.sequenced_message_message.last.template_id) {
             8w1: parse_instrument_directory_message;
             8w2: parse_reg_sho_restriction_message;
             8w3: parse_security_trading_status_message;
@@ -170,45 +182,45 @@ parser MemxequitiesMemoirlastsaleParser(packet_in packet, out headers_t hdr, ino
     }
 
     state parse_instrument_directory_message {
-        packet.extract(hdr.instrument_directory_message);
+        packet.extract(hdr.instrument_directory_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_reg_sho_restriction_message {
-        packet.extract(hdr.reg_sho_restriction_message);
+        packet.extract(hdr.reg_sho_restriction_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_security_trading_status_message {
-        packet.extract(hdr.security_trading_status_message);
+        packet.extract(hdr.security_trading_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_trading_session_status_message {
-        packet.extract(hdr.trading_session_status_message);
+        packet.extract(hdr.trading_session_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_trade_report_message {
-        packet.extract(hdr.trade_report_message);
+        packet.extract(hdr.trade_report_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_trade_cancel_message {
-        packet.extract(hdr.trade_cancel_message);
+        packet.extract(hdr.trade_cancel_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
     state parse_trade_correct_message {
-        packet.extract(hdr.trade_correct_message);
+        packet.extract(hdr.trade_correct_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_sequenced_message_message;
     }
 
 }
@@ -243,6 +255,7 @@ control MemxequitiesMemoirlastsaleDeparser(packet_out packet, in headers_t hdr) 
     apply {
         packet.emit(hdr.common_header);
         packet.emit(hdr.sequenced_message);
+        packet.emit(hdr.sequenced_message_message);
         packet.emit(hdr.instrument_directory_message);
         packet.emit(hdr.reg_sho_restriction_message);
         packet.emit(hdr.security_trading_status_message);

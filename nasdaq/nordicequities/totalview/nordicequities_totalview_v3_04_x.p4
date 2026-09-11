@@ -1,8 +1,8 @@
-// P4_16 (v1model) definition for: Nasdaq NordicEquities PureStream Itch v3.04.X
+// P4_16 (v1model) definition for: Nasdaq NordicEquities TotalView Itch v3.04.X
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Nordic Ouch 5 PureStream
+//   Protocol: Nordic Equity TotalView
 //   Encoding: Itch
 //   Version: 3.04.X
 //   Date: 11/12/2025
@@ -282,7 +282,7 @@ struct headers_t {
     execution_summary_message_t execution_summary_message[MAX_MESSAGES];
 }
 
-parser NordicequitiesPurestreamParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NordicequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
@@ -430,12 +430,12 @@ parser NordicequitiesPurestreamParser(packet_in packet, out headers_t hdr, inout
 
 }
 
-control NordicequitiesPurestreamVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicequitiesTotalviewVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesPurestreamIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicequitiesTotalviewIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -446,17 +446,17 @@ control NordicequitiesPurestreamIngress(inout headers_t hdr, inout metadata_t me
     }
 }
 
-control NordicequitiesPurestreamEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicequitiesTotalviewEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control NordicequitiesPurestreamComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicequitiesTotalviewComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesPurestreamDeparser(packet_out packet, in headers_t hdr) {
+control NordicequitiesTotalviewDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
@@ -481,10 +481,10 @@ control NordicequitiesPurestreamDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    NordicequitiesPurestreamParser(),
-    NordicequitiesPurestreamVerifyChecksum(),
-    NordicequitiesPurestreamIngress(),
-    NordicequitiesPurestreamEgress(),
-    NordicequitiesPurestreamComputeChecksum(),
-    NordicequitiesPurestreamDeparser()
+    NordicequitiesTotalviewParser(),
+    NordicequitiesTotalviewVerifyChecksum(),
+    NordicequitiesTotalviewIngress(),
+    NordicequitiesTotalviewEgress(),
+    NordicequitiesTotalviewComputeChecksum(),
+    NordicequitiesTotalviewDeparser()
 ) main;

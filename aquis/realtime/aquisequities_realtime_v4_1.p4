@@ -31,8 +31,11 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<8> message_count;
+}
+
+header packet_header_message_t {
     bit<8> msg_type;
     bit<8> msg_length;
     bit<32> seq_no;
@@ -140,7 +143,7 @@ header security_definition_message_t {
     bit<2> reserved_2;
     bit<1> avx_enabled;
     bit<8> reserved_8;
-    bit<160> reserved_char_2020;
+    bit<160> reserved;
     bit<64> lot_size;
     bit<8> lot_size_decimal;
 }
@@ -176,23 +179,32 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    order_add_t order_add;
-    order_cancel_t order_cancel;
-    order_modify_t order_modify;
-    trade_t trade;
-    trade_bust_message_t trade_bust_message;
-    tick_table_data_message_t tick_table_data_message;
-    security_definition_message_t security_definition_message;
-    security_status_message_t security_status_message;
-    ao_d_update_message_t ao_d_update_message;
-    ma_c_update_message_t ma_c_update_message;
+    packet_header_t packet_header;
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    order_add_t order_add[MAX_MESSAGES];
+    order_cancel_t order_cancel[MAX_MESSAGES];
+    order_modify_t order_modify[MAX_MESSAGES];
+    trade_t trade[MAX_MESSAGES];
+    trade_bust_message_t trade_bust_message[MAX_MESSAGES];
+    tick_table_data_message_t tick_table_data_message[MAX_MESSAGES];
+    security_definition_message_t security_definition_message[MAX_MESSAGES];
+    security_status_message_t security_status_message[MAX_MESSAGES];
+    ao_d_update_message_t ao_d_update_message[MAX_MESSAGES];
+    ma_c_update_message_t ma_c_update_message[MAX_MESSAGES];
 }
 
 parser AquisequitiesRealtimeParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.msg_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
+            8w0: accept;
+            default: parse_packet_header_message;
+        }
+    }
+
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             8w2: parse_order_add;
             8w3: parse_order_cancel;
             8w4: parse_order_modify;
@@ -208,63 +220,63 @@ parser AquisequitiesRealtimeParser(packet_in packet, out headers_t hdr, inout me
     }
 
     state parse_order_add {
-        packet.extract(hdr.order_add);
+        packet.extract(hdr.order_add.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_order_cancel {
-        packet.extract(hdr.order_cancel);
+        packet.extract(hdr.order_cancel.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_order_modify {
-        packet.extract(hdr.order_modify);
+        packet.extract(hdr.order_modify.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_trade {
-        packet.extract(hdr.trade);
+        packet.extract(hdr.trade.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_trade_bust_message {
-        packet.extract(hdr.trade_bust_message);
+        packet.extract(hdr.trade_bust_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_tick_table_data_message {
-        packet.extract(hdr.tick_table_data_message);
+        packet.extract(hdr.tick_table_data_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_security_definition_message {
-        packet.extract(hdr.security_definition_message);
+        packet.extract(hdr.security_definition_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_security_status_message {
-        packet.extract(hdr.security_status_message);
+        packet.extract(hdr.security_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_ao_d_update_message {
-        packet.extract(hdr.ao_d_update_message);
+        packet.extract(hdr.ao_d_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_ma_c_update_message {
-        packet.extract(hdr.ma_c_update_message);
+        packet.extract(hdr.ma_c_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
 }
@@ -297,7 +309,8 @@ control AquisequitiesRealtimeComputeChecksum(inout headers_t hdr, inout metadata
 
 control AquisequitiesRealtimeDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.order_add);
         packet.emit(hdr.order_cancel);
         packet.emit(hdr.order_modify);

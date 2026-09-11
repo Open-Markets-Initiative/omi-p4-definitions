@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> body_len;
     bit<16> template_id;
     bit<32> msg_seq_num;
@@ -273,7 +273,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
     heartbeat_message_t heartbeat_message;
     product_summary_message_t product_summary_message;
     snapshot_order_message_t snapshot_order_message;
@@ -302,8 +302,8 @@ struct headers_t {
 
 parser BseindiaEobiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id_2) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.template_id_2) {
             16w0xc932: parse_heartbeat_message;
             16w0x2035: parse_product_summary_message;
             16w0x2235: parse_snapshot_order_message;
@@ -524,7 +524,7 @@ control BseindiaEobiComputeChecksum(inout headers_t hdr, inout metadata_t meta) 
 
 control BseindiaEobiDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
         packet.emit(hdr.heartbeat_message);
         packet.emit(hdr.product_summary_message);
         packet.emit(hdr.snapshot_order_message);

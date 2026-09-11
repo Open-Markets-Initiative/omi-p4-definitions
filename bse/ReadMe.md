@@ -7,7 +7,7 @@
 | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
 | [BseIndia][BseIndia.Exchange] | [Eobi][Bse.BseIndia.Eobi] | [Fbe][Omi.Encoding.Fbe] | [1.4][Bse.BseIndia.Eobi.Fbe.v1.4.Definition] | 7/14/2025 | 562 | [Active][Omi.Glossary.Status.Active] | [Verified][Omi.Glossary.Testing.Verified] | [url][Bse.BseIndia.Eobi.Fbe.v1.4.Url] - [pdf][Bse.BseIndia.Eobi.Fbe.v1.4.Pdf] |
 | [BseIndia][BseIndia.Exchange] | [Eti][Bse.BseIndia.Eti] | [Fbe][Omi.Encoding.Fbe] | [1.6.14][Bse.BseIndia.Eti.Fbe.v1.6.14.Definition] | 3/30/2026 | 932 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Bse.BseIndia.Eti.Fbe.v1.6.14.Url] - [pdf][Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf] - [xml][Bse.BseIndia.Eti.Fbe.v1.6.14.Xml] |
-| [BseIndia][BseIndia.Exchange] | [Eti][Bse.BseIndia.Eti] | [Fbe][Omi.Encoding.Fbe] | [1.6.14][Bse.BseIndia.Eti.Fbe.v1.6.14.Definition] | 3/30/2026 | 2252 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Bse.BseIndia.Eti.Fbe.v1.6.14.Url] - [pdf][Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf] - [xml][Bse.BseIndia.Eti.Fbe.v1.6.14.Xml] |
+| [BseIndia][BseIndia.Exchange] | [Eti][Bse.BseIndia.Eti] | [Fbe][Omi.Encoding.Fbe] | [1.6.14][Bse.BseIndia.Eti.Fbe.v1.6.14.Definition] | 3/30/2026 | 2308 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Bse.BseIndia.Eti.Fbe.v1.6.14.Url] - [pdf][Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf] - [xml][Bse.BseIndia.Eti.Fbe.v1.6.14.Xml] |
 
 
 Bse: [website](https://www.bseindia.com "Go to BSE Limited")
@@ -35,12 +35,12 @@ Bse: [website](https://www.bseindia.com "Go to BSE Limited")
 
 [Bse.BseIndia.Eobi.Fbe.v1.4.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/bse/eobi/bseindia_eobi_v1_4.p4 "Bse BseIndia Eobi Fbe v1.4 P4 Definition"
 [Bse.BseIndia.Eobi.Fbe.v1.4.Url]: https://www.bseindia.com/nta "BSE Limited 1.4 Url"
-[Bse.BseIndia.Eobi.Fbe.v1.4.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Bse/Eobi/Bse.BseIndia.Eobi.Fbe.v1.4.pdf "BSE Limited 1.4 Pdf"
+[Bse.BseIndia.Eobi.Fbe.v1.4.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Eobi/Bse.BseIndia.Eobi.Fbe.v1.4.pdf "BSE Limited 1.4 Pdf"
 [Bse.BseIndia.Eti.Fbe.v1.6.14.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/bse/eti/bseindia_eti_v1_6_14_client.p4 "Bse BseIndia Eti Fbe v1.6.14 P4 Definition"
 [Bse.BseIndia.Eti.Fbe.v1.6.14.Url]: https://www.bseindia.com/nta "BSE Limited 1.6.14 Url"
-[Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Bse/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.pdf "BSE Limited 1.6.14 Pdf"
-[Bse.BseIndia.Eti.Fbe.v1.6.14.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Bse/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.xml "BSE Limited 1.6.14 Xml"
+[Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.pdf "BSE Limited 1.6.14 Pdf"
+[Bse.BseIndia.Eti.Fbe.v1.6.14.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.xml "BSE Limited 1.6.14 Xml"
 [Bse.BseIndia.Eti.Fbe.v1.6.14.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/bse/eti/bseindia_eti_v1_6_14_server.p4 "Bse BseIndia Eti Fbe v1.6.14 P4 Definition"
 [Bse.BseIndia.Eti.Fbe.v1.6.14.Url]: https://www.bseindia.com/nta "BSE Limited 1.6.14 Url"
-[Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Bse/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.pdf "BSE Limited 1.6.14 Pdf"
-[Bse.BseIndia.Eti.Fbe.v1.6.14.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Bse/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.xml "BSE Limited 1.6.14 Xml"
+[Bse.BseIndia.Eti.Fbe.v1.6.14.Pdf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.pdf "BSE Limited 1.6.14 Pdf"
+[Bse.BseIndia.Eti.Fbe.v1.6.14.Xml]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Organizations/Bse/Specifications/Eti/Bse.BseIndia.Eti.Fbe.v1.6.14.xml "BSE Limited 1.6.14 Xml"

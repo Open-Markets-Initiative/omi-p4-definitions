@@ -1345,6 +1345,38 @@ header user_password_change_response_t {
     bit<32> pad4;
 }
 
+header broadcast_error_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header forced_logout_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header multi_leg_order_reject_var_text_t {
+    varbit<2048> var_text;
+}
+
+header news_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header reject_var_text_t {
+    varbit<2048> var_text;
+}
+
+header risk_collateral_alert_admin_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header risk_collateral_alert_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header session_registration_response_var_text_t {
+    varbit<2048> var_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> delete_all_order_broadcast_not_affected_orders_grp_comp_remaining;
@@ -1446,6 +1478,14 @@ struct headers_t {
     user_login_response_t user_login_response;
     user_logout_response_t user_logout_response;
     user_password_change_response_t user_password_change_response;
+    broadcast_error_notification_var_text_t broadcast_error_notification_var_text;
+    forced_logout_notification_var_text_t forced_logout_notification_var_text;
+    multi_leg_order_reject_var_text_t multi_leg_order_reject_var_text;
+    news_broadcast_var_text_t news_broadcast_var_text;
+    reject_var_text_t reject_var_text;
+    risk_collateral_alert_admin_broadcast_var_text_t risk_collateral_alert_admin_broadcast_var_text;
+    risk_collateral_alert_broadcast_var_text_t risk_collateral_alert_broadcast_var_text;
+    session_registration_response_var_text_t session_registration_response_var_text;
 }
 
 parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -1510,6 +1550,7 @@ parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_broadcast_error_notification {
         packet.extract(hdr.broadcast_error_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.broadcast_error_notification_var_text, (bit<32>)hdr.broadcast_error_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -1628,6 +1669,7 @@ parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_forced_logout_notification {
         packet.extract(hdr.forced_logout_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.forced_logout_notification_var_text, (bit<32>)hdr.forced_logout_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -1820,6 +1862,7 @@ parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_multi_leg_order_reject {
         packet.extract(hdr.multi_leg_order_reject);
         meta.dispatched = 1;
+        packet.extract(hdr.multi_leg_order_reject_var_text, (bit<32>)hdr.multi_leg_order_reject.var_text_len * 8);
         transition accept;
     }
 
@@ -1838,6 +1881,7 @@ parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_news_broadcast {
         packet.extract(hdr.news_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.news_broadcast_var_text, (bit<32>)hdr.news_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -2024,6 +2068,7 @@ parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_reject {
         packet.extract(hdr.reject);
         meta.dispatched = 1;
+        packet.extract(hdr.reject_var_text, (bit<32>)hdr.reject.var_text_len * 8);
         transition accept;
     }
 
@@ -2042,12 +2087,14 @@ parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_risk_collateral_alert_admin_broadcast {
         packet.extract(hdr.risk_collateral_alert_admin_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.risk_collateral_alert_admin_broadcast_var_text, (bit<32>)hdr.risk_collateral_alert_admin_broadcast.var_text_len * 8);
         transition accept;
     }
 
     state parse_risk_collateral_alert_broadcast {
         packet.extract(hdr.risk_collateral_alert_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.risk_collateral_alert_broadcast_var_text, (bit<32>)hdr.risk_collateral_alert_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -2072,6 +2119,7 @@ parser BseindiaEtiServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_session_registration_response {
         packet.extract(hdr.session_registration_response);
         meta.dispatched = 1;
+        packet.extract(hdr.session_registration_response_var_text, (bit<32>)hdr.session_registration_response.var_text_len * 8);
         transition accept;
     }
 
@@ -2167,6 +2215,7 @@ control BseindiaEtiServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.broadcast_error_notification);
+        packet.emit(hdr.broadcast_error_notification_var_text);
         packet.emit(hdr.debt_inquiry_response);
         packet.emit(hdr.delete_all_order_broadcast);
         packet.emit(hdr.delete_all_order_broadcast_not_affected_orders_grp_comp);
@@ -2182,6 +2231,7 @@ control BseindiaEtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.delete_order_nr_response);
         packet.emit(hdr.delete_order_response);
         packet.emit(hdr.forced_logout_notification);
+        packet.emit(hdr.forced_logout_notification_var_text);
         packet.emit(hdr.gateway_response);
         packet.emit(hdr.gw_order_acknowledgement);
         packet.emit(hdr.heartbeat_notification);
@@ -2202,9 +2252,11 @@ control BseindiaEtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.multi_leg_exec_response_multi_leg_fill_grp_comp);
         packet.emit(hdr.multi_leg_exec_response_instrmnt_leg_exec_grp_comp);
         packet.emit(hdr.multi_leg_order_reject);
+        packet.emit(hdr.multi_leg_order_reject_var_text);
         packet.emit(hdr.new_order_nr_response);
         packet.emit(hdr.new_order_response);
         packet.emit(hdr.news_broadcast);
+        packet.emit(hdr.news_broadcast_var_text);
         packet.emit(hdr.order_exec_notification);
         packet.emit(hdr.order_exec_notification_fills_grp_comp);
         packet.emit(hdr.order_exec_notification_instrmnt_leg_exec_grp_comp);
@@ -2221,14 +2273,18 @@ control BseindiaEtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.quote_execution_report_quote_event_grp_comp);
         packet.emit(hdr.quote_execution_report_quote_leg_exec_grp_comp);
         packet.emit(hdr.reject);
+        packet.emit(hdr.reject_var_text);
         packet.emit(hdr.retransmit_me_message_response);
         packet.emit(hdr.retransmit_response);
         packet.emit(hdr.risk_collateral_alert_admin_broadcast);
+        packet.emit(hdr.risk_collateral_alert_admin_broadcast_var_text);
         packet.emit(hdr.risk_collateral_alert_broadcast);
+        packet.emit(hdr.risk_collateral_alert_broadcast_var_text);
         packet.emit(hdr.risk_notification_broadcast);
         packet.emit(hdr.service_availability_broadcast);
         packet.emit(hdr.session_password_change_response);
         packet.emit(hdr.session_registration_response);
+        packet.emit(hdr.session_registration_response_var_text);
         packet.emit(hdr.subscribe_response);
         packet.emit(hdr.tm_trading_session_status_broadcast);
         packet.emit(hdr.throttle_update_notification);

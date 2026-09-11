@@ -31,52 +31,76 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header packet_header_t {
+header login_message_t {
     bit<16> msg_type;
     bit<16> msg_length;
     bit<128> username;
     bit<256> password;
     bit<32> mic;
     bit<160> version;
-    bit<16> msg_type_2;
-    bit<16> msg_length_2;
-    bit<128> username_2;
+}
+
+header login_response_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<128> username;
     bit<8> status;
-    bit<16> msg_type_3;
-    bit<16> msg_length_3;
+}
+
+header stream_avail_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
     bit<32> sess;
     bit<32> user;
     bit<64> next_seq;
     bit<8> access;
-    bit<16> msg_type_4;
-    bit<16> msg_length_4;
-    bit<16> msg_type_5;
-    bit<16> msg_length_5;
-    bit<32> sess_2;
-    bit<32> user_2;
+}
+
+header heartbeat_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+}
+
+header open_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> user;
     bit<64> start_seq;
     bit<64> end_seq;
-    bit<8> access_2;
+    bit<8> access;
     bit<8> mode;
-    bit<16> msg_type_6;
-    bit<16> msg_length_6;
-    bit<32> sess_3;
-    bit<32> user_3;
-    bit<8> status_2;
-    bit<8> access_3;
-    bit<16> msg_type_7;
-    bit<16> msg_length_7;
-    bit<32> sess_4;
-    bit<32> user_4;
-    bit<16> msg_type_8;
-    bit<16> msg_length_8;
-    bit<32> sess_5;
-    bit<32> user_5;
-    bit<8> status_3;
-    bit<16> msg_type_9;
-    bit<16> msg_length_9;
-    bit<32> sess_6;
-    bit<32> user_6;
+}
+
+header open_response_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> user;
+    bit<8> status;
+    bit<8> access;
+}
+
+header close_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> user;
+}
+
+header close_response_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> user;
+    bit<8> status;
+}
+
+header seq_msg_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> user;
     bit<64> seq;
     bit<32> reserved_4;
     bit<64> timestamp;
@@ -108,14 +132,6 @@ header new_order_message_t {
     bit<80> user_data;
     bit<64> leg_open_close;
     bit<64> auction_id;
-    bit<16> sub_msg_type;
-    bit<16> sub_msg_length;
-    bit<64> stop_px;
-    bit<32> max_floor;
-    bit<40> deliver_to_comp_id;
-    bit<40> clearing_firm;
-    bit<128> optional_data;
-    bit<40> clearing_account;
 }
 
 header order_cancel_request_message_t {
@@ -182,14 +198,6 @@ header new_order_cross_message_t {
     bit<64> auction_id;
     bit<16> sub_msg_type_2;
     bit<16> sub_msg_length_2;
-    bit<64> stop_px;
-    bit<32> max_floor;
-    bit<40> deliver_to_comp_id;
-    bit<40> clearing_firm;
-    bit<128> optional_data;
-    bit<40> clearing_account;
-    bit<16> sub_msg_type_3;
-    bit<16> sub_msg_length_3;
     bit<32> symbol_id_2;
     bit<32> mpid_2;
     bit<80> market_maker_2;
@@ -203,14 +211,6 @@ header new_order_cross_message_t {
     bit<80> user_data_2;
     bit<64> leg_open_close_2;
     bit<64> auction_id_2;
-    bit<16> sub_msg_type_4;
-    bit<16> sub_msg_length_4;
-    bit<64> stop_px_2;
-    bit<32> max_floor_2;
-    bit<40> deliver_to_comp_id_2;
-    bit<40> clearing_firm_2;
-    bit<128> optional_data_2;
-    bit<40> clearing_account_2;
 }
 
 header bulk_cancel_request_type_223_message_t {
@@ -390,14 +390,6 @@ header order_and_cancel_replace_acknowledgement_message_t {
     bit<7> unused_7;
     bit<64> leg_open_close;
     bit<64> auction_id;
-    bit<16> sub_msg_type;
-    bit<16> sub_msg_length;
-    bit<64> stop_px;
-    bit<32> max_floor;
-    bit<40> deliver_to_comp_id;
-    bit<40> clearing_firm;
-    bit<128> optional_data;
-    bit<40> clearing_account;
 }
 
 header bulk_quote_acknowledgment_type_294_message_t {
@@ -497,14 +489,6 @@ header execution_report_message_t {
     bit<8> covered_or_uncovered;
     bit<64> cross_id;
     bit<8> open_close_u_81;
-    bit<16> sub_msg_type;
-    bit<16> sub_msg_length;
-    bit<64> stop_px;
-    bit<32> max_floor;
-    bit<40> deliver_to_comp_id;
-    bit<40> clearing_firm;
-    bit<128> optional_data;
-    bit<40> clearing_account;
 }
 
 header trade_bust_correct_message_t {
@@ -620,7 +604,15 @@ struct metadata_t {
 }
 
 struct headers_t {
-    packet_header_t packet_header;
+    login_message_t login_message;
+    login_response_t login_response;
+    stream_avail_t stream_avail;
+    heartbeat_t heartbeat;
+    open_t open;
+    open_response_t open_response;
+    close_t close;
+    close_response_t close_response;
+    seq_msg_t seq_msg;
     session_configuration_request_message_t session_configuration_request_message;
     new_order_message_t new_order_message;
     order_cancel_request_message_t order_cancel_request_message;
@@ -656,8 +648,72 @@ struct headers_t {
 
 parser AmexoptionsBinarygatewayParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.packet_header);
-        transition select(hdr.packet_header.seq_msg_type) {
+        transition select(packet.lookahead<bit<16>>()) {
+            16w0x102: parse_login_message;
+            16w0x202: parse_login_response;
+            16w0x302: parse_stream_avail;
+            16w0x402: parse_heartbeat;
+            16w0x502: parse_open;
+            16w0x602: parse_open_response;
+            16w0x702: parse_close;
+            16w0x802: parse_close_response;
+            16w0x509: parse_seq_msg;
+            default: accept;
+        }
+    }
+
+    state parse_login_message {
+        packet.extract(hdr.login_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_response {
+        packet.extract(hdr.login_response);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_stream_avail {
+        packet.extract(hdr.stream_avail);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_heartbeat {
+        packet.extract(hdr.heartbeat);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_open {
+        packet.extract(hdr.open);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_open_response {
+        packet.extract(hdr.open_response);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_close {
+        packet.extract(hdr.close);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_close_response {
+        packet.extract(hdr.close_response);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_seq_msg {
+        packet.extract(hdr.seq_msg);
+        meta.dispatched = 1;
+        transition select(hdr.seq_msg.seq_msg_type) {
             16w0x2002: parse_session_configuration_request_message;
             16w0x8202: parse_sequenced_filler_message;
             16w0x4802: parse_new_order_message;
@@ -921,7 +977,15 @@ control AmexoptionsBinarygatewayComputeChecksum(inout headers_t hdr, inout metad
 
 control AmexoptionsBinarygatewayDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.packet_header);
+        packet.emit(hdr.login_message);
+        packet.emit(hdr.login_response);
+        packet.emit(hdr.stream_avail);
+        packet.emit(hdr.heartbeat);
+        packet.emit(hdr.open);
+        packet.emit(hdr.open_response);
+        packet.emit(hdr.close);
+        packet.emit(hdr.close_response);
+        packet.emit(hdr.seq_msg);
         packet.emit(hdr.session_configuration_request_message);
         packet.emit(hdr.new_order_message);
         packet.emit(hdr.order_cancel_request_message);

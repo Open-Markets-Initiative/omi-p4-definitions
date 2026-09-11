@@ -31,13 +31,16 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> pkt_size;
     bit<8> delivery_flag;
     bit<8> number_msgs;
     bit<32> seq_num;
     bit<32> seconds;
     bit<32> nanoseconds;
+}
+
+header message_t {
     bit<16> message_size;
     bit<16> message_type;
 }
@@ -103,12 +106,6 @@ header delta_message_t {
     bit<8> update_count;
 }
 
-header delta_message_price_point_t {
-    bit<32> price;
-    bit<8> side;
-    bit<8> participants;
-}
-
 header imbalance_message_t {
     bit<32> source_time;
     bit<32> source_time_ns;
@@ -138,24 +135,36 @@ header imbalance_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> delta_message_price_point_remaining;
 }
 
 struct headers_t {
-    message_header_t message_header;
-    sequence_number_reset_message_t sequence_number_reset_message;
-    symbol_index_mapping_message_t symbol_index_mapping_message;
-    symbol_clear_message_t symbol_clear_message;
-    security_status_message_t security_status_message;
-    delta_message_t delta_message;
-    delta_message_price_point_t delta_message_price_point[MAX_MESSAGES];
-    imbalance_message_t imbalance_message;
+    packet_header_t packet_header;
+    message_t message[MAX_MESSAGES];
+    sequence_number_reset_message_t sequence_number_reset_message[MAX_MESSAGES];
+    symbol_index_mapping_message_t symbol_index_mapping_message[MAX_MESSAGES];
+    symbol_clear_message_t symbol_clear_message[MAX_MESSAGES];
+    security_status_message_t security_status_message[MAX_MESSAGES];
+    delta_message_t delta_message[MAX_MESSAGES];
+    imbalance_message_t imbalance_message[MAX_MESSAGES];
 }
 
 parser NationalequitiesDepthfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.delivery_flag) {
+            8w1: parse_heartbeat;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_message {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             16w0x100: parse_sequence_number_reset_message;
             16w0x300: parse_symbol_index_mapping_message;
             16w0x2000: parse_symbol_clear_message;
@@ -167,52 +176,39 @@ parser NationalequitiesDepthfeedParser(packet_in packet, out headers_t hdr, inou
     }
 
     state parse_sequence_number_reset_message {
-        packet.extract(hdr.sequence_number_reset_message);
+        packet.extract(hdr.sequence_number_reset_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_symbol_index_mapping_message {
-        packet.extract(hdr.symbol_index_mapping_message);
+        packet.extract(hdr.symbol_index_mapping_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_symbol_clear_message {
-        packet.extract(hdr.symbol_clear_message);
+        packet.extract(hdr.symbol_clear_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_security_status_message {
-        packet.extract(hdr.security_status_message);
+        packet.extract(hdr.security_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_delta_message {
-        packet.extract(hdr.delta_message);
+        packet.extract(hdr.delta_message.next);
         meta.dispatched = 1;
-        meta.delta_message_price_point_remaining = hdr.delta_message.update_count;
-        transition select(meta.delta_message_price_point_remaining) {
-            8w0: accept;
-            default: parse_delta_message_price_point;
-        }
-    }
-
-    state parse_delta_message_price_point {
-        packet.extract(hdr.delta_message_price_point.next);
-        meta.delta_message_price_point_remaining = meta.delta_message_price_point_remaining - 1;
-        transition select(meta.delta_message_price_point_remaining) {
-            8w0: accept;
-            default: parse_delta_message_price_point;
-        }
+        transition parse_message;
     }
 
     state parse_imbalance_message {
-        packet.extract(hdr.imbalance_message);
+        packet.extract(hdr.imbalance_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
 }
@@ -245,13 +241,13 @@ control NationalequitiesDepthfeedComputeChecksum(inout headers_t hdr, inout meta
 
 control NationalequitiesDepthfeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.sequence_number_reset_message);
         packet.emit(hdr.symbol_index_mapping_message);
         packet.emit(hdr.symbol_clear_message);
         packet.emit(hdr.security_status_message);
         packet.emit(hdr.delta_message);
-        packet.emit(hdr.delta_message_price_point);
         packet.emit(hdr.imbalance_message);
     }
 }

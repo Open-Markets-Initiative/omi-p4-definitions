@@ -2033,6 +2033,34 @@ header xetra_en_light_status_broadcast_t {
     bit<24> pad3;
 }
 
+header broadcast_error_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header forced_logout_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header forced_user_logout_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header legal_notification_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header news_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header reject_var_text_t {
+    varbit<2048> var_text;
+}
+
+header tes_approve_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> delete_all_order_broadcast_not_affected_orders_grp_comp_remaining;
@@ -2170,6 +2198,13 @@ struct headers_t {
     xetra_en_light_quote_requester_notification_srqs_quote_entry_grp_comp_t xetra_en_light_quote_requester_notification_srqs_quote_entry_grp_comp[MAX_MESSAGES];
     xetra_en_light_quote_response_t xetra_en_light_quote_response;
     xetra_en_light_status_broadcast_t xetra_en_light_status_broadcast;
+    broadcast_error_notification_var_text_t broadcast_error_notification_var_text;
+    forced_logout_notification_var_text_t forced_logout_notification_var_text;
+    forced_user_logout_notification_var_text_t forced_user_logout_notification_var_text;
+    legal_notification_broadcast_var_text_t legal_notification_broadcast_var_text;
+    news_broadcast_var_text_t news_broadcast_var_text;
+    reject_var_text_t reject_var_text;
+    tes_approve_broadcast_var_text_t tes_approve_broadcast_var_text;
 }
 
 parser EurexT7XtiServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -2262,6 +2297,7 @@ parser EurexT7XtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_broadcast_error_notification {
         packet.extract(hdr.broadcast_error_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.broadcast_error_notification_var_text, (bit<32>)hdr.broadcast_error_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -2454,12 +2490,14 @@ parser EurexT7XtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_forced_logout_notification {
         packet.extract(hdr.forced_logout_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.forced_logout_notification_var_text, (bit<32>)hdr.forced_logout_notification.var_text_len * 8);
         transition accept;
     }
 
     state parse_forced_user_logout_notification {
         packet.extract(hdr.forced_user_logout_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.forced_user_logout_notification_var_text, (bit<32>)hdr.forced_user_logout_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -2541,6 +2579,7 @@ parser EurexT7XtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_legal_notification_broadcast {
         packet.extract(hdr.legal_notification_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.legal_notification_broadcast_var_text, (bit<32>)hdr.legal_notification_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -2602,6 +2641,7 @@ parser EurexT7XtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_news_broadcast {
         packet.extract(hdr.news_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.news_broadcast_var_text, (bit<32>)hdr.news_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -2758,6 +2798,7 @@ parser EurexT7XtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_reject {
         packet.extract(hdr.reject);
         meta.dispatched = 1;
+        packet.extract(hdr.reject_var_text, (bit<32>)hdr.reject.var_text_len * 8);
         transition accept;
     }
 
@@ -2873,6 +2914,7 @@ parser EurexT7XtiServerParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_tes_approve_broadcast {
         packet.extract(hdr.tes_approve_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.tes_approve_broadcast_var_text, (bit<32>)hdr.tes_approve_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -3123,6 +3165,7 @@ control EurexT7XtiServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.broadcast_error_notification);
+        packet.emit(hdr.broadcast_error_notification_var_text);
         packet.emit(hdr.cross_request_response);
         packet.emit(hdr.delete_all_order_broadcast);
         packet.emit(hdr.delete_all_order_broadcast_not_affected_orders_grp_comp);
@@ -3143,7 +3186,9 @@ control EurexT7XtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.delete_order_response);
         packet.emit(hdr.extended_deletion_report);
         packet.emit(hdr.forced_logout_notification);
+        packet.emit(hdr.forced_logout_notification_var_text);
         packet.emit(hdr.forced_user_logout_notification);
+        packet.emit(hdr.forced_user_logout_notification_var_text);
         packet.emit(hdr.heartbeat_notification);
         packet.emit(hdr.inquire_enrichment_rule_id_list_response);
         packet.emit(hdr.inquire_enrichment_rule_id_list_response_enrichment_rules_grp_comp);
@@ -3154,6 +3199,7 @@ control EurexT7XtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.issuer_notification);
         packet.emit(hdr.issuer_security_state_change_response);
         packet.emit(hdr.legal_notification_broadcast);
+        packet.emit(hdr.legal_notification_broadcast_var_text);
         packet.emit(hdr.logon_response);
         packet.emit(hdr.logout_response);
         packet.emit(hdr.mass_quote_response);
@@ -3163,6 +3209,7 @@ control EurexT7XtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.new_order_nr_response);
         packet.emit(hdr.new_order_response);
         packet.emit(hdr.news_broadcast);
+        packet.emit(hdr.news_broadcast_var_text);
         packet.emit(hdr.order_exec_notification);
         packet.emit(hdr.order_exec_notification_fills_grp_comp);
         packet.emit(hdr.order_exec_report_broadcast);
@@ -3182,6 +3229,7 @@ control EurexT7XtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.rfq_response);
         packet.emit(hdr.rfq_specialist_broadcast);
         packet.emit(hdr.reject);
+        packet.emit(hdr.reject_var_text);
         packet.emit(hdr.retransmit_me_message_response);
         packet.emit(hdr.retransmit_response);
         packet.emit(hdr.service_availability_broadcast);
@@ -3197,6 +3245,7 @@ control EurexT7XtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.specialist_security_state_change_response);
         packet.emit(hdr.subscribe_response);
         packet.emit(hdr.tes_approve_broadcast);
+        packet.emit(hdr.tes_approve_broadcast_var_text);
         packet.emit(hdr.tes_broadcast);
         packet.emit(hdr.tes_broadcast_side_alloc_grp_bc_comp);
         packet.emit(hdr.tes_delete_broadcast);

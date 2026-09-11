@@ -31,11 +31,14 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<72> market_day_identifier;
     bit<8> feed_identifier;
     bit<64> sequence;
     bit<16> count;
+}
+
+header packet_header_message_t {
     bit<16> length;
     bit<8> message_type;
 }
@@ -144,23 +147,32 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    market_event_message_t market_event_message;
-    symbol_information_message_t symbol_information_message;
-    symbol_state_message_t symbol_state_message;
-    new_order_add_message_t new_order_add_message;
-    order_partial_cancel_message_t order_partial_cancel_message;
-    order_cancel_all_message_t order_cancel_all_message;
-    order_executed_message_t order_executed_message;
-    trade_message_t trade_message;
-    trade_cancel_message_t trade_cancel_message;
-    trade_correct_message_t trade_correct_message;
+    packet_header_t packet_header;
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    market_event_message_t market_event_message[MAX_MESSAGES];
+    symbol_information_message_t symbol_information_message[MAX_MESSAGES];
+    symbol_state_message_t symbol_state_message[MAX_MESSAGES];
+    new_order_add_message_t new_order_add_message[MAX_MESSAGES];
+    order_partial_cancel_message_t order_partial_cancel_message[MAX_MESSAGES];
+    order_cancel_all_message_t order_cancel_all_message[MAX_MESSAGES];
+    order_executed_message_t order_executed_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
+    trade_cancel_message_t trade_cancel_message[MAX_MESSAGES];
+    trade_correct_message_t trade_correct_message[MAX_MESSAGES];
 }
 
 parser CixatsCixaspenMarketdatafeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.count) {
+            16w0: accept;
+            default: parse_packet_header_message;
+        }
+    }
+
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.message_type) {
             8w0x41: parse_market_event_message;
             8w0x42: parse_symbol_information_message;
             8w0x43: parse_symbol_state_message;
@@ -176,63 +188,63 @@ parser CixatsCixaspenMarketdatafeedParser(packet_in packet, out headers_t hdr, i
     }
 
     state parse_market_event_message {
-        packet.extract(hdr.market_event_message);
+        packet.extract(hdr.market_event_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_symbol_information_message {
-        packet.extract(hdr.symbol_information_message);
+        packet.extract(hdr.symbol_information_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_symbol_state_message {
-        packet.extract(hdr.symbol_state_message);
+        packet.extract(hdr.symbol_state_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_new_order_add_message {
-        packet.extract(hdr.new_order_add_message);
+        packet.extract(hdr.new_order_add_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_order_partial_cancel_message {
-        packet.extract(hdr.order_partial_cancel_message);
+        packet.extract(hdr.order_partial_cancel_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_order_cancel_all_message {
-        packet.extract(hdr.order_cancel_all_message);
+        packet.extract(hdr.order_cancel_all_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_order_executed_message {
-        packet.extract(hdr.order_executed_message);
+        packet.extract(hdr.order_executed_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_trade_message {
-        packet.extract(hdr.trade_message);
+        packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_trade_cancel_message {
-        packet.extract(hdr.trade_cancel_message);
+        packet.extract(hdr.trade_cancel_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_trade_correct_message {
-        packet.extract(hdr.trade_correct_message);
+        packet.extract(hdr.trade_correct_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
 }
@@ -265,7 +277,8 @@ control CixatsCixaspenMarketdatafeedComputeChecksum(inout headers_t hdr, inout m
 
 control CixatsCixaspenMarketdatafeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.market_event_message);
         packet.emit(hdr.symbol_information_message);
         packet.emit(hdr.symbol_state_message);

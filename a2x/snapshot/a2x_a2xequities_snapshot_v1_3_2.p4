@@ -33,6 +33,9 @@
 
 header message_header_t {
     bit<8> message_count;
+}
+
+header message_header_message_t {
     bit<8> msg_type;
     bit<8> msg_length;
     bit<32> seq_no;
@@ -77,16 +80,25 @@ struct metadata_t {
 
 struct headers_t {
     message_header_t message_header;
-    snapshot_start_message_t snapshot_start_message;
-    book_status_message_t book_status_message;
-    book_entry_message_t book_entry_message;
-    market_at_close_book_entry_message_t market_at_close_book_entry_message;
+    message_header_message_t message_header_message[MAX_MESSAGES];
+    snapshot_start_message_t snapshot_start_message[MAX_MESSAGES];
+    book_status_message_t book_status_message[MAX_MESSAGES];
+    book_entry_message_t book_entry_message[MAX_MESSAGES];
+    market_at_close_book_entry_message_t market_at_close_book_entry_message[MAX_MESSAGES];
 }
 
 parser A2xA2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
-        transition select(hdr.message_header.msg_type) {
+        transition select(hdr.message_header.message_count) {
+            8w0: accept;
+            default: parse_message_header_message;
+        }
+    }
+
+    state parse_message_header_message {
+        packet.extract(hdr.message_header_message.next);
+        transition select(hdr.message_header_message.last.msg_type) {
             8w1: parse_heartbeat_message;
             8w10: parse_snapshot_start_message;
             8w11: parse_book_status_message;
@@ -98,31 +110,31 @@ parser A2xA2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_heartbeat_message {
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_snapshot_start_message {
-        packet.extract(hdr.snapshot_start_message);
+        packet.extract(hdr.snapshot_start_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_book_status_message {
-        packet.extract(hdr.book_status_message);
+        packet.extract(hdr.book_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_book_entry_message {
-        packet.extract(hdr.book_entry_message);
+        packet.extract(hdr.book_entry_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_market_at_close_book_entry_message {
-        packet.extract(hdr.market_at_close_book_entry_message);
+        packet.extract(hdr.market_at_close_book_entry_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
 }
@@ -156,6 +168,7 @@ control A2xA2xequitiesSnapshotComputeChecksum(inout headers_t hdr, inout metadat
 control A2xA2xequitiesSnapshotDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
+        packet.emit(hdr.message_header_message);
         packet.emit(hdr.snapshot_start_message);
         packet.emit(hdr.book_status_message);
         packet.emit(hdr.book_entry_message);

@@ -31,10 +31,14 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header message_t {
     bit<16> msg_length;
     bit<8> msg_type;
     bit<32> msg_seq_no;
+}
+
+header message_payload_t {
+    varbit<2048> payload;
 }
 
 struct metadata_t {
@@ -42,12 +46,14 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    message_t message;
+    message_payload_t message_payload;
 }
 
 parser AquisequitiesTcpheaderParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
+        packet.extract(hdr.message);
+        packet.extract(hdr.message_payload, (bit<32>)hdr.message.msg_length * 8);
         transition accept;
     }
 
@@ -76,7 +82,8 @@ control AquisequitiesTcpheaderComputeChecksum(inout headers_t hdr, inout metadat
 
 control AquisequitiesTcpheaderDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.message);
+        packet.emit(hdr.message_payload);
     }
 }
 

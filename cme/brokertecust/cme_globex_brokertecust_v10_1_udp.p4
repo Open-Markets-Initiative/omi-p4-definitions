@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header binary_packet_header_t {
     bit<32> packet_sequence_number;
     bit<64> sending_time;
     bit<16> message_size;
@@ -72,15 +72,15 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    binary_packet_header_t binary_packet_header;
     md_incremental_refresh_btec_t md_incremental_refresh_btec;
     md_incremental_refresh_btec_incremental_refresh_btec_group_t md_incremental_refresh_btec_incremental_refresh_btec_group[MAX_MESSAGES];
 }
 
 parser CmeGlobexBrokertecustUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.binary_packet_header);
+        transition select(hdr.binary_packet_header.template_id) {
             16w0x9501: parse_md_incremental_refresh_btec;
             16w0x9b01: parse_admin_heartbeat;
             default: accept;
@@ -141,7 +141,7 @@ control CmeGlobexBrokertecustUdpComputeChecksum(inout headers_t hdr, inout metad
 
 control CmeGlobexBrokertecustUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.binary_packet_header);
         packet.emit(hdr.md_incremental_refresh_btec);
         packet.emit(hdr.md_incremental_refresh_btec_incremental_refresh_btec_group);
     }

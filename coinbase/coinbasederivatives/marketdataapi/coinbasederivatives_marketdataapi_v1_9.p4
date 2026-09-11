@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<64> sending_time;
     bit<64> seq_num;
     bit<16> channel_id;
@@ -496,7 +496,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
     outright_instrument_definition_message_t outright_instrument_definition_message;
     spread_instrument_definition_message_t spread_instrument_definition_message;
     option_instrument_definition_message_t option_instrument_definition_message;
@@ -525,8 +525,8 @@ struct headers_t {
 
 parser CoinbasederivativesMarketdataapiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.template_id) {
             16w0xa00: parse_outright_instrument_definition_message;
             16w0xb00: parse_spread_instrument_definition_message;
             16w0xc00: parse_option_instrument_definition_message;
@@ -729,7 +729,7 @@ control CoinbasederivativesMarketdataapiComputeChecksum(inout headers_t hdr, ino
 
 control CoinbasederivativesMarketdataapiDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
         packet.emit(hdr.outright_instrument_definition_message);
         packet.emit(hdr.spread_instrument_definition_message);
         packet.emit(hdr.option_instrument_definition_message);

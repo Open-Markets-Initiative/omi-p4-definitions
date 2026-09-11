@@ -31,13 +31,16 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> pkt_size;
     bit<8> delivery_flag;
     bit<8> number_msgs;
     bit<32> seq_num;
     bit<32> seconds;
     bit<32> nanoseconds;
+}
+
+header message_t {
     bit<16> message_size;
     bit<16> message_type;
 }
@@ -250,30 +253,44 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    sequence_number_reset_message_t sequence_number_reset_message;
-    source_time_reference_message_t source_time_reference_message;
-    symbol_index_mapping_message_t symbol_index_mapping_message;
-    symbol_clear_message_t symbol_clear_message;
-    security_status_message_t security_status_message;
-    add_order_message_t add_order_message;
-    modify_order_message_t modify_order_message;
-    delete_order_message_t delete_order_message;
-    order_execution_message_t order_execution_message;
-    replace_order_message_t replace_order_message;
-    imbalance_message_t imbalance_message;
-    add_order_refresh_message_t add_order_refresh_message;
-    non_displayed_trade_message_t non_displayed_trade_message;
-    cross_trade_message_t cross_trade_message;
-    trade_cancel_message_t trade_cancel_message;
-    cross_correction_message_t cross_correction_message;
-    retail_price_improvement_message_t retail_price_improvement_message;
+    packet_header_t packet_header;
+    message_t message[MAX_MESSAGES];
+    sequence_number_reset_message_t sequence_number_reset_message[MAX_MESSAGES];
+    source_time_reference_message_t source_time_reference_message[MAX_MESSAGES];
+    symbol_index_mapping_message_t symbol_index_mapping_message[MAX_MESSAGES];
+    symbol_clear_message_t symbol_clear_message[MAX_MESSAGES];
+    security_status_message_t security_status_message[MAX_MESSAGES];
+    add_order_message_t add_order_message[MAX_MESSAGES];
+    modify_order_message_t modify_order_message[MAX_MESSAGES];
+    delete_order_message_t delete_order_message[MAX_MESSAGES];
+    order_execution_message_t order_execution_message[MAX_MESSAGES];
+    replace_order_message_t replace_order_message[MAX_MESSAGES];
+    imbalance_message_t imbalance_message[MAX_MESSAGES];
+    add_order_refresh_message_t add_order_refresh_message[MAX_MESSAGES];
+    non_displayed_trade_message_t non_displayed_trade_message[MAX_MESSAGES];
+    cross_trade_message_t cross_trade_message[MAX_MESSAGES];
+    trade_cancel_message_t trade_cancel_message[MAX_MESSAGES];
+    cross_correction_message_t cross_correction_message[MAX_MESSAGES];
+    retail_price_improvement_message_t retail_price_improvement_message[MAX_MESSAGES];
 }
 
 parser NyseequitiesIntegratedfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.delivery_flag) {
+            8w1: parse_heartbeat;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_message {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             16w0x100: parse_sequence_number_reset_message;
             16w0x200: parse_source_time_reference_message;
             16w0x300: parse_symbol_index_mapping_message;
@@ -296,105 +313,105 @@ parser NyseequitiesIntegratedfeedParser(packet_in packet, out headers_t hdr, ino
     }
 
     state parse_sequence_number_reset_message {
-        packet.extract(hdr.sequence_number_reset_message);
+        packet.extract(hdr.sequence_number_reset_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_source_time_reference_message {
-        packet.extract(hdr.source_time_reference_message);
+        packet.extract(hdr.source_time_reference_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_symbol_index_mapping_message {
-        packet.extract(hdr.symbol_index_mapping_message);
+        packet.extract(hdr.symbol_index_mapping_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_symbol_clear_message {
-        packet.extract(hdr.symbol_clear_message);
+        packet.extract(hdr.symbol_clear_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_security_status_message {
-        packet.extract(hdr.security_status_message);
+        packet.extract(hdr.security_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_add_order_message {
-        packet.extract(hdr.add_order_message);
+        packet.extract(hdr.add_order_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_modify_order_message {
-        packet.extract(hdr.modify_order_message);
+        packet.extract(hdr.modify_order_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_delete_order_message {
-        packet.extract(hdr.delete_order_message);
+        packet.extract(hdr.delete_order_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_order_execution_message {
-        packet.extract(hdr.order_execution_message);
+        packet.extract(hdr.order_execution_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_replace_order_message {
-        packet.extract(hdr.replace_order_message);
+        packet.extract(hdr.replace_order_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_imbalance_message {
-        packet.extract(hdr.imbalance_message);
+        packet.extract(hdr.imbalance_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_add_order_refresh_message {
-        packet.extract(hdr.add_order_refresh_message);
+        packet.extract(hdr.add_order_refresh_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_non_displayed_trade_message {
-        packet.extract(hdr.non_displayed_trade_message);
+        packet.extract(hdr.non_displayed_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_cross_trade_message {
-        packet.extract(hdr.cross_trade_message);
+        packet.extract(hdr.cross_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_trade_cancel_message {
-        packet.extract(hdr.trade_cancel_message);
+        packet.extract(hdr.trade_cancel_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_cross_correction_message {
-        packet.extract(hdr.cross_correction_message);
+        packet.extract(hdr.cross_correction_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_retail_price_improvement_message {
-        packet.extract(hdr.retail_price_improvement_message);
+        packet.extract(hdr.retail_price_improvement_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
 }
@@ -427,7 +444,8 @@ control NyseequitiesIntegratedfeedComputeChecksum(inout headers_t hdr, inout met
 
 control NyseequitiesIntegratedfeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.sequence_number_reset_message);
         packet.emit(hdr.source_time_reference_message);
         packet.emit(hdr.symbol_index_mapping_message);

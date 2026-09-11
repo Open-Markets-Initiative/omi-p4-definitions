@@ -31,13 +31,16 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_size;
     bit<8> delivery_flag;
     bit<8> message_count;
     bit<32> sequence_number;
     bit<32> timestamp;
     bit<32> nanoseconds;
+}
+
+header packet_header_message_t {
     bit<16> message_size;
     bit<16> message_type;
 }
@@ -169,24 +172,33 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    complex_quote_message_t complex_quote_message;
-    complex_trade_message_t complex_trade_message;
-    complex_crossing_rfq_message_t complex_crossing_rfq_message;
-    complex_cube_rfq_message_t complex_cube_rfq_message;
-    complex_status_message_t complex_status_message;
-    refresh_complex_quote_message_t refresh_complex_quote_message;
-    refresh_complex_trade_message_t refresh_complex_trade_message;
-    complex_symbol_definition_message_t complex_symbol_definition_message;
+    packet_header_t packet_header;
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    complex_quote_message_t complex_quote_message[MAX_MESSAGES];
+    complex_trade_message_t complex_trade_message[MAX_MESSAGES];
+    complex_crossing_rfq_message_t complex_crossing_rfq_message[MAX_MESSAGES];
+    complex_cube_rfq_message_t complex_cube_rfq_message[MAX_MESSAGES];
+    complex_status_message_t complex_status_message[MAX_MESSAGES];
+    refresh_complex_quote_message_t refresh_complex_quote_message[MAX_MESSAGES];
+    refresh_complex_trade_message_t refresh_complex_trade_message[MAX_MESSAGES];
+    complex_symbol_definition_message_t complex_symbol_definition_message[MAX_MESSAGES];
     complex_symbol_definition_message_leg_definition_t complex_symbol_definition_message_leg_definition[MAX_MESSAGES];
-    stream_id_message_t stream_id_message;
-    sequence_number_reset_message_t sequence_number_reset_message;
+    stream_id_message_t stream_id_message[MAX_MESSAGES];
+    sequence_number_reset_message_t sequence_number_reset_message[MAX_MESSAGES];
 }
 
 parser AmexoptionsComplexfeedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
+            8w0: accept;
+            default: parse_packet_header_message;
+        }
+    }
+
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.message_type) {
             16w0xa701: parse_complex_quote_message;
             16w0xa901: parse_complex_trade_message;
             16w0xad01: parse_complex_crossing_rfq_message;
@@ -202,53 +214,53 @@ parser AmexoptionsComplexfeedParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_complex_quote_message {
-        packet.extract(hdr.complex_quote_message);
+        packet.extract(hdr.complex_quote_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_complex_trade_message {
-        packet.extract(hdr.complex_trade_message);
+        packet.extract(hdr.complex_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_complex_crossing_rfq_message {
-        packet.extract(hdr.complex_crossing_rfq_message);
+        packet.extract(hdr.complex_crossing_rfq_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_complex_cube_rfq_message {
-        packet.extract(hdr.complex_cube_rfq_message);
+        packet.extract(hdr.complex_cube_rfq_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_complex_status_message {
-        packet.extract(hdr.complex_status_message);
+        packet.extract(hdr.complex_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_refresh_complex_quote_message {
-        packet.extract(hdr.refresh_complex_quote_message);
+        packet.extract(hdr.refresh_complex_quote_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_refresh_complex_trade_message {
-        packet.extract(hdr.refresh_complex_trade_message);
+        packet.extract(hdr.refresh_complex_trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_complex_symbol_definition_message {
-        packet.extract(hdr.complex_symbol_definition_message);
+        packet.extract(hdr.complex_symbol_definition_message.next);
         meta.dispatched = 1;
-        meta.complex_symbol_definition_message_leg_definition_remaining = hdr.complex_symbol_definition_message.no_of_legs;
+        meta.complex_symbol_definition_message_leg_definition_remaining = hdr.complex_symbol_definition_message.last.no_of_legs;
         transition select(meta.complex_symbol_definition_message_leg_definition_remaining) {
-            16w0: accept;
+            16w0: parse_packet_header_message;
             default: parse_complex_symbol_definition_message_leg_definition;
         }
     }
@@ -257,21 +269,21 @@ parser AmexoptionsComplexfeedParser(packet_in packet, out headers_t hdr, inout m
         packet.extract(hdr.complex_symbol_definition_message_leg_definition.next);
         meta.complex_symbol_definition_message_leg_definition_remaining = meta.complex_symbol_definition_message_leg_definition_remaining - 1;
         transition select(meta.complex_symbol_definition_message_leg_definition_remaining) {
-            16w0: accept;
+            16w0: parse_packet_header_message;
             default: parse_complex_symbol_definition_message_leg_definition;
         }
     }
 
     state parse_stream_id_message {
-        packet.extract(hdr.stream_id_message);
+        packet.extract(hdr.stream_id_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_sequence_number_reset_message {
-        packet.extract(hdr.sequence_number_reset_message);
+        packet.extract(hdr.sequence_number_reset_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
 }
@@ -304,7 +316,8 @@ control AmexoptionsComplexfeedComputeChecksum(inout headers_t hdr, inout metadat
 
 control AmexoptionsComplexfeedDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.complex_quote_message);
         packet.emit(hdr.complex_trade_message);
         packet.emit(hdr.complex_crossing_rfq_message);

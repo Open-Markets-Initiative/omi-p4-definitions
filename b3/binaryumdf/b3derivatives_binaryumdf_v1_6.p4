@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<8> channel_id;
     bit<8> reserved;
     bit<16> sequence_version;
@@ -659,7 +659,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
     sequence_message_t sequence_message;
     security_status_3_message_t security_status_3_message;
     security_group_phase_10_message_t security_group_phase_10_message;
@@ -696,8 +696,8 @@ struct headers_t {
 
 parser B3derivativesBinaryumdfParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.template_id) {
             16w0x100: parse_sequence_reset_message;
             16w0x200: parse_sequence_message;
             16w0x300: parse_security_status_3_message;
@@ -982,7 +982,7 @@ control B3derivativesBinaryumdfComputeChecksum(inout headers_t hdr, inout metada
 
 control B3derivativesBinaryumdfDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
         packet.emit(hdr.sequence_message);
         packet.emit(hdr.security_status_3_message);
         packet.emit(hdr.security_group_phase_10_message);

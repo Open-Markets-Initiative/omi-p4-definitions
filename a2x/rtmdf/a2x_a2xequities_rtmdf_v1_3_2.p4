@@ -33,6 +33,9 @@
 
 header message_header_t {
     bit<8> message_count;
+}
+
+header message_header_message_t {
     bit<8> msg_type;
     bit<8> msg_length;
     bit<32> seq_no;
@@ -132,22 +135,31 @@ struct metadata_t {
 
 struct headers_t {
     message_header_t message_header;
-    order_add_message_t order_add_message;
-    order_cancel_message_t order_cancel_message;
-    order_modify_message_t order_modify_message;
-    trade_message_t trade_message;
-    trade_bust_message_t trade_bust_message;
-    tick_table_data_message_t tick_table_data_message;
-    security_definition_message_t security_definition_message;
-    security_status_message_t security_status_message;
-    auction_on_demand_message_t auction_on_demand_message;
-    market_at_close_t market_at_close;
+    message_header_message_t message_header_message[MAX_MESSAGES];
+    order_add_message_t order_add_message[MAX_MESSAGES];
+    order_cancel_message_t order_cancel_message[MAX_MESSAGES];
+    order_modify_message_t order_modify_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
+    trade_bust_message_t trade_bust_message[MAX_MESSAGES];
+    tick_table_data_message_t tick_table_data_message[MAX_MESSAGES];
+    security_definition_message_t security_definition_message[MAX_MESSAGES];
+    security_status_message_t security_status_message[MAX_MESSAGES];
+    auction_on_demand_message_t auction_on_demand_message[MAX_MESSAGES];
+    market_at_close_t market_at_close[MAX_MESSAGES];
 }
 
 parser A2xA2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
-        transition select(hdr.message_header.msg_type) {
+        transition select(hdr.message_header.message_count) {
+            8w0: accept;
+            default: parse_message_header_message;
+        }
+    }
+
+    state parse_message_header_message {
+        packet.extract(hdr.message_header_message.next);
+        transition select(hdr.message_header_message.last.msg_type) {
             8w1: parse_heartbeat_message;
             8w2: parse_order_add_message;
             8w3: parse_order_cancel_message;
@@ -165,67 +177,67 @@ parser A2xA2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout meta
 
     state parse_heartbeat_message {
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_order_add_message {
-        packet.extract(hdr.order_add_message);
+        packet.extract(hdr.order_add_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_order_cancel_message {
-        packet.extract(hdr.order_cancel_message);
+        packet.extract(hdr.order_cancel_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_order_modify_message {
-        packet.extract(hdr.order_modify_message);
+        packet.extract(hdr.order_modify_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_trade_message {
-        packet.extract(hdr.trade_message);
+        packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_trade_bust_message {
-        packet.extract(hdr.trade_bust_message);
+        packet.extract(hdr.trade_bust_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_tick_table_data_message {
-        packet.extract(hdr.tick_table_data_message);
+        packet.extract(hdr.tick_table_data_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_security_definition_message {
-        packet.extract(hdr.security_definition_message);
+        packet.extract(hdr.security_definition_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_security_status_message {
-        packet.extract(hdr.security_status_message);
+        packet.extract(hdr.security_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_auction_on_demand_message {
-        packet.extract(hdr.auction_on_demand_message);
+        packet.extract(hdr.auction_on_demand_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
     state parse_market_at_close {
-        packet.extract(hdr.market_at_close);
+        packet.extract(hdr.market_at_close.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message_header_message;
     }
 
 }
@@ -259,6 +271,7 @@ control A2xA2xequitiesRtmdfComputeChecksum(inout headers_t hdr, inout metadata_t
 control A2xA2xequitiesRtmdfDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
+        packet.emit(hdr.message_header_message);
         packet.emit(hdr.order_add_message);
         packet.emit(hdr.order_cancel_message);
         packet.emit(hdr.order_modify_message);

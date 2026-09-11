@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header technical_header_t {
     bit<16> encoding_type;
     bit<32> message_sequence_number;
     bit<64> tcp_sending_time;
@@ -713,7 +713,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    technical_header_t technical_header;
     admin_login_t admin_login;
     admin_logout_t admin_logout;
     md_incremental_refresh_eris_reference_data_and_daily_statistics_t md_incremental_refresh_eris_reference_data_and_daily_statistics;
@@ -756,8 +756,8 @@ struct headers_t {
 
 parser CmeGlobexStreamlinedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.technical_header);
+        transition select(hdr.technical_header.template_id) {
             16w0x3801: parse_admin_heartbeat;
             16w0x3b01: parse_admin_login;
             16w0x3c01: parse_admin_logout;
@@ -1162,7 +1162,7 @@ control CmeGlobexStreamlinedTcpComputeChecksum(inout headers_t hdr, inout metada
 
 control CmeGlobexStreamlinedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.technical_header);
         packet.emit(hdr.admin_login);
         packet.emit(hdr.admin_logout);
         packet.emit(hdr.md_incremental_refresh_eris_reference_data_and_daily_statistics);

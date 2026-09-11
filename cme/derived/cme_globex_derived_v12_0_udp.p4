@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header binary_packet_header_t {
     bit<32> packet_sequence_number;
     bit<64> sending_time;
     bit<16> message_size;
@@ -161,7 +161,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    binary_packet_header_t binary_packet_header;
     md_incremental_refresh_spectrum_t md_incremental_refresh_spectrum;
     md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_t md_incremental_refresh_spectrum_incremental_refresh_spectrum_group[MAX_MESSAGES];
     md_incremental_refresh_ticker_t md_incremental_refresh_ticker;
@@ -175,8 +175,8 @@ struct headers_t {
 
 parser CmeGlobexDerivedUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.binary_packet_header);
+        transition select(hdr.binary_packet_header.template_id) {
             16w0x2e01: parse_admin_heartbeat;
             16w0x2f01: parse_md_incremental_refresh_spectrum;
             16w0x3001: parse_md_incremental_refresh_ticker;
@@ -304,7 +304,7 @@ control CmeGlobexDerivedUdpComputeChecksum(inout headers_t hdr, inout metadata_t
 
 control CmeGlobexDerivedUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.binary_packet_header);
         packet.emit(hdr.md_incremental_refresh_spectrum);
         packet.emit(hdr.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group);
         packet.emit(hdr.md_incremental_refresh_ticker);

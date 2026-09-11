@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_comp_t {
+header packet_header_t {
     bit<16> body_len;
     bit<16> template_id;
     bit<32> msg_seq_num;
@@ -426,7 +426,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_comp_t message_header_comp;
+    packet_header_t packet_header;
     add_complex_instrument_t add_complex_instrument;
     add_complex_instrument_instrmt_leg_grp_comp_t add_complex_instrument_instrmt_leg_grp_comp[MAX_MESSAGES];
     add_flexible_instrument_t add_flexible_instrument;
@@ -461,8 +461,8 @@ struct headers_t {
 
 parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header_comp);
-        transition select(hdr.message_header_comp.template_id_2) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.template_id_2) {
             16w0x5834: parse_add_complex_instrument;
             16w0x5934: parse_add_flexible_instrument;
             16w0x5a34: parse_add_scaled_simple_instrument;
@@ -731,7 +731,7 @@ control EurexT7EobiComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
 
 control EurexT7EobiDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header_comp);
+        packet.emit(hdr.packet_header);
         packet.emit(hdr.add_complex_instrument);
         packet.emit(hdr.add_complex_instrument_instrmt_leg_grp_comp);
         packet.emit(hdr.add_flexible_instrument);

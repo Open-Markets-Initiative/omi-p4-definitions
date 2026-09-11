@@ -37,6 +37,9 @@ header snapshot_header_t {
     bit<32> number_of_records;
     bit<32> last_sequence_number;
     bit<16> stream_id;
+}
+
+header snapshot_header_message_t {
     bit<8> message_type;
 }
 
@@ -64,14 +67,23 @@ struct metadata_t {
 
 struct headers_t {
     snapshot_header_t snapshot_header;
-    new_order_message_t new_order_message;
-    new_spread_order_message_t new_spread_order_message;
+    snapshot_header_message_t snapshot_header_message[MAX_MESSAGES];
+    new_order_message_t new_order_message[MAX_MESSAGES];
+    new_spread_order_message_t new_spread_order_message[MAX_MESSAGES];
 }
 
 parser NsecomSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.snapshot_header);
-        transition select(hdr.snapshot_header.message_type) {
+        transition select(hdr.snapshot_header.number_of_records) {
+            32w0: accept;
+            default: parse_snapshot_header_message;
+        }
+    }
+
+    state parse_snapshot_header_message {
+        packet.extract(hdr.snapshot_header_message.next);
+        transition select(hdr.snapshot_header_message.last.message_type) {
             8w0x4e: parse_new_order_message;
             8w0x47: parse_new_spread_order_message;
             default: accept;
@@ -79,15 +91,15 @@ parser NsecomSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_
     }
 
     state parse_new_order_message {
-        packet.extract(hdr.new_order_message);
+        packet.extract(hdr.new_order_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_snapshot_header_message;
     }
 
     state parse_new_spread_order_message {
-        packet.extract(hdr.new_spread_order_message);
+        packet.extract(hdr.new_spread_order_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_snapshot_header_message;
     }
 
 }
@@ -121,6 +133,7 @@ control NsecomSnapshotComputeChecksum(inout headers_t hdr, inout metadata_t meta
 control NsecomSnapshotDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.snapshot_header);
+        packet.emit(hdr.snapshot_header_message);
         packet.emit(hdr.new_order_message);
         packet.emit(hdr.new_spread_order_message);
     }

@@ -1,8 +1,8 @@
-// P4_16 (v1model) definition for: Nasdaq NordicEquities PureStream Ouch v5.02.6
+// P4_16 (v1model) definition for: Nasdaq NordicEquities OrderEntry Ouch v5.02.6
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Nordic Ouch 5 PureStream
+//   Protocol: Nordic Ouch 5 Order Entry
 //   Encoding: Ouch
 //   Version: 5.02.6
 //   Date: 11/12/2025
@@ -283,7 +283,7 @@ struct headers_t {
     mmi_notification_request_message_t mmi_notification_request_message;
 }
 
-parser NordicequitiesPurestreamClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NordicequitiesOrderentryClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.client_packet_header);
         transition select(hdr.client_packet_header.client_packet_type) {
@@ -638,12 +638,12 @@ parser NordicequitiesPurestreamClientParser(packet_in packet, out headers_t hdr,
 
 }
 
-control NordicequitiesPurestreamClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicequitiesOrderentryClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesPurestreamClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicequitiesOrderentryClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -654,17 +654,17 @@ control NordicequitiesPurestreamClientIngress(inout headers_t hdr, inout metadat
     }
 }
 
-control NordicequitiesPurestreamClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicequitiesOrderentryClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control NordicequitiesPurestreamClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicequitiesOrderentryClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesPurestreamClientDeparser(packet_out packet, in headers_t hdr) {
+control NordicequitiesOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
         packet.emit(hdr.debug_packet);
@@ -712,10 +712,10 @@ control NordicequitiesPurestreamClientDeparser(packet_out packet, in headers_t h
 }
 
 V1Switch(
-    NordicequitiesPurestreamClientParser(),
-    NordicequitiesPurestreamClientVerifyChecksum(),
-    NordicequitiesPurestreamClientIngress(),
-    NordicequitiesPurestreamClientEgress(),
-    NordicequitiesPurestreamClientComputeChecksum(),
-    NordicequitiesPurestreamClientDeparser()
+    NordicequitiesOrderentryClientParser(),
+    NordicequitiesOrderentryClientVerifyChecksum(),
+    NordicequitiesOrderentryClientIngress(),
+    NordicequitiesOrderentryClientEgress(),
+    NordicequitiesOrderentryClientComputeChecksum(),
+    NordicequitiesOrderentryClientDeparser()
 ) main;

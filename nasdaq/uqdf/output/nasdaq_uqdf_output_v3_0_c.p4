@@ -64,20 +64,6 @@ header utp_quote_shortform_message_t {
     bit<8> retail_interest_indicator;
     bit<8> nbbo_appendage_indicator;
     bit<8> luld_national_bbo_indicator;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
-    bit<16> national_best_bid_price_short;
-    bit<16> national_best_bid_size_short;
-    bit<8> national_best_ask_market_center;
-    bit<16> national_best_ask_price_short;
-    bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition_2;
-    bit<8> national_best_bid_market_center_2;
-    bit<64> national_best_bid_price_long;
-    bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center_2;
-    bit<64> national_best_ask_price_long;
-    bit<32> national_best_ask_size_long;
 }
 
 header utp_quote_longform_message_t {
@@ -99,20 +85,6 @@ header utp_quote_longform_message_t {
     bit<8> nbbo_appendage_indicator;
     bit<8> luld_national_bbo_indicator;
     bit<8> finra_adf_mpid_appendage_indicator;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
-    bit<16> national_best_bid_price_short;
-    bit<16> national_best_bid_size_short;
-    bit<8> national_best_ask_market_center;
-    bit<16> national_best_ask_price_short;
-    bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition_2;
-    bit<8> national_best_bid_market_center_2;
-    bit<64> national_best_bid_price_long;
-    bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center_2;
-    bit<64> national_best_ask_price_long;
-    bit<32> national_best_ask_size_long;
 }
 
 header finra_adf_market_participant_quotation_message_t {
@@ -151,40 +123,6 @@ header combined_quote_message_short_form_message_t {
     bit<8> bolo_appendage_indicator;
     bit<8> odd_lot_attachment_type;
     bit<16> odd_lot_attachment_count;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
-    bit<16> national_best_bid_price_short;
-    bit<16> national_best_bid_size_short;
-    bit<8> national_best_ask_market_center;
-    bit<16> national_best_ask_price_short;
-    bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition_2;
-    bit<8> national_best_bid_market_center_2;
-    bit<64> national_best_bid_price_long;
-    bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center_2;
-    bit<64> national_best_ask_price_long;
-    bit<32> national_best_ask_size_long;
-    bit<8> bolo_best_bid_market_center;
-    bit<16> bolo_bid_price_short;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<16> bolo_ask_price_short;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center_2;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size_2;
-    bit<8> bolo_best_ask_market_center_2;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size_2;
-    bit<8> bolo_best_bid_market_center_3;
-    bit<64> bolo_bid_price_long_2;
-    bit<16> bolo_bid_size_3;
-    bit<8> bolo_best_ask_market_center_3;
-    bit<64> bolo_ask_price_long_2;
-    bit<16> bolo_ask_size_3;
-    bit<32> bolo_best_bid_market_participant_identifier;
-    bit<32> bolo_best_ask_market_participant_identifier;
 }
 
 header combined_quote_message_long_form_message_t {
@@ -209,42 +147,6 @@ header combined_quote_message_long_form_message_t {
     bit<8> bolo_appendage_indicator;
     bit<8> odd_lot_attachment_type;
     bit<16> odd_lot_attachment_count;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
-    bit<16> national_best_bid_price_short;
-    bit<16> national_best_bid_size_short;
-    bit<8> national_best_ask_market_center;
-    bit<16> national_best_ask_price_short;
-    bit<16> national_best_ask_size_short;
-    bit<8> nbbo_quote_condition_2;
-    bit<8> national_best_bid_market_center_2;
-    bit<64> national_best_bid_price_long;
-    bit<32> national_best_bid_size_long;
-    bit<8> national_best_ask_market_center_2;
-    bit<64> national_best_ask_price_long;
-    bit<32> national_best_ask_size_long;
-    bit<32> bid_adf_mpid;
-    bit<32> ask_adf_mpid;
-    bit<8> bolo_best_bid_market_center;
-    bit<16> bolo_bid_price_short;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<16> bolo_ask_price_short;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center_2;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size_2;
-    bit<8> bolo_best_ask_market_center_2;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size_2;
-    bit<8> bolo_best_bid_market_center_3;
-    bit<64> bolo_bid_price_long_2;
-    bit<16> bolo_bid_size_3;
-    bit<8> bolo_best_ask_market_center_3;
-    bit<64> bolo_ask_price_long_2;
-    bit<16> bolo_ask_size_3;
-    bit<32> bolo_best_bid_market_participant_identifier;
-    bit<32> bolo_best_ask_market_participant_identifier;
 }
 
 header odd_lot_quote_message_short_form_message_t {
@@ -258,26 +160,6 @@ header odd_lot_quote_message_short_form_message_t {
     bit<8> bolo_appendage_indicator;
     bit<8> odd_lot_attachment_type;
     bit<16> odd_lot_attachment_count;
-    bit<8> bolo_best_bid_market_center;
-    bit<16> bolo_bid_price_short;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<16> bolo_ask_price_short;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center_2;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size_2;
-    bit<8> bolo_best_ask_market_center_2;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size_2;
-    bit<8> bolo_best_bid_market_center_3;
-    bit<64> bolo_bid_price_long_2;
-    bit<16> bolo_bid_size_3;
-    bit<8> bolo_best_ask_market_center_3;
-    bit<64> bolo_ask_price_long_2;
-    bit<16> bolo_ask_size_3;
-    bit<32> bolo_best_bid_market_participant_identifier;
-    bit<32> bolo_best_ask_market_participant_identifier;
 }
 
 header odd_lot_quote_message_long_form_message_t {
@@ -292,26 +174,6 @@ header odd_lot_quote_message_long_form_message_t {
     bit<8> bolo_appendage_indicator;
     bit<8> odd_lot_attachment_type;
     bit<16> odd_lot_attachment_count;
-    bit<8> bolo_best_bid_market_center;
-    bit<16> bolo_bid_price_short;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<16> bolo_ask_price_short;
-    bit<16> bolo_ask_size;
-    bit<8> bolo_best_bid_market_center_2;
-    bit<64> bolo_bid_price_long;
-    bit<16> bolo_bid_size_2;
-    bit<8> bolo_best_ask_market_center_2;
-    bit<64> bolo_ask_price_long;
-    bit<16> bolo_ask_size_2;
-    bit<8> bolo_best_bid_market_center_3;
-    bit<64> bolo_bid_price_long_2;
-    bit<16> bolo_bid_size_3;
-    bit<8> bolo_best_ask_market_center_3;
-    bit<64> bolo_ask_price_long_2;
-    bit<16> bolo_ask_size_3;
-    bit<32> bolo_best_bid_market_participant_identifier;
-    bit<32> bolo_best_ask_market_participant_identifier;
 }
 
 header administrative_message_t {
@@ -504,6 +366,10 @@ header quote_wipe_out_message_t {
     bit<64> participant_token;
 }
 
+header general_administrative_message_text_t {
+    varbit<2048> text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> session_close_recap_message_market_center_close_recap_remaining;
@@ -539,6 +405,7 @@ struct headers_t {
     market_session_close_message_t market_session_close_message[MAX_MESSAGES];
     end_of_transmissions_message_t end_of_transmissions_message[MAX_MESSAGES];
     quote_wipe_out_message_t quote_wipe_out_message[MAX_MESSAGES];
+    general_administrative_message_text_t general_administrative_message_text;
 }
 
 parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -649,6 +516,7 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_general_administrative_message {
         packet.extract(hdr.general_administrative_message.next);
         meta.dispatched = 1;
+        packet.extract(hdr.general_administrative_message_text, (bit<32>)hdr.general_administrative_message.last.text_length * 8);
         transition parse_message;
     }
 
@@ -811,6 +679,7 @@ control NasdaqUqdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.odd_lot_quote_message_long_form_message);
         packet.emit(hdr.administrative_message);
         packet.emit(hdr.general_administrative_message);
+        packet.emit(hdr.general_administrative_message_text);
         packet.emit(hdr.cross_sro_trading_action_message);
         packet.emit(hdr.market_center_trading_action_message);
         packet.emit(hdr.issue_symbol_directory_message);

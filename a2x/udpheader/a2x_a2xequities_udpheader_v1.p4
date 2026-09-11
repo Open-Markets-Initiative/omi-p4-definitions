@@ -31,11 +31,11 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header message_t {
     bit<8> message_count;
 }
 
-header message_header_message_t {
+header message_message_t {
     bit<8> msg_type;
     bit<8> msg_length;
     bit<32> seq_no;
@@ -43,30 +43,30 @@ header message_header_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> message_header_message_remaining;
+    bit<8> message_message_remaining;
 }
 
 struct headers_t {
-    message_header_t message_header;
-    message_header_message_t message_header_message[MAX_MESSAGES];
+    message_t message;
+    message_message_t message_message[MAX_MESSAGES];
 }
 
 parser A2xA2xequitiesUdpheaderParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        meta.message_header_message_remaining = hdr.message_header.message_count;
-        transition select(meta.message_header_message_remaining) {
+        packet.extract(hdr.message);
+        meta.message_message_remaining = hdr.message.message_count;
+        transition select(meta.message_message_remaining) {
             8w0: accept;
-            default: parse_message_header_message;
+            default: parse_message_message;
         }
     }
 
-    state parse_message_header_message {
-        packet.extract(hdr.message_header_message.next);
-        meta.message_header_message_remaining = meta.message_header_message_remaining - 1;
-        transition select(meta.message_header_message_remaining) {
+    state parse_message_message {
+        packet.extract(hdr.message_message.next);
+        meta.message_message_remaining = meta.message_message_remaining - 1;
+        transition select(meta.message_message_remaining) {
             8w0: accept;
-            default: parse_message_header_message;
+            default: parse_message_message;
         }
     }
 
@@ -95,8 +95,8 @@ control A2xA2xequitiesUdpheaderComputeChecksum(inout headers_t hdr, inout metada
 
 control A2xA2xequitiesUdpheaderDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
-        packet.emit(hdr.message_header_message);
+        packet.emit(hdr.message);
+        packet.emit(hdr.message_message);
     }
 }
 

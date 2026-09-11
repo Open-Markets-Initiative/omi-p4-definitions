@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header session_t {
+header packet_header_t {
     bit<24> protocol_version;
     bit<16> session_year;
     bit<16> session_week;
@@ -408,7 +408,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    session_t session;
+    packet_header_t packet_header;
     message_t message[MAX_MESSAGES];
     time_message_t time_message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
@@ -444,8 +444,8 @@ struct headers_t {
 
 parser AsxderivativesT24Parser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.session);
-        transition select(hdr.session.message_count) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
             16w0: parse_heartbeat;
             16w65535: parse_end_of_session;
             default: parse_message;
@@ -709,7 +709,7 @@ control AsxderivativesT24ComputeChecksum(inout headers_t hdr, inout metadata_t m
 
 control AsxderivativesT24Deparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.session);
+        packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
         packet.emit(hdr.time_message);
         packet.emit(hdr.system_event_message);

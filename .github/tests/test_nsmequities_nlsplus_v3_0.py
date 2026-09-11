@@ -10,12 +10,12 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "nasdaq/nsmequities/nlsplus/nsmequities_nlsplus_v4_0.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "nsmequities_nlsplus_v4_0.json")
+PROGRAM = "nasdaq/nsmequities/nlsplus/nsmequities_nlsplus_v3_0.p4"
+JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "nsmequities_nlsplus_v3_0.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class NsmequitiesNlsplusV40Tests(unittest.TestCase):
+class NsmequitiesNlsplusV30Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -28,23 +28,23 @@ class NsmequitiesNlsplusV40Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_nlsplusregshoshortsalepricetestrestrictedindicatormessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v4.0/NlsPlus.RegShoShortSalePriceTestRestrictedIndicatorMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v3.0/NlsPlus.RegShoShortSalePriceTestRestrictedIndicatorMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_nlsplusstocktradingactionmessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v4.0/NlsPlus.StockTradingActionMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v3.0/NlsPlus.StockTradingActionMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_nlsplussystemeventmessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v4.0/NlsPlus.SystemEventMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v3.0/NlsPlus.SystemEventMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_nlsplustradereportlongpricemessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v4.0/NlsPlus.TradeReportLongPriceMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v3.0/NlsPlus.TradeReportLongPriceMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_nlsplustradereportmessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v4.0/NlsPlus.TradeReportMessage.pcap"):
+        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.NlsPlus.Itch.v3.0/NlsPlus.TradeReportMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

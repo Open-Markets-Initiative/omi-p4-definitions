@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header binary_packet_header_t {
     bit<32> packet_sequence_number;
     bit<64> sending_time;
     bit<16> message_size;
@@ -168,7 +168,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    binary_packet_header_t binary_packet_header;
     md_incremental_refresh_settle_t md_incremental_refresh_settle;
     md_incremental_refresh_settle_incremental_refresh_settle_group_t md_incremental_refresh_settle_incremental_refresh_settle_group[MAX_MESSAGES];
     md_incremental_refresh_voi_t md_incremental_refresh_voi;
@@ -179,8 +179,8 @@ struct headers_t {
 
 parser CmeGlobexSettlementsUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.binary_packet_header);
+        transition select(hdr.binary_packet_header.template_id) {
             16w0x9101: parse_md_incremental_refresh_settle;
             16w0x9201: parse_md_incremental_refresh_voi;
             16w0x9301: parse_md_incremental_refresh_high_low;
@@ -281,7 +281,7 @@ control CmeGlobexSettlementsUdpComputeChecksum(inout headers_t hdr, inout metada
 
 control CmeGlobexSettlementsUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.binary_packet_header);
         packet.emit(hdr.md_incremental_refresh_settle);
         packet.emit(hdr.md_incremental_refresh_settle_incremental_refresh_settle_group);
         packet.emit(hdr.md_incremental_refresh_voi);

@@ -93,12 +93,6 @@ header modify_order_message_t {
     bit<32> quantity;
 }
 
-header account_query_message_t {
-    bit<16> appendage_length;
-    bit<8> optional_field_length;
-    bit<8> account_query_optional_field;
-}
-
 header mass_cancel_request_message_t {
     bit<32> user_ref_num;
     bit<32> firm;
@@ -137,7 +131,6 @@ struct headers_t {
     replace_order_message_t replace_order_message;
     cancel_order_message_t cancel_order_message;
     modify_order_message_t modify_order_message;
-    account_query_message_t account_query_message;
     mass_cancel_request_message_t mass_cancel_request_message;
     disable_order_entry_request_message_t disable_order_entry_request_message;
     enable_order_entry_request_message_t enable_order_entry_request_message;
@@ -269,9 +262,8 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
     }
 
     state parse_account_query_message {
-        packet.extract(hdr.account_query_message);
         meta.dispatched = 1;
-        transition select(hdr.account_query_message.account_query_optional_field) {
+        transition select(packet.lookahead<bit<8>>()) {
             8w28: parse_user_ref_idx;
             default: accept;
         }
@@ -369,7 +361,6 @@ control NsmequitiesOrdersClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.replace_order_message);
         packet.emit(hdr.cancel_order_message);
         packet.emit(hdr.modify_order_message);
-        packet.emit(hdr.account_query_message);
         packet.emit(hdr.mass_cancel_request_message);
         packet.emit(hdr.disable_order_entry_request_message);
         packet.emit(hdr.enable_order_entry_request_message);

@@ -213,6 +213,14 @@ header session_status_broadcast_t {
     bit<56> pad7;
 }
 
+header forced_logout_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header reject_var_text_t {
+    varbit<2048> var_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> delete_order_broadcast_affected_ord_grp_comp_remaining;
@@ -237,6 +245,8 @@ struct headers_t {
     session_list_notification_t session_list_notification;
     session_list_notification_sessions_grp_comp_t session_list_notification_sessions_grp_comp[MAX_MESSAGES];
     session_status_broadcast_t session_status_broadcast;
+    forced_logout_notification_var_text_t forced_logout_notification_var_text;
+    reject_var_text_t reject_var_text;
 }
 
 parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -279,6 +289,7 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_forced_logout_notification {
         packet.extract(hdr.forced_logout_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.forced_logout_notification_var_text, (bit<32>)hdr.forced_logout_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -341,6 +352,7 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_reject {
         packet.extract(hdr.reject);
         meta.dispatched = 1;
+        packet.extract(hdr.reject_var_text, (bit<32>)hdr.reject.var_text_len * 8);
         transition accept;
     }
 
@@ -403,6 +415,7 @@ control EurexT7EdciServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.delete_order_broadcast);
         packet.emit(hdr.delete_order_broadcast_affected_ord_grp_comp);
         packet.emit(hdr.forced_logout_notification);
+        packet.emit(hdr.forced_logout_notification_var_text);
         packet.emit(hdr.heartbeat_notification);
         packet.emit(hdr.logon_response);
         packet.emit(hdr.logout_response);
@@ -411,6 +424,7 @@ control EurexT7EdciServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.partition_list_notification);
         packet.emit(hdr.partition_list_notification_partition_grp_comp);
         packet.emit(hdr.reject);
+        packet.emit(hdr.reject_var_text);
         packet.emit(hdr.session_list_notification);
         packet.emit(hdr.session_list_notification_sessions_grp_comp);
         packet.emit(hdr.session_status_broadcast);

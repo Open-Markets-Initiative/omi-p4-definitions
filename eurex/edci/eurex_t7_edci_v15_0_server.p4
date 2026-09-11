@@ -494,6 +494,18 @@ header user_logout_response_t {
     bit<24> pad3;
 }
 
+header forced_logout_notification_var_text_t {
+    varbit<2048> var_text;
+}
+
+header legal_notification_broadcast_var_text_t {
+    varbit<2048> var_text;
+}
+
+header reject_var_text_t {
+    varbit<2048> var_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> delete_order_broadcast_affected_ord_grp_comp_remaining;
@@ -536,6 +548,9 @@ struct headers_t {
     trading_action_response_matching_engine_status_grp_comp_t trading_action_response_matching_engine_status_grp_comp[MAX_MESSAGES];
     user_login_response_t user_login_response;
     user_logout_response_t user_logout_response;
+    forced_logout_notification_var_text_t forced_logout_notification_var_text;
+    legal_notification_broadcast_var_text_t legal_notification_broadcast_var_text;
+    reject_var_text_t reject_var_text;
 }
 
 parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -617,6 +632,7 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_forced_logout_notification {
         packet.extract(hdr.forced_logout_notification);
         meta.dispatched = 1;
+        packet.extract(hdr.forced_logout_notification_var_text, (bit<32>)hdr.forced_logout_notification.var_text_len * 8);
         transition accept;
     }
 
@@ -629,6 +645,7 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_legal_notification_broadcast {
         packet.extract(hdr.legal_notification_broadcast);
         meta.dispatched = 1;
+        packet.extract(hdr.legal_notification_broadcast_var_text, (bit<32>)hdr.legal_notification_broadcast.var_text_len * 8);
         transition accept;
     }
 
@@ -703,6 +720,7 @@ parser EurexT7EdciServerParser(packet_in packet, out headers_t hdr, inout metada
     state parse_reject {
         packet.extract(hdr.reject);
         meta.dispatched = 1;
+        packet.extract(hdr.reject_var_text, (bit<32>)hdr.reject.var_text_len * 8);
         transition accept;
     }
 
@@ -829,8 +847,10 @@ control EurexT7EdciServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.enter_clip_request_notification);
         packet.emit(hdr.enter_clip_request_notification_cross_request_side_grp_comp);
         packet.emit(hdr.forced_logout_notification);
+        packet.emit(hdr.forced_logout_notification_var_text);
         packet.emit(hdr.heartbeat_notification);
         packet.emit(hdr.legal_notification_broadcast);
+        packet.emit(hdr.legal_notification_broadcast_var_text);
         packet.emit(hdr.logon_response);
         packet.emit(hdr.logout_response);
         packet.emit(hdr.order_exec_report_broadcast);
@@ -841,6 +861,7 @@ control EurexT7EdciServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.party_action_report);
         packet.emit(hdr.party_entitlements_update_report);
         packet.emit(hdr.reject);
+        packet.emit(hdr.reject_var_text);
         packet.emit(hdr.retransmit_response);
         packet.emit(hdr.rfq_notification);
         packet.emit(hdr.risk_notification_broadcast);

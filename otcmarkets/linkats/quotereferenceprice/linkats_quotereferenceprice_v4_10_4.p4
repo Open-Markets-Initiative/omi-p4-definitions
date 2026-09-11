@@ -31,16 +31,19 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_size;
     bit<32> seq_num;
-    bit<1> heartbeat;
-    bit<1> seq_num_reset;
-    bit<4> reserved_4;
-    bit<1> replay;
     bit<1> test;
+    bit<1> replay;
+    bit<4> reserved_4;
+    bit<1> seq_num_reset;
+    bit<1> heartbeat;
     bit<8> messages;
     bit<32> packet_milli;
+}
+
+header message_t {
     bit<16> message_size;
     bit<8> message_type;
 }
@@ -134,20 +137,34 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    start_of_spin_message_t start_of_spin_message;
-    end_of_spin_message_t end_of_spin_message;
-    market_open_message_t market_open_message;
-    market_close_message_t market_close_message;
-    security_message_t security_message;
-    reference_price_message_t reference_price_message;
-    reference_price_update_message_t reference_price_update_message;
+    packet_header_t packet_header;
+    message_t message[MAX_MESSAGES];
+    start_of_spin_message_t start_of_spin_message[MAX_MESSAGES];
+    end_of_spin_message_t end_of_spin_message[MAX_MESSAGES];
+    market_open_message_t market_open_message[MAX_MESSAGES];
+    market_close_message_t market_close_message[MAX_MESSAGES];
+    security_message_t security_message[MAX_MESSAGES];
+    reference_price_message_t reference_price_message[MAX_MESSAGES];
+    reference_price_update_message_t reference_price_update_message[MAX_MESSAGES];
 }
 
 parser LinkatsQuotereferencepriceParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.heartbeat) {
+            1w1: parse_heartbeat_packet;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_message {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             8w11: parse_start_of_spin_message;
             8w12: parse_end_of_spin_message;
             8w13: parse_market_open_message;
@@ -160,45 +177,45 @@ parser LinkatsQuotereferencepriceParser(packet_in packet, out headers_t hdr, ino
     }
 
     state parse_start_of_spin_message {
-        packet.extract(hdr.start_of_spin_message);
+        packet.extract(hdr.start_of_spin_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_end_of_spin_message {
-        packet.extract(hdr.end_of_spin_message);
+        packet.extract(hdr.end_of_spin_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_market_open_message {
-        packet.extract(hdr.market_open_message);
+        packet.extract(hdr.market_open_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_market_close_message {
-        packet.extract(hdr.market_close_message);
+        packet.extract(hdr.market_close_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_security_message {
-        packet.extract(hdr.security_message);
+        packet.extract(hdr.security_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_reference_price_message {
-        packet.extract(hdr.reference_price_message);
+        packet.extract(hdr.reference_price_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
     state parse_reference_price_update_message {
-        packet.extract(hdr.reference_price_update_message);
+        packet.extract(hdr.reference_price_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
 }
@@ -231,7 +248,8 @@ control LinkatsQuotereferencepriceComputeChecksum(inout headers_t hdr, inout met
 
 control LinkatsQuotereferencepriceDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.message);
         packet.emit(hdr.start_of_spin_message);
         packet.emit(hdr.end_of_spin_message);
         packet.emit(hdr.market_open_message);

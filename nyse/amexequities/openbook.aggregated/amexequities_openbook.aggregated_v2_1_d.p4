@@ -31,13 +31,16 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_size;
     bit<8> delivery_flag;
     bit<8> message_count;
     bit<32> sequence_number;
     bit<32> timestamp;
     bit<32> nanoseconds;
+}
+
+header packet_header_message_t {
     bit<16> message_size;
     bit<16> message_type;
 }
@@ -190,27 +193,36 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    sequence_number_reset_message_t sequence_number_reset_message;
-    source_time_reference_message_t source_time_reference_message;
-    symbol_index_mapping_message_t symbol_index_mapping_message;
-    symbol_clear_message_t symbol_clear_message;
-    security_status_message_t security_status_message;
-    retransmission_request_message_t retransmission_request_message;
-    symbol_index_mapping_request_message_t symbol_index_mapping_request_message;
-    refresh_request_message_t refresh_request_message;
-    message_unavailable_message_t message_unavailable_message;
-    refresh_header_message_t refresh_header_message;
-    request_response_message_t request_response_message;
-    heartbeat_response_message_t heartbeat_response_message;
-    orderbook_snapshot_message_t orderbook_snapshot_message;
-    orderbook_delta_update_message_t orderbook_delta_update_message;
+    packet_header_t packet_header;
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    sequence_number_reset_message_t sequence_number_reset_message[MAX_MESSAGES];
+    source_time_reference_message_t source_time_reference_message[MAX_MESSAGES];
+    symbol_index_mapping_message_t symbol_index_mapping_message[MAX_MESSAGES];
+    symbol_clear_message_t symbol_clear_message[MAX_MESSAGES];
+    security_status_message_t security_status_message[MAX_MESSAGES];
+    retransmission_request_message_t retransmission_request_message[MAX_MESSAGES];
+    symbol_index_mapping_request_message_t symbol_index_mapping_request_message[MAX_MESSAGES];
+    refresh_request_message_t refresh_request_message[MAX_MESSAGES];
+    message_unavailable_message_t message_unavailable_message[MAX_MESSAGES];
+    refresh_header_message_t refresh_header_message[MAX_MESSAGES];
+    request_response_message_t request_response_message[MAX_MESSAGES];
+    heartbeat_response_message_t heartbeat_response_message[MAX_MESSAGES];
+    orderbook_snapshot_message_t orderbook_snapshot_message[MAX_MESSAGES];
+    orderbook_delta_update_message_t orderbook_delta_update_message[MAX_MESSAGES];
 }
 
 parser AmexequitiesOpenbookaggregatedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_type) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
+            8w0: accept;
+            default: parse_packet_header_message;
+        }
+    }
+
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.message_type) {
             16w0x100: parse_sequence_number_reset_message;
             16w0x200: parse_source_time_reference_message;
             16w0x300: parse_symbol_index_mapping_message;
@@ -230,87 +242,87 @@ parser AmexequitiesOpenbookaggregatedParser(packet_in packet, out headers_t hdr,
     }
 
     state parse_sequence_number_reset_message {
-        packet.extract(hdr.sequence_number_reset_message);
+        packet.extract(hdr.sequence_number_reset_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_source_time_reference_message {
-        packet.extract(hdr.source_time_reference_message);
+        packet.extract(hdr.source_time_reference_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_symbol_index_mapping_message {
-        packet.extract(hdr.symbol_index_mapping_message);
+        packet.extract(hdr.symbol_index_mapping_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_symbol_clear_message {
-        packet.extract(hdr.symbol_clear_message);
+        packet.extract(hdr.symbol_clear_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_security_status_message {
-        packet.extract(hdr.security_status_message);
+        packet.extract(hdr.security_status_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_retransmission_request_message {
-        packet.extract(hdr.retransmission_request_message);
+        packet.extract(hdr.retransmission_request_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_symbol_index_mapping_request_message {
-        packet.extract(hdr.symbol_index_mapping_request_message);
+        packet.extract(hdr.symbol_index_mapping_request_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_refresh_request_message {
-        packet.extract(hdr.refresh_request_message);
+        packet.extract(hdr.refresh_request_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_message_unavailable_message {
-        packet.extract(hdr.message_unavailable_message);
+        packet.extract(hdr.message_unavailable_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_refresh_header_message {
-        packet.extract(hdr.refresh_header_message);
+        packet.extract(hdr.refresh_header_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_request_response_message {
-        packet.extract(hdr.request_response_message);
+        packet.extract(hdr.request_response_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_heartbeat_response_message {
-        packet.extract(hdr.heartbeat_response_message);
+        packet.extract(hdr.heartbeat_response_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_orderbook_snapshot_message {
-        packet.extract(hdr.orderbook_snapshot_message);
+        packet.extract(hdr.orderbook_snapshot_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
     state parse_orderbook_delta_update_message {
-        packet.extract(hdr.orderbook_delta_update_message);
+        packet.extract(hdr.orderbook_delta_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_message;
     }
 
 }
@@ -343,7 +355,8 @@ control AmexequitiesOpenbookaggregatedComputeChecksum(inout headers_t hdr, inout
 
 control AmexequitiesOpenbookaggregatedDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_number_reset_message);
         packet.emit(hdr.source_time_reference_message);
         packet.emit(hdr.symbol_index_mapping_message);

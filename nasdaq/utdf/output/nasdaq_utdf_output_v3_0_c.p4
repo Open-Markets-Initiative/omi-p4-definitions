@@ -488,6 +488,10 @@ header end_of_consolidated_last_sale_eligibility_message_t {
     bit<64> participant_token;
 }
 
+header general_administrative_message_text_t {
+    varbit<2048> text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> closing_trade_summary_report_message_market_center_closing_price_and_volume_summary_remaining;
@@ -531,6 +535,7 @@ struct headers_t {
     end_of_transmissions_message_t end_of_transmissions_message[MAX_MESSAGES];
     end_of_trade_reporting_message_t end_of_trade_reporting_message[MAX_MESSAGES];
     end_of_consolidated_last_sale_eligibility_message_t end_of_consolidated_last_sale_eligibility_message[MAX_MESSAGES];
+    general_administrative_message_text_t general_administrative_message_text;
 }
 
 parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -663,6 +668,7 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_general_administrative_message {
         packet.extract(hdr.general_administrative_message.next);
         meta.dispatched = 1;
+        packet.extract(hdr.general_administrative_message_text, (bit<32>)hdr.general_administrative_message.last.text_length * 8);
         transition parse_message;
     }
 
@@ -863,6 +869,7 @@ control NasdaqUtdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.fractional_as_of_trade_message);
         packet.emit(hdr.administrative_message);
         packet.emit(hdr.general_administrative_message);
+        packet.emit(hdr.general_administrative_message_text);
         packet.emit(hdr.cross_sro_trading_action_message);
         packet.emit(hdr.market_center_trading_action_message);
         packet.emit(hdr.issue_symbol_directory_message);

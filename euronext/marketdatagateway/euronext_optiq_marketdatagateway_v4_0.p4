@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header market_data_packet_header_t {
     bit<64> packet_time;
     bit<32> packet_sequence_number;
     bit<1> compression;
@@ -753,7 +753,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    market_data_packet_header_t market_data_packet_header;
     start_of_day_message_t start_of_day_message;
     end_of_day_message_t end_of_day_message;
     health_status_message_t health_status_message;
@@ -797,8 +797,8 @@ struct headers_t {
 
 parser EuronextOptiqMarketdatagatewayParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.market_data_packet_header);
+        transition select(hdr.market_data_packet_header.template_id) {
             16w0x4d04: parse_start_of_day_message;
             16w0x4e04: parse_end_of_day_message;
             16w0x4f04: parse_health_status_message;
@@ -1178,7 +1178,7 @@ control EuronextOptiqMarketdatagatewayComputeChecksum(inout headers_t hdr, inout
 
 control EuronextOptiqMarketdatagatewayDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.market_data_packet_header);
         packet.emit(hdr.start_of_day_message);
         packet.emit(hdr.end_of_day_message);
         packet.emit(hdr.health_status_message);
