@@ -151,8 +151,8 @@ header order_executed_message_t {
     bit<64> timestamp;
     bit<64> symbol;
     bit<8> order_capacity;
-    bit<1> intermarket_sweep;
     bit<7> reserved_7;
+    bit<1> intermarket_sweep;
     bit<64> order_id;
     bit<64> trade_id;
     bit<32> quantity;

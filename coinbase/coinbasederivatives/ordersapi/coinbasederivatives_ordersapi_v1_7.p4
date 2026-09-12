@@ -33,8 +33,8 @@
 
 header flags_t {
     bit<8> protocol_id;
-    bit<1> post_only;
     bit<7> reserved_7;
+    bit<1> post_only;
     bit<16> message_length;
     bit<32> sequence_number;
     bit<32> last_processed_seq_no;
@@ -131,8 +131,8 @@ header new_order_message_t {
     bit<32> quantity;
     bit<32> instrument_id;
     bit<8> side;
-    bit<1> post_only;
     bit<7> reserved_7;
+    bit<1> post_only;
     bit<16> good_til_date;
 }
 

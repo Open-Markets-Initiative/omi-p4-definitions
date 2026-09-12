@@ -117,12 +117,12 @@ header add_order_no_participant_id_message_t {
     bit<32> order_book_position;
     bit<64> quantity;
     bit<32> price;
-    bit<2> reserved_2_bits;
-    bit<1> market_bid;
-    bit<1> price_stabilisation;
-    bit<1> reserved_bit;
-    bit<1> undisclosed;
     bit<10> reserved_10_bits;
+    bit<1> undisclosed;
+    bit<1> reserved_bit;
+    bit<1> price_stabilisation;
+    bit<1> market_bid;
+    bit<2> reserved_2_bits;
     bit<8> lot_type;
 }
 
@@ -134,12 +134,12 @@ header add_order_participant_id_message_t {
     bit<32> order_book_position;
     bit<64> quantity;
     bit<32> price;
-    bit<2> reserved_2_bits;
-    bit<1> market_bid;
-    bit<1> price_stabilisation;
-    bit<1> reserved_bit;
-    bit<1> undisclosed;
     bit<10> reserved_10_bits;
+    bit<1> undisclosed;
+    bit<1> reserved_bit;
+    bit<1> price_stabilisation;
+    bit<1> market_bid;
+    bit<2> reserved_2_bits;
     bit<8> lot_type;
     bit<56> participant_id;
 }
@@ -177,12 +177,12 @@ header order_replace_message_t {
     bit<32> new_order_book_position;
     bit<64> quantity;
     bit<32> price;
-    bit<2> reserved_2_bits;
-    bit<1> market_bid;
-    bit<1> price_stabilisation;
-    bit<1> reserved_bit;
-    bit<1> undisclosed;
     bit<10> reserved_10_bits;
+    bit<1> undisclosed;
+    bit<1> reserved_bit;
+    bit<1> price_stabilisation;
+    bit<1> market_bid;
+    bit<2> reserved_2_bits;
 }
 
 header order_delete_message_t {

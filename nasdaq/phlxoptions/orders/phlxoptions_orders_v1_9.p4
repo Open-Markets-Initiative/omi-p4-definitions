@@ -54,9 +54,9 @@ header options_directory_message_t {
     bit<32> nanoseconds;
     bit<32> option_id;
     bit<40> security_symbol;
-    bit<5> day;
-    bit<4> month;
     bit<7> year;
+    bit<4> month;
+    bit<5> day;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<8> source;
@@ -78,9 +78,9 @@ header complex_order_strategy_message_t {
 header complex_order_strategy_message_complex_order_strategy_leg_t {
     bit<32> option_id;
     bit<40> security_symbol;
-    bit<5> day;
-    bit<4> month;
     bit<7> year;
+    bit<4> month;
+    bit<5> day;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<8> side;
@@ -92,9 +92,9 @@ header security_trading_action_message_t {
     bit<32> nanoseconds;
     bit<32> option_id;
     bit<40> security_symbol;
-    bit<5> day;
-    bit<4> month;
     bit<7> year;
+    bit<4> month;
+    bit<5> day;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<8> current_trading_state;
@@ -112,9 +112,9 @@ header security_open_closed_message_t {
     bit<32> nanoseconds;
     bit<32> option_id;
     bit<40> security_symbol;
-    bit<5> day;
-    bit<4> month;
     bit<7> year;
+    bit<4> month;
+    bit<5> day;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<8> open_state;
@@ -132,9 +132,9 @@ header simple_order_message_t {
     bit<32> nanoseconds;
     bit<32> option_id;
     bit<40> security_symbol;
-    bit<5> day;
-    bit<4> month;
     bit<7> year;
+    bit<4> month;
+    bit<5> day;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<32> order_id;
@@ -174,9 +174,9 @@ header complex_order_message_complex_order_leg_t {
     bit<8> leg_open_close_indicator;
     bit<32> option_id;
     bit<40> security_symbol;
-    bit<5> day;
-    bit<4> month;
     bit<7> year;
+    bit<4> month;
+    bit<5> day;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<8> side;
@@ -188,9 +188,9 @@ header auction_notification_message_t {
     bit<32> nanoseconds;
     bit<32> option_id;
     bit<40> security_symbol;
-    bit<5> day;
-    bit<4> month;
     bit<7> year;
+    bit<4> month;
+    bit<5> day;
     bit<32> explicit_strike_price;
     bit<8> option_type;
     bit<32> auction_id;

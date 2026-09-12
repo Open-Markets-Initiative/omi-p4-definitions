@@ -349,13 +349,13 @@ header open_high_low_last_trade_adjustment_message_t {
     bit<32> last_volume;
     bit<32> total_traded_volume;
     bit<32> total_trades;
-    bit<1> opening_trade_price;
-    bit<1> highest_traded_price;
-    bit<1> lowest_traded_price;
-    bit<1> total_traded_volume_and_total_trades;
-    bit<1> last_traded_price;
-    bit<1> last_traded_volume;
     bit<2> all_fields;
+    bit<1> last_traded_volume;
+    bit<1> last_traded_price;
+    bit<1> total_traded_volume_and_total_trades;
+    bit<1> lowest_traded_price;
+    bit<1> highest_traded_price;
+    bit<1> opening_trade_price;
 }
 
 header market_settlement_message_t {

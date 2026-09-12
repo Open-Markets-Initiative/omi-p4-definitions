@@ -96,21 +96,21 @@ header security_definition_message_t {
     bit<24> currency;
     bit<32> mic;
     bit<8> tick_table_id;
-    bit<10> unused_10;
-    bit<1> aod_enabled;
-    bit<1> unused_1;
-    bit<1> illiquid;
-    bit<2> test_stock;
     bit<1> mac_enabled;
+    bit<2> test_stock;
+    bit<1> illiquid;
+    bit<1> unused_1;
+    bit<1> aod_enabled;
+    bit<10> unused_10;
 }
 
 header security_status_message_t {
     bit<16> security_id;
     bit<8> trading_status;
-    bit<5> unused_5;
-    bit<1> mac_run;
-    bit<1> mac_open;
     bit<1> trading;
+    bit<1> mac_open;
+    bit<1> mac_run;
+    bit<5> unused_5;
     bit<64> timestamp;
 }
 

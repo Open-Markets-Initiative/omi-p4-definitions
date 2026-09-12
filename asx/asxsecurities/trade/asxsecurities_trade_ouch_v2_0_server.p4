@@ -131,9 +131,9 @@ header order_executed_message_t {
     bit<32> trade_price;
     bit<96> match_id;
     bit<16> deal_source;
-    bit<1> passive_aggressive_indicator;
-    bit<2> crossing_dealing_capacity;
     bit<5> reserved;
+    bit<2> crossing_dealing_capacity;
+    bit<1> passive_aggressive_indicator;
 }
 
 struct metadata_t {

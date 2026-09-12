@@ -40,7 +40,7 @@ header packet_header_t {
     bit<32> nanoseconds;
 }
 
-header packet_header_message_t {
+header message_t {
     bit<16> message_size;
     bit<16> message_type;
 }
@@ -154,7 +154,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    message_t message[MAX_MESSAGES];
     add_order_message_t add_order_message[MAX_MESSAGES];
     modify_order_message_t modify_order_message[MAX_MESSAGES];
     delete_order_message_t delete_order_message[MAX_MESSAGES];
@@ -168,15 +168,20 @@ struct headers_t {
 parser ArcaequitiesArcabookParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
-        transition select(hdr.packet_header.number_msgs) {
-            8w0: accept;
-            default: parse_packet_header_message;
+        transition select(hdr.packet_header.delivery_flag) {
+            8w1: parse_heartbeat;
+            default: parse_message;
         }
     }
 
-    state parse_packet_header_message {
-        packet.extract(hdr.packet_header_message.next);
-        transition select(hdr.packet_header_message.last.message_type) {
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_message {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             16w0x6400: parse_add_order_message;
             16w0x6500: parse_modify_order_message;
             16w0x6600: parse_delete_order_message;
@@ -192,49 +197,49 @@ parser ArcaequitiesArcabookParser(packet_in packet, out headers_t hdr, inout met
     state parse_add_order_message {
         packet.extract(hdr.add_order_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_modify_order_message {
         packet.extract(hdr.modify_order_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_delete_order_message {
         packet.extract(hdr.delete_order_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_execution_message {
         packet.extract(hdr.execution_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_add_order_refresh_message {
         packet.extract(hdr.add_order_refresh_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_attributed_add_order_message {
         packet.extract(hdr.attributed_add_order_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_attributed_add_order_refresh_message {
         packet.extract(hdr.attributed_add_order_refresh_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
 }
@@ -268,7 +273,7 @@ control ArcaequitiesArcabookComputeChecksum(inout headers_t hdr, inout metadata_
 control ArcaequitiesArcabookDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_message);
+        packet.emit(hdr.message);
         packet.emit(hdr.add_order_message);
         packet.emit(hdr.modify_order_message);
         packet.emit(hdr.delete_order_message);

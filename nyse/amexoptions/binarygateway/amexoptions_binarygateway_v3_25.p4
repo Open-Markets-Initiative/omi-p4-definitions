@@ -386,8 +386,8 @@ header order_and_cancel_replace_acknowledgement_message_t {
     bit<32> pre_liquidity_indicator;
     bit<16> reason_code;
     bit<8> ack_type;
-    bit<1> throttled;
     bit<7> unused_7;
+    bit<1> throttled;
     bit<64> leg_open_close;
     bit<64> auction_id;
 }
@@ -398,8 +398,8 @@ header bulk_quote_acknowledgment_type_294_message_t {
     bit<80> market_maker;
     bit<32> sub_id;
     bit<64> cl_ord_id;
-    bit<1> throttled;
     bit<7> unused_7;
+    bit<1> throttled;
     bit<8> self_trade_type_u_81;
     bit<32> group_id;
     bit<8> repeating_groups;
@@ -411,8 +411,8 @@ header bulk_quote_acknowledgment_message_t {
     bit<80> market_maker;
     bit<32> sub_id;
     bit<64> cl_ord_id;
-    bit<1> throttled;
     bit<7> unused_7;
+    bit<1> throttled;
     bit<8> self_trade_type_u_81;
     bit<32> group_id;
     bit<8> repeating_groups;
@@ -432,8 +432,8 @@ header order_single_complex_modify_cancel_request_acknowledgment_and_urout_messa
     bit<8> locate_reqd_u_81;
     bit<16> reason_code;
     bit<8> ack_type;
-    bit<1> throttled;
     bit<7> unused_7;
+    bit<1> throttled;
     bit<80> user_data;
     bit<32> group_id;
     bit<80> market_maker;

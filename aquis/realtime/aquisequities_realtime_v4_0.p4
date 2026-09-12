@@ -48,16 +48,16 @@ header order_add_t {
     bit<64> price;
     bit<32> order_ref;
     bit<64> timestamp;
-    bit<1> unrestricted_liquidity_indicator;
     bit<7> reserved_7;
+    bit<1> unrestricted_liquidity_indicator;
 }
 
 header order_cancel_t {
     bit<16> security_id;
     bit<32> order_ref;
     bit<64> timestamp;
-    bit<1> unrestricted_liquidity_indicator;
     bit<7> reserved_7;
+    bit<1> unrestricted_liquidity_indicator;
 }
 
 header order_modify_t {
@@ -66,8 +66,8 @@ header order_modify_t {
     bit<64> price;
     bit<32> order_ref;
     bit<64> timestamp;
-    bit<1> unrestricted_liquidity_indicator;
     bit<7> reserved_7;
+    bit<1> unrestricted_liquidity_indicator;
 }
 
 header trade_t {
@@ -78,23 +78,23 @@ header trade_t {
     bit<32> order_ref;
     bit<32> trade_ref;
     bit<64> timestamp;
-    bit<3> market_mechanism;
-    bit<4> trading_mode;
-    bit<3> transaction_category;
-    bit<3> negotiation_indicator_or_pre_trade_transparency_waiver;
-    bit<1> crossing_trade;
-    bit<2> modification_indicator;
-    bit<2> benchmark_reference_price_indicator;
-    bit<1> dividend;
-    bit<2> off_book_automation;
-    bit<3> price_formation_discovery_process;
-    bit<1> algorithmic_indicator;
-    bit<3> publication_mode_post_trade_deferral;
-    bit<1> deferral_type;
-    bit<1> duplicative_indicator;
     bit<2> spare;
-    bit<1> unrestricted_liquidity_indicator;
+    bit<1> duplicative_indicator;
+    bit<1> deferral_type;
+    bit<3> publication_mode_post_trade_deferral;
+    bit<1> algorithmic_indicator;
+    bit<3> price_formation_discovery_process;
+    bit<2> off_book_automation;
+    bit<1> dividend;
+    bit<2> benchmark_reference_price_indicator;
+    bit<2> modification_indicator;
+    bit<1> crossing_trade;
+    bit<3> negotiation_indicator_or_pre_trade_transparency_waiver;
+    bit<3> transaction_category;
+    bit<4> trading_mode;
+    bit<3> market_mechanism;
     bit<7> reserved_7;
+    bit<1> unrestricted_liquidity_indicator;
 }
 
 header trade_bust_message_t {
@@ -103,21 +103,21 @@ header trade_bust_message_t {
     bit<64> price;
     bit<32> trade_ref;
     bit<64> timestamp;
-    bit<3> market_mechanism;
-    bit<4> trading_mode;
-    bit<3> transaction_category;
-    bit<3> negotiation_indicator_or_pre_trade_transparency_waiver;
-    bit<1> crossing_trade;
-    bit<2> modification_indicator;
-    bit<2> benchmark_reference_price_indicator;
-    bit<1> dividend;
-    bit<2> off_book_automation;
-    bit<3> price_formation_discovery_process;
-    bit<1> algorithmic_indicator;
-    bit<3> publication_mode_post_trade_deferral;
-    bit<1> deferral_type;
-    bit<1> duplicative_indicator;
     bit<2> spare;
+    bit<1> duplicative_indicator;
+    bit<1> deferral_type;
+    bit<3> publication_mode_post_trade_deferral;
+    bit<1> algorithmic_indicator;
+    bit<3> price_formation_discovery_process;
+    bit<2> off_book_automation;
+    bit<1> dividend;
+    bit<2> benchmark_reference_price_indicator;
+    bit<2> modification_indicator;
+    bit<1> crossing_trade;
+    bit<3> negotiation_indicator_or_pre_trade_transparency_waiver;
+    bit<3> transaction_category;
+    bit<4> trading_mode;
+    bit<3> market_mechanism;
 }
 
 header tick_table_data_message_t {
@@ -134,14 +134,14 @@ header security_definition_message_t {
     bit<24> currency;
     bit<32> mic;
     bit<8> tick_table_id;
-    bit<1> mac_enabled;
-    bit<1> test_stock;
-    bit<1> illiquid;
-    bit<1> reserved_1;
-    bit<1> aod_enabled;
-    bit<2> reserved_2;
-    bit<1> avx_enabled;
     bit<8> reserved_8;
+    bit<1> avx_enabled;
+    bit<2> reserved_2;
+    bit<1> aod_enabled;
+    bit<1> reserved_1;
+    bit<1> illiquid;
+    bit<1> test_stock;
+    bit<1> mac_enabled;
     bit<160> reserved;
     bit<64> lot_size;
     bit<8> lot_size_decimal;
@@ -150,10 +150,10 @@ header security_definition_message_t {
 header security_status_message_t {
     bit<16> security_id;
     bit<8> trading_status;
-    bit<1> trading;
-    bit<1> mac_open;
-    bit<1> mac_run;
     bit<5> reserved_5;
+    bit<1> mac_run;
+    bit<1> mac_open;
+    bit<1> trading;
     bit<64> timestamp;
     bit<8> trading_phase;
 }

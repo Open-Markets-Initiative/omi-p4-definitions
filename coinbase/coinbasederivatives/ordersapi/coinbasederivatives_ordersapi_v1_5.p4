@@ -33,8 +33,8 @@
 
 header flags_t {
     bit<8> protocol_id;
-    bit<1> is_resend;
     bit<7> reserved_bits;
+    bit<1> is_resend;
     bit<16> message_length;
     bit<32> sequence_number;
     bit<32> last_processed_seq_no;

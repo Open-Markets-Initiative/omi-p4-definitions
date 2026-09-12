@@ -55,10 +55,10 @@ header system_event_message_t {
 }
 
 header security_directory_message_t {
-    bit<5> unused_5;
-    bit<1> etp;
-    bit<1> when_issued;
     bit<1> test_security;
+    bit<1> when_issued;
+    bit<1> etp;
+    bit<5> unused_5;
     bit<64> timestamp;
     bit<64> symbol;
     bit<32> round_lot_size;
@@ -115,12 +115,12 @@ header price_level_sell_update_message_t {
 }
 
 header trade_report_message_t {
-    bit<3> unused_3;
-    bit<1> singleprice_cross_trade;
-    bit<1> trade_through_exempt;
-    bit<1> odd_lot;
-    bit<1> extended_hours;
     bit<1> intermarket_sweep;
+    bit<1> extended_hours;
+    bit<1> odd_lot;
+    bit<1> trade_through_exempt;
+    bit<1> singleprice_cross_trade;
+    bit<3> unused_3;
     bit<64> timestamp;
     bit<64> symbol;
     bit<32> size;
@@ -136,12 +136,12 @@ header official_price_message_t {
 }
 
 header trade_break_message_t {
-    bit<3> unused_3;
-    bit<1> singleprice_cross_trade;
-    bit<1> trade_through_exempt;
-    bit<1> odd_lot;
-    bit<1> extended_hours;
     bit<1> intermarket_sweep;
+    bit<1> extended_hours;
+    bit<1> odd_lot;
+    bit<1> trade_through_exempt;
+    bit<1> singleprice_cross_trade;
+    bit<3> unused_3;
     bit<64> timestamp;
     bit<64> symbol;
     bit<32> size;

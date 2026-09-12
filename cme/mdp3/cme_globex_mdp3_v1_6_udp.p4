@@ -43,14 +43,14 @@ header binary_packet_header_t {
 
 header channel_reset_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> block_length;
     bit<8> num_in_group;
 }
@@ -68,14 +68,14 @@ header admin_logout_t {
 }
 
 header md_instrument_definition_future_t {
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<32> tot_num_reports_optional;
     bit<8> security_update_action;
     bit<64> last_update_time;
@@ -107,14 +107,14 @@ header md_instrument_definition_future_t {
     bit<240> unit_of_measure;
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
-    bit<1> final;
-    bit<1> actual;
-    bit<1> rounded;
-    bit<1> intraday;
-    bit<1> reserved_bits;
-    bit<1> unused_settl_price_type_5;
-    bit<1> unused_settl_price_type_6;
     bit<1> null_value;
+    bit<1> unused_settl_price_type_6;
+    bit<1> unused_settl_price_type_5;
+    bit<1> reserved_bits;
+    bit<1> intraday;
+    bit<1> rounded;
+    bit<1> actual;
+    bit<1> final;
     bit<32> open_interest_qty;
     bit<32> cleared_volume;
     bit<64> high_limit_price;
@@ -154,27 +154,27 @@ header md_instrument_definition_future_inst_attrib_group_header_t {
 }
 
 header md_instrument_definition_future_inst_attrib_group_t {
-    bit<1> electronic_match_eligible;
-    bit<1> order_cross_eligible;
-    bit<1> block_trade_eligible;
-    bit<1> efp_eligible;
-    bit<1> ebf_eligible;
-    bit<1> efs_eligible;
-    bit<1> efr_eligible;
-    bit<1> otc_eligible;
-    bit<1> ilink_indicative_mass_quoting_eligible;
-    bit<1> negative_strike_eligible;
-    bit<1> negative_price_outright_eligible;
-    bit<1> is_fractional;
-    bit<1> volatility_quoted_option;
-    bit<1> rfq_cross_eligible;
-    bit<1> zero_price_outright_eligible;
-    bit<1> decaying_product_eligibility;
-    bit<1> variable_product_eligibility;
-    bit<1> daily_product_eligibility;
-    bit<1> gt_orders_eligibility;
-    bit<1> implied_matching_eligibility;
     bit<12> reserved_12;
+    bit<1> implied_matching_eligibility;
+    bit<1> gt_orders_eligibility;
+    bit<1> daily_product_eligibility;
+    bit<1> variable_product_eligibility;
+    bit<1> decaying_product_eligibility;
+    bit<1> zero_price_outright_eligible;
+    bit<1> rfq_cross_eligible;
+    bit<1> volatility_quoted_option;
+    bit<1> is_fractional;
+    bit<1> negative_price_outright_eligible;
+    bit<1> negative_strike_eligible;
+    bit<1> ilink_indicative_mass_quoting_eligible;
+    bit<1> otc_eligible;
+    bit<1> efr_eligible;
+    bit<1> efs_eligible;
+    bit<1> ebf_eligible;
+    bit<1> efp_eligible;
+    bit<1> block_trade_eligible;
+    bit<1> order_cross_eligible;
+    bit<1> electronic_match_eligible;
 }
 
 header md_instrument_definition_future_lot_type_rules_group_header_t {
@@ -188,14 +188,14 @@ header md_instrument_definition_future_lot_type_rules_group_t {
 }
 
 header md_instrument_definition_spread_t {
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<32> tot_num_reports_optional;
     bit<8> security_update_action;
     bit<64> last_update_time;
@@ -227,14 +227,14 @@ header md_instrument_definition_spread_t {
     bit<8> tick_rule;
     bit<240> unit_of_measure;
     bit<64> trading_reference_price;
-    bit<1> final;
-    bit<1> actual;
-    bit<1> rounded;
-    bit<1> intraday;
-    bit<1> reserved_bits;
-    bit<1> unused_settl_price_type_5;
-    bit<1> unused_settl_price_type_6;
     bit<1> null_value;
+    bit<1> unused_settl_price_type_6;
+    bit<1> unused_settl_price_type_5;
+    bit<1> reserved_bits;
+    bit<1> intraday;
+    bit<1> rounded;
+    bit<1> actual;
+    bit<1> final;
     bit<32> open_interest_qty;
     bit<32> cleared_volume;
     bit<64> high_limit_price;
@@ -268,27 +268,27 @@ header md_instrument_definition_spread_inst_attrib_group_header_t {
 }
 
 header md_instrument_definition_spread_inst_attrib_group_t {
-    bit<1> electronic_match_eligible;
-    bit<1> order_cross_eligible;
-    bit<1> block_trade_eligible;
-    bit<1> efp_eligible;
-    bit<1> ebf_eligible;
-    bit<1> efs_eligible;
-    bit<1> efr_eligible;
-    bit<1> otc_eligible;
-    bit<1> ilink_indicative_mass_quoting_eligible;
-    bit<1> negative_strike_eligible;
-    bit<1> negative_price_outright_eligible;
-    bit<1> is_fractional;
-    bit<1> volatility_quoted_option;
-    bit<1> rfq_cross_eligible;
-    bit<1> zero_price_outright_eligible;
-    bit<1> decaying_product_eligibility;
-    bit<1> variable_product_eligibility;
-    bit<1> daily_product_eligibility;
-    bit<1> gt_orders_eligibility;
-    bit<1> implied_matching_eligibility;
     bit<12> reserved_12;
+    bit<1> implied_matching_eligibility;
+    bit<1> gt_orders_eligibility;
+    bit<1> daily_product_eligibility;
+    bit<1> variable_product_eligibility;
+    bit<1> decaying_product_eligibility;
+    bit<1> zero_price_outright_eligible;
+    bit<1> rfq_cross_eligible;
+    bit<1> volatility_quoted_option;
+    bit<1> is_fractional;
+    bit<1> negative_price_outright_eligible;
+    bit<1> negative_strike_eligible;
+    bit<1> ilink_indicative_mass_quoting_eligible;
+    bit<1> otc_eligible;
+    bit<1> efr_eligible;
+    bit<1> efs_eligible;
+    bit<1> ebf_eligible;
+    bit<1> efp_eligible;
+    bit<1> block_trade_eligible;
+    bit<1> order_cross_eligible;
+    bit<1> electronic_match_eligible;
 }
 
 header md_instrument_definition_spread_lot_type_rules_group_header_t {
@@ -320,14 +320,14 @@ header security_status_t {
     bit<48> asset;
     bit<32> security_id_optional;
     bit<16> trade_date;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<8> security_trading_status;
     bit<8> halt_reason;
     bit<8> security_trading_event;
@@ -335,14 +335,14 @@ header security_status_t {
 
 header md_incremental_refresh_book_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -362,14 +362,14 @@ header md_incremental_refresh_book_incremental_refresh_book_group_t {
 
 header md_incremental_refresh_daily_statistics_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -381,14 +381,14 @@ header md_incremental_refresh_daily_statistics_incremental_refresh_daily_statist
     bit<32> security_id;
     bit<32> rpt_seq;
     bit<16> trading_reference_date;
-    bit<1> final;
-    bit<1> actual;
-    bit<1> rounded;
-    bit<1> intraday;
-    bit<1> reserved_bits;
-    bit<1> unused_settl_price_type_5;
-    bit<1> unused_settl_price_type_6;
     bit<1> null_value;
+    bit<1> unused_settl_price_type_6;
+    bit<1> unused_settl_price_type_5;
+    bit<1> reserved_bits;
+    bit<1> intraday;
+    bit<1> rounded;
+    bit<1> actual;
+    bit<1> final;
     bit<8> md_update_action;
     bit<8> md_entry_type_daily_statistics;
     bit<56> padding_7;
@@ -396,14 +396,14 @@ header md_incremental_refresh_daily_statistics_incremental_refresh_daily_statist
 
 header md_incremental_refresh_limits_banding_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -419,14 +419,14 @@ header md_incremental_refresh_limits_banding_incremental_refresh_limits_banding_
 
 header md_incremental_refresh_session_statistics_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -444,14 +444,14 @@ header md_incremental_refresh_session_statistics_incremental_refresh_session_sta
 
 header md_incremental_refresh_trade_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -471,14 +471,14 @@ header md_incremental_refresh_trade_incremental_refresh_trade_group_t {
 
 header md_incremental_refresh_volume_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -515,28 +515,28 @@ header snapshot_full_refresh_snapshot_full_refresh_group_t {
     bit<8> md_price_level_optional;
     bit<16> trading_reference_date;
     bit<8> open_close_settl_flag;
-    bit<1> final;
-    bit<1> actual;
-    bit<1> rounded;
-    bit<1> intraday;
-    bit<1> reserved_bits;
-    bit<1> unused_settl_price_type_5;
-    bit<1> unused_settl_price_type_6;
     bit<1> null_value;
+    bit<1> unused_settl_price_type_6;
+    bit<1> unused_settl_price_type_5;
+    bit<1> reserved_bits;
+    bit<1> intraday;
+    bit<1> rounded;
+    bit<1> actual;
+    bit<1> final;
     bit<8> md_entry_type;
 }
 
 header quote_request_t {
     bit<64> transact_time;
     bit<184> quote_req_id;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<24> padding_3;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -552,14 +552,14 @@ header quote_request_related_sym_group_t {
 }
 
 header md_instrument_definition_option_t {
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<32> tot_num_reports_optional;
     bit<8> security_update_action;
     bit<64> last_update_time;
@@ -597,14 +597,14 @@ header md_instrument_definition_option_t {
     bit<240> unit_of_measure;
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
-    bit<1> final;
-    bit<1> actual;
-    bit<1> rounded;
-    bit<1> intraday;
-    bit<1> reserved_bits;
-    bit<1> unused_settl_price_type_5;
-    bit<1> unused_settl_price_type_6;
     bit<1> null_value;
+    bit<1> unused_settl_price_type_6;
+    bit<1> unused_settl_price_type_5;
+    bit<1> reserved_bits;
+    bit<1> intraday;
+    bit<1> rounded;
+    bit<1> actual;
+    bit<1> final;
     bit<32> cleared_volume;
     bit<32> open_interest_qty;
     bit<64> low_limit_price;
@@ -636,27 +636,27 @@ header md_instrument_definition_option_inst_attrib_group_header_t {
 }
 
 header md_instrument_definition_option_inst_attrib_group_t {
-    bit<1> electronic_match_eligible;
-    bit<1> order_cross_eligible;
-    bit<1> block_trade_eligible;
-    bit<1> efp_eligible;
-    bit<1> ebf_eligible;
-    bit<1> efs_eligible;
-    bit<1> efr_eligible;
-    bit<1> otc_eligible;
-    bit<1> ilink_indicative_mass_quoting_eligible;
-    bit<1> negative_strike_eligible;
-    bit<1> negative_price_outright_eligible;
-    bit<1> is_fractional;
-    bit<1> volatility_quoted_option;
-    bit<1> rfq_cross_eligible;
-    bit<1> zero_price_outright_eligible;
-    bit<1> decaying_product_eligibility;
-    bit<1> variable_product_eligibility;
-    bit<1> daily_product_eligibility;
-    bit<1> gt_orders_eligibility;
-    bit<1> implied_matching_eligibility;
     bit<12> reserved_12;
+    bit<1> implied_matching_eligibility;
+    bit<1> gt_orders_eligibility;
+    bit<1> daily_product_eligibility;
+    bit<1> variable_product_eligibility;
+    bit<1> decaying_product_eligibility;
+    bit<1> zero_price_outright_eligible;
+    bit<1> rfq_cross_eligible;
+    bit<1> volatility_quoted_option;
+    bit<1> is_fractional;
+    bit<1> negative_price_outright_eligible;
+    bit<1> negative_strike_eligible;
+    bit<1> ilink_indicative_mass_quoting_eligible;
+    bit<1> otc_eligible;
+    bit<1> efr_eligible;
+    bit<1> efs_eligible;
+    bit<1> ebf_eligible;
+    bit<1> efp_eligible;
+    bit<1> block_trade_eligible;
+    bit<1> order_cross_eligible;
+    bit<1> electronic_match_eligible;
 }
 
 header md_instrument_definition_option_lot_type_rules_group_header_t {
@@ -681,14 +681,14 @@ header md_instrument_definition_option_option_underlyings_group_t {
 
 header md_incremental_refresh_trade_summary_t {
     bit<64> transact_time;
-    bit<1> last_trade_msg;
-    bit<1> last_volume_msg;
-    bit<1> last_quote_msg;
-    bit<1> last_stats_msg;
-    bit<1> last_implied_msg;
-    bit<1> recovery_msg;
-    bit<1> reserved;
     bit<1> end_of_event;
+    bit<1> reserved;
+    bit<1> recovery_msg;
+    bit<1> last_implied_msg;
+    bit<1> last_stats_msg;
+    bit<1> last_quote_msg;
+    bit<1> last_volume_msg;
+    bit<1> last_trade_msg;
     bit<16> padding_2;
     bit<16> block_length;
     bit<8> num_in_group;

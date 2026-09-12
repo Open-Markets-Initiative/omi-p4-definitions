@@ -72,12 +72,12 @@ header security_message_t {
     bit<8> security_action;
     bit<8> asset_class;
     bit<32> security_id;
-    bit<1> piggyback_flag;
-    bit<1> caveat_flag;
-    bit<1> qib_only_144_a;
-    bit<1> unsolicited_only_flag;
-    bit<1> closing_cross_auction;
     bit<11> reserved_11;
+    bit<1> closing_cross_auction;
+    bit<1> unsolicited_only_flag;
+    bit<1> qib_only_144_a;
+    bit<1> caveat_flag;
+    bit<1> piggyback_flag;
     bit<8> tier;
     bit<8> reporting_status;
     bit<8> security_status;

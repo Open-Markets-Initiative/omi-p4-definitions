@@ -82,14 +82,14 @@ header security_message_t {
     bit<8> security_action;
     bit<8> asset_class;
     bit<32> security_id;
-    bit<1> proprietary_quote_eligible;
-    bit<1> caveat_emptor_warning;
-    bit<1> qualified_institutional_buyers_only;
-    bit<1> unsolicited_only;
-    bit<1> bb_quoted;
-    bit<1> otc_link_ecn_eligible;
-    bit<1> otc_link_messaging_disabled;
     bit<1> saturation_eligible;
+    bit<1> otc_link_messaging_disabled;
+    bit<1> otc_link_ecn_eligible;
+    bit<1> bb_quoted;
+    bit<1> unsolicited_only;
+    bit<1> qualified_institutional_buyers_only;
+    bit<1> caveat_emptor_warning;
+    bit<1> proprietary_quote_eligible;
     bit<8> tier;
     bit<8> reporting_status;
     bit<8> security_status;
@@ -99,14 +99,14 @@ header quote_message_t {
     bit<32> channel_seq_num;
     bit<32> quote_id;
     bit<8> quote_action;
-    bit<1> update_side;
-    bit<1> state_;
-    bit<1> ask_unsolicited;
-    bit<1> ask_priced;
-    bit<1> ask_bid_wanted;
-    bit<1> bid_unsolicited;
-    bit<1> bid_priced;
     bit<1> bid_ask_wanted;
+    bit<1> bid_priced;
+    bit<1> bid_unsolicited;
+    bit<1> ask_bid_wanted;
+    bit<1> ask_priced;
+    bit<1> ask_unsolicited;
+    bit<1> state_;
+    bit<1> update_side;
     bit<32> security_id;
     bit<32> mpid;
     bit<64> ask_price;
@@ -118,34 +118,34 @@ header quote_message_t {
     bit<8> bid_qap;
     bit<64> bid_time_milli;
     bit<16> quote_reference_id;
-    bit<1> quote_saturated;
-    bit<1> bid_auto_ex;
-    bit<1> offer_auto_ex;
-    bit<1> nms_conditional_quote;
     bit<4> reserved_4;
+    bit<1> nms_conditional_quote;
+    bit<1> offer_auto_ex;
+    bit<1> bid_auto_ex;
+    bit<1> quote_saturated;
 }
 
 header quote_update_message_t {
     bit<32> channel_seq_num;
     bit<32> quote_id;
-    bit<1> update_side;
-    bit<1> state_;
-    bit<1> ask_unsolicited;
-    bit<1> ask_priced;
-    bit<1> ask_bid_wanted;
-    bit<1> bid_unsolicited;
-    bit<1> bid_priced;
     bit<1> bid_ask_wanted;
+    bit<1> bid_priced;
+    bit<1> bid_unsolicited;
+    bit<1> ask_bid_wanted;
+    bit<1> ask_priced;
+    bit<1> ask_unsolicited;
+    bit<1> state_;
+    bit<1> update_side;
     bit<64> price;
     bit<32> size;
     bit<8> qap;
     bit<64> quote_time_milli;
     bit<16> quote_reference_id;
-    bit<1> quote_saturated;
-    bit<1> bid_auto_ex;
-    bit<1> offer_auto_ex;
-    bit<1> nms_conditional_quote;
     bit<4> reserved_4;
+    bit<1> nms_conditional_quote;
+    bit<1> offer_auto_ex;
+    bit<1> bid_auto_ex;
+    bit<1> quote_saturated;
 }
 
 struct metadata_t {

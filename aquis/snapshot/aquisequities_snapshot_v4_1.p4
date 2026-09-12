@@ -50,10 +50,10 @@ header snapshot_start_message_t {
 header book_status_message_t {
     bit<16> security_id;
     bit<8> trading_status;
-    bit<1> trading;
-    bit<1> mac_open;
-    bit<1> mac_run;
     bit<5> reserved;
+    bit<1> mac_run;
+    bit<1> mac_open;
+    bit<1> trading;
     bit<16> entries;
     bit<32> closing_buy_qty;
     bit<32> closing_sell_qty;

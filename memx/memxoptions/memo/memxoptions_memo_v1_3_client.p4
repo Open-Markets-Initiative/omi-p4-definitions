@@ -73,10 +73,10 @@ header new_order_single_message_t {
     bit<64> price_optional;
     bit<8> time_in_force;
     bit<8> open_or_close_optional;
-    bit<1> participate_do_not_initiate;
-    bit<1> intermarket_sweep;
-    bit<1> external_routing_not_allowed;
     bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
     bit<8> trading_capacity;
     bit<8> reprice_frequency;
     bit<8> reprice_behavior;
@@ -98,10 +98,10 @@ header short_two_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<1> participate_do_not_initiate;
-    bit<1> intermarket_sweep;
-    bit<1> external_routing_not_allowed;
     bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
     bit<8> trading_capacity;
     bit<16> mtp_group_id;
     bit<8> match_trade_prevention;
@@ -135,10 +135,10 @@ header long_two_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<1> participate_do_not_initiate;
-    bit<1> intermarket_sweep;
-    bit<1> external_routing_not_allowed;
     bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
     bit<8> trading_capacity;
     bit<16> mtp_group_id;
     bit<8> match_trade_prevention;
@@ -172,10 +172,10 @@ header short_one_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<1> participate_do_not_initiate;
-    bit<1> intermarket_sweep;
-    bit<1> external_routing_not_allowed;
     bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
     bit<8> trading_capacity;
     bit<16> mtp_group_id;
     bit<8> match_trade_prevention;
@@ -208,10 +208,10 @@ header long_one_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<1> participate_do_not_initiate;
-    bit<1> intermarket_sweep;
-    bit<1> external_routing_not_allowed;
     bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
     bit<8> trading_capacity;
     bit<16> mtp_group_id;
     bit<8> match_trade_prevention;
@@ -271,10 +271,10 @@ header mass_cancel_request_message_t {
     bit<48> underlier_optional;
     bit<64> options_security_id_optional;
     bit<16> cancel_group_id;
-    bit<1> lockout;
-    bit<1> send_cancels;
-    bit<1> cancel_orders_from_this_port_only;
     bit<5> reserved_5;
+    bit<1> cancel_orders_from_this_port_only;
+    bit<1> send_cancels;
+    bit<1> lockout;
 }
 
 header mass_cancel_clear_lockout_request_message_t {

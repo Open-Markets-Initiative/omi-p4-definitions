@@ -65,18 +65,18 @@ header order_add_message_t {
     bit<8> order_capacity;
     bit<8> account;
     bit<64> user_tag;
-    bit<1> liq_prov;
-    bit<1> algo_trade_flag;
-    bit<1> dea_flag;
     bit<5> reserved_5;
-    bit<4> party_role;
+    bit<1> dea_flag;
+    bit<1> algo_trade_flag;
+    bit<1> liq_prov;
     bit<4> party_role_qualifier;
+    bit<4> party_role;
     bit<32> short_code_1;
-    bit<4> party_role_2;
     bit<4> party_role_qualifier_2;
+    bit<4> party_role_2;
     bit<32> short_code_2;
-    bit<4> party_role_3;
     bit<4> party_role_qualifier_3;
+    bit<4> party_role_3;
     bit<32> short_code_3;
 }
 
@@ -90,26 +90,26 @@ header order_add_extended_message_t {
     bit<8> order_capacity;
     bit<8> account;
     bit<64> user_tag;
-    bit<1> liq_prov;
-    bit<1> algo_trade_flag;
-    bit<1> dea_flag;
     bit<5> reserved_5;
-    bit<4> party_role;
+    bit<1> dea_flag;
+    bit<1> algo_trade_flag;
+    bit<1> liq_prov;
     bit<4> party_role_qualifier;
+    bit<4> party_role;
     bit<32> short_code_1;
-    bit<4> party_role_2;
     bit<4> party_role_qualifier_2;
+    bit<4> party_role_2;
     bit<32> short_code_2;
-    bit<4> party_role_3;
     bit<4> party_role_qualifier_3;
+    bit<4> party_role_3;
     bit<32> short_code_3;
     bit<32> display_quantity;
     bit<32> min_qty;
-    bit<1> stp_enable;
-    bit<1> lis_only;
-    bit<1> routetolit;
-    bit<3> routing;
     bit<2> reserved_2;
+    bit<3> routing;
+    bit<1> routetolit;
+    bit<1> lis_only;
+    bit<1> stp_enable;
     bit<64> reserved_long;
     bit<64> designated_order_id;
     bit<16> reserved_short;
@@ -119,18 +119,18 @@ header order_add_extended_message_t {
 header order_cancel_message_t {
     bit<32> order_ref;
     bit<64> user_tag;
-    bit<1> liq_prov;
-    bit<1> algo_trade_flag;
-    bit<1> dea_flag;
     bit<5> reserved_5;
-    bit<4> party_role;
+    bit<1> dea_flag;
+    bit<1> algo_trade_flag;
+    bit<1> liq_prov;
     bit<4> party_role_qualifier;
+    bit<4> party_role;
     bit<32> short_code_1;
-    bit<4> party_role_2;
     bit<4> party_role_qualifier_2;
+    bit<4> party_role_2;
     bit<32> short_code_2;
-    bit<4> party_role_3;
     bit<4> party_role_qualifier_3;
+    bit<4> party_role_3;
     bit<32> short_code_3;
 }
 
@@ -139,18 +139,18 @@ header order_modify_message_t {
     bit<64> price;
     bit<32> quantity;
     bit<64> user_tag;
-    bit<1> liq_prov;
-    bit<1> algo_trade_flag;
-    bit<1> dea_flag;
     bit<5> reserved_5;
-    bit<4> party_role;
+    bit<1> dea_flag;
+    bit<1> algo_trade_flag;
+    bit<1> liq_prov;
     bit<4> party_role_qualifier;
+    bit<4> party_role;
     bit<32> short_code_1;
-    bit<4> party_role_2;
     bit<4> party_role_qualifier_2;
+    bit<4> party_role_2;
     bit<32> short_code_2;
-    bit<4> party_role_3;
     bit<4> party_role_qualifier_3;
+    bit<4> party_role_3;
     bit<32> short_code_3;
     bit<8> order_capacity;
 }
@@ -160,18 +160,18 @@ header order_modify_extended_message_t {
     bit<64> price;
     bit<32> quantity;
     bit<64> user_tag;
-    bit<1> liq_prov;
-    bit<1> algo_trade_flag;
-    bit<1> dea_flag;
     bit<5> reserved_5;
-    bit<4> party_role;
+    bit<1> dea_flag;
+    bit<1> algo_trade_flag;
+    bit<1> liq_prov;
     bit<4> party_role_qualifier;
+    bit<4> party_role;
     bit<32> short_code_1;
-    bit<4> party_role_2;
     bit<4> party_role_qualifier_2;
+    bit<4> party_role_2;
     bit<32> short_code_2;
-    bit<4> party_role_3;
     bit<4> party_role_qualifier_3;
+    bit<4> party_role_3;
     bit<32> short_code_3;
     bit<8> order_capacity;
     bit<32> display_quantity;
@@ -182,21 +182,21 @@ header order_modify_extended_message_t {
 header order_add_response_message_t {
     bit<32> order_ref;
     bit<32> market_data_id;
-    bit<5> reason_code;
     bit<3> order_status;
+    bit<5> reason_code;
     bit<32> traded_quantity;
     bit<64> timestamp;
     bit<64> user_tag;
-    bit<6> reserved_6;
-    bit<1> lis;
     bit<1> dark_flag;
+    bit<1> lis;
+    bit<6> reserved_6;
 }
 
 header order_cancel_response_message_t {
     bit<32> order_ref;
     bit<32> request_ref;
-    bit<5> reason_code;
     bit<3> order_status;
+    bit<5> reason_code;
     bit<64> timestamp;
     bit<64> user_tag;
 }
@@ -204,8 +204,8 @@ header order_cancel_response_message_t {
 header order_modify_response_message_t {
     bit<32> order_ref;
     bit<32> request_ref;
-    bit<5> reason_code;
     bit<3> order_status;
+    bit<5> reason_code;
     bit<64> timestamp;
     bit<64> user_tag;
     bit<8> order_modify_response_flags_u_81;
@@ -223,16 +223,16 @@ header trade_capture_message_t {
     bit<64> price;
     bit<32> security_id_long;
     bit<8> trade_capture_type;
-    bit<1> reserved_1;
-    bit<1> algo_trade_flag;
     bit<6> reserved_6;
+    bit<1> algo_trade_flag;
+    bit<1> reserved_1;
     bit<8> account;
     bit<64> user_tag;
 }
 
 header trade_capture_response_message_t {
-    bit<5> reason_code;
     bit<3> order_status;
+    bit<5> reason_code;
     bit<32> trade_ref;
     bit<32> request_ref;
     bit<64> user_tag;
@@ -249,9 +249,9 @@ header trade_message_t {
     bit<16> security_id_short;
     bit<64> timestamp;
     bit<64> user_tag;
-    bit<6> reserved_6;
-    bit<1> lis;
     bit<1> dark_flag;
+    bit<1> lis;
+    bit<6> reserved_6;
 }
 
 header trade_bust_message_t {
@@ -273,23 +273,23 @@ header ioi_add_message_t {
     bit<8> order_capacity;
     bit<8> account;
     bit<64> user_tag;
-    bit<1> liq_prov;
-    bit<1> algo_trade_flag;
-    bit<1> dea_flag;
     bit<5> reserved_5;
-    bit<4> party_role;
+    bit<1> dea_flag;
+    bit<1> algo_trade_flag;
+    bit<1> liq_prov;
     bit<4> party_role_qualifier;
+    bit<4> party_role;
     bit<32> short_code_1;
-    bit<4> party_role_2;
     bit<4> party_role_qualifier_2;
+    bit<4> party_role_2;
     bit<32> short_code_2;
-    bit<4> party_role_3;
     bit<4> party_role_qualifier_3;
+    bit<4> party_role_3;
     bit<32> short_code_3;
     bit<32> min_qty;
-    bit<1> stp_enable;
-    bit<1> lis_only;
     bit<6> reserved_6;
+    bit<1> lis_only;
+    bit<1> stp_enable;
     bit<8> optim_x_universe;
     bit<400> blotter_blacklist;
 }

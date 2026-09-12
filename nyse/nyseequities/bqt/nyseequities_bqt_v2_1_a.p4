@@ -128,10 +128,10 @@ header consolidated_trading_session_change_message_t {
     bit<32> source_time_ns;
     bit<32> symbol_index;
     bit<32> symbol_seq_num;
-    bit<1> ok_for_morning_hours;
-    bit<1> ok_for_national_hours_core;
-    bit<1> ok_for_late_hours;
     bit<5> reserved_5;
+    bit<1> ok_for_late_hours;
+    bit<1> ok_for_national_hours_core;
+    bit<1> ok_for_morning_hours;
     bit<16> market_id;
 }
 

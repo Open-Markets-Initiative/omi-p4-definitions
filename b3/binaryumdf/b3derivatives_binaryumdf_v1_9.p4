@@ -51,41 +51,41 @@ header sequence_message_t {
 
 header empty_book_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<24> offset_9_padding_3;
     bit<64> md_entry_timestamp;
 }
 
 header channel_reset_11_message_t {
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<24> offset_1_padding_3;
     bit<64> md_entry_timestamp;
 }
 
 header security_status_3_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> trading_session_id;
     bit<8> security_trading_status;
     bit<8> security_trading_event;
@@ -99,14 +99,14 @@ header security_status_3_message_t {
 header security_group_phase_10_message_t {
     bit<24> security_group;
     bit<40> offset_3_padding_5;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> trading_session_id;
     bit<8> trading_session_sub_id;
     bit<8> security_trading_event;
@@ -209,14 +209,14 @@ header security_definition_message_instr_attribs_group_t {
 
 header news_5_message_t {
     bit<64> security_id_optional;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> news_source;
     bit<16> language_code;
     bit<16> part_count;
@@ -231,14 +231,14 @@ header news_5_message_t {
 
 header opening_price_15_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> md_update_action;
     bit<8> open_close_settl_flag;
     bit<8> offset_11_padding_1;
@@ -252,14 +252,14 @@ header opening_price_15_message_t {
 
 header theoretical_opening_price_16_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> md_update_action;
     bit<16> trade_date;
     bit<64> md_corporate_offset_price_optional;
@@ -270,14 +270,14 @@ header theoretical_opening_price_16_message_t {
 
 header closing_price_17_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> open_close_settl_flag;
     bit<16> offset_10_padding_2;
     bit<64> md_corporate_price;
@@ -289,26 +289,26 @@ header closing_price_17_message_t {
 
 header auction_imbalance_19_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> md_update_action;
-    bit<1> unused_imbalance_condition_0;
-    bit<1> unused_imbalance_condition_1;
-    bit<1> unused_imbalance_condition_2;
-    bit<1> unused_imbalance_condition_3;
-    bit<1> unused_imbalance_condition_4;
-    bit<1> unused_imbalance_condition_5;
-    bit<1> unused_imbalance_condition_6;
-    bit<1> unused_imbalance_condition_7;
-    bit<1> imbalance_more_buyers;
-    bit<1> imbalance_more_sellers;
     bit<6> reserved_6;
+    bit<1> imbalance_more_sellers;
+    bit<1> imbalance_more_buyers;
+    bit<1> unused_imbalance_condition_7;
+    bit<1> unused_imbalance_condition_6;
+    bit<1> unused_imbalance_condition_5;
+    bit<1> unused_imbalance_condition_4;
+    bit<1> unused_imbalance_condition_3;
+    bit<1> unused_imbalance_condition_2;
+    bit<1> unused_imbalance_condition_1;
+    bit<1> unused_imbalance_condition_0;
     bit<64> md_entry_size_quantity_optional;
     bit<64> md_entry_timestamp;
     bit<32> rpt_seq;
@@ -316,14 +316,14 @@ header auction_imbalance_19_message_t {
 
 header quantity_band_21_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<24> offset_9_padding_3;
     bit<64> avg_daily_traded_qty;
     bit<64> max_trade_vol;
@@ -333,14 +333,14 @@ header quantity_band_21_message_t {
 
 header price_band_22_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> price_band_type;
     bit<8> price_limit_type;
     bit<8> price_band_midpoint_price_type;
@@ -353,14 +353,14 @@ header price_band_22_message_t {
 
 header high_price_24_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> md_update_action;
     bit<16> trade_date;
     bit<64> md_future_price;
@@ -370,14 +370,14 @@ header high_price_24_message_t {
 
 header low_price_25_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> md_update_action;
     bit<16> trade_date;
     bit<64> md_future_price;
@@ -387,31 +387,31 @@ header low_price_25_message_t {
 
 header last_trade_price_27_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> trading_session_id;
-    bit<1> opening_price;
-    bit<1> crossed;
-    bit<1> last_trade_at_the_same_price;
-    bit<1> out_of_sequence;
-    bit<1> unused_trade_condition_4;
-    bit<1> unused_trade_condition_5;
-    bit<1> trade_on_behalf;
-    bit<1> unused_trade_condition_7;
-    bit<1> unused_trade_condition_8;
-    bit<1> unused_trade_condition_9;
-    bit<1> unused_trade_condition_10;
-    bit<1> unused_trade_condition_11;
-    bit<1> unused_trade_condition_12;
-    bit<1> regular_trade;
-    bit<1> block_trade;
     bit<1> unused_trade_condition_15;
+    bit<1> block_trade;
+    bit<1> regular_trade;
+    bit<1> unused_trade_condition_12;
+    bit<1> unused_trade_condition_11;
+    bit<1> unused_trade_condition_10;
+    bit<1> unused_trade_condition_9;
+    bit<1> unused_trade_condition_8;
+    bit<1> unused_trade_condition_7;
+    bit<1> trade_on_behalf;
+    bit<1> unused_trade_condition_5;
+    bit<1> unused_trade_condition_4;
+    bit<1> out_of_sequence;
+    bit<1> last_trade_at_the_same_price;
+    bit<1> crossed;
+    bit<1> opening_price;
     bit<64> md_future_price;
     bit<64> md_entry_size_quantity;
     bit<32> trade_id;
@@ -428,14 +428,14 @@ header last_trade_price_27_message_t {
 
 header settlement_price_28_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> offset_9_padding_1;
     bit<16> trade_date;
     bit<64> md_future_price;
@@ -449,14 +449,14 @@ header settlement_price_28_message_t {
 
 header open_interest_29_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> offset_9_padding_1;
     bit<16> trade_date;
     bit<64> md_entry_size_quantity;
@@ -477,14 +477,14 @@ header snapshot_full_refresh_header_30_message_t {
 
 header order_mb_o_50_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> md_update_action;
     bit<8> md_entry_type;
     bit<8> offset_11_padding_1;
@@ -500,14 +500,14 @@ header order_mb_o_50_message_t {
 
 header delete_order_mb_o_51_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> offset_9_padding_1;
     bit<8> md_entry_type;
     bit<8> offset_11_padding_1;
@@ -520,14 +520,14 @@ header delete_order_mb_o_51_message_t {
 
 header mass_delete_orders_mb_o_52_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> md_update_action;
     bit<8> md_entry_type;
     bit<8> offset_11_padding_1;
@@ -538,31 +538,31 @@ header mass_delete_orders_mb_o_52_message_t {
 
 header trade_53_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> trading_session_id;
-    bit<1> opening_price;
-    bit<1> crossed;
-    bit<1> last_trade_at_the_same_price;
-    bit<1> out_of_sequence;
-    bit<1> unused_trade_condition_4;
-    bit<1> unused_trade_condition_5;
-    bit<1> trade_on_behalf;
-    bit<1> unused_trade_condition_7;
-    bit<1> unused_trade_condition_8;
-    bit<1> unused_trade_condition_9;
-    bit<1> unused_trade_condition_10;
-    bit<1> unused_trade_condition_11;
-    bit<1> unused_trade_condition_12;
-    bit<1> regular_trade;
-    bit<1> block_trade;
     bit<1> unused_trade_condition_15;
+    bit<1> block_trade;
+    bit<1> regular_trade;
+    bit<1> unused_trade_condition_12;
+    bit<1> unused_trade_condition_11;
+    bit<1> unused_trade_condition_10;
+    bit<1> unused_trade_condition_9;
+    bit<1> unused_trade_condition_8;
+    bit<1> unused_trade_condition_7;
+    bit<1> trade_on_behalf;
+    bit<1> unused_trade_condition_5;
+    bit<1> unused_trade_condition_4;
+    bit<1> out_of_sequence;
+    bit<1> last_trade_at_the_same_price;
+    bit<1> crossed;
+    bit<1> opening_price;
     bit<64> md_future_price;
     bit<64> md_entry_size_quantity;
     bit<32> trade_id;
@@ -577,31 +577,31 @@ header trade_53_message_t {
 
 header forward_trade_54_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> trading_session_id;
-    bit<1> opening_price;
-    bit<1> crossed;
-    bit<1> last_trade_at_the_same_price;
-    bit<1> out_of_sequence;
-    bit<1> unused_trade_condition_4;
-    bit<1> unused_trade_condition_5;
-    bit<1> trade_on_behalf;
-    bit<1> unused_trade_condition_7;
-    bit<1> unused_trade_condition_8;
-    bit<1> unused_trade_condition_9;
-    bit<1> unused_trade_condition_10;
-    bit<1> unused_trade_condition_11;
-    bit<1> unused_trade_condition_12;
-    bit<1> regular_trade;
-    bit<1> block_trade;
     bit<1> unused_trade_condition_15;
+    bit<1> block_trade;
+    bit<1> regular_trade;
+    bit<1> unused_trade_condition_12;
+    bit<1> unused_trade_condition_11;
+    bit<1> unused_trade_condition_10;
+    bit<1> unused_trade_condition_9;
+    bit<1> unused_trade_condition_8;
+    bit<1> unused_trade_condition_7;
+    bit<1> trade_on_behalf;
+    bit<1> unused_trade_condition_5;
+    bit<1> unused_trade_condition_4;
+    bit<1> out_of_sequence;
+    bit<1> last_trade_at_the_same_price;
+    bit<1> crossed;
+    bit<1> opening_price;
     bit<64> md_future_price;
     bit<64> md_entry_size_quantity;
     bit<32> trade_id;
@@ -632,14 +632,14 @@ header execution_summary_55_message_t {
 
 header execution_statistics_56_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> trading_session_id;
     bit<16> trade_date;
     bit<64> trade_volume;
@@ -652,14 +652,14 @@ header execution_statistics_56_message_t {
 
 header trade_bust_57_message_t {
     bit<64> security_id;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
     bit<8> trading_session_id;
     bit<16> offset_10_padding_2;
     bit<64> md_future_price;
@@ -685,14 +685,14 @@ header snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders
     bit<64> md_insert_timestamp;
     bit<64> secondary_order_id;
     bit<8> md_entry_type;
-    bit<1> unused_match_event_indicator_0;
-    bit<1> unused_match_event_indicator_1;
-    bit<1> unused_match_event_indicator_2;
-    bit<1> unused_match_event_indicator_3;
-    bit<1> implied;
-    bit<1> recovery_msg;
-    bit<1> unused_match_event_indicator_6;
     bit<1> end_of_event;
+    bit<1> unused_match_event_indicator_6;
+    bit<1> recovery_msg;
+    bit<1> implied;
+    bit<1> unused_match_event_indicator_3;
+    bit<1> unused_match_event_indicator_2;
+    bit<1> unused_match_event_indicator_1;
+    bit<1> unused_match_event_indicator_0;
 }
 
 struct metadata_t {

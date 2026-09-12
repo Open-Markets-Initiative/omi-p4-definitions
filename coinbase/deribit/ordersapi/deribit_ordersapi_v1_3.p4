@@ -33,8 +33,8 @@
 
 header session_flags_t {
     bit<8> protocol_id;
-    bit<1> is_resend;
     bit<7> reserved_bits;
+    bit<1> is_resend;
     bit<16> message_length;
     bit<16> template_id;
     bit<16> schema_version;
@@ -96,13 +96,13 @@ header new_order_request_message_t {
     bit<64> self_match_prevention_id;
     bit<8> side;
     bit<8> time_in_force;
-    bit<1> cancel_on_disconnect;
-    bit<1> post_only;
-    bit<1> post_only_reject;
-    bit<1> market_limit;
-    bit<1> mmp;
-    bit<1> reset_mmp;
     bit<10> reserved_10;
+    bit<1> reset_mmp;
+    bit<1> mmp;
+    bit<1> market_limit;
+    bit<1> post_only_reject;
+    bit<1> post_only;
+    bit<1> cancel_on_disconnect;
     bit<8> self_trading_mode;
 }
 
@@ -115,10 +115,10 @@ header amend_order_request_message_t {
     bit<8> exponent;
     bit<64> mantissa_2;
     bit<8> exponent_2;
-    bit<1> unused_replace_order_flags_0;
-    bit<1> post_only;
-    bit<1> post_only_reject;
     bit<13> reserved_13;
+    bit<1> post_only_reject;
+    bit<1> post_only;
+    bit<1> unused_replace_order_flags_0;
 }
 
 header cancel_order_request_message_t {
@@ -138,8 +138,8 @@ header mass_quote_request_message_t {
     bit<64> correlation_id;
     bit<64> mmp_group_id;
     bit<64> self_match_prevention_id;
-    bit<1> reset_mmp;
     bit<7> reserved_7;
+    bit<1> reset_mmp;
     bit<16> block_length;
     bit<16> num_in_group;
 }
@@ -152,20 +152,20 @@ header mass_quote_request_message_mass_quote_request_message_quotes_group_t {
     bit<8> exponent;
     bit<64> mantissa_2;
     bit<8> exponent_2;
-    bit<1> cancel_on_disconnect;
-    bit<1> post_only;
-    bit<1> post_only_reject;
-    bit<1> market_limit;
-    bit<1> mmp;
-    bit<1> reset_mmp;
     bit<10> reserved_10;
-    bit<1> cancel_on_disconnect_2;
-    bit<1> post_only_2;
-    bit<1> post_only_reject_2;
-    bit<1> market_limit_2;
-    bit<1> mmp_2;
-    bit<1> reset_mmp_2;
+    bit<1> reset_mmp;
+    bit<1> mmp;
+    bit<1> market_limit;
+    bit<1> post_only_reject;
+    bit<1> post_only;
+    bit<1> cancel_on_disconnect;
     bit<10> reserved_10_2;
+    bit<1> reset_mmp_2;
+    bit<1> mmp_2;
+    bit<1> market_limit_2;
+    bit<1> post_only_reject_2;
+    bit<1> post_only_2;
+    bit<1> cancel_on_disconnect_2;
 }
 
 header mass_cancel_request_message_t {
@@ -461,9 +461,9 @@ header order_filled_message_order_filled_message_fills_group_t {
     bit<64> mantissa_2;
     bit<8> exponent_2;
     bit<8> side;
-    bit<1> is_quote;
-    bit<1> is_fully_filled;
     bit<6> reserved_6;
+    bit<1> is_fully_filled;
+    bit<1> is_quote;
 }
 
 header order_filled_message_order_filled_message_legs_group_header_t {
@@ -483,8 +483,8 @@ header order_filled_message_order_filled_message_legs_group_t {
 header orders_canceled_message_t {
     bit<64> timestamp;
     bit<64> exec_id;
-    bit<1> is_last_message;
     bit<7> reserved_7;
+    bit<1> is_last_message;
     bit<16> block_length;
     bit<16> num_in_group;
 }
@@ -496,8 +496,8 @@ header orders_canceled_message_orders_canceled_message_orders_group_t {
     bit<64> mantissa;
     bit<8> exponent;
     bit<8> cancel_reason;
-    bit<1> is_quote;
     bit<7> reserved_7;
+    bit<1> is_quote;
 }
 
 header order_placed_message_t {

@@ -148,8 +148,8 @@ header trade_message_t {
     bit<64> timestamp;
     bit<64> symbol;
     bit<64> trade_id;
-    bit<1> intermarket_sweep;
     bit<7> reserved_7;
+    bit<1> intermarket_sweep;
     bit<8> side;
     bit<32> quantity;
     bit<64> price;

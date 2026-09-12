@@ -61,10 +61,10 @@ header enter_order_message_t {
     bit<32> execution_within_firm;
     bit<32> investment_decision_within_firm_short_code;
     bit<32> client_identifier;
-    bit<2> client_identification;
-    bit<2> investment_decision_within_firm;
-    bit<2> execution_decision_within_firm;
     bit<2> reserved_78;
+    bit<2> execution_decision_within_firm;
+    bit<2> investment_decision_within_firm;
+    bit<2> client_identification;
     bit<8> capacity;
     bit<8> algo_indicator;
     bit<16> appendage_length;

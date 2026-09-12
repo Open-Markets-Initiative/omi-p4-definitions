@@ -110,9 +110,9 @@ header add_order_no_mpid_attribution_t {
     bit<32> ranking_sequence_number;
     bit<64> quantity;
     bit<32> price;
-    bit<13> reserved_13;
-    bit<1> bait_implied_order;
     bit<2> reserved_2;
+    bit<1> bait_implied_order;
+    bit<13> reserved_13;
     bit<8> lot_type;
     bit<64> ranking_time;
 }
@@ -125,9 +125,9 @@ header add_order_with_mpid_attribution_t {
     bit<32> reserved_4;
     bit<64> quantity;
     bit<32> price;
-    bit<13> reserved_13;
-    bit<1> bait_implied_order;
     bit<2> reserved_2;
+    bit<1> bait_implied_order;
+    bit<13> reserved_13;
     bit<8> lot_type;
     bit<56> participant_id;
 }
@@ -165,9 +165,9 @@ header order_replace_message_t {
     bit<32> new_order_book_position;
     bit<64> quantity;
     bit<32> price;
-    bit<13> reserved_13;
-    bit<1> bait_implied_order;
     bit<2> reserved_2;
+    bit<1> bait_implied_order;
+    bit<13> reserved_13;
 }
 
 header order_delete_message_t {

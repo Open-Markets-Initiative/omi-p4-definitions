@@ -81,8 +81,8 @@ header extended_trade_message_t {
     bit<8> trade_action;
     bit<8> trade_flags;
     bit<32> security_id;
-    bit<1> irregular;
     bit<7> reserved_7;
+    bit<1> irregular;
     bit<24> venue;
     bit<40> deprecated_utf_85;
     bit<64> trade_price;

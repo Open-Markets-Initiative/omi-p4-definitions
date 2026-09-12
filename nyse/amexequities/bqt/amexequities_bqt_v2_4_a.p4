@@ -164,9 +164,9 @@ header best_quotes_message_t {
     bit<32> bid_volume;
     bit<8> ask_quote_condition;
     bit<8> bid_quote_condition;
-    bit<1> retail_interest_on_the_bid_side;
-    bit<1> retail_interest_on_the_ask_side;
     bit<6> reserved;
+    bit<1> retail_interest_on_the_ask_side;
+    bit<1> retail_interest_on_the_bid_side;
     bit<16> market_id_of_best_ask;
     bit<16> market_id_of_best_bid;
 }
@@ -178,9 +178,9 @@ header consolidated_single_sided_quote_message_t {
     bit<32> price;
     bit<32> volume;
     bit<8> quote_condition;
-    bit<1> retail_interest_on_the_bid_side;
-    bit<1> retail_interest_on_the_ask_side;
     bit<6> reserved;
+    bit<1> retail_interest_on_the_ask_side;
+    bit<1> retail_interest_on_the_bid_side;
     bit<16> market_id;
 }
 
