@@ -411,7 +411,7 @@ header md_instrument_definition_future_t {
     bit<8> match_algorithm;
     bit<32> min_trade_vol;
     bit<32> max_trade_vol;
-    bit<64> min_price_increment;
+    bit<64> min_price_increment_ex;
     bit<64> display_factor;
     bit<8> main_fraction;
     bit<8> sub_fraction;
@@ -544,7 +544,7 @@ header md_instrument_definition_option_t {
     bit<8> match_algorithm;
     bit<32> min_trade_vol;
     bit<32> max_trade_vol;
-    bit<64> min_price_increment_optional;
+    bit<64> min_price_increment_optional_ex;
     bit<64> min_price_increment_amount;
     bit<64> display_factor;
     bit<8> tick_rule;
@@ -688,7 +688,7 @@ header md_instrument_definition_spread_t {
     bit<8> match_algorithm;
     bit<32> min_trade_vol;
     bit<32> max_trade_vol;
-    bit<64> min_price_increment_optional;
+    bit<64> min_price_increment_optional_ex;
     bit<64> display_factor;
     bit<8> price_display_format;
     bit<64> price_ratio;
@@ -823,7 +823,7 @@ header md_instrument_definition_fixed_income_t {
     bit<8> match_algorithm;
     bit<32> min_trade_vol;
     bit<32> max_trade_vol;
-    bit<64> min_price_increment_optional;
+    bit<64> min_price_increment_optional_ex;
     bit<64> display_factor;
     bit<8> main_fraction;
     bit<8> sub_fraction;
@@ -949,7 +949,7 @@ header md_instrument_definition_repo_t {
     bit<8> match_algorithm;
     bit<32> min_trade_vol;
     bit<32> max_trade_vol;
-    bit<64> min_price_increment;
+    bit<64> min_price_increment_ex;
     bit<64> display_factor;
     bit<240> unit_of_measure;
     bit<64> unit_of_measure_qty;
@@ -1223,7 +1223,7 @@ header md_instrument_definition_fx_t {
     bit<8> match_algorithm;
     bit<32> min_trade_vol;
     bit<32> max_trade_vol;
-    bit<64> min_price_increment;
+    bit<64> min_price_increment_ex;
     bit<64> display_factor;
     bit<8> price_precision;
     bit<240> unit_of_measure;

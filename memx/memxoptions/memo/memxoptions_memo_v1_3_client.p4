@@ -91,7 +91,7 @@ header new_order_single_message_t {
 header new_order_single_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header short_two_sided_bulk_quote_message_t {
@@ -114,7 +114,7 @@ header short_two_sided_bulk_quote_message_t {
 header short_two_sided_bulk_quote_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header short_two_sided_bulk_quote_message_two_sided_quotes_group_header_t {
@@ -151,7 +151,7 @@ header long_two_sided_bulk_quote_message_t {
 header long_two_sided_bulk_quote_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header long_two_sided_bulk_quote_message_two_sided_quotes_group_header_t {
@@ -188,7 +188,7 @@ header short_one_sided_bulk_quote_message_t {
 header short_one_sided_bulk_quote_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header short_one_sided_bulk_quote_message_one_sided_quotes_group_header_t {
@@ -224,7 +224,7 @@ header long_one_sided_bulk_quote_message_t {
 header long_one_sided_bulk_quote_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header long_one_sided_bulk_quote_message_one_sided_quotes_group_header_t {
@@ -293,7 +293,7 @@ header allocation_instruction_message_t {
     bit<64> trd_match_id;
     bit<64> security_id;
     bit<8> side;
-    bit<32> quantity_uint_32;
+    bit<32> quantity_long;
     bit<64> trade_date;
     bit<8> block_length_short;
     bit<8> num_in_group;

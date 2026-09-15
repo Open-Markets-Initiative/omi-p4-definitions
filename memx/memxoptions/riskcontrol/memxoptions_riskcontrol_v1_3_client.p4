@@ -70,7 +70,7 @@ header risk_settings_query_message_t {
 header active_risk_threshold_change_req_message_t {
     bit<160> clordid;
     bit<48> underlier_active_risk_threshold_change_req_underlier;
-    bit<32> efi_d_active_risk_threshold_change_req_efid;
+    bit<32> efid_active_risk_threshold_change_req_efid;
     bit<32> threshold_quantity;
 }
 
@@ -231,7 +231,7 @@ header active_risk_threshold_state_message_t {
 header active_risk_threshold_change_rej_message_t {
     bit<160> clordid;
     bit<48> underlier_active_risk_threshold_change_rej_underlier;
-    bit<32> efi_d_active_risk_threshold_change_rej_efid;
+    bit<32> efid_active_risk_threshold_change_rej_efid;
     bit<32> threshold_quantity;
     bit<16> reject_reason;
 }

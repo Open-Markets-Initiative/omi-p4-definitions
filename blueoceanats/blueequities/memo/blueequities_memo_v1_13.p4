@@ -95,12 +95,12 @@ header new_order_single_message_t {
     bit<16> risk_group_id;
     bit<32> link_id_optional;
     bit<32> locate_broker_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header new_order_single_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -176,12 +176,12 @@ header execution_report_pending_new_message_t {
     bit<32> cum_qty;
     bit<32> link_id_optional;
     bit<32> locate_broker_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_pending_new_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -225,12 +225,12 @@ header execution_report_new_message_t {
     bit<64> transact_time;
     bit<32> link_id_optional;
     bit<32> locate_broker_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_new_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -246,12 +246,12 @@ header execution_report_rejected_message_t {
     bit<32> cum_qty;
     bit<8> order_reject_reason;
     bit<32> link_id_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_rejected_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -272,12 +272,12 @@ header execution_report_trade_message_t {
     bit<64> trd_matching_id;
     bit<32> link_id_optional;
     bit<8> security_group;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_trade_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -294,12 +294,12 @@ header execution_report_pending_cancel_message_t {
     bit<32> leaves_qty;
     bit<32> cum_qty;
     bit<32> link_id_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_pending_cancel_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -327,12 +327,12 @@ header execution_report_canceled_message_t {
     bit<8> cancel_reason;
     bit<64> transact_time;
     bit<32> link_id_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_canceled_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -361,12 +361,12 @@ header execution_report_pending_replace_message_t {
     bit<32> cum_qty;
     bit<32> link_id_optional;
     bit<32> locate_broker_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_pending_replace_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -391,12 +391,12 @@ header execution_report_replaced_message_t {
     bit<64> transact_time;
     bit<32> link_id_optional;
     bit<32> locate_broker_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_replaced_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -415,12 +415,12 @@ header execution_report_trade_correction_message_t {
     bit<32> cum_qty;
     bit<32> link_id_optional;
     bit<8> security_group;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_trade_correction_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -437,12 +437,12 @@ header execution_report_trade_break_message_t {
     bit<32> cum_qty;
     bit<32> link_id_optional;
     bit<8> security_group;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_trade_break_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }
@@ -461,12 +461,12 @@ header execution_report_restatement_message_t {
     bit<64> transact_time;
     bit<8> extended_restatement_reason;
     bit<32> link_id_optional;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header execution_report_restatement_message_parties_group_t {
-    bit<128> party_i_d_new_order_single_party_id;
+    bit<128> party_id_new_order_single_party_id;
     bit<8> party_id_source;
     bit<8> party_role;
 }

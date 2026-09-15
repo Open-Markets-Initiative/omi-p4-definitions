@@ -116,7 +116,7 @@ header execution_report_new_message_t {
 header execution_report_new_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header execution_report_bulk_quote_pending_new_message_t {
@@ -142,7 +142,7 @@ header execution_report_bulk_quote_pending_new_message_t {
 header execution_report_bulk_quote_pending_new_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header execution_report_bulk_quote_component_new_message_t {
@@ -201,7 +201,7 @@ header execution_report_trade_message_t {
 header execution_report_trade_message_parties_group_t {
     bit<128> party_id;
     bit<8> party_id_source;
-    bit<8> party_role_party_role_type;
+    bit<8> party_role;
 }
 
 header execution_report_pending_cancel_message_t {
@@ -377,7 +377,7 @@ header allocation_report_message_t {
     bit<64> trd_match_id;
     bit<64> security_id;
     bit<8> side;
-    bit<32> quantity_uint_32;
+    bit<32> quantity_long;
     bit<64> trade_date;
     bit<64> sending_time;
     bit<8> block_length_short;

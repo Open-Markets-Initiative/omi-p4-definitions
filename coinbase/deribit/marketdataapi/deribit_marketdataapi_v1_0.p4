@@ -35,7 +35,7 @@ header packet_header_t {
     bit<64> sending_time;
     bit<64> seq_num;
     bit<32> channel_id;
-    bit<13> reserved_bits;
+    bit<13> packet_reserved_bits;
     bit<1> retransmit;
     bit<1> snapshot;
     bit<1> incremental_update;
@@ -212,7 +212,7 @@ header end_of_cycle_message_t {
 
 header retransmit_request_message_t {
     bit<64> begin_seq_num;
-    bit<8> message_count_uint_8;
+    bit<8> message_count_short;
 }
 
 header retransmit_reject_message_t {

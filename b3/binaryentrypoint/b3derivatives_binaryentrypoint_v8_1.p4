@@ -141,7 +141,7 @@ header simple_new_order_message_t {
     bit<8> market_segment_id;
     bit<8> padding;
     bit<8> ordtagid;
-    bit<8> mm_protection_reset_boolean;
+    bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
     bit<80> sender_location;
@@ -166,7 +166,7 @@ header simple_modify_order_message_t {
     bit<8> market_segment_id;
     bit<8> padding;
     bit<8> ordtagid;
-    bit<8> mm_protection_reset_boolean;
+    bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
     bit<80> sender_location;
@@ -193,7 +193,7 @@ header new_order_single_message_t {
     bit<8> market_segment_id;
     bit<8> padding;
     bit<8> ordtagid;
-    bit<8> mm_protection_reset_boolean;
+    bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
     bit<80> sender_location;
@@ -228,7 +228,7 @@ header order_cancel_replace_request_message_t {
     bit<8> market_segment_id;
     bit<8> padding;
     bit<8> ordtagid;
-    bit<8> mm_protection_reset_boolean;
+    bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
     bit<80> sender_location;
@@ -347,7 +347,7 @@ header execution_report_new_message_t {
     bit<32> document;
     bit<8> cross_type;
     bit<8> cross_prioritization;
-    bit<8> mm_protection_reset_boolean_optional;
+    bit<8> mm_protection_reset_optional;
     bit<24> offset_165_padding_3;
     bit<32> strategy_id;
     bit<8> desk_id_length;
@@ -390,7 +390,7 @@ header execution_report_modify_message_t {
     bit<8> ordtagid;
     bit<16> prefix;
     bit<32> document;
-    bit<8> mm_protection_reset_boolean_optional;
+    bit<8> mm_protection_reset_optional;
     bit<24> offset_179_padding_3;
     bit<32> strategy_id;
     bit<8> desk_id_length;
@@ -544,7 +544,7 @@ header execution_report_forward_message_t {
     bit<32> contra_broker;
     bit<64> order_id;
     bit<8> aggressor_indicator;
-    bit<8> settltype_optional;
+    bit<8> settl_type_optional;
     bit<16> trade_date;
     bit<16> days_to_settlement_optional;
     bit<16> offset_118_padding_2;
@@ -625,7 +625,7 @@ header quote_request_message_t {
     bit<32> contra_broker;
     bit<64> transact_time;
     bit<64> price_8;
-    bit<8> settltype;
+    bit<8> settl_type;
     bit<8> execute_underlying_trade;
     bit<64> order_qty;
     bit<80> sender_location;
@@ -660,7 +660,7 @@ header quote_status_report_message_t {
     bit<8> quote_status_response_to;
     bit<32> account;
     bit<8> side_optional;
-    bit<8> settltype_optional;
+    bit<8> settl_type_optional;
     bit<64> price_8_optional;
     bit<64> order_qty;
     bit<80> sender_location;
@@ -688,7 +688,7 @@ header quote_message_t {
     bit<64> price_8_optional;
     bit<64> order_qty;
     bit<8> side;
-    bit<8> settltype;
+    bit<8> settl_type;
     bit<32> account;
     bit<80> sender_location;
     bit<40> entering_trader;
@@ -733,7 +733,7 @@ header quote_request_reject_message_t {
     bit<32> contra_broker;
     bit<64> transact_time;
     bit<40> entering_trader;
-    bit<8> settltype_optional;
+    bit<8> settl_type_optional;
     bit<64> price_8_optional;
     bit<64> order_qty_optional;
     bit<80> sender_location;

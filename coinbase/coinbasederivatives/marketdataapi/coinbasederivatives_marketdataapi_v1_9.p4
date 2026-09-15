@@ -335,9 +335,9 @@ header funding_rate_message_t {
     bit<16> reserved;
     bit<64> transact_time;
     bit<64> funding_rate;
-    bit<64> futures_mark_price_price;
-    bit<64> spot_mark_price_price;
-    bit<64> fair_value_price;
+    bit<64> futures_mark_price;
+    bit<64> spot_mark_price;
+    bit<64> fair_value;
     bit<64> final_funding_rate_timestamp;
     bit<64> correlation_id;
     bit<7> reserved_7;
@@ -470,10 +470,10 @@ header end_of_snapshot_message_t {
     bit<64> final_funding_rate;
     bit<64> final_futures_mark_price;
     bit<64> final_funding_rate_timestamp;
-    bit<64> futures_mark_price_price_optional;
+    bit<64> futures_mark_price_optional;
     bit<64> predicted_funding_rate;
-    bit<64> spot_mark_price_price_optional;
-    bit<64> fair_value_price_optional;
+    bit<64> spot_mark_price_optional;
+    bit<64> fair_value_optional;
 }
 
 header end_of_cycle_message_t {

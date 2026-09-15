@@ -86,160 +86,160 @@ header risk_settings_query_message_t {
 }
 
 header active_risk_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_active_risk_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_active_risk_threshold_change_request_cl_ord_id;
     bit<48> underlier_active_risk_threshold_change_request_underlier_optional;
-    bit<32> efi_d_active_risk_threshold_change_request_efi_d_optional;
+    bit<32> efid_active_risk_threshold_change_request_efid_optional;
     bit<32> threshold_quantity;
 }
 
 header active_risk_acknowledgement_request_message_t {
-    bit<160> cl_ord_i_d_active_risk_acknowledgement_request_cl_ord_id;
+    bit<160> cl_ord_id_active_risk_acknowledgement_request_cl_ord_id;
     bit<48> underlier_active_risk_acknowledgement_request_underlier;
-    bit<32> efi_d_active_risk_acknowledgement_request_efid;
+    bit<32> efid_active_risk_acknowledgement_request_efid;
     bit<32> quantity;
 }
 
 header cp_volume_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_volume_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_volume_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_volume_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_volume_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_volume_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<64> volume;
     bit<32> period_in_milli_seconds;
 }
 
 header cp_executed_notional_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_executed_notional_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_executed_notional_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_executed_notional_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_executed_notional_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_executed_notional_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<64> price_in_dollars;
     bit<32> period_in_milli_seconds;
 }
 
 header cp_total_executions_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_total_executions_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_total_executions_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_total_executions_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_total_executions_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_total_executions_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<32> total_executions;
     bit<32> period_in_milli_seconds;
 }
 
 header cp_percent_outstanding_contracts_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_percent_outstanding_contracts_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_percent_outstanding_contracts_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_percent_outstanding_contracts_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_percent_outstanding_contracts_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_percent_outstanding_contracts_threshold_change_request_efid_optional;
     bit<32> percent;
     bit<32> period_in_milli_seconds;
 }
 
 header cp_breach_count_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_breach_count_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_breach_count_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_breach_count_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_breach_count_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_breach_count_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<32> count;
     bit<32> period_in_milli_seconds;
 }
 
 header manual_cp_breach_trigger_request_message_t {
-    bit<160> cl_ord_i_d_manual_cp_breach_trigger_request_cl_ord_id;
+    bit<160> cl_ord_id_manual_cp_breach_trigger_request_cl_ord_id;
     bit<48> underlier_manual_cp_breach_trigger_request_underlier_optional;
-    bit<32> efi_d_manual_cp_breach_trigger_request_efi_d_optional;
+    bit<32> efid_manual_cp_breach_trigger_request_efid_optional;
     bit<16> risk_group_id;
     bit<8> send_cancels;
 }
 
 header cp_clear_breach_request_message_t {
-    bit<160> cl_ord_i_d_cp_clear_breach_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_clear_breach_request_cl_ord_id;
     bit<64> breach_id;
 }
 
 header single_order_allow_iso_orders_change_request_message_t {
-    bit<160> cl_ord_i_d_single_order_allow_iso_orders_change_request_cl_ord_id;
+    bit<160> cl_ord_id_single_order_allow_iso_orders_change_request_cl_ord_id;
     bit<48> underlier_single_order_allow_iso_orders_change_request_underlier_optional;
-    bit<32> efi_d_single_order_allow_iso_orders_change_request_efi_d_optional;
+    bit<32> efid_single_order_allow_iso_orders_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<8> allow_iso_orders;
 }
 
 header single_order_allow_orders_in_crossed_market_change_request_message_t {
-    bit<160> cl_ord_i_d_single_order_allow_orders_in_crossed_market_change_request_cl_ord_id;
+    bit<160> cl_ord_id_single_order_allow_orders_in_crossed_market_change_request_cl_ord_id;
     bit<48> underlier_single_order_allow_orders_in_crossed_market_change_request_underlier_optional;
-    bit<32> efi_d_single_order_allow_orders_in_crossed_market_change_request_efi_d_optional;
+    bit<32> efid_single_order_allow_orders_in_crossed_market_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<8> allow_orders;
 }
 
 header single_order_max_notional_change_request_message_t {
-    bit<160> cl_ord_i_d_single_order_max_notional_change_request_cl_ord_id;
+    bit<160> cl_ord_id_single_order_max_notional_change_request_cl_ord_id;
     bit<48> underlier_single_order_max_notional_change_request_underlier_optional;
-    bit<32> efi_d_single_order_max_notional_change_request_efi_d_optional;
+    bit<32> efid_single_order_max_notional_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<64> max_notional_in_dollars;
 }
 
 header single_order_max_contracts_change_request_message_t {
-    bit<160> cl_ord_i_d_single_order_max_contracts_change_request_cl_ord_id;
+    bit<160> cl_ord_id_single_order_max_contracts_change_request_cl_ord_id;
     bit<48> underlier_single_order_max_contracts_change_request_underlier_optional;
-    bit<32> efi_d_single_order_max_contracts_change_request_efi_d_optional;
+    bit<32> efid_single_order_max_contracts_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<32> max_contracts;
 }
 
 header single_order_allow_market_orders_change_request_message_t {
-    bit<160> cl_ord_i_d_single_order_allow_market_orders_change_request_cl_ord_id;
+    bit<160> cl_ord_id_single_order_allow_market_orders_change_request_cl_ord_id;
     bit<48> underlier_single_order_allow_market_orders_change_request_underlier_optional;
-    bit<32> efi_d_single_order_allow_market_orders_change_request_efi_d_optional;
+    bit<32> efid_single_order_allow_market_orders_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<8> allow_market_orders;
 }
 
 header single_order_restricted_underlier_change_request_message_t {
-    bit<160> cl_ord_i_d_single_order_restricted_underlier_change_request_cl_ord_id;
+    bit<160> cl_ord_id_single_order_restricted_underlier_change_request_cl_ord_id;
     bit<48> underlier_single_order_restricted_underlier_change_request_underlier;
-    bit<32> efi_d_single_order_restricted_underlier_change_request_efi_d_optional;
+    bit<32> efid_single_order_restricted_underlier_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<8> restricted;
 }
 
 header cp_gross_notional_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_gross_notional_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_gross_notional_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_gross_notional_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_gross_notional_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_gross_notional_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<64> price_in_dollars;
 }
 
 header cp_market_order_gross_notional_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_market_order_gross_notional_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_market_order_gross_notional_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_market_order_gross_notional_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_market_order_gross_notional_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_market_order_gross_notional_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<64> price_in_dollars;
 }
 
 header cp_net_notional_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_net_notional_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_net_notional_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_net_notional_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_net_notional_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_net_notional_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<64> price_in_dollars;
 }
 
 header cp_market_order_net_notional_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_market_order_net_notional_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_market_order_net_notional_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_market_order_net_notional_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_market_order_net_notional_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_market_order_net_notional_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<64> price_in_dollars;
 }
 
 header cp_duplicate_order_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_duplicate_order_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_duplicate_order_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_duplicate_order_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_duplicate_order_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_duplicate_order_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<32> max_dup_orders;
     bit<8> use_order_price_in_dup_check_optional;
@@ -247,28 +247,28 @@ header cp_duplicate_order_threshold_change_request_message_t {
 }
 
 header cp_order_rate_threshold_change_request_message_t {
-    bit<160> cl_ord_i_d_cp_order_rate_threshold_change_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_order_rate_threshold_change_request_cl_ord_id;
     bit<48> underlier_cp_order_rate_threshold_change_request_underlier_optional;
-    bit<32> efi_d_cp_order_rate_threshold_change_request_efi_d_optional;
+    bit<32> efid_cp_order_rate_threshold_change_request_efid_optional;
     bit<16> risk_group_id;
     bit<32> max_order_msgs;
     bit<32> period_in_milli_seconds;
 }
 
 header cp_clear_all_breaches_request_message_t {
-    bit<160> cl_ord_i_d_cp_clear_all_breaches_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_clear_all_breaches_request_cl_ord_id;
 }
 
 header cp_clear_all_breaches_by_efid_or_underlier_request_message_t {
-    bit<160> cl_ord_i_d_cp_clear_all_breaches_by_efid_or_underlier_request_cl_ord_id;
+    bit<160> cl_ord_id_cp_clear_all_breaches_by_efid_or_underlier_request_cl_ord_id;
     bit<48> underlier_cp_clear_all_breaches_by_efid_or_underlier_request_underlier_optional;
-    bit<32> efi_d_cp_clear_all_breaches_by_efid_or_underlier_request_efi_d_optional;
+    bit<32> efid_cp_clear_all_breaches_by_efid_or_underlier_request_efid_optional;
 }
 
 header active_risk_acknowledge_all_request_message_t {
-    bit<160> cl_ord_i_d_active_risk_acknowledge_all_request_cl_ord_id;
+    bit<160> cl_ord_id_active_risk_acknowledge_all_request_cl_ord_id;
     bit<48> underlier_active_risk_acknowledge_all_request_underlier;
-    bit<32> efi_d_active_risk_acknowledge_all_request_efid;
+    bit<32> efid_active_risk_acknowledge_all_request_efid;
 }
 
 header active_risk_threshold_state_message_t {
@@ -280,9 +280,9 @@ header active_risk_threshold_state_message_t {
 }
 
 header active_risk_threshold_change_rejected_message_t {
-    bit<160> cl_ord_i_d_active_risk_threshold_change_rejected_cl_ord_id;
+    bit<160> cl_ord_id_active_risk_threshold_change_rejected_cl_ord_id;
     bit<48> underlier_active_risk_threshold_change_rejected_underlier_optional;
-    bit<32> efi_d_active_risk_threshold_change_rejected_efi_d_optional;
+    bit<32> efid_active_risk_threshold_change_rejected_efid_optional;
     bit<32> threshold_quantity;
     bit<16> reject_reason;
 }
@@ -296,9 +296,9 @@ header active_risk_acknowledged_message_t {
 }
 
 header active_risk_acknowledge_rejected_message_t {
-    bit<160> cl_ord_i_d_active_risk_acknowledge_rejected_cl_ord_id;
+    bit<160> cl_ord_id_active_risk_acknowledge_rejected_cl_ord_id;
     bit<48> underlier_active_risk_acknowledge_rejected_underlier;
-    bit<32> efi_d_active_risk_acknowledge_rejected_efid;
+    bit<32> efid_active_risk_acknowledge_rejected_efid;
     bit<32> threshold_quantity;
     bit<16> reject_reason;
 }
@@ -378,7 +378,7 @@ header manual_cp_breach_trigger_done_message_t {
 }
 
 header risk_threshold_update_rejected_message_t {
-    bit<160> cl_ord_i_d_risk_threshold_update_rejected_cl_ord_id;
+    bit<160> cl_ord_id_risk_threshold_update_rejected_cl_ord_id;
     bit<8> risk_type;
     bit<16> reject_reason;
 }
@@ -426,17 +426,17 @@ header single_order_max_contracts_threshold_state_message_t {
 }
 
 header single_order_allow_market_orders_state_message_t {
-    bit<160> cl_ord_i_d_single_order_allow_market_orders_state_cl_ord_i_d_optional;
+    bit<160> cl_ord_id_single_order_allow_market_orders_state_cl_ord_id_optional;
     bit<48> underlier_single_order_allow_market_orders_state_underlier_optional;
-    bit<32> efi_d_single_order_allow_market_orders_state_efi_d_optional;
+    bit<32> efid_single_order_allow_market_orders_state_efid_optional;
     bit<16> risk_group_id;
     bit<8> market_orders;
 }
 
 header single_order_restricted_underlier_state_message_t {
-    bit<160> cl_ord_i_d_single_order_restricted_underlier_state_cl_ord_i_d_optional;
+    bit<160> cl_ord_id_single_order_restricted_underlier_state_cl_ord_id_optional;
     bit<48> underlier_single_order_restricted_underlier_state_underlier;
-    bit<32> efi_d_single_order_restricted_underlier_state_efi_d_optional;
+    bit<32> efid_single_order_restricted_underlier_state_efid_optional;
     bit<16> risk_group_id;
     bit<8> restricted;
 }
@@ -447,20 +447,20 @@ header risk_settings_query_done_message_t {
 }
 
 header risk_settings_query_rejected_message_t {
-    bit<160> cl_ord_i_d_risk_settings_query_rejected_cl_ord_id;
+    bit<160> cl_ord_id_risk_settings_query_rejected_cl_ord_id;
     bit<16> reject_reason;
 }
 
 header manual_cp_breach_trigger_rejected_message_t {
-    bit<160> cl_ord_i_d_manual_cp_breach_trigger_rejected_cl_ord_id;
+    bit<160> cl_ord_id_manual_cp_breach_trigger_rejected_cl_ord_id;
     bit<48> underlier_manual_cp_breach_trigger_rejected_underlier_optional;
-    bit<32> efi_d_manual_cp_breach_trigger_rejected_efi_d_optional;
+    bit<32> efid_manual_cp_breach_trigger_rejected_efid_optional;
     bit<16> risk_group_id;
     bit<16> reject_reason;
 }
 
 header breach_clear_rejected_message_t {
-    bit<160> cl_ord_i_d_breach_clear_rejected_cl_ord_id;
+    bit<160> cl_ord_id_breach_clear_rejected_cl_ord_id;
     bit<64> breach_id_optional;
     bit<16> reject_reason;
 }
@@ -471,24 +471,24 @@ header breach_cleared_message_t {
 }
 
 header breach_clear_all_accepted_message_t {
-    bit<160> cl_ord_i_d_breach_clear_all_accepted_cl_ord_id;
+    bit<160> cl_ord_id_breach_clear_all_accepted_cl_ord_id;
 }
 
 header breach_clear_all_rejected_message_t {
-    bit<160> cl_ord_i_d_breach_clear_all_rejected_cl_ord_id;
+    bit<160> cl_ord_id_breach_clear_all_rejected_cl_ord_id;
     bit<16> reject_reason;
 }
 
 header breach_clear_all_by_efid_or_underlier_accepted_message_t {
-    bit<160> cl_ord_i_d_breach_clear_all_by_efid_or_underlier_accepted_cl_ord_id;
+    bit<160> cl_ord_id_breach_clear_all_by_efid_or_underlier_accepted_cl_ord_id;
     bit<48> underlier_breach_clear_all_by_efid_or_underlier_accepted_underlier_optional;
-    bit<32> efi_d_breach_clear_all_by_efid_or_underlier_accepted_efi_d_optional;
+    bit<32> efid_breach_clear_all_by_efid_or_underlier_accepted_efid_optional;
 }
 
 header breach_clear_all_by_efid_or_underlier_rejected_message_t {
-    bit<160> cl_ord_i_d_breach_clear_all_by_efid_or_underlier_rejected_cl_ord_id;
+    bit<160> cl_ord_id_breach_clear_all_by_efid_or_underlier_rejected_cl_ord_id;
     bit<48> underlier_breach_clear_all_by_efid_or_underlier_rejected_underlier_optional;
-    bit<32> efi_d_breach_clear_all_by_efid_or_underlier_rejected_efi_d_optional;
+    bit<32> efid_breach_clear_all_by_efid_or_underlier_rejected_efid_optional;
     bit<16> reject_reason;
 }
 

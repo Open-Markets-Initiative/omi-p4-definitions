@@ -51,11 +51,11 @@ header login_response_message_t {
 
 header gateway_heartbeat_message_t {
     bit<8> keep_alive;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
-header gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_t {
+header gateway_heartbeat_message_sub_sessions_group_t {
     bit<8> subsession_type;
     bit<64> subsession_id;
     bit<8> joined;
@@ -94,7 +94,7 @@ header subsession_leave_response_message_t {
 
 header new_order_single_message_t {
     bit<128> account_account;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<32> clearing_account;
@@ -102,7 +102,7 @@ header new_order_single_message_t {
     bit<8> open_close;
     bit<8> attributed_quote;
     bit<8> time_in_force;
-    bit<8> cancel_instead_of_slide_cancel_instead_of_slide;
+    bit<8> cancel_instead_of_slide;
     bit<8> display_inst;
     bit<8> exec_inst;
     bit<8> ord_type;
@@ -119,7 +119,7 @@ header new_order_single_message_t {
 
 header order_cancel_replace_request_message_t {
     bit<128> account_account;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<32> clearing_account;
@@ -128,7 +128,7 @@ header order_cancel_replace_request_message_t {
     bit<8> open_close;
     bit<8> attributed_quote;
     bit<8> time_in_force;
-    bit<8> cancel_instead_of_slide_cancel_instead_of_slide_optional;
+    bit<8> cancel_instead_of_slide_optional;
     bit<8> display_inst;
     bit<8> exec_inst;
     bit<8> ord_type;
@@ -144,7 +144,7 @@ header order_cancel_replace_request_message_t {
 }
 
 header order_cancel_request_message_t {
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<64> orig_cl_ord_id;
@@ -152,19 +152,19 @@ header order_cancel_request_message_t {
 
 header new_bulk_quote_message_t {
     bit<32> market_participant_id;
-    bit<16> custom_group_id_uint_16;
+    bit<16> custom_group_id;
     bit<64> cl_ord_id;
     bit<32> clearing_account;
-    bit<8> cancel_instead_of_slide_cancel_instead_of_slide_optional;
+    bit<8> cancel_instead_of_slide_optional;
     bit<64> send_time;
     bit<24> aiq;
     bit<8> time_in_force;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_t {
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<8> side;
     bit<32> price_price_4_optional;
     bit<32> order_qty_quantity_zero_optional;
@@ -173,7 +173,7 @@ header new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_t {
 }
 
 header mass_cancel_request_message_t {
-    bit<32> underlying_id_instrument_id_optional;
+    bit<32> underlying_id_optional;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<64> send_time;
@@ -183,24 +183,24 @@ header mass_cancel_request_message_t {
 }
 
 header purge_request_message_t {
-    bit<32> underlying_id_instrument_id;
+    bit<32> underlying_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<64> send_time;
     bit<8> ack_style_purge_request_ack_style;
     bit<8> bulk_action;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header purge_request_message_purge_request_message_custom_group_ids_group_t {
-    bit<16> custom_group_id_uint_16;
+    bit<16> custom_group_id;
 }
 
 header order_ack_message_t {
     bit<128> account_account;
     bit<64> transact_time;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<32> clearing_account;
@@ -210,7 +210,7 @@ header order_ack_message_t {
     bit<8> open_close;
     bit<8> attributed_quote;
     bit<8> time_in_force;
-    bit<8> cancel_instead_of_slide_cancel_instead_of_slide;
+    bit<8> cancel_instead_of_slide;
     bit<8> display_inst;
     bit<8> exec_inst;
     bit<8> ord_type;
@@ -233,7 +233,7 @@ header order_ack_message_t {
 
 header unsolicited_modify_ack_message_t {
     bit<64> transact_time;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> orig_cl_ord_id;
     bit<64> order_id;
@@ -249,7 +249,7 @@ header unsolicited_modify_ack_message_t {
 
 header order_cancel_ack_message_t {
     bit<64> transact_time;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<64> orig_cl_ord_id;
@@ -263,7 +263,7 @@ header order_cancel_ack_message_t {
 
 header mass_cancel_ack_message_t {
     bit<64> transact_time;
-    bit<32> underlying_id_instrument_id_optional;
+    bit<32> underlying_id_optional;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<8> reason_code;
@@ -277,17 +277,17 @@ header mass_cancel_ack_message_t {
 header bulk_quote_ack_message_t {
     bit<64> transact_time;
     bit<32> market_participant_id;
-    bit<16> custom_group_id_uint_16;
+    bit<16> custom_group_id;
     bit<64> cl_ord_id;
     bit<32> clearing_account;
     bit<24> aiq;
     bit<8> throttle_indicator;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_t {
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<8> side;
     bit<64> order_id;
     bit<8> ack_type;
@@ -302,7 +302,7 @@ header new_ioc_quote_ack_message_t {
     bit<64> cl_ord_id;
     bit<32> clearing_account;
     bit<24> aiq;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<8> side;
     bit<64> order_id;
     bit<8> ack_type;
@@ -314,7 +314,7 @@ header new_ioc_quote_ack_message_t {
 
 header quote_restated_message_t {
     bit<64> transact_time;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<64> order_id;
@@ -327,7 +327,7 @@ header quote_restated_message_t {
 
 header quote_canceled_message_t {
     bit<64> transact_time;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<64> order_id;
@@ -339,25 +339,25 @@ header quote_canceled_message_t {
 
 header purge_ack_message_t {
     bit<64> transact_time;
-    bit<32> underlying_id_instrument_id;
+    bit<32> underlying_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<8> ack_style_purge_request_ack_style;
     bit<8> bulk_action;
     bit<32> cancel_count;
     bit<8> throttle_indicator;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
 header purge_ack_message_purge_ack_message_custom_group_ids_group_t {
-    bit<16> custom_group_id_uint_16;
+    bit<16> custom_group_id;
 }
 
 header execution_report_message_t {
     bit<128> account_account;
     bit<64> transact_time;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<32> clearing_account;
@@ -391,7 +391,7 @@ header execution_report_message_t {
 
 header trade_bust_correct_message_t {
     bit<64> transact_time;
-    bit<32> instrument_id_instrument_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<64> order_id;
@@ -407,8 +407,8 @@ header trade_bust_correct_message_t {
 
 header application_layer_reject_message_t {
     bit<64> transact_time;
-    bit<32> underlying_id_instrument_id;
-    bit<32> instrument_id_instrument_id;
+    bit<32> underlying_id;
+    bit<32> instrument_id;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
     bit<128> account_string_16;
@@ -418,30 +418,30 @@ header application_layer_reject_message_t {
 }
 
 header risk_limit_update_request_message_t {
-    bit<32> underlying_id_instrument_id_optional;
+    bit<32> underlying_id_optional;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
-    bit<8> risk_control_risk_control_optional;
-    bit<8> risk_control_status_risk_control_status_optional;
+    bit<8> risk_control_optional;
+    bit<8> risk_control_status_optional;
     bit<64> time_limit;
     bit<32> percentage_limit;
     bit<32> count_limit;
     bit<8> ioc_attribution;
-    bit<8> cust_capacity_weight_uint_8_optional;
+    bit<8> cust_capacity_weight_optional;
 }
 
 header risk_action_request_message_t {
-    bit<32> underlying_id_instrument_id_optional;
+    bit<32> underlying_id_optional;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
-    bit<8> risk_control_risk_control;
+    bit<8> risk_control;
     bit<8> risk_action;
-    bit<16> custom_group_id_uint_16_optional;
+    bit<16> custom_group_id_optional;
 }
 
 header underlying_ref_data_message_t {
     bit<64> transact_time;
-    bit<32> underlying_id_uint_32;
+    bit<32> underlying_id;
     bit<64> underlying_symbol;
     bit<32> mic;
     bit<8> mpv_group;
@@ -449,8 +449,8 @@ header underlying_ref_data_message_t {
 
 header instrument_ref_data_message_t {
     bit<64> transact_time;
-    bit<32> instrument_id_uint_32;
-    bit<32> underlying_id_uint_32;
+    bit<32> instrument_id;
+    bit<32> underlying_id;
     bit<168> osi_symbol;
     bit<64> maturity_date;
     bit<8> option_type;
@@ -479,7 +479,7 @@ header mpid_configuration_acknowledgement_message_t {
 
 header market_maker_symbol_appointment_message_t {
     bit<64> transact_time;
-    bit<32> underlying_id_instrument_id;
+    bit<32> underlying_id;
     bit<32> market_participant_id;
     bit<8> appointment_type;
     bit<8> appointment_status;
@@ -505,28 +505,28 @@ header session_configuration_acknowledgement_message_t {
 
 header risk_control_acknowledgment_message_t {
     bit<64> transact_time;
-    bit<32> underlying_id_instrument_id_optional;
+    bit<32> underlying_id_optional;
     bit<32> market_participant_id;
     bit<64> cl_ord_id;
-    bit<16> custom_group_id_uint_16_optional;
+    bit<16> custom_group_id_optional;
     bit<8> risk_ack_type;
-    bit<8> risk_control_status_risk_control_status;
-    bit<8> risk_control_risk_control;
+    bit<8> risk_control_status;
+    bit<8> risk_control;
     bit<8> risk_action;
     bit<64> time_limit;
     bit<32> percentage_limit;
     bit<32> count_limit;
     bit<8> ioc_attribution;
     bit<8> blocked_by_breach_indicator;
-    bit<8> cust_capacity_weight_uint_8;
+    bit<8> cust_capacity_weight;
     bit<8> throttle_indicator;
 }
 
 header risk_control_alert_message_t {
     bit<64> transact_time;
-    bit<32> underlying_id_instrument_id_optional;
+    bit<32> underlying_id_optional;
     bit<32> market_participant_id;
-    bit<8> risk_control_risk_control;
+    bit<8> risk_control;
     bit<64> time_limit;
     bit<32> percentage_limit;
     bit<32> count_limit;
@@ -535,7 +535,7 @@ header risk_control_alert_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining;
+    bit<8> gateway_heartbeat_message_sub_sessions_group_remaining;
     bit<8> new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_remaining;
     bit<8> purge_request_message_purge_request_message_custom_group_ids_group_remaining;
     bit<8> bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_remaining;
@@ -547,7 +547,7 @@ struct headers_t {
     login_request_message_t login_request_message;
     login_response_message_t login_response_message;
     gateway_heartbeat_message_t gateway_heartbeat_message;
-    gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_t gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group[MAX_MESSAGES];
+    gateway_heartbeat_message_sub_sessions_group_t gateway_heartbeat_message_sub_sessions_group[MAX_MESSAGES];
     terminate_message_t terminate_message;
     sequenced_message_header_message_t sequenced_message_header_message;
     subsession_join_message_t subsession_join_message;
@@ -630,19 +630,19 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
     state parse_gateway_heartbeat_message {
         packet.extract(hdr.gateway_heartbeat_message);
         meta.dispatched = 1;
-        meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining = hdr.gateway_heartbeat_message.num_in_group;
-        transition select(meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining) {
+        meta.gateway_heartbeat_message_sub_sessions_group_remaining = hdr.gateway_heartbeat_message.num_in_group;
+        transition select(meta.gateway_heartbeat_message_sub_sessions_group_remaining) {
             8w0: accept;
-            default: parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group;
+            default: parse_gateway_heartbeat_message_sub_sessions_group;
         }
     }
 
-    state parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group {
-        packet.extract(hdr.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group.next);
-        meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining = meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining - 1;
-        transition select(meta.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group_remaining) {
+    state parse_gateway_heartbeat_message_sub_sessions_group {
+        packet.extract(hdr.gateway_heartbeat_message_sub_sessions_group.next);
+        meta.gateway_heartbeat_message_sub_sessions_group_remaining = meta.gateway_heartbeat_message_sub_sessions_group_remaining - 1;
+        transition select(meta.gateway_heartbeat_message_sub_sessions_group_remaining) {
             8w0: accept;
-            default: parse_gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group;
+            default: parse_gateway_heartbeat_message_sub_sessions_group;
         }
     }
 
@@ -974,7 +974,7 @@ control IexoptionsBinaryorderentryDeparser(packet_out packet, in headers_t hdr) 
         packet.emit(hdr.login_request_message);
         packet.emit(hdr.login_response_message);
         packet.emit(hdr.gateway_heartbeat_message);
-        packet.emit(hdr.gateway_heartbeat_message_gateway_heartbeat_message_sub_sessions_group);
+        packet.emit(hdr.gateway_heartbeat_message_sub_sessions_group);
         packet.emit(hdr.terminate_message);
         packet.emit(hdr.sequenced_message_header_message);
         packet.emit(hdr.subsession_join_message);

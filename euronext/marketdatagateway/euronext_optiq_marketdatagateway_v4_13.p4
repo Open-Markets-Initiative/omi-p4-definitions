@@ -65,12 +65,12 @@ header health_status_message_t {
 }
 
 header technical_notification_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> technical_notification_type;
     bit<8> rebroadcast_indicator;
     bit<64> retransmission_start_time;
     bit<64> retransmission_end_time;
-    bit<32> symbol_index;
+    bit<32> symbol_index_optional;
 }
 
 header market_update_message_t {
@@ -87,7 +87,7 @@ header market_update_message_market_updates_group_t {
     bit<32> symbol_index;
     bit<16> number_of_orders;
     bit<64> price;
-    bit<64> quantity;
+    bit<64> quantity_optional;
 }
 
 header order_update_message_t {
@@ -124,7 +124,7 @@ header price_update_message_price_updates_group_t {
     bit<8> price_type;
     bit<32> symbol_index;
     bit<64> price;
-    bit<64> quantity;
+    bit<64> quantity_optional;
     bit<64> imbalance_qty;
     bit<8> imbalance_qty_side;
     bit<8> price_qualifier;
@@ -135,7 +135,7 @@ header full_trade_information_message_t {
     bit<8> rebroadcast_indicator;
     bit<8> emm;
     bit<64> event_time;
-    bit<32> symbol_index;
+    bit<32> symbol_index_optional;
     bit<216> trading_date_time;
     bit<216> publication_date_time;
     bit<8> trade_type;
@@ -156,7 +156,7 @@ header full_trade_information_message_t {
     bit<32> mmt_transaction_category;
     bit<32> mmt_negotiation_indicator;
     bit<32> mmt_agency_cross_trade_indicator;
-    bit<32> mmt_modification_indicator_char_4_optional;
+    bit<32> mmt_modification_indicator_optional;
     bit<32> mmt_benchmark_indicator;
     bit<32> mmt_special_dividend_indicator;
     bit<8> mmt_off_book_automated_indicator;
@@ -234,7 +234,7 @@ header timetable_message_t {
     bit<8> rebroadcast_indicator;
     bit<8> emm_optional;
     bit<16> pattern_id;
-    bit<32> symbol_index;
+    bit<32> symbol_index_optional;
     bit<8> block_length_short;
     bit<8> num_in_group;
 }
@@ -286,7 +286,7 @@ header standing_data_message_t {
     bit<128> icb;
     bit<24> issuing_country;
     bit<64> last_adjusted_closing_price;
-    bit<64> lot_size;
+    bit<64> lot_size_optional;
     bit<64> maturity_date_optional;
     bit<8> maximum_decimals_in_quantity;
     bit<32> mic;
@@ -328,7 +328,7 @@ header standing_data_message_emm_pattern_rep_group_t {
     bit<16> pattern_id;
     bit<16> tick_size_index_id;
     bit<8> market_model;
-    bit<64> lot_size;
+    bit<64> lot_size_optional;
     bit<8> inst_unit_exp;
     bit<8> anonymous;
 }
@@ -415,10 +415,10 @@ header contract_standing_data_message_t {
     bit<480> contract_name;
     bit<8> contract_type;
     bit<8> underlying_type;
-    bit<8> price_decimals;
+    bit<8> price_decimals_optional;
     bit<8> quantity_decimals;
     bit<8> amount_decimals;
-    bit<8> ratio_decimals;
+    bit<8> ratio_decimals_optional;
     bit<40> main_depositary;
     bit<32> mic;
     bit<24> country_of_exchange;
@@ -464,7 +464,7 @@ header contract_standing_data_message_contract_emm_properties_group_t {
     bit<8> emm_optional;
     bit<16> tick_size_index_id;
     bit<16> pattern_id;
-    bit<64> lot_size;
+    bit<64> lot_size_optional;
     bit<16> reserved_16;
     bit<1> put_straddle_versus_sell_a_call_or_a_put;
     bit<1> put_spread_versus_sell_a_call;
@@ -589,7 +589,7 @@ header lis_package_structure_message_package_components_group_t {
 }
 
 header apa_quotes_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> mifid_instrument_id_type;
     bit<96> mifid_instrument_id;
@@ -604,7 +604,7 @@ header apa_quotes_message_t {
 }
 
 header apa_standing_data_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> mifid_instrument_id_type;
     bit<96> mifid_instrument_id;
@@ -671,7 +671,7 @@ header apa_full_trade_information_message_t {
 }
 
 header bf_instrument_reference_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> symbol_index;
     bit<8> optiq_segment;
@@ -719,7 +719,7 @@ header bf_instrument_reference_message_interest_payment_date_rep_group_t {
 }
 
 header bf_trade_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> symbol_index;
     bit<416> mifid_transaction_id;
@@ -741,20 +741,20 @@ header bf_trade_message_t {
 }
 
 header bfnav_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> symbol_index;
     bit<64> bid_offer_date_time;
     bit<416> mifid_transaction_id;
     bit<32> mmt_modification_indicator;
     bit<64> nav_price;
-    bit<64> event_time;
+    bit<64> event_time_optional;
     bit<64> nav_bid_price;
     bit<64> nav_offer_price;
 }
 
 header bf_instrument_suspension_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> symbol_index;
     bit<64> event_time;

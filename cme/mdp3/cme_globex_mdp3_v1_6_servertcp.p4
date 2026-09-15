@@ -302,12 +302,12 @@ header md_instrument_definition_spread_lot_type_rules_group_t {
     bit<32> min_lot_size;
 }
 
-header md_instrument_definition_spread_legs_group_header_t {
+header md_instrument_definition_spread_legacy_legs_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
 }
 
-header md_instrument_definition_spread_legs_group_t {
+header md_instrument_definition_spread_legacy_legs_group_t {
     bit<32> leg_security_id;
     bit<8> leg_side;
     bit<8> leg_ratio_qty;
@@ -779,7 +779,7 @@ struct metadata_t {
     bit<8> md_instrument_definition_spread_feed_types_group_remaining;
     bit<8> md_instrument_definition_spread_inst_attrib_group_remaining;
     bit<8> md_instrument_definition_spread_lot_type_rules_group_remaining;
-    bit<8> md_instrument_definition_spread_legs_group_remaining;
+    bit<8> md_instrument_definition_spread_legacy_legs_group_remaining;
     bit<8> md_incremental_refresh_book_incremental_refresh_book_group_remaining;
     bit<8> md_incremental_refresh_daily_statistics_incremental_refresh_daily_statistics_group_remaining;
     bit<8> md_incremental_refresh_limits_banding_incremental_refresh_limits_banding_group_remaining;
@@ -821,8 +821,8 @@ struct headers_t {
     md_instrument_definition_spread_inst_attrib_group_t md_instrument_definition_spread_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_spread_lot_type_rules_group_header_t md_instrument_definition_spread_lot_type_rules_group_header;
     md_instrument_definition_spread_lot_type_rules_group_t md_instrument_definition_spread_lot_type_rules_group[MAX_MESSAGES];
-    md_instrument_definition_spread_legs_group_header_t md_instrument_definition_spread_legs_group_header;
-    md_instrument_definition_spread_legs_group_t md_instrument_definition_spread_legs_group[MAX_MESSAGES];
+    md_instrument_definition_spread_legacy_legs_group_header_t md_instrument_definition_spread_legacy_legs_group_header;
+    md_instrument_definition_spread_legacy_legs_group_t md_instrument_definition_spread_legacy_legs_group[MAX_MESSAGES];
     security_status_t security_status;
     md_incremental_refresh_book_t md_incremental_refresh_book;
     md_incremental_refresh_book_incremental_refresh_book_group_t md_incremental_refresh_book_incremental_refresh_book_group[MAX_MESSAGES];
@@ -1062,7 +1062,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
         packet.extract(hdr.md_instrument_definition_spread_lot_type_rules_group_header);
         meta.md_instrument_definition_spread_lot_type_rules_group_remaining = hdr.md_instrument_definition_spread_lot_type_rules_group_header.num_in_group;
         transition select(meta.md_instrument_definition_spread_lot_type_rules_group_remaining) {
-            8w0: read_md_instrument_definition_spread_legs_group;
+            8w0: read_md_instrument_definition_spread_legacy_legs_group;
             default: parse_md_instrument_definition_spread_lot_type_rules_group;
         }
     }
@@ -1071,26 +1071,26 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
         packet.extract(hdr.md_instrument_definition_spread_lot_type_rules_group.next);
         meta.md_instrument_definition_spread_lot_type_rules_group_remaining = meta.md_instrument_definition_spread_lot_type_rules_group_remaining - 1;
         transition select(meta.md_instrument_definition_spread_lot_type_rules_group_remaining) {
-            8w0: read_md_instrument_definition_spread_legs_group;
+            8w0: read_md_instrument_definition_spread_legacy_legs_group;
             default: parse_md_instrument_definition_spread_lot_type_rules_group;
         }
     }
 
-    state read_md_instrument_definition_spread_legs_group {
-        packet.extract(hdr.md_instrument_definition_spread_legs_group_header);
-        meta.md_instrument_definition_spread_legs_group_remaining = hdr.md_instrument_definition_spread_legs_group_header.num_in_group;
-        transition select(meta.md_instrument_definition_spread_legs_group_remaining) {
+    state read_md_instrument_definition_spread_legacy_legs_group {
+        packet.extract(hdr.md_instrument_definition_spread_legacy_legs_group_header);
+        meta.md_instrument_definition_spread_legacy_legs_group_remaining = hdr.md_instrument_definition_spread_legacy_legs_group_header.num_in_group;
+        transition select(meta.md_instrument_definition_spread_legacy_legs_group_remaining) {
             8w0: accept;
-            default: parse_md_instrument_definition_spread_legs_group;
+            default: parse_md_instrument_definition_spread_legacy_legs_group;
         }
     }
 
-    state parse_md_instrument_definition_spread_legs_group {
-        packet.extract(hdr.md_instrument_definition_spread_legs_group.next);
-        meta.md_instrument_definition_spread_legs_group_remaining = meta.md_instrument_definition_spread_legs_group_remaining - 1;
-        transition select(meta.md_instrument_definition_spread_legs_group_remaining) {
+    state parse_md_instrument_definition_spread_legacy_legs_group {
+        packet.extract(hdr.md_instrument_definition_spread_legacy_legs_group.next);
+        meta.md_instrument_definition_spread_legacy_legs_group_remaining = meta.md_instrument_definition_spread_legacy_legs_group_remaining - 1;
+        transition select(meta.md_instrument_definition_spread_legacy_legs_group_remaining) {
             8w0: accept;
-            default: parse_md_instrument_definition_spread_legs_group;
+            default: parse_md_instrument_definition_spread_legacy_legs_group;
         }
     }
 
@@ -1492,8 +1492,8 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_spread_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_spread_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_spread_lot_type_rules_group);
-        packet.emit(hdr.md_instrument_definition_spread_legs_group_header);
-        packet.emit(hdr.md_instrument_definition_spread_legs_group);
+        packet.emit(hdr.md_instrument_definition_spread_legacy_legs_group_header);
+        packet.emit(hdr.md_instrument_definition_spread_legacy_legs_group);
         packet.emit(hdr.security_status);
         packet.emit(hdr.md_incremental_refresh_book);
         packet.emit(hdr.md_incremental_refresh_book_incremental_refresh_book_group);

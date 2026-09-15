@@ -36,7 +36,7 @@ header packet_header_t {
     bit<8> delivery_flag;
     bit<8> message_count;
     bit<32> sequence_number;
-    bit<32> timestamp;
+    bit<32> seconds;
     bit<32> nanoseconds;
 }
 

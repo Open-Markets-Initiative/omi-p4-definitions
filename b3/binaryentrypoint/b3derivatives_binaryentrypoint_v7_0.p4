@@ -496,7 +496,7 @@ header execution_report_forward_message_t {
     bit<32> contra_broker;
     bit<64> order_id;
     bit<8> aggressor_indicator;
-    bit<8> settltype_optional;
+    bit<8> settl_type_optional;
     bit<16> trade_date;
     bit<16> days_to_settlement_optional;
     bit<16> offset_118_padding_2;
@@ -573,7 +573,7 @@ header quote_request_message_t {
     bit<32> contra_broker;
     bit<64> transact_time;
     bit<64> price;
-    bit<8> settltype;
+    bit<8> settl_type;
     bit<8> execute_underlying_trade;
     bit<64> order_qty;
     bit<80> sender_location;
@@ -607,7 +607,7 @@ header quote_status_report_message_t {
     bit<8> quote_status_response_to;
     bit<32> account;
     bit<8> side_optional;
-    bit<8> settltype_optional;
+    bit<8> settl_type_optional;
     bit<64> price_optional;
     bit<64> order_qty;
     bit<80> sender_location;
@@ -635,7 +635,7 @@ header quote_message_t {
     bit<64> price_optional;
     bit<64> order_qty;
     bit<8> side;
-    bit<8> settltype;
+    bit<8> settl_type;
     bit<32> account;
     bit<80> sender_location;
     bit<40> entering_trader;
@@ -680,7 +680,7 @@ header quote_request_reject_message_t {
     bit<32> contra_broker;
     bit<64> transact_time;
     bit<40> entering_trader;
-    bit<8> settltype_optional;
+    bit<8> settl_type_optional;
     bit<64> price_optional;
     bit<64> order_qty_optional;
     bit<80> sender_location;

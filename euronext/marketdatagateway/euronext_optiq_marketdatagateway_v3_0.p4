@@ -65,12 +65,12 @@ header health_status_message_t {
 }
 
 header technical_notification_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> technical_notification_type;
     bit<8> rebroadcast_indicator;
     bit<64> retransmission_start_time;
     bit<64> retransmission_end_time;
-    bit<32> symbol_index;
+    bit<32> symbol_index_optional;
 }
 
 header market_update_message_t {
@@ -134,7 +134,7 @@ header full_trade_information_message_t {
     bit<8> rebroadcast_indicator;
     bit<8> emm;
     bit<64> event_time;
-    bit<32> symbol_index;
+    bit<32> symbol_index_optional;
     bit<216> trading_date_time;
     bit<216> publication_date_time;
     bit<8> trade_type;
@@ -229,7 +229,7 @@ header timetable_message_t {
     bit<8> rebroadcast_indicator;
     bit<8> emm_optional;
     bit<16> pattern_id;
-    bit<32> symbol_index;
+    bit<32> symbol_index_optional;
     bit<8> block_length_short;
     bit<8> num_in_group;
 }
@@ -279,7 +279,7 @@ header standing_data_message_t {
     bit<128> icb;
     bit<24> issuing_country;
     bit<64> last_adjusted_closing_price;
-    bit<64> lot_size;
+    bit<64> lot_size_optional;
     bit<64> maturity_date_optional;
     bit<8> maximum_decimals_in_quantity;
     bit<32> mic;
@@ -321,7 +321,7 @@ header standing_data_message_emm_pattern_rep_group_t {
     bit<16> pattern_id;
     bit<16> tick_size_index_id;
     bit<8> market_model;
-    bit<64> lot_size;
+    bit<64> lot_size_optional;
     bit<8> inst_unit_exp;
 }
 
@@ -407,10 +407,10 @@ header contract_standing_data_message_t {
     bit<480> contract_name;
     bit<8> contract_type;
     bit<8> underlying_type;
-    bit<8> price_decimals;
+    bit<8> price_decimals_optional;
     bit<8> quantity_decimals;
     bit<8> amount_decimals;
-    bit<8> ratio_decimals;
+    bit<8> ratio_decimals_optional;
     bit<40> main_depositary;
     bit<32> mic;
     bit<24> country_of_exchange;
@@ -456,7 +456,7 @@ header contract_standing_data_message_contract_emm_properties_group_t {
     bit<8> emm_optional;
     bit<16> tick_size_index_id;
     bit<16> pattern_id;
-    bit<64> lot_size;
+    bit<64> lot_size_optional;
     bit<16> reserved_16;
     bit<1> put_straddle_versus_sell_a_call_or_a_put;
     bit<1> put_spread_versus_sell_a_call;
@@ -555,7 +555,7 @@ header lis_package_structure_message_package_components_group_t {
 }
 
 header apa_quotes_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> mifid_instrument_id_type;
     bit<96> mifid_instrument_id;
@@ -569,7 +569,7 @@ header apa_quotes_message_t {
 }
 
 header apa_standing_data_message_t {
-    bit<64> md_seq_num;
+    bit<64> md_seq_num_optional;
     bit<8> rebroadcast_indicator;
     bit<32> mifid_instrument_id_type;
     bit<96> mifid_instrument_id;

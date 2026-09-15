@@ -221,7 +221,7 @@ header heartbeat_message_t {
 header sequenced_packet_message_t {
     bit<32> channel_id;
     bit<64> sequence_number;
-    bit<8> block_length_uint_8;
+    bit<8> block_length_short;
     bit<8> num_in_group;
 }
 

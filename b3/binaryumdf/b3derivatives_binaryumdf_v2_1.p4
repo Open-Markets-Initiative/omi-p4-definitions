@@ -166,7 +166,7 @@ header security_definition_message_t {
     bit<8> product;
     bit<8> exercise_style;
     bit<8> put_or_call;
-    bit<8> price_type_price_type_optional;
+    bit<8> price_type_optional;
     bit<8> market_segment_id;
     bit<8> governance_indicator;
     bit<8> security_match_type;
@@ -441,7 +441,7 @@ header settlement_price_28_message_t {
     bit<64> md_future_price;
     bit<64> md_entry_timestamp;
     bit<8> open_close_settl_flag;
-    bit<8> price_type_price_type;
+    bit<8> price_type;
     bit<8> settl_price_type;
     bit<32> rpt_seq;
     bit<8> padding_1;
