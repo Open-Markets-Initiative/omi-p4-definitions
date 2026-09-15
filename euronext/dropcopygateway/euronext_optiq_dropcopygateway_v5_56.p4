@@ -89,8 +89,8 @@ header dc_price_update_message_t {
     bit<64> event_time;
     bit<8> price_type;
     bit<32> symbol_index;
-    bit<64> price_int_64t_optional;
-    bit<64> quantity_uint_64t_optional;
+    bit<64> price;
+    bit<64> quantity;
     bit<64> imbalance_qty;
     bit<8> imbalance_qty_side;
 }
@@ -111,9 +111,9 @@ header long_order_message_t {
     bit<1> queue_indicator;
     bit<1> dark_indicator;
     bit<8> ack_type;
-    bit<64> book_in_uint_64t_optional;
-    bit<64> book_out_time_uint_64t_optional;
-    bit<64> client_order_i_d_int_64t_optional;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> client_order_id;
     bit<2> reserved_2;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
@@ -134,7 +134,7 @@ header long_order_message_t {
     bit<64> firm_id;
     bit<64> indicative_auction_price;
     bit<64> indicative_auction_volume;
-    bit<64> oe_session_i_d_uint_64t;
+    bit<64> oe_session_id;
     bit<8> lp_role_lp_roleenum_optional;
     bit<2> reserved_2_2;
     bit<1> frmaramplp;
@@ -143,8 +143,8 @@ header long_order_message_t {
     bit<1> execution_algo_indicator;
     bit<1> investment_algo_indicator;
     bit<1> dea_indicator;
-    bit<64> oegin_from_member_uint_64t_optional;
-    bit<64> oegout_time_to_m_e_uint_64t_optional;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<64> order_id;
     bit<64> order_priority;
     bit<64> order_px;
@@ -156,12 +156,12 @@ header long_order_message_t {
     bit<32> symbol_index;
     bit<8> time_in_force_time_in_forceenum;
     bit<64> displayed_qty;
-    bit<8> cross_order_indicator_unsignedchar;
+    bit<8> cross_order_indicator;
     bit<64> counterpart_firm_id;
-    bit<32> execution_i_d_uint_32t_optional;
+    bit<32> execution_id;
     bit<8> execution_phase_execution_phaseenum_optional;
-    bit<64> last_shares_uint_64t_optional;
-    bit<64> last_traded_px_int_64t_optional;
+    bit<64> last_shares;
+    bit<64> last_traded_px;
     bit<64> leaves_qty;
     bit<1> deferred_publication;
     bit<1> nav_trade_expressed_in_price_currency;
@@ -177,7 +177,7 @@ header long_order_message_t {
     bit<64> breached_collar_price;
     bit<8> collar_rej_type;
     bit<8> rejected_message;
-    bit<16> error_code_uint_16t_optional;
+    bit<16> error_code;
     bit<64> stop_queue_priority;
     bit<8> counterparty_reason_type;
     bit<8> quote_indicator;
@@ -325,7 +325,7 @@ header long_order_message_long_order_strategy_fields_group_t {
     bit<64> leg_last_qty;
     bit<32> leg_instrument_id;
     bit<8> leg_side;
-    bit<32> execution_i_d_uint_32t_optional;
+    bit<32> execution_id;
     bit<128> trade_unique_identifier;
 }
 
@@ -377,20 +377,20 @@ header dc_short_order_reject_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<8> order_event_type;
-    bit<64> book_in_uint_64t;
-    bit<64> book_out_time_uint_64t;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> client_order_id;
     bit<8> emm;
     bit<64> event_id;
     bit<64> firm_id;
-    bit<64> oegin_from_member_uint_64t_optional;
-    bit<64> oegout_time_to_m_e_uint_64t;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<64> order_id;
     bit<32> symbol_index;
     bit<64> breached_collar_price;
     bit<8> collar_rej_type;
     bit<8> rejected_message;
-    bit<16> error_code_uint_16t;
+    bit<16> error_code;
     bit<2> reserved_2;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
@@ -398,7 +398,7 @@ header dc_short_order_reject_message_t {
     bit<1> execution_algo_indicator;
     bit<1> investment_algo_indicator;
     bit<1> dea_indicator;
-    bit<64> oe_session_i_d_uint_64t_optional;
+    bit<64> oe_session_id;
     bit<8> order_side_order_sideenum_optional;
     bit<8> time_in_force_time_in_forceenum_optional;
     bit<8> block_length_uint_8;
@@ -425,13 +425,13 @@ header dc_short_trade_cancellation_message_t {
     bit<32> msg_seq_num;
     bit<64> produce_time;
     bit<64> consume_time;
-    bit<32> execution_i_d_uint_32t;
+    bit<32> execution_id;
     bit<8> emm;
     bit<64> event_id;
     bit<32> symbol_index;
-    bit<64> book_in_uint_64t;
-    bit<64> last_traded_px_int_64t;
-    bit<64> last_shares_uint_64t;
+    bit<64> book_in;
+    bit<64> last_traded_px;
+    bit<64> last_shares;
     bit<128> trade_unique_identifier;
 }
 
@@ -447,7 +447,7 @@ header dc_static_collars_message_t {
 
 header dc_static_collars_message_d_c_static_collars_message_static_collarsrep_group_t {
     bit<8> update_type;
-    bit<64> price_int_64t;
+    bit<64> price;
 }
 
 header trade_bust_notification_message_t {
@@ -455,15 +455,15 @@ header trade_bust_notification_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<64> firm_id;
-    bit<64> oe_session_i_d_uint_64t;
+    bit<64> oe_session_id;
     bit<8> order_side_order_sideenum;
-    bit<64> book_out_time_uint_64t;
+    bit<64> book_out_time;
     bit<64> book_in_time;
     bit<32> symbol_index;
     bit<8> emm;
-    bit<32> execution_i_d_uint_32t;
-    bit<64> last_shares_uint_64t;
-    bit<64> last_traded_px_int_64t;
+    bit<32> execution_id;
+    bit<64> last_shares;
+    bit<64> last_traded_px;
     bit<64> order_id;
     bit<2> reserved_2;
     bit<1> frmaramplp;
@@ -474,7 +474,7 @@ header trade_bust_notification_message_t {
     bit<1> dea_indicator;
     bit<64> clearing_firm_i_d_char_8;
     bit<8> trading_capacity_trading_capacityenum;
-    bit<64> oegin_from_member_uint_64t;
+    bit<64> oegin_from_member;
     bit<8> execution_phase_execution_phaseenum;
     bit<1> deferred_publication;
     bit<1> nav_trade_expressed_in_price_currency;
@@ -541,12 +541,12 @@ header dc_quote_message_t {
     bit<32> msg_seq_num;
     bit<64> produce_time;
     bit<64> consume_time;
-    bit<64> book_in_uint_64t;
-    bit<64> book_out_time_uint_64t;
+    bit<64> book_in;
+    bit<64> book_out_time;
     bit<32> symbol_index;
     bit<8> emm;
     bit<64> event_id;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<8> trading_capacity_trading_capacityenum;
     bit<8> account_type_account_typeenum;
     bit<8> lp_role_lp_roleenum;
@@ -557,7 +557,7 @@ header dc_quote_message_t {
     bit<1> execution_algo_indicator;
     bit<1> investment_algo_indicator;
     bit<1> dea_indicator;
-    bit<8> rfe_answer_unsignedchar;
+    bit<8> rfe_answer;
     bit<64> firm_id;
     bit<1> stp_both_orders;
     bit<1> conditional_order;
@@ -580,7 +580,7 @@ header dc_quote_message_d_c_quote_message_bid_quoterep_group_t {
     bit<8> buy_revision_flag;
     bit<16> bid_error_code;
     bit<64> bid_oe_session_id;
-    bit<8> rfe_answer_unsignedchar_optional;
+    bit<8> rfe_answer;
     bit<64> bid_leaves_quantity;
     bit<64> bid_previous_size;
     bit<64> bid_previous_px;
@@ -599,7 +599,7 @@ header dc_quote_message_d_c_quote_message_offer_quoterep_group_t {
     bit<8> sell_revision_flag;
     bit<16> offer_error_code;
     bit<64> offer_oe_session_id;
-    bit<8> rfe_answer_unsignedchar_optional;
+    bit<8> rfe_answer;
     bit<64> offer_leaves_quantity;
     bit<64> offer_previous_size;
     bit<64> offer_previous_px;
@@ -657,13 +657,13 @@ header dcafqrfe_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<8> afq_reason;
-    bit<64> book_out_time_uint_64t;
+    bit<64> book_out_time;
     bit<8> emm;
     bit<64> event_id;
     bit<32> symbol_index;
     bit<64> firm_id;
     bit<8> afq_indicator;
-    bit<64> oe_session_i_d_uint_64t;
+    bit<64> oe_session_id;
 }
 
 header dc_declaration_new_message_t {
@@ -671,25 +671,25 @@ header dc_declaration_new_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<64> message_sending_time;
-    bit<64> book_in_uint_64t;
-    bit<64> book_out_time_uint_64t;
-    bit<64> oegin_from_member_uint_64t;
-    bit<64> oegout_time_to_m_e_uint_64t;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<64> event_id;
     bit<8> declaration_event_type;
     bit<64> firm_id;
-    bit<64> oe_session_i_d_uint_64t;
+    bit<64> oe_session_id;
     bit<8> account_type_account_typeenum;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<8> emm;
     bit<64> declaration_id;
     bit<8> declaration_status;
-    bit<64> price_int_64t_optional;
-    bit<64> quantity_uint_64t_optional;
+    bit<64> price;
+    bit<64> quantity;
     bit<8> side;
     bit<32> symbol_index;
     bit<8> operation_type;
-    bit<8> cross_order_indicator_unsignedchar;
+    bit<8> cross_order_indicator;
     bit<64> entering_counterparty;
     bit<128> trader_id;
     bit<128> investor_id;
@@ -697,8 +697,8 @@ header dc_declaration_new_message_t {
     bit<64> principal_code;
     bit<64> clearing_firm_i_d_char_8_optional;
     bit<128> clearing_account;
-    bit<8> settlement_period_unsignedchar;
-    bit<8> settlement_flag_unsignedchar;
+    bit<8> settlement_period;
+    bit<8> settlement_flag;
     bit<8> guarantee_flag_guarantee_flagenum;
     bit<8> transaction_price_type;
 }
@@ -708,18 +708,18 @@ header dc_short_declaration_reject_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<64> message_sending_time;
-    bit<64> book_in_uint_64t;
-    bit<64> book_out_time_uint_64t;
-    bit<64> oegin_from_member_uint_64t;
-    bit<64> oegout_time_to_m_e_uint_64t;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<64> event_id;
     bit<8> declaration_event_type;
     bit<64> firm_id;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<8> emm;
     bit<64> declaration_id;
     bit<32> symbol_index;
-    bit<16> error_code_uint_16t;
+    bit<16> error_code;
     bit<16> rejected_message_id;
 }
 
@@ -728,15 +728,15 @@ header dc_short_declaration_cancel_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<64> message_sending_time;
-    bit<64> book_in_uint_64t;
-    bit<64> book_out_time_uint_64t;
-    bit<64> oegin_from_member_uint_64t;
-    bit<64> oegout_time_to_m_e_uint_64t;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<64> event_id;
     bit<8> declaration_event_type;
     bit<64> firm_id;
-    bit<64> oe_session_i_d_uint_64t;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> oe_session_id;
+    bit<64> client_order_id;
     bit<8> emm;
     bit<64> declaration_id;
     bit<32> symbol_index;
@@ -750,14 +750,14 @@ header dc_short_trade_declaration_message_t {
     bit<64> event_id;
     bit<8> emm;
     bit<32> symbol_index;
-    bit<32> execution_i_d_uint_32t;
-    bit<8> cross_order_indicator_unsignedchar;
+    bit<32> execution_id;
+    bit<8> cross_order_indicator;
     bit<64> trade_time;
     bit<64> publication_time;
     bit<8> session_sessionenum_optional;
     bit<8> trade_type;
-    bit<8> settlement_period_unsignedchar_optional;
-    bit<8> settlement_flag_unsignedchar_optional;
+    bit<8> settlement_period;
+    bit<8> settlement_flag;
     bit<8> guarantee_flag_guarantee_flagenum_optional;
     bit<8> block_length_uint_8;
     bit<8> num_in_group;
@@ -765,21 +765,21 @@ header dc_short_trade_declaration_message_t {
 
 header dc_short_trade_declaration_message_d_c_short_trade_declaration_message_short_trade_declarations_group_t {
     bit<64> declaration_id;
-    bit<64> price_int_64t_optional;
-    bit<64> quantity_uint_64t_optional;
+    bit<64> price;
+    bit<64> quantity;
     bit<8> operation_type;
     bit<8> side;
     bit<64> firm_id;
-    bit<16> oe_partition_i_d_uint_16t;
-    bit<32> logical_access_i_d_uint_32t;
-    bit<64> book_in_uint_64t;
+    bit<16> oe_partition_id;
+    bit<32> logical_access_id;
+    bit<64> book_in;
     bit<128> trader_id;
     bit<128> investor_id;
     bit<64> principal_code;
     bit<64> clearing_firm_i_d_char_8_optional;
     bit<128> clearing_account;
     bit<8> account_type_account_typeenum;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<144> free_text;
 }
 
@@ -787,13 +787,13 @@ header dc_short_trade_declaration_cancellation_message_t {
     bit<32> msg_seq_num;
     bit<64> produce_time;
     bit<64> consume_time;
-    bit<64> book_in_uint_64t;
+    bit<64> book_in;
     bit<64> event_id;
     bit<8> emm;
-    bit<32> execution_i_d_uint_32t;
+    bit<32> execution_id;
     bit<32> symbol_index;
-    bit<64> price_int_64t;
-    bit<64> quantity_uint_64t;
+    bit<64> price;
+    bit<64> quantity;
 }
 
 header dc_trade_bust_declaration_message_t {
@@ -801,21 +801,21 @@ header dc_trade_bust_declaration_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<64> message_sending_time;
-    bit<64> book_in_uint_64t;
-    bit<64> book_out_time_uint_64t;
-    bit<64> oegin_from_member_uint_64t;
-    bit<64> oegout_time_to_m_e_uint_64t;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<64> event_id;
     bit<8> declaration_event_type;
     bit<64> firm_id;
-    bit<64> oe_session_i_d_uint_64t;
+    bit<64> oe_session_id;
     bit<8> account_type_account_typeenum;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<8> emm;
     bit<64> declaration_id;
     bit<8> declaration_status;
-    bit<64> price_int_64t_optional;
-    bit<64> quantity_uint_64t_optional;
+    bit<64> price;
+    bit<64> quantity;
     bit<8> side;
     bit<32> symbol_index;
     bit<8> operation_type;
@@ -832,9 +832,9 @@ header dc_trade_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<64> event_id;
-    bit<32> execution_i_d_uint_32t;
-    bit<64> quantity_uint_64t;
-    bit<64> price_int_64t_optional;
+    bit<32> execution_id;
+    bit<64> quantity;
+    bit<64> price;
     bit<64> trade_time;
     bit<64> publication_time;
     bit<8> session_sessionenum_optional;
@@ -848,8 +848,8 @@ header dc_trade_message_t {
     bit<1> passive_order;
     bit<1> first_trade_price;
     bit<1> uncrossing_trade;
-    bit<8> settlement_period_unsignedchar_optional;
-    bit<8> settlement_flag_unsignedchar_optional;
+    bit<8> settlement_period;
+    bit<8> settlement_flag;
     bit<8> guarantee_flag_guarantee_flagenum_optional;
     bit<8> counterparty_reason_type;
     bit<32> symbol_index;
@@ -878,11 +878,11 @@ header dc_trade_message_d_c_trade_message_matched_orders_group_t {
     bit<1> leg_2;
     bit<1> leg_1;
     bit<1> field_actively_used;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<64> firm_id;
-    bit<16> oe_partition_i_d_uint_16t_optional;
-    bit<32> logical_access_i_d_uint_32t_optional;
-    bit<64> book_in_uint_64t_optional;
+    bit<16> oe_partition_id;
+    bit<32> logical_access_id;
+    bit<64> book_in;
     bit<1> deferred_publication;
     bit<1> nav_trade_expressed_in_price_currency;
     bit<1> nav_trade_expressed_in_bps;
@@ -898,7 +898,7 @@ header dc_trade_message_d_c_trade_message_matched_orders_group_t {
     bit<64> clearing_firm_i_d_char_8_optional;
     bit<128> trader_id;
     bit<128> original_investor_id;
-    bit<8> cross_order_indicator_unsignedchar_optional;
+    bit<8> cross_order_indicator;
     bit<16> clearing_instruction_clearing_instructionenum;
 }
 
@@ -912,16 +912,16 @@ header dc_trade_message_d_c_trade_message_matched_declarations_group_t {
     bit<8> side;
     bit<8> operation_type;
     bit<64> firm_id;
-    bit<16> oe_partition_i_d_uint_16t_optional;
-    bit<32> logical_access_i_d_uint_32t_optional;
-    bit<64> book_in_uint_64t_optional;
+    bit<16> oe_partition_id;
+    bit<32> logical_access_id;
+    bit<64> book_in;
     bit<8> account_type_account_typeenum_optional;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<144> free_text;
     bit<64> clearing_firm_i_d_char_8_optional;
     bit<128> clearing_account;
     bit<64> principal_code;
-    bit<8> cross_order_indicator_unsignedchar_optional;
+    bit<8> cross_order_indicator;
     bit<128> trader_id;
     bit<128> investor_id;
 }
@@ -931,10 +931,10 @@ header dc_short_declaration_fill_message_t {
     bit<64> produce_time;
     bit<64> consume_time;
     bit<64> message_sending_time;
-    bit<64> book_in_uint_64t;
-    bit<64> book_out_time_uint_64t;
-    bit<64> oegin_from_member_uint_64t;
-    bit<64> oegout_time_to_m_e_uint_64t;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<8> operation_type;
     bit<8> declaration_event_type;
     bit<8> declaration_status;
@@ -942,27 +942,27 @@ header dc_short_declaration_fill_message_t {
     bit<8> emm;
     bit<32> symbol_index;
     bit<64> declaration_id;
-    bit<64> price_int_64t;
-    bit<64> quantity_uint_64t;
+    bit<64> price;
+    bit<64> quantity;
     bit<8> side;
-    bit<8> cross_order_indicator_unsignedchar;
+    bit<8> cross_order_indicator;
     bit<64> trade_time;
     bit<64> entering_counterparty;
     bit<8> session_sessionenum_optional;
     bit<8> trade_type;
     bit<64> firm_id;
-    bit<16> oe_partition_i_d_uint_16t;
-    bit<32> logical_access_i_d_uint_32t;
+    bit<16> oe_partition_id;
+    bit<32> logical_access_id;
     bit<128> trader_id;
     bit<128> investor_id;
     bit<64> principal_code;
     bit<64> clearing_firm_i_d_char_8_optional;
     bit<128> clearing_account;
     bit<8> account_type_account_typeenum;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> client_order_id;
     bit<144> free_text;
-    bit<8> settlement_period_unsignedchar_optional;
-    bit<8> settlement_flag_unsignedchar_optional;
+    bit<8> settlement_period;
+    bit<8> settlement_flag;
     bit<8> guarantee_flag_guarantee_flagenum_optional;
 }
 
@@ -972,8 +972,8 @@ header dc_quote_request_message_t {
     bit<64> consume_time;
     bit<64> event_id;
     bit<64> book_in;
-    bit<64> book_out_time_uint_64t;
-    bit<64> client_order_i_d_int_64t;
+    bit<64> book_out_time;
+    bit<64> client_order_id;
     bit<2> reserved_2;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
@@ -985,9 +985,9 @@ header dc_quote_request_message_t {
     bit<88> end_client;
     bit<64> firm_id;
     bit<8> firm_id_publication;
-    bit<64> oe_session_i_d_uint_64t;
-    bit<64> oegin_from_member_uint_64t;
-    bit<64> oegout_time_to_m_e_uint_64t;
+    bit<64> oe_session_id;
+    bit<64> oegin_from_member;
+    bit<64> oegout_time_to_me;
     bit<64> order_id;
     bit<64> order_qty;
     bit<8> order_side_order_sideenum_optional;

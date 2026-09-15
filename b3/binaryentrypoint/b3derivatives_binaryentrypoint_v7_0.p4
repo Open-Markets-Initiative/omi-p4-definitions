@@ -140,7 +140,7 @@ header simple_new_order_message_t {
     bit<64> sending_time;
     bit<8> market_segment_id;
     bit<8> padding;
-    bit<8> ord_tag_id;
+    bit<8> ordtagid;
     bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
@@ -164,7 +164,7 @@ header simple_modify_order_message_t {
     bit<64> sending_time;
     bit<8> market_segment_id;
     bit<8> padding;
-    bit<8> ord_tag_id;
+    bit<8> ordtagid;
     bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
@@ -190,7 +190,7 @@ header new_order_single_message_t {
     bit<64> sending_time;
     bit<8> market_segment_id;
     bit<8> padding;
-    bit<8> ord_tag_id;
+    bit<8> ordtagid;
     bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
@@ -224,7 +224,7 @@ header order_cancel_replace_request_message_t {
     bit<64> sending_time;
     bit<8> market_segment_id;
     bit<8> padding;
-    bit<8> ord_tag_id;
+    bit<8> ordtagid;
     bit<8> mm_protection_reset;
     bit<64> clordid;
     bit<32> account;
@@ -817,7 +817,7 @@ header order_mass_action_request_message_t {
     bit<8> mass_action_scope;
     bit<64> clordid;
     bit<8> mass_cancel_restatement_reason;
-    bit<8> ord_tag_id;
+    bit<8> ordtagid;
     bit<8> side_optional;
     bit<8> offset_31_padding_1;
     bit<48> asset;
@@ -840,7 +840,7 @@ header order_mass_action_report_message_t {
     bit<8> mass_action_response;
     bit<8> mass_action_reject_reason;
     bit<8> mass_cancel_restatement_reason;
-    bit<8> ord_tag_id;
+    bit<8> ordtagid;
     bit<8> side_optional;
     bit<8> offset_49_padding_1;
     bit<48> asset;

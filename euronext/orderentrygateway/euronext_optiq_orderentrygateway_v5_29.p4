@@ -49,7 +49,7 @@ header new_order_message_t {
     bit<8> side;
     bit<8> order_type;
     bit<8> time_in_force;
-    bit<64> order_px_optional;
+    bit<64> order_px;
     bit<64> order_qty;
     bit<32> execution_within_firm_short_code;
     bit<8> trading_capacity;
@@ -78,7 +78,7 @@ header new_order_message_t {
     bit<1> dea_indicator;
     bit<16> stpid;
     bit<16> non_executing_client_id;
-    bit<64> ioi_id_optional;
+    bit<64> ioi_id;
     bit<8> block_length_short;
     bit<8> num_in_group;
 }
@@ -108,7 +108,7 @@ header new_order_message_order_optional_fields_group_t {
     bit<64> undisclosed_price;
     bit<64> disclosed_qty;
     bit<64> min_order_qty;
-    bit<64> quote_req_id_optional;
+    bit<64> quote_req_id;
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
     bit<8> peg_offset;
@@ -164,24 +164,24 @@ header new_order_message_additional_infos_group_t {
 header ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
-    bit<64> client_order_id_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> client_order_id;
     bit<64> orig_client_order_id;
     bit<32> symbol_index;
     bit<8> emm;
     bit<8> side_optional;
     bit<8> ack_type;
     bit<8> ack_phase;
-    bit<64> order_id_optional;
+    bit<64> order_id;
     bit<64> order_priority;
-    bit<64> order_px_optional;
-    bit<64> order_qty_optional;
+    bit<64> order_px;
+    bit<64> order_qty;
     bit<1> executed_upon_entry_flag;
     bit<1> execution_upon_entry_flag_enabled;
     bit<1> internal_2;
@@ -195,14 +195,7 @@ header ack_message_t {
 }
 
 header ack_message_mifid_fields_group_t {
-    bit<1> stp_both_orders;
-    bit<1> conditional_order;
-    bit<1> rfq_confirmation;
-    bit<1> rfq_answer;
-    bit<1> disabled_cancel_on_disconnect_indicator;
-    bit<1> disclosed_quantity_randomization;
-    bit<1> stp_incoming_order;
-    bit<1> stp_resting_order;
+    bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<2> reserved_2;
     bit<1> frmaramplp;
@@ -217,10 +210,10 @@ header fill_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
     bit<64> trade_time;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
-    bit<64> client_order_id_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> client_order_id;
     bit<32> symbol_index;
     bit<8> emm;
     bit<8> side;
@@ -263,7 +256,7 @@ header fill_message_fill_strategy_field_group_t {
     bit<64> leg_last_qty;
     bit<32> leg_instrument_id;
     bit<8> leg_side_optional;
-    bit<32> execution_id_optional;
+    bit<32> execution_id;
     bit<128> trade_unique_identifier;
 }
 
@@ -273,14 +266,7 @@ header fill_message_mifid_fields_group_header_t {
 }
 
 header fill_message_mifid_fields_group_t {
-    bit<1> stp_both_orders;
-    bit<1> conditional_order;
-    bit<1> rfq_confirmation;
-    bit<1> rfq_answer;
-    bit<1> disabled_cancel_on_disconnect_indicator;
-    bit<1> disclosed_quantity_randomization;
-    bit<1> stp_incoming_order;
-    bit<1> stp_resting_order;
+    bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<2> reserved_2;
     bit<1> frmaramplp;
@@ -306,14 +292,14 @@ header fill_message_fill_derivatives_field_group_t {
 header kill_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
-    bit<64> client_order_id_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> client_order_id;
     bit<64> orig_client_order_id;
     bit<64> order_id;
     bit<32> symbol_index;
@@ -332,14 +318,7 @@ header kill_message_t {
 }
 
 header kill_message_mifid_fields_group_t {
-    bit<1> stp_both_orders;
-    bit<1> conditional_order;
-    bit<1> rfq_confirmation;
-    bit<1> rfq_answer;
-    bit<1> disabled_cancel_on_disconnect_indicator;
-    bit<1> disclosed_quantity_randomization;
-    bit<1> stp_incoming_order;
-    bit<1> stp_resting_order;
+    bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<2> reserved_2;
     bit<1> frmaramplp;
@@ -357,9 +336,9 @@ header cancel_replace_message_t {
     bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<64> client_order_id;
-    bit<64> order_id_optional;
+    bit<64> order_id;
     bit<64> orig_client_order_id;
-    bit<64> order_px_optional;
+    bit<64> order_px;
     bit<64> order_qty;
     bit<32> symbol_index;
     bit<8> emm;
@@ -460,16 +439,16 @@ header cancel_replace_message_additional_infos_group_t {
 header reject_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id_optional;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
-    bit<64> book_in_optional;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
-    bit<64> client_order_id_optional;
-    bit<64> order_id_optional;
-    bit<32> symbol_index_optional;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> client_order_id;
+    bit<64> order_id;
+    bit<32> symbol_index;
     bit<8> emm_optional;
     bit<8> rejected_message;
     bit<16> error_code;
@@ -497,14 +476,7 @@ header reject_message_mifid_fields_group_header_t {
 }
 
 header reject_message_mifid_fields_group_t {
-    bit<1> stp_both_orders;
-    bit<1> conditional_order;
-    bit<1> rfq_confirmation;
-    bit<1> rfq_answer;
-    bit<1> disabled_cancel_on_disconnect_indicator;
-    bit<1> disclosed_quantity_randomization;
-    bit<1> stp_incoming_order;
-    bit<1> stp_resting_order;
+    bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<2> reserved_2;
     bit<1> frmaramplp;
@@ -593,24 +565,17 @@ header quotes_message_quotes_rep_group_t {
 header quote_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
     bit<64> client_order_id;
     bit<8> account_type;
     bit<8> lp_role;
-    bit<1> stp_both_orders;
-    bit<1> conditional_order;
-    bit<1> rfq_confirmation;
-    bit<1> rfq_answer;
-    bit<1> disabled_cancel_on_disconnect_indicator;
-    bit<1> disclosed_quantity_randomization;
-    bit<1> stp_incoming_order;
-    bit<1> stp_resting_order;
+    bit<32> execution_within_firm_short_code;
     bit<1> executed_upon_entry_flag;
     bit<1> execution_upon_entry_flag_enabled;
     bit<1> internal_2;
@@ -664,7 +629,7 @@ header cancel_request_message_t {
     bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<64> client_order_id;
-    bit<64> order_id_optional;
+    bit<64> order_id;
     bit<64> orig_client_order_id;
     bit<32> symbol_index;
     bit<8> emm;
@@ -684,12 +649,12 @@ header mass_cancel_message_t {
     bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<64> client_order_id;
-    bit<32> symbol_index_optional;
+    bit<32> symbol_index;
     bit<8> emm_optional;
     bit<16> instrument_group_code;
     bit<8> side_optional;
-    bit<32> lp_role_optional;
-    bit<16> oe_partition_id_optional;
+    bit<32> logical_access_id;
+    bit<16> oe_partition_id;
     bit<32> contract_id;
     bit<64> maturity;
     bit<8> account_type_optional;
@@ -705,7 +670,7 @@ header mass_cancel_message_t {
 header mass_cancel_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
     bit<64> book_in;
@@ -714,12 +679,12 @@ header mass_cancel_ack_message_t {
     bit<64> oeg_out_to_member;
     bit<64> client_order_id;
     bit<32> total_affected_orders;
-    bit<32> symbol_index_optional;
+    bit<32> symbol_index;
     bit<8> emm_optional;
     bit<16> instrument_group_code;
     bit<8> side_optional;
-    bit<32> lp_role_optional;
-    bit<16> oe_partition_id_optional;
+    bit<32> logical_access_id;
+    bit<16> oe_partition_id;
     bit<32> contract_id;
     bit<64> maturity;
     bit<8> account_type_optional;
@@ -739,14 +704,7 @@ header mass_cancel_ack_message_t {
 }
 
 header mass_cancel_ack_message_mifid_fields_group_t {
-    bit<1> stp_both_orders;
-    bit<1> conditional_order;
-    bit<1> rfq_confirmation;
-    bit<1> rfq_answer;
-    bit<1> disabled_cancel_on_disconnect_indicator;
-    bit<1> disclosed_quantity_randomization;
-    bit<1> stp_incoming_order;
-    bit<1> stp_resting_order;
+    bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<2> reserved_2;
     bit<1> frmaramplp;
@@ -764,7 +722,7 @@ header open_order_request_message_t {
     bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<64> client_order_id;
-    bit<64> order_id_optional;
+    bit<64> order_id;
     bit<64> orig_client_order_id;
     bit<32> symbol_index;
     bit<8> emm;
@@ -775,10 +733,10 @@ header ownership_request_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
     bit<64> client_order_id;
-    bit<64> order_id_optional;
+    bit<64> order_id;
     bit<32> symbol_index;
-    bit<32> lp_role_optional;
-    bit<16> oe_partition_id_optional;
+    bit<32> logical_access_id;
+    bit<16> oe_partition_id;
     bit<32> total_affected_orders;
     bit<8> order_category;
 }
@@ -790,12 +748,12 @@ header ownership_request_message_t {
     bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<64> client_order_id;
-    bit<64> order_id_optional;
+    bit<64> order_id;
     bit<64> orig_client_order_id;
     bit<32> symbol_index;
     bit<8> emm;
-    bit<32> lp_role_optional;
-    bit<16> oe_partition_id_optional;
+    bit<32> logical_access_id;
+    bit<16> oe_partition_id;
     bit<8> order_category;
 }
 
@@ -803,9 +761,9 @@ header trade_bust_notification_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
     bit<32> symbol_index;
     bit<8> emm;
     bit<32> execution_id;
@@ -827,7 +785,7 @@ header collar_breach_confirmation_message_t {
     bit<64> client_order_id;
     bit<32> symbol_index;
     bit<8> emm;
-    bit<64> order_id_optional;
+    bit<64> order_id;
     bit<64> orig_client_order_id;
 }
 
@@ -841,7 +799,7 @@ header price_input_message_t {
     bit<32> symbol_index;
     bit<8> emm;
     bit<8> input_price_type;
-    bit<64> price_optional;
+    bit<64> price;
 }
 
 header liquidity_provider_command_message_t {
@@ -875,9 +833,9 @@ header rfq_notification_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
     bit<64> quote_req_id;
     bit<64> order_qty;
     bit<64> counterpart_firm_id;
@@ -900,9 +858,9 @@ header rfq_matching_status_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
     bit<64> quote_req_id;
     bit<64> potential_matching_px;
     bit<64> potential_matching_qty;
@@ -917,9 +875,9 @@ header rfqlp_matching_status_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
     bit<64> quote_req_id;
     bit<64> potential_matching_qty;
     bit<32> symbol_index;
@@ -930,19 +888,12 @@ header rfqlp_matching_status_message_t {
 header user_notification_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<1> stp_both_orders;
-    bit<1> conditional_order;
-    bit<1> rfq_confirmation;
-    bit<1> rfq_answer;
-    bit<1> disabled_cancel_on_disconnect_indicator;
-    bit<1> disclosed_quantity_randomization;
-    bit<1> stp_incoming_order;
-    bit<1> stp_resting_order;
+    bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<64> family_id;
-    bit<32> symbol_index_optional;
+    bit<32> symbol_index;
     bit<8> user_status;
-    bit<32> lp_role_optional;
+    bit<32> logical_access_id;
     bit<64> order_size_limit;
     bit<64> order_amount_limit;
     bit<8> exposure_side;
@@ -982,13 +933,13 @@ header mm_sign_in_message_t {
 header mm_sign_in_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
     bit<64> book_in;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
     bit<32> logical_access_id;
     bit<16> oe_partition_id;
     bit<64> client_order_id;
@@ -1016,7 +967,7 @@ header mm_sign_in_ack_message_t {
 
 header instrument_synchronization_list_message_t {
     bit<32> msg_seq_num;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> oeg_out_to_member;
     bit<16> resynchronization_id;
     bit<8> block_length_short;
     bit<8> num_in_group;
@@ -1029,7 +980,7 @@ header instrument_synchronization_list_message_instrument_synchronization_group_
 
 header synchronization_time_message_t {
     bit<32> msg_seq_num;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> oeg_out_to_member;
     bit<16> resynchronization_id;
     bit<64> last_book_in_time;
 }
@@ -1050,7 +1001,7 @@ header security_definition_request_message_strategy_legs_group_t {
     bit<32> leg_ratio;
     bit<8> leg_security_type;
     bit<8> leg_put_or_call;
-    bit<64> leg_price_optional;
+    bit<64> leg_price;
     bit<64> leg_strike_price;
     bit<64> leg_last_trading_date;
     bit<8> leg_side;
@@ -1059,13 +1010,13 @@ header security_definition_request_message_strategy_legs_group_t {
 header security_definition_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
-    bit<64> book_in_optional;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
     bit<64> security_req_id;
     bit<32> symbol_index;
 }
@@ -1092,14 +1043,14 @@ header mm_protection_request_message_mmp_request_group_t {
 header mm_protection_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
-    bit<64> book_in_optional;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
-    bit<64> client_order_id_optional;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> client_order_id;
     bit<32> execution_within_firm_short_code;
     bit<32> symbol_index;
     bit<8> emm;
@@ -1152,7 +1103,7 @@ header new_wholesale_order_message_wholesale_legs_group_t {
     bit<64> offer_quantity;
     bit<8> leg_side_optional;
     bit<64> leg_strike_price;
-    bit<32> leg_ratio_optional;
+    bit<32> leg_ratio;
     bit<8> leg_put_or_call;
     bit<8> leg_security_type;
     bit<64> leg_last_trading_date;
@@ -1194,20 +1145,20 @@ header new_wholesale_order_message_wholesale_client_group_t {
 header wholesale_order_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> sending_time_optional;
+    bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
-    bit<64> book_in_optional;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
-    bit<64> client_order_id_optional;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> client_order_id;
     bit<32> contract_symbol_index;
     bit<8> wholesale_trade_type;
     bit<32> lis_transaction_id;
     bit<8> strategy_code_optional;
-    bit<64> price_optional;
-    bit<64> quantity_optional;
+    bit<64> price;
+    bit<64> quantity;
     bit<32> execution_within_firm_short_code;
     bit<2> reserved_2;
     bit<1> frmaramplp;
@@ -1410,11 +1361,11 @@ header wave_for_liquidity_notification_message_t {
     bit<64> sending_time;
     bit<64> oeg_in_from_member;
     bit<64> oeg_out_time_to_me;
-    bit<64> book_in_optional;
-    bit<64> book_out_time_optional;
-    bit<64> oeg_in_from_me_optional;
-    bit<64> oeg_out_to_member_optional;
-    bit<64> ioi_id_optional;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> ioi_id;
     bit<64> exchange_ioi_id_optional;
     bit<8> ioi_type;
     bit<64> original_ioiid;
@@ -1424,12 +1375,12 @@ header wave_for_liquidity_notification_message_t {
     bit<64> order_quantity;
     bit<8> ioi_quantity;
     bit<8> ioi_quality_indication;
-    bit<16> error_code_optional;
+    bit<16> error_code;
 }
 
 header clear_book_message_t {
     bit<32> msg_seq_num;
-    bit<64> oeg_out_to_member_optional;
+    bit<64> oeg_out_to_member;
     bit<32> symbol_index;
     bit<8> emm;
 }
@@ -1437,7 +1388,7 @@ header clear_book_message_t {
 header logon_message_t {
     bit<32> logical_access_id;
     bit<16> oe_partition_id;
-    bit<32> last_msg_seq_num_optional;
+    bit<32> last_msg_seq_num;
     bit<64> software_provider;
     bit<8> queueing_indicator;
 }
@@ -1459,7 +1410,7 @@ header logout_message_t {
 }
 
 header technical_reject_message_t {
-    bit<64> oeg_out_to_member_optional;
+    bit<64> oeg_out_to_member;
     bit<32> rejected_client_message_sequence_number;
     bit<8> rejected_message;
     bit<16> error_code;
@@ -1476,8 +1427,8 @@ header declaration_entry_message_t {
     bit<8> emm;
     bit<64> entering_counterparty;
     bit<8> side;
-    bit<64> quantity_optional;
-    bit<64> price_optional;
+    bit<64> quantity;
+    bit<64> price;
     bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
     bit<32> mi_cof_secondary_listing;
@@ -1516,7 +1467,7 @@ header declaration_entry_message_t {
 header declaration_entry_ack_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> declaration_id_optional;
+    bit<64> declaration_id;
     bit<64> client_order_id;
     bit<32> symbol_index;
     bit<8> emm;
@@ -1538,7 +1489,7 @@ header declaration_entry_ack_message_t {
 header declaration_notice_message_t {
     bit<32> msg_seq_num;
     bit<64> firm_id;
-    bit<64> client_order_id_optional;
+    bit<64> client_order_id;
     bit<64> declaration_id;
     bit<8> declaration_status;
     bit<8> operation_type;
@@ -1546,10 +1497,10 @@ header declaration_notice_message_t {
     bit<8> emm;
     bit<64> entering_counterparty;
     bit<8> side_optional;
-    bit<64> quantity_optional;
-    bit<64> price_optional;
+    bit<64> quantity;
+    bit<64> price;
     bit<8> pre_matching_type;
-    bit<64> trade_time_optional;
+    bit<64> trade_time;
     bit<32> mi_cof_secondary_listing;
     bit<80> centralisation_date;
     bit<64> clearing_firm_id;
@@ -1557,8 +1508,8 @@ header declaration_notice_message_t {
     bit<8> account_type_cross;
     bit<8> trading_capacity_optional;
     bit<8> trading_capacity_cross;
-    bit<8> settlement_flag_optional;
-    bit<8> settlement_period_optional;
+    bit<8> settlement_flag;
+    bit<8> settlement_period;
     bit<8> guarantee_flag_optional;
     bit<8> transaction_price_type;
     bit<64> principal_code;

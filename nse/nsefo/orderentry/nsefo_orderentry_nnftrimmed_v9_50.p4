@@ -149,8 +149,8 @@ header order_confirmation_trimmed_message_t {
     bit<32> log_time;
     bit<32> user_id;
     bit<16> error_code;
-    bit<64> time_stamp_1;
-    bit<8> time_stamp_2;
+    bit<64> timestamp_1_long_long;
+    bit<8> timestamp_2_char;
     bit<8> modified_cancelled_by;
     bit<16> reason_code;
     bit<32> token_no;
@@ -215,8 +215,8 @@ header trade_confirmation_trimmed_message_t {
     bit<32> log_time;
     bit<32> trader_id;
     bit<64> time_stamp;
-    bit<64> time_stamp_1;
-    bit<8> time_stamp_2;
+    bit<64> timestamp_1_double;
+    bit<64> timestamp_2_double;
     bit<64> response_order_number;
     bit<40> broker_id;
     bit<8> reserved_1;

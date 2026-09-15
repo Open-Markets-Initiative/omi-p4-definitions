@@ -353,7 +353,7 @@ header execution_report_new_message_t {
     bit<64> crossid_optional;
     bit<64> received_time;
     bit<24> offset_152_padding_3;
-    bit<8> ordtagid_optional;
+    bit<8> ordtagid;
     bit<16> prefix;
     bit<32> document;
     bit<8> cross_type;
@@ -399,7 +399,7 @@ header execution_report_modify_message_t {
     bit<64> max_floor;
     bit<64> received_time;
     bit<24> offset_168_padding_3;
-    bit<8> ordtagid_optional;
+    bit<8> ordtagid;
     bit<16> prefix;
     bit<32> document;
     bit<8> mm_protection_reset_boolean_optional;
@@ -443,7 +443,7 @@ header execution_report_cancel_message_t {
     bit<64> max_floor;
     bit<64> received_time;
     bit<24> offset_164_padding_3;
-    bit<8> ordtagid_optional;
+    bit<8> ordtagid;
     bit<16> prefix;
     bit<32> document;
     bit<32> strategy_id;
@@ -528,7 +528,7 @@ header execution_report_reject_message_t {
     bit<16> crossed_indicator;
     bit<64> received_time;
     bit<24> offset_146_padding_3;
-    bit<8> ordtagid_optional;
+    bit<8> ordtagid;
     bit<16> prefix;
     bit<32> document;
     bit<32> strategy_id;
