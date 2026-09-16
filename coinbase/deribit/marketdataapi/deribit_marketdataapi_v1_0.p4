@@ -35,10 +35,6 @@ header packet_header_t {
     bit<64> sending_time;
     bit<64> seq_num;
     bit<32> channel_id;
-    bit<13> packet_reserved_bits;
-    bit<1> retransmit;
-    bit<1> snapshot;
-    bit<1> incremental_update;
     bit<16> message_count;
 }
 
@@ -46,9 +42,6 @@ header md_message_t {
     bit<16> message_length;
     bit<16> template_id;
     bit<16> schema_version;
-    bit<14> reserved_bits;
-    bit<1> end_of_transaction;
-    bit<1> start_of_transaction;
     bit<64> transact_time;
 }
 
@@ -162,9 +155,6 @@ header trade_summary_message_t {
     bit<64> mark_price;
     bit<64> index_price;
     bit<32> trade_count;
-    bit<30> reserved_30;
-    bit<1> is_liquidation;
-    bit<1> is_sell;
 }
 
 header trade_message_t {
@@ -173,9 +163,6 @@ header trade_message_t {
     bit<64> maker_order_id;
     bit<64> fill_qty_mantissa;
     bit<64> fill_price;
-    bit<30> reserved_30;
-    bit<1> is_liquidation;
-    bit<1> is_sell;
 }
 
 header block_trade_message_t {
@@ -188,9 +175,6 @@ header block_trade_message_t {
     bit<64> mark_price;
     bit<64> index_price;
     bit<64> implied_volatility;
-    bit<30> reserved_30;
-    bit<1> is_liquidation;
-    bit<1> is_sell;
     bit<16> number_of_legs;
 }
 

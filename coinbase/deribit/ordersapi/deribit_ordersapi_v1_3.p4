@@ -96,13 +96,6 @@ header new_order_request_message_t {
     bit<64> self_match_prevention_id;
     bit<8> side;
     bit<8> time_in_force;
-    bit<10> reserved_10;
-    bit<1> reset_mmp;
-    bit<1> mmp;
-    bit<1> market_limit;
-    bit<1> post_only_reject;
-    bit<1> post_only;
-    bit<1> cancel_on_disconnect;
     bit<8> self_trading_mode;
 }
 
@@ -115,10 +108,6 @@ header amend_order_request_message_t {
     bit<8> exponent;
     bit<64> mantissa_2;
     bit<8> exponent_2;
-    bit<13> reserved_13;
-    bit<1> post_only_reject;
-    bit<1> post_only;
-    bit<1> unused_replace_order_flags_0;
 }
 
 header cancel_order_request_message_t {
@@ -152,20 +141,6 @@ header mass_quote_request_message_mass_quote_request_message_quotes_group_t {
     bit<8> exponent;
     bit<64> mantissa_2;
     bit<8> exponent_2;
-    bit<10> reserved_10;
-    bit<1> reset_mmp;
-    bit<1> mmp;
-    bit<1> market_limit;
-    bit<1> post_only_reject;
-    bit<1> post_only;
-    bit<1> cancel_on_disconnect;
-    bit<10> reserved_10_2;
-    bit<1> reset_mmp_2;
-    bit<1> mmp_2;
-    bit<1> market_limit_2;
-    bit<1> post_only_reject_2;
-    bit<1> post_only_2;
-    bit<1> cancel_on_disconnect_2;
 }
 
 header mass_cancel_request_message_t {

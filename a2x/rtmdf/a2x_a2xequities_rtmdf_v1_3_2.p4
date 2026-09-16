@@ -96,12 +96,6 @@ header security_definition_message_t {
     bit<24> currency;
     bit<32> mic;
     bit<8> tick_table_id;
-    bit<1> mac_enabled;
-    bit<2> test_stock;
-    bit<1> illiquid;
-    bit<1> unused_1;
-    bit<1> aod_enabled;
-    bit<10> unused_10;
 }
 
 header security_status_message_t {

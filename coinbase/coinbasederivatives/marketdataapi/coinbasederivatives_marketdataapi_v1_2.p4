@@ -72,8 +72,6 @@ header outright_instrument_definition_message_t {
     bit<32> product_id;
     bit<8> product_group;
     bit<8> trading_status;
-    bit<15> reserved_15;
-    bit<1> is_prior_settlement_theoretical;
 }
 
 header spread_instrument_definition_message_t {
@@ -103,8 +101,6 @@ header spread_instrument_definition_message_t {
     bit<32> leg_1_instrument_id;
     bit<32> leg_2_instrument_id;
     bit<8> spread_buy_convention;
-    bit<15> reserved_15;
-    bit<1> is_prior_settlement_theoretical;
 }
 
 header trading_status_update_message_t {
@@ -344,8 +340,6 @@ header end_of_snapshot_message_t {
     bit<32> next_bid_implied_qty;
     bit<32> next_ask_implied_qty;
     bit<64> prior_settlement_price;
-    bit<15> reserved_15;
-    bit<1> is_prior_settlement_theoretical;
 }
 
 header retransmit_request_message_t {

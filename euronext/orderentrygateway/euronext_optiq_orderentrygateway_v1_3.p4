@@ -127,17 +127,6 @@ header new_order_message_order_clearing_fields_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
-    bit<6> reserved_6;
-    bit<1> leg_9;
-    bit<1> leg_8;
-    bit<1> leg_7;
-    bit<1> leg_6;
-    bit<1> leg_5;
-    bit<1> leg_4;
-    bit<1> leg_3;
-    bit<1> leg_2;
-    bit<1> leg_1;
-    bit<1> field_actively_used;
     bit<16> clearing_instruction;
     bit<8> account_type_cross;
 }
@@ -312,17 +301,6 @@ header cancel_replace_message_cancel_replace_clearing_fields_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
-    bit<6> reserved_6;
-    bit<1> leg_9;
-    bit<1> leg_8;
-    bit<1> leg_7;
-    bit<1> leg_6;
-    bit<1> leg_5;
-    bit<1> leg_4;
-    bit<1> leg_3;
-    bit<1> leg_2;
-    bit<1> leg_1;
-    bit<1> field_actively_used;
     bit<16> clearing_instruction;
 }
 
@@ -388,17 +366,6 @@ header quotes_message_clearing_dataset_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
-    bit<6> reserved_6;
-    bit<1> leg_9;
-    bit<1> leg_8;
-    bit<1> leg_7;
-    bit<1> leg_6;
-    bit<1> leg_5;
-    bit<1> leg_4;
-    bit<1> leg_3;
-    bit<1> leg_2;
-    bit<1> leg_1;
-    bit<1> field_actively_used;
     bit<16> clearing_instruction;
     bit<144> free_text;
 }

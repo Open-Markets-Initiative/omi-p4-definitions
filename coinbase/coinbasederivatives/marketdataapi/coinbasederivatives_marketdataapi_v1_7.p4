@@ -72,11 +72,6 @@ header outright_instrument_definition_message_t {
     bit<32> product_id;
     bit<8> product_group;
     bit<8> trading_status;
-    bit<12> reserved_12;
-    bit<1> is_strike_delisted;
-    bit<1> is_call;
-    bit<1> is_announced;
-    bit<1> is_prior_settlement_theoretical;
     bit<64> contract_size;
     bit<16> year;
     bit<16> month;
@@ -111,11 +106,6 @@ header spread_instrument_definition_message_t {
     bit<32> leg_1_instrument_id;
     bit<32> leg_2_instrument_id;
     bit<8> spread_buy_convention;
-    bit<12> reserved_12;
-    bit<1> is_strike_delisted;
-    bit<1> is_call;
-    bit<1> is_announced;
-    bit<1> is_prior_settlement_theoretical;
     bit<16> year;
     bit<16> month;
     bit<16> week_of_month;
@@ -146,11 +136,6 @@ header option_instrument_definition_message_t {
     bit<32> underlying_instrument_id;
     bit<8> product_group;
     bit<8> trading_status;
-    bit<12> reserved_12;
-    bit<1> is_strike_delisted;
-    bit<1> is_call;
-    bit<1> is_announced;
-    bit<1> is_prior_settlement_theoretical;
     bit<8> option_expiry_type;
     bit<16> year;
     bit<16> month;
@@ -390,11 +375,6 @@ header start_of_option_instrument_snapshot_message_t {
     bit<16> trading_session_date;
     bit<8> product_group;
     bit<8> trading_status;
-    bit<12> reserved_12;
-    bit<1> is_strike_delisted;
-    bit<1> is_call;
-    bit<1> is_announced;
-    bit<1> is_prior_settlement_theoretical;
     bit<8> option_expiry_type;
     bit<16> year;
     bit<16> month;
@@ -435,11 +415,6 @@ header end_of_snapshot_message_t {
     bit<32> next_bid_implied_qty;
     bit<32> next_ask_implied_qty;
     bit<64> prior_settlement_price_optional;
-    bit<12> reserved_12;
-    bit<1> is_strike_delisted;
-    bit<1> is_call;
-    bit<1> is_announced;
-    bit<1> is_prior_settlement_theoretical;
 }
 
 header end_of_cycle_message_t {
