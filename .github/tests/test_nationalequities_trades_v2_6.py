@@ -10,12 +10,12 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "iex/iexequities/tops/iexequities_tops_v1_56.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "iexequities_tops_v1_56.json")
+PROGRAM = "nyse/nationalequities/trades/nationalequities_trades_v2_6.p4"
+JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "nationalequities_trades_v2_6.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class IexequitiesTopsV156Tests(unittest.TestCase):
+class NationalequitiesTradesV26Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -27,12 +27,12 @@ class IexequitiesTopsV156Tests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
-    def test_quoteupdatemessage(self):
-        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.56/QuoteUpdateMessage.pcap"):
+    def test_securitystatusmessage(self):
+        for payload in payloads.of("omi-data-packets/Nyse/NationalEquities.Trades.Pillar.v2.6/SecurityStatusMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_tradereportmessage(self):
-        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.56/TradeReportMessage.pcap"):
+    def test_trademessage(self):
+        for payload in payloads.of("omi-data-packets/Nyse/NationalEquities.Trades.Pillar.v2.6/TradeMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

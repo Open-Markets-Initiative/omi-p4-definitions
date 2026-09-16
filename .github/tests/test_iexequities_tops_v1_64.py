@@ -27,8 +27,40 @@ class IexequitiesTopsV164Tests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
+    def test_auctioninformationmessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/AuctionInformationMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_officialpricemessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/OfficialPriceMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_operationalhaltstatusmessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/OperationalHaltStatusMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
     def test_quoteupdatemessage(self):
         for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/QuoteUpdateMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_securitydirectorymessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/SecurityDirectoryMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_shortsalepriceteststatusmessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/ShortSalePriceTestStatusMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_systemeventmessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/SystemEventMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_tradereportmessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/TradeReportMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_tradingstatusmessage(self):
+        for payload in payloads.of("omi-data-packets/Iex/IexEquities.Tops.IexTp.v1.64/TradingStatusMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 
