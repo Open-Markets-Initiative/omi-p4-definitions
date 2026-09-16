@@ -39,6 +39,10 @@ class ArcaequitiesIntegratedfeedV25GTests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Nyse/ArcaEquities.IntegratedFeed.Pillar.v2.5.g/DeleteOrderMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
+    def test_messagesequence(self):
+        for payload in payloads.of("omi-data-packets/Nyse/ArcaEquities.IntegratedFeed.Pillar.v2.5.g/MessageSequence.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
     def test_modifyordermessage(self):
         for payload in payloads.of("omi-data-packets/Nyse/ArcaEquities.IntegratedFeed.Pillar.v2.5.g/ModifyOrderMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")

@@ -27,6 +27,10 @@ class NationalequitiesBboV25DTests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
+    def test_messagesequence(self):
+        for payload in payloads.of("omi-data-packets/Nyse/NationalEquities.Bbo.Pillar.v2.5.d/MessageSequence.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
     def test_quotemessage(self):
         for payload in payloads.of("omi-data-packets/Nyse/NationalEquities.Bbo.Pillar.v2.5.d/QuoteMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
