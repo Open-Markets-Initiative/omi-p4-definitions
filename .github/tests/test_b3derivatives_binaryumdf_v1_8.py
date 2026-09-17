@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "b3/binaryumdf/b3derivatives_binaryumdf_v1_8.p4"
+PROGRAM = "b3/b3derivatives/binaryumdf/b3derivatives_binaryumdf_v1_8.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "b3derivatives_binaryumdf_v1_8.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

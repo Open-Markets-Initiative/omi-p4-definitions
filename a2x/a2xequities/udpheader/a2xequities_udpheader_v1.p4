@@ -51,7 +51,7 @@ struct headers_t {
     message_message_t message_message[MAX_MESSAGES];
 }
 
-parser A2xA2xequitiesUdpheaderParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser A2xequitiesUdpheaderParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message);
         meta.message_message_remaining = hdr.message.message_count;
@@ -72,28 +72,28 @@ parser A2xA2xequitiesUdpheaderParser(packet_in packet, out headers_t hdr, inout 
 
 }
 
-control A2xA2xequitiesUdpheaderVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control A2xequitiesUdpheaderVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control A2xA2xequitiesUdpheaderIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control A2xequitiesUdpheaderIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         standard_metadata.egress_spec = FORWARD_PORT;
     }
 }
 
-control A2xA2xequitiesUdpheaderEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control A2xequitiesUdpheaderEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control A2xA2xequitiesUdpheaderComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control A2xequitiesUdpheaderComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control A2xA2xequitiesUdpheaderDeparser(packet_out packet, in headers_t hdr) {
+control A2xequitiesUdpheaderDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message);
         packet.emit(hdr.message_message);
@@ -101,10 +101,10 @@ control A2xA2xequitiesUdpheaderDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    A2xA2xequitiesUdpheaderParser(),
-    A2xA2xequitiesUdpheaderVerifyChecksum(),
-    A2xA2xequitiesUdpheaderIngress(),
-    A2xA2xequitiesUdpheaderEgress(),
-    A2xA2xequitiesUdpheaderComputeChecksum(),
-    A2xA2xequitiesUdpheaderDeparser()
+    A2xequitiesUdpheaderParser(),
+    A2xequitiesUdpheaderVerifyChecksum(),
+    A2xequitiesUdpheaderIngress(),
+    A2xequitiesUdpheaderEgress(),
+    A2xequitiesUdpheaderComputeChecksum(),
+    A2xequitiesUdpheaderDeparser()
 ) main;

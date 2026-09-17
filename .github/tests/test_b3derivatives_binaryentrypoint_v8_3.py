@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "b3/binaryentrypoint/b3derivatives_binaryentrypoint_v8_3.p4"
+PROGRAM = "b3/b3derivatives/binaryentrypoint/b3derivatives_binaryentrypoint_v8_3.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "b3derivatives_binaryentrypoint_v8_3.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

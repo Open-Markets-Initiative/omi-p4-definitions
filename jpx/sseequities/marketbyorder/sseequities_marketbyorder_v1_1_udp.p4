@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Jpx FseEquities MarketByOrder Flex v1.1
+// P4_16 (v1model) definition for: Jpx SseEquities MarketByOrder Flex v1.1
 // 
 // Protocol:
 //   Organization: Japan Exchange Group
@@ -134,7 +134,7 @@ struct headers_t {
     communication_control_message_t communication_control_message[MAX_MESSAGES];
 }
 
-parser JpxFseequitiesMarketbyorderUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser SseequitiesMarketbyorderUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
@@ -215,12 +215,12 @@ parser JpxFseequitiesMarketbyorderUdpParser(packet_in packet, out headers_t hdr,
 
 }
 
-control JpxFseequitiesMarketbyorderUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control SseequitiesMarketbyorderUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxFseequitiesMarketbyorderUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control SseequitiesMarketbyorderUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -231,17 +231,17 @@ control JpxFseequitiesMarketbyorderUdpIngress(inout headers_t hdr, inout metadat
     }
 }
 
-control JpxFseequitiesMarketbyorderUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control SseequitiesMarketbyorderUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control JpxFseequitiesMarketbyorderUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control SseequitiesMarketbyorderUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxFseequitiesMarketbyorderUdpDeparser(packet_out packet, in headers_t hdr) {
+control SseequitiesMarketbyorderUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.packet_header_message);
@@ -258,10 +258,10 @@ control JpxFseequitiesMarketbyorderUdpDeparser(packet_out packet, in headers_t h
 }
 
 V1Switch(
-    JpxFseequitiesMarketbyorderUdpParser(),
-    JpxFseequitiesMarketbyorderUdpVerifyChecksum(),
-    JpxFseequitiesMarketbyorderUdpIngress(),
-    JpxFseequitiesMarketbyorderUdpEgress(),
-    JpxFseequitiesMarketbyorderUdpComputeChecksum(),
-    JpxFseequitiesMarketbyorderUdpDeparser()
+    SseequitiesMarketbyorderUdpParser(),
+    SseequitiesMarketbyorderUdpVerifyChecksum(),
+    SseequitiesMarketbyorderUdpIngress(),
+    SseequitiesMarketbyorderUdpEgress(),
+    SseequitiesMarketbyorderUdpComputeChecksum(),
+    SseequitiesMarketbyorderUdpDeparser()
 ) main;

@@ -10,9 +10,9 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM_CLIENT = "cme/ilink3/cme_globex_ilink3_v8_5_client.p4"
+PROGRAM_CLIENT = "cme/globex/ilink3/cme_globex_ilink3_v8_5_client.p4"
 JSON_CLIENT = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_ilink3_v8_5_client.json")
-PROGRAM_SERVER = "cme/ilink3/cme_globex_ilink3_v8_5_server.p4"
+PROGRAM_SERVER = "cme/globex/ilink3/cme_globex_ilink3_v8_5_server.p4"
 JSON_SERVER = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_ilink3_v8_5_server.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

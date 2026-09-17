@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Jpx NseEquities MarketByOrder Flex v1.1
+// P4_16 (v1model) definition for: Jpx SseEquities MarketByOrder Flex v1.1
 // 
 // Protocol:
 //   Organization: Japan Exchange Group
@@ -66,7 +66,7 @@ struct headers_t {
     end_of_message_message_t end_of_message_message;
 }
 
-parser JpxNseequitiesMarketbyorderTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser SseequitiesMarketbyorderTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
@@ -103,12 +103,12 @@ parser JpxNseequitiesMarketbyorderTcpParser(packet_in packet, out headers_t hdr,
 
 }
 
-control JpxNseequitiesMarketbyorderTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control SseequitiesMarketbyorderTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxNseequitiesMarketbyorderTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control SseequitiesMarketbyorderTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -119,17 +119,17 @@ control JpxNseequitiesMarketbyorderTcpIngress(inout headers_t hdr, inout metadat
     }
 }
 
-control JpxNseequitiesMarketbyorderTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control SseequitiesMarketbyorderTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control JpxNseequitiesMarketbyorderTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control SseequitiesMarketbyorderTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxNseequitiesMarketbyorderTcpDeparser(packet_out packet, in headers_t hdr) {
+control SseequitiesMarketbyorderTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
         packet.emit(hdr.login_request_message);
@@ -139,10 +139,10 @@ control JpxNseequitiesMarketbyorderTcpDeparser(packet_out packet, in headers_t h
 }
 
 V1Switch(
-    JpxNseequitiesMarketbyorderTcpParser(),
-    JpxNseequitiesMarketbyorderTcpVerifyChecksum(),
-    JpxNseequitiesMarketbyorderTcpIngress(),
-    JpxNseequitiesMarketbyorderTcpEgress(),
-    JpxNseequitiesMarketbyorderTcpComputeChecksum(),
-    JpxNseequitiesMarketbyorderTcpDeparser()
+    SseequitiesMarketbyorderTcpParser(),
+    SseequitiesMarketbyorderTcpVerifyChecksum(),
+    SseequitiesMarketbyorderTcpIngress(),
+    SseequitiesMarketbyorderTcpEgress(),
+    SseequitiesMarketbyorderTcpComputeChecksum(),
+    SseequitiesMarketbyorderTcpDeparser()
 ) main;

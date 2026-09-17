@@ -10,9 +10,9 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM_CLIENTTCP = "cme/mdp3/cme_globex_mdp3_v1_12_clienttcp.p4"
+PROGRAM_CLIENTTCP = "cme/globex/mdp3/cme_globex_mdp3_v1_12_clienttcp.p4"
 JSON_CLIENTTCP = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_mdp3_v1_12_clienttcp.json")
-PROGRAM_SERVERTCP = "cme/mdp3/cme_globex_mdp3_v1_12_servertcp.p4"
+PROGRAM_SERVERTCP = "cme/globex/mdp3/cme_globex_mdp3_v1_12_servertcp.p4"
 JSON_SERVERTCP = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "cme_globex_mdp3_v1_12_servertcp.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

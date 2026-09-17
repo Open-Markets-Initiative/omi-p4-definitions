@@ -119,7 +119,7 @@ struct headers_t {
     mass_cancel_t mass_cancel;
 }
 
-parser JpxOsederivativesGeniuminetClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser OsederivativesGeniuminetClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.client_packet_header);
         transition select(hdr.client_packet_header.client_packet_type) {
@@ -206,12 +206,12 @@ parser JpxOsederivativesGeniuminetClientParser(packet_in packet, out headers_t h
 
 }
 
-control JpxOsederivativesGeniuminetClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control OsederivativesGeniuminetClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxOsederivativesGeniuminetClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control OsederivativesGeniuminetClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -222,17 +222,17 @@ control JpxOsederivativesGeniuminetClientIngress(inout headers_t hdr, inout meta
     }
 }
 
-control JpxOsederivativesGeniuminetClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control OsederivativesGeniuminetClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control JpxOsederivativesGeniuminetClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control OsederivativesGeniuminetClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxOsederivativesGeniuminetClientDeparser(packet_out packet, in headers_t hdr) {
+control OsederivativesGeniuminetClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
         packet.emit(hdr.debug_packet);
@@ -248,10 +248,10 @@ control JpxOsederivativesGeniuminetClientDeparser(packet_out packet, in headers_
 }
 
 V1Switch(
-    JpxOsederivativesGeniuminetClientParser(),
-    JpxOsederivativesGeniuminetClientVerifyChecksum(),
-    JpxOsederivativesGeniuminetClientIngress(),
-    JpxOsederivativesGeniuminetClientEgress(),
-    JpxOsederivativesGeniuminetClientComputeChecksum(),
-    JpxOsederivativesGeniuminetClientDeparser()
+    OsederivativesGeniuminetClientParser(),
+    OsederivativesGeniuminetClientVerifyChecksum(),
+    OsederivativesGeniuminetClientIngress(),
+    OsederivativesGeniuminetClientEgress(),
+    OsederivativesGeniuminetClientComputeChecksum(),
+    OsederivativesGeniuminetClientDeparser()
 ) main;

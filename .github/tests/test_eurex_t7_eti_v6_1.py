@@ -10,9 +10,9 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM_CLIENT = "eurex/eti/eurex_t7_eti_v6_1_client.p4"
+PROGRAM_CLIENT = "eurex/t7/eti/eurex_t7_eti_v6_1_client.p4"
 JSON_CLIENT = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v6_1_client.json")
-PROGRAM_SERVER = "eurex/eti/eurex_t7_eti_v6_1_server.p4"
+PROGRAM_SERVER = "eurex/t7/eti/eurex_t7_eti_v6_1_server.p4"
 JSON_SERVER = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v6_1_server.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

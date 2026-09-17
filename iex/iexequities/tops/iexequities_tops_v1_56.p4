@@ -49,49 +49,6 @@ header message_t {
     bit<8> message_type;
 }
 
-header system_event_message_t {
-    bit<8> system_event;
-    bit<64> timestamp;
-}
-
-header security_directory_message_t {
-    bit<1> test_security;
-    bit<1> when_issued;
-    bit<1> etp;
-    bit<5> unused_5;
-    bit<64> timestamp;
-    bit<64> symbol;
-    bit<32> round_lot_size;
-    bit<64> adjusted_poc_price;
-    bit<8> luld_tier;
-}
-
-header trading_status_message_t {
-    bit<8> trading_status;
-    bit<64> timestamp;
-    bit<64> symbol;
-    bit<32> reason;
-}
-
-header operational_halt_status_message_t {
-    bit<8> operational_halt_status;
-    bit<64> timestamp;
-    bit<64> symbol;
-}
-
-header short_sale_price_test_status_message_t {
-    bit<8> short_sale_price_test_status;
-    bit<64> timestamp;
-    bit<64> symbol;
-    bit<8> detail;
-}
-
-header security_event_message_t {
-    bit<8> security_event;
-    bit<64> timestamp;
-    bit<64> symbol;
-}
-
 header quote_update_message_t {
     bit<1> symbol_availability;
     bit<1> market_session;
@@ -115,13 +72,7 @@ header trade_report_message_t {
     bit<32> size;
     bit<64> price;
     bit<64> trade_id;
-}
-
-header official_price_message_t {
-    bit<8> price_type;
-    bit<64> timestamp;
-    bit<64> symbol;
-    bit<64> official_price;
+    bit<32> reserved_4;
 }
 
 header trade_break_message_t {
@@ -135,23 +86,7 @@ header trade_break_message_t {
     bit<32> size;
     bit<64> price;
     bit<64> trade_id;
-}
-
-header auction_information_message_t {
-    bit<8> auction_type;
-    bit<64> timestamp;
-    bit<64> symbol;
-    bit<32> paired_shares;
-    bit<64> reference_price;
-    bit<64> indicative_clearing_price;
-    bit<32> imbalance_shares;
-    bit<8> imbalance_side;
-    bit<8> extension_number;
-    bit<32> scheduled_auction_time;
-    bit<64> auction_book_clearing_price;
-    bit<64> collar_reference_price;
-    bit<64> lower_auction_collar;
-    bit<64> upper_auction_collar;
+    bit<32> reserved_4;
 }
 
 struct metadata_t {
@@ -161,17 +96,9 @@ struct metadata_t {
 struct headers_t {
     iextp_header_t iextp_header;
     message_t message[MAX_MESSAGES];
-    system_event_message_t system_event_message[MAX_MESSAGES];
-    security_directory_message_t security_directory_message[MAX_MESSAGES];
-    trading_status_message_t trading_status_message[MAX_MESSAGES];
-    operational_halt_status_message_t operational_halt_status_message[MAX_MESSAGES];
-    short_sale_price_test_status_message_t short_sale_price_test_status_message[MAX_MESSAGES];
-    security_event_message_t security_event_message[MAX_MESSAGES];
     quote_update_message_t quote_update_message[MAX_MESSAGES];
     trade_report_message_t trade_report_message[MAX_MESSAGES];
-    official_price_message_t official_price_message[MAX_MESSAGES];
     trade_break_message_t trade_break_message[MAX_MESSAGES];
-    auction_information_message_t auction_information_message[MAX_MESSAGES];
 }
 
 parser IexequitiesTopsParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -191,55 +118,11 @@ parser IexequitiesTopsParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_message {
         packet.extract(hdr.message.next);
         transition select(hdr.message.last.message_type) {
-            8w0x53: parse_system_event_message;
-            8w0x44: parse_security_directory_message;
-            8w0x48: parse_trading_status_message;
-            8w0x4f: parse_operational_halt_status_message;
-            8w0x50: parse_short_sale_price_test_status_message;
-            8w0x45: parse_security_event_message;
             8w0x51: parse_quote_update_message;
             8w0x54: parse_trade_report_message;
-            8w0x58: parse_official_price_message;
             8w0x42: parse_trade_break_message;
-            8w0x41: parse_auction_information_message;
             default: accept;
         }
-    }
-
-    state parse_system_event_message {
-        packet.extract(hdr.system_event_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_security_directory_message {
-        packet.extract(hdr.security_directory_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_trading_status_message {
-        packet.extract(hdr.trading_status_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_operational_halt_status_message {
-        packet.extract(hdr.operational_halt_status_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_short_sale_price_test_status_message {
-        packet.extract(hdr.short_sale_price_test_status_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_security_event_message {
-        packet.extract(hdr.security_event_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
     }
 
     state parse_quote_update_message {
@@ -254,20 +137,8 @@ parser IexequitiesTopsParser(packet_in packet, out headers_t hdr, inout metadata
         transition parse_message;
     }
 
-    state parse_official_price_message {
-        packet.extract(hdr.official_price_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
     state parse_trade_break_message {
         packet.extract(hdr.trade_break_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_auction_information_message {
-        packet.extract(hdr.auction_information_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -304,17 +175,9 @@ control IexequitiesTopsDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.iextp_header);
         packet.emit(hdr.message);
-        packet.emit(hdr.system_event_message);
-        packet.emit(hdr.security_directory_message);
-        packet.emit(hdr.trading_status_message);
-        packet.emit(hdr.operational_halt_status_message);
-        packet.emit(hdr.short_sale_price_test_status_message);
-        packet.emit(hdr.security_event_message);
         packet.emit(hdr.quote_update_message);
         packet.emit(hdr.trade_report_message);
-        packet.emit(hdr.official_price_message);
         packet.emit(hdr.trade_break_message);
-        packet.emit(hdr.auction_information_message);
     }
 }
 

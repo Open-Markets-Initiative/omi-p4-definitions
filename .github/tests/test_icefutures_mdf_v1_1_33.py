@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "ice/mdf/icefutures_mdf_v1_1_33.p4"
+PROGRAM = "ice/icefutures/mdf/icefutures_mdf_v1_1_33.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "icefutures_mdf_v1_1_33.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

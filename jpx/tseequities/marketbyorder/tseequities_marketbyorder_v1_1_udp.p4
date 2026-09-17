@@ -134,7 +134,7 @@ struct headers_t {
     communication_control_message_t communication_control_message[MAX_MESSAGES];
 }
 
-parser JpxTseequitiesMarketbyorderUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser TseequitiesMarketbyorderUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
@@ -215,12 +215,12 @@ parser JpxTseequitiesMarketbyorderUdpParser(packet_in packet, out headers_t hdr,
 
 }
 
-control JpxTseequitiesMarketbyorderUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control TseequitiesMarketbyorderUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxTseequitiesMarketbyorderUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control TseequitiesMarketbyorderUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -231,17 +231,17 @@ control JpxTseequitiesMarketbyorderUdpIngress(inout headers_t hdr, inout metadat
     }
 }
 
-control JpxTseequitiesMarketbyorderUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control TseequitiesMarketbyorderUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control JpxTseequitiesMarketbyorderUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control TseequitiesMarketbyorderUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxTseequitiesMarketbyorderUdpDeparser(packet_out packet, in headers_t hdr) {
+control TseequitiesMarketbyorderUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.packet_header_message);
@@ -258,10 +258,10 @@ control JpxTseequitiesMarketbyorderUdpDeparser(packet_out packet, in headers_t h
 }
 
 V1Switch(
-    JpxTseequitiesMarketbyorderUdpParser(),
-    JpxTseequitiesMarketbyorderUdpVerifyChecksum(),
-    JpxTseequitiesMarketbyorderUdpIngress(),
-    JpxTseequitiesMarketbyorderUdpEgress(),
-    JpxTseequitiesMarketbyorderUdpComputeChecksum(),
-    JpxTseequitiesMarketbyorderUdpDeparser()
+    TseequitiesMarketbyorderUdpParser(),
+    TseequitiesMarketbyorderUdpVerifyChecksum(),
+    TseequitiesMarketbyorderUdpIngress(),
+    TseequitiesMarketbyorderUdpEgress(),
+    TseequitiesMarketbyorderUdpComputeChecksum(),
+    TseequitiesMarketbyorderUdpDeparser()
 ) main;

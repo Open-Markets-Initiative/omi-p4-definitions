@@ -142,7 +142,7 @@ struct headers_t {
     market_at_close_t market_at_close[MAX_MESSAGES];
 }
 
-parser A2xA2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser A2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_count) {
@@ -236,12 +236,12 @@ parser A2xA2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout meta
 
 }
 
-control A2xA2xequitiesRtmdfVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control A2xequitiesRtmdfVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control A2xA2xequitiesRtmdfIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control A2xequitiesRtmdfIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -252,17 +252,17 @@ control A2xA2xequitiesRtmdfIngress(inout headers_t hdr, inout metadata_t meta, i
     }
 }
 
-control A2xA2xequitiesRtmdfEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control A2xequitiesRtmdfEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control A2xA2xequitiesRtmdfComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control A2xequitiesRtmdfComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control A2xA2xequitiesRtmdfDeparser(packet_out packet, in headers_t hdr) {
+control A2xequitiesRtmdfDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.message_header_message);
@@ -280,10 +280,10 @@ control A2xA2xequitiesRtmdfDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    A2xA2xequitiesRtmdfParser(),
-    A2xA2xequitiesRtmdfVerifyChecksum(),
-    A2xA2xequitiesRtmdfIngress(),
-    A2xA2xequitiesRtmdfEgress(),
-    A2xA2xequitiesRtmdfComputeChecksum(),
-    A2xA2xequitiesRtmdfDeparser()
+    A2xequitiesRtmdfParser(),
+    A2xequitiesRtmdfVerifyChecksum(),
+    A2xequitiesRtmdfIngress(),
+    A2xequitiesRtmdfEgress(),
+    A2xequitiesRtmdfComputeChecksum(),
+    A2xequitiesRtmdfDeparser()
 ) main;

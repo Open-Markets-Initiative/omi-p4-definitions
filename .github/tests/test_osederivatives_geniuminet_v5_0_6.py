@@ -10,12 +10,12 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "jpx/osederivatives/geniuminet/jpx_osederivatives_geniuminet_v5_0_6.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "jpx_osederivatives_geniuminet_v5_0_6.json")
+PROGRAM = "jpx/osederivatives/geniuminet/osederivatives_geniuminet_v5_0_6.p4"
+JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "osederivatives_geniuminet_v5_0_6.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class JpxOsederivativesGeniuminetV506Tests(unittest.TestCase):
+class OsederivativesGeniuminetV506Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

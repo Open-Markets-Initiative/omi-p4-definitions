@@ -103,6 +103,13 @@ header add_order_no_mpid_t {
     bit<32> order_book_position;
     bit<64> quantity;
     bit<32> price;
+    bit<10> unused;
+    bit<1> undisclosed;
+    bit<1> override_crossing;
+    bit<1> price_stabilization;
+    bit<1> market_bid;
+    bit<1> short_sell;
+    bit<1> force;
     bit<8> lot_type;
 }
 
@@ -114,6 +121,13 @@ header add_order_with_mpid_t {
     bit<32> order_book_position;
     bit<64> quantity;
     bit<32> price;
+    bit<10> unused;
+    bit<1> undisclosed;
+    bit<1> override_crossing;
+    bit<1> price_stabilization;
+    bit<1> market_bid;
+    bit<1> short_sell;
+    bit<1> force;
     bit<8> lot_type;
     bit<56> participant_id;
 }
@@ -153,6 +167,13 @@ header order_replace_message_t {
     bit<32> new_orderbook_position;
     bit<64> quantity;
     bit<32> price;
+    bit<10> unused;
+    bit<1> undisclosed;
+    bit<1> override_crossing;
+    bit<1> price_stabilization;
+    bit<1> market_bid;
+    bit<1> short_sell;
+    bit<1> force;
 }
 
 header order_delete_message_t {
@@ -208,7 +229,7 @@ struct headers_t {
     equilibrium_price_update_t equilibrium_price_update[MAX_MESSAGES];
 }
 
-parser JpxOsederivativesGeniuminetParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser OsederivativesGeniuminetParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
@@ -335,12 +356,12 @@ parser JpxOsederivativesGeniuminetParser(packet_in packet, out headers_t hdr, in
 
 }
 
-control JpxOsederivativesGeniuminetVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control OsederivativesGeniuminetVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxOsederivativesGeniuminetIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control OsederivativesGeniuminetIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -351,17 +372,17 @@ control JpxOsederivativesGeniuminetIngress(inout headers_t hdr, inout metadata_t
     }
 }
 
-control JpxOsederivativesGeniuminetEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control OsederivativesGeniuminetEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control JpxOsederivativesGeniuminetComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control OsederivativesGeniuminetComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control JpxOsederivativesGeniuminetDeparser(packet_out packet, in headers_t hdr) {
+control OsederivativesGeniuminetDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
@@ -383,10 +404,10 @@ control JpxOsederivativesGeniuminetDeparser(packet_out packet, in headers_t hdr)
 }
 
 V1Switch(
-    JpxOsederivativesGeniuminetParser(),
-    JpxOsederivativesGeniuminetVerifyChecksum(),
-    JpxOsederivativesGeniuminetIngress(),
-    JpxOsederivativesGeniuminetEgress(),
-    JpxOsederivativesGeniuminetComputeChecksum(),
-    JpxOsederivativesGeniuminetDeparser()
+    OsederivativesGeniuminetParser(),
+    OsederivativesGeniuminetVerifyChecksum(),
+    OsederivativesGeniuminetIngress(),
+    OsederivativesGeniuminetEgress(),
+    OsederivativesGeniuminetComputeChecksum(),
+    OsederivativesGeniuminetDeparser()
 ) main;

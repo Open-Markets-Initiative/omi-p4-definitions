@@ -87,7 +87,7 @@ struct headers_t {
     market_at_close_book_entry_message_t market_at_close_book_entry_message[MAX_MESSAGES];
 }
 
-parser A2xA2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser A2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_count) {
@@ -139,12 +139,12 @@ parser A2xA2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout m
 
 }
 
-control A2xA2xequitiesSnapshotVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control A2xequitiesSnapshotVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control A2xA2xequitiesSnapshotIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control A2xequitiesSnapshotIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -155,17 +155,17 @@ control A2xA2xequitiesSnapshotIngress(inout headers_t hdr, inout metadata_t meta
     }
 }
 
-control A2xA2xequitiesSnapshotEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control A2xequitiesSnapshotEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control A2xA2xequitiesSnapshotComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control A2xequitiesSnapshotComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control A2xA2xequitiesSnapshotDeparser(packet_out packet, in headers_t hdr) {
+control A2xequitiesSnapshotDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.message_header_message);
@@ -177,10 +177,10 @@ control A2xA2xequitiesSnapshotDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    A2xA2xequitiesSnapshotParser(),
-    A2xA2xequitiesSnapshotVerifyChecksum(),
-    A2xA2xequitiesSnapshotIngress(),
-    A2xA2xequitiesSnapshotEgress(),
-    A2xA2xequitiesSnapshotComputeChecksum(),
-    A2xA2xequitiesSnapshotDeparser()
+    A2xequitiesSnapshotParser(),
+    A2xequitiesSnapshotVerifyChecksum(),
+    A2xequitiesSnapshotIngress(),
+    A2xequitiesSnapshotEgress(),
+    A2xequitiesSnapshotComputeChecksum(),
+    A2xequitiesSnapshotDeparser()
 ) main;

@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "blueoceanats/blueequities/memoirlastsale/blueequities_memoirlastsale_v1_3.p4"
+PROGRAM = "blueoceanats/memoirlastsale/blueequities_memoirlastsale_v1_3.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "blueequities_memoirlastsale_v1_3.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
