@@ -10,12 +10,12 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "eurex/t7/xti/eurex_t7_xti_v10_0_server.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_xti_v10_0.json")
+PROGRAM = "eurex/t7/eti/eurex_t7_eti_v10_0_server.p4"
+JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "eurex_t7_eti_v10_0.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class EurexT7XtiV100Tests(unittest.TestCase):
+class EurexT7EtiV100Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -28,7 +28,7 @@ class EurexT7XtiV100Tests(unittest.TestCase):
         cls.switch.stop()
 
     def test_orderexecresponse(self):
-        for payload in payloads.of("omi-data-packets/Eurex/T7.Xti.Fbe.v10.0/OrderExecResponse.pcap"):
+        for payload in payloads.of("omi-data-packets/Eurex/T7.Eti.Fbe.v10.0/OrderExecResponse.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

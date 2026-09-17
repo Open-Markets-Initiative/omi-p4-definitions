@@ -54,7 +54,7 @@ header add_complex_instrument_t {
     bit<8> product_complex;
     bit<8> implied_market_indicator;
     bit<8> no_legs;
-    bit<8> pad1;
+    bit<8> pad_1;
 }
 
 header add_complex_instrument_instrmt_leg_grp_comp_t {
@@ -78,7 +78,7 @@ header auction_bbo_t {
     bit<8> potential_security_trading_event;
     bit<8> bid_ord_type;
     bit<8> offer_ord_type;
-    bit<8> pad_1;
+    bit<40> pad5;
 }
 
 header auction_clearing_price_t {
@@ -99,7 +99,7 @@ header cross_request_t {
     bit<8> side;
     bit<8> cross_request_type;
     bit<8> input_source;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> transact_time;
 }
 
@@ -121,7 +121,7 @@ header full_order_execution_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<32> trd_match_id;
     bit<64> price;
     bit<64> trd_reg_ts_time_priority;
@@ -229,7 +229,7 @@ header partial_order_execution_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<32> trd_match_id;
     bit<64> price;
     bit<64> trd_reg_ts_time_priority;

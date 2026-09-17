@@ -80,7 +80,7 @@ header auction_bbo_t {
     bit<8> potential_security_trading_event;
     bit<8> bid_ord_type;
     bit<8> offer_ord_type;
-    bit<8> pad_1;
+    bit<40> pad5;
 }
 
 header auction_clearing_price_t {
@@ -101,7 +101,7 @@ header cross_request_t {
     bit<8> side;
     bit<8> cross_request_type;
     bit<8> input_source;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> transact_time;
 }
 
@@ -112,7 +112,7 @@ header execution_summary_t {
     bit<64> exec_id;
     bit<64> last_qty;
     bit<8> aggressor_side;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<16> trade_condition;
     bit<32> pad4;
     bit<64> last_px;
@@ -124,7 +124,7 @@ header full_order_execution_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<32> trd_match_id;
     bit<64> price;
     bit<64> trd_reg_ts_time_priority;
@@ -170,7 +170,7 @@ header instrument_summary_md_instrument_entry_grp_comp_t {
     bit<64> md_entry_px;
     bit<64> md_entry_size;
     bit<8> md_entry_type;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<16> trade_condition;
     bit<32> pad4;
 }
@@ -183,7 +183,7 @@ header mass_instrument_state_change_t {
     bit<8> fast_market_indicator;
     bit<8> security_mass_trading_event;
     bit<8> mass_sold_out_indicator;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<64> transact_time;
     bit<8> last_fragment;
     bit<8> no_related_sym;
@@ -259,7 +259,7 @@ header partial_order_execution_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<32> trd_match_id;
     bit<64> price;
     bit<64> trd_reg_ts_time_priority;
@@ -326,7 +326,7 @@ header trade_report_t {
     bit<8> match_type;
     bit<8> match_sub_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<16> trade_condition;
     bit<48> pad6;
 }

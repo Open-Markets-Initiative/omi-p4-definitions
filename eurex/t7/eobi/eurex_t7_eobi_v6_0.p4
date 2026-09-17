@@ -54,7 +54,7 @@ header add_complex_instrument_t {
     bit<8> product_complex;
     bit<8> implied_market_indicator;
     bit<8> no_legs;
-    bit<8> pad1;
+    bit<8> pad_1;
 }
 
 header add_complex_instrument_instrmt_leg_grp_comp_t {
@@ -113,7 +113,7 @@ header full_order_execution_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> price;
     bit<64> trd_reg_ts_time_priority;
     bit<64> security_id;
@@ -220,7 +220,7 @@ header partial_order_execution_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> price;
     bit<64> trd_reg_ts_time_priority;
     bit<64> security_id;

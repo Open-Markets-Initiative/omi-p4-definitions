@@ -54,7 +54,7 @@ header add_complex_instrument_t {
     bit<8> product_complex;
     bit<8> implied_market_indicator;
     bit<8> no_legs;
-    bit<8> pad1;
+    bit<8> pad_1;
 }
 
 header add_complex_instrument_instrmt_leg_grp_comp_t {
@@ -121,7 +121,7 @@ header instrument_state_change_t {
     bit<8> security_status;
     bit<8> security_trading_status;
     bit<8> fast_market_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> transact_time;
 }
 

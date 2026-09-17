@@ -54,7 +54,7 @@ header add_complex_instrument_t {
     bit<8> product_complex;
     bit<8> implied_market_indicator;
     bit<8> no_legs;
-    bit<8> pad1;
+    bit<8> pad_1;
 }
 
 header add_complex_instrument_instrmt_leg_grp_comp_t {
@@ -146,7 +146,7 @@ header instrument_summary_t {
     bit<8> fast_market_indicator;
     bit<8> security_trading_event;
     bit<8> no_md_entries;
-    bit<8> pad1;
+    bit<8> pad_1;
 }
 
 header instrument_summary_md_instrument_entry_grp_comp_t {

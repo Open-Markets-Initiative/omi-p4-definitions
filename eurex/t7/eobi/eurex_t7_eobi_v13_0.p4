@@ -93,7 +93,7 @@ header add_scaled_simple_instrument_t {
     bit<64> transact_time;
     bit<320> security_desc;
     bit<8> security_type;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<16> quantity_scaling_factor;
     bit<32> pad4;
     bit<64> related_security_id;
@@ -109,7 +109,7 @@ header auction_bbo_t {
     bit<8> potential_security_trading_event;
     bit<8> bid_ord_type;
     bit<8> offer_ord_type;
-    bit<8> pad_1;
+    bit<40> pad5;
 }
 
 header auction_clearing_price_t {
@@ -130,7 +130,7 @@ header cross_request_t {
     bit<8> side;
     bit<8> cross_request_type;
     bit<8> input_source;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> transact_time;
 }
 
@@ -140,7 +140,7 @@ header execution_summary_t {
     bit<64> exec_id;
     bit<64> last_qty;
     bit<8> aggressor_side;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<16> trade_condition;
     bit<8> trading_hhi_indicator;
     bit<24> pad3;
@@ -203,7 +203,7 @@ header instrument_summary_t {
     bit<8> product_complex;
     bit<8> no_md_entries;
     bit<8> tes_security_status;
-    bit<8> pad_1;
+    bit<40> pad5;
 }
 
 header instrument_summary_md_instrument_entry_grp_comp_t {
@@ -254,7 +254,7 @@ header order_add_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> hhi_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> price;
 }
 
@@ -267,7 +267,7 @@ header order_delete_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> hhi_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> price;
 }
 
@@ -287,7 +287,7 @@ header order_modify_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> hhi_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> price;
     bit<8> prev_price_hhi_indicator;
     bit<56> pad7;
@@ -303,7 +303,7 @@ header order_modify_same_prio_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> hhi_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> price;
 }
 
@@ -356,7 +356,7 @@ header snapshot_order_t {
     bit<8> side;
     bit<8> ord_type;
     bit<8> hhi_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> price;
 }
 
@@ -399,7 +399,7 @@ header trade_report_t {
     bit<8> match_type;
     bit<8> match_sub_type;
     bit<8> algorithmic_trade_indicator;
-    bit<8> pad1;
+    bit<8> pad_1;
     bit<16> trade_condition;
     bit<48> pad6;
 }
