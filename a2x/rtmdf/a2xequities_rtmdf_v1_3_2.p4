@@ -96,6 +96,7 @@ header security_definition_message_t {
     bit<24> currency;
     bit<32> mic;
     bit<8> tick_table_id;
+    bit<16> security_flags;
 }
 
 header security_status_message_t {

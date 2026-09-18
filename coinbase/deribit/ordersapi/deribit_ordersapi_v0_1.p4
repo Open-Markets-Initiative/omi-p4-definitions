@@ -96,6 +96,7 @@ header new_order_request_message_t {
     bit<64> self_match_prevention_id;
     bit<8> side;
     bit<8> time_in_force;
+    bit<16> flags_order_flags;
     bit<8> self_trading_mode;
 }
 
@@ -108,6 +109,7 @@ header amend_order_request_message_t {
     bit<8> exponent;
     bit<64> mantissa_2;
     bit<8> exponent_2;
+    bit<16> flags_replace_order_flags;
 }
 
 header cancel_order_request_message_t {
@@ -135,6 +137,8 @@ header mass_quote_request_message_mass_quote_request_message_quotes_group_t {
     bit<8> exponent;
     bit<64> mantissa_2;
     bit<8> exponent_2;
+    bit<16> bid_flags;
+    bit<16> ask_flags;
 }
 
 header mass_cancel_request_message_t {

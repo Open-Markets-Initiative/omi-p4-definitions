@@ -153,6 +153,10 @@ header md_instrument_definition_future_legacy_inst_attrib_group_header_t {
     bit<8> num_in_group;
 }
 
+header md_instrument_definition_future_legacy_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
+}
+
 header md_instrument_definition_future_legacy_lot_type_rules_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
@@ -241,6 +245,10 @@ header md_instrument_definition_spread_legacy_feed_types_group_t {
 header md_instrument_definition_spread_legacy_inst_attrib_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_instrument_definition_spread_legacy_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
 }
 
 header md_instrument_definition_spread_legacy_lot_type_rules_group_header_t {
@@ -574,6 +582,10 @@ header md_instrument_definition_option_legacy_feed_types_group_t {
 header md_instrument_definition_option_legacy_inst_attrib_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_instrument_definition_option_legacy_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
 }
 
 header md_instrument_definition_option_legacy_lot_type_rules_group_header_t {
@@ -1019,6 +1031,10 @@ header md_instrument_definition_future_inst_attrib_group_header_t {
     bit<8> num_in_group;
 }
 
+header md_instrument_definition_future_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
+}
+
 header md_instrument_definition_future_lot_type_rules_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
@@ -1111,6 +1127,10 @@ header md_instrument_definition_option_feed_types_group_t {
 header md_instrument_definition_option_inst_attrib_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_instrument_definition_option_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
 }
 
 header md_instrument_definition_option_lot_type_rules_group_header_t {
@@ -1221,6 +1241,10 @@ header md_instrument_definition_spread_feed_types_group_t {
 header md_instrument_definition_spread_inst_attrib_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_instrument_definition_spread_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
 }
 
 header md_instrument_definition_spread_lot_type_rules_group_header_t {
@@ -1441,6 +1465,7 @@ struct headers_t {
     md_instrument_definition_future_legacy_feed_types_group_header_t md_instrument_definition_future_legacy_feed_types_group_header;
     md_instrument_definition_future_legacy_feed_types_group_t md_instrument_definition_future_legacy_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_future_legacy_inst_attrib_group_header_t md_instrument_definition_future_legacy_inst_attrib_group_header;
+    md_instrument_definition_future_legacy_inst_attrib_group_t md_instrument_definition_future_legacy_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_future_legacy_lot_type_rules_group_header_t md_instrument_definition_future_legacy_lot_type_rules_group_header;
     md_instrument_definition_future_legacy_lot_type_rules_group_t md_instrument_definition_future_legacy_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_spread_legacy_t md_instrument_definition_spread_legacy;
@@ -1448,6 +1473,7 @@ struct headers_t {
     md_instrument_definition_spread_legacy_feed_types_group_header_t md_instrument_definition_spread_legacy_feed_types_group_header;
     md_instrument_definition_spread_legacy_feed_types_group_t md_instrument_definition_spread_legacy_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_spread_legacy_inst_attrib_group_header_t md_instrument_definition_spread_legacy_inst_attrib_group_header;
+    md_instrument_definition_spread_legacy_inst_attrib_group_t md_instrument_definition_spread_legacy_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_spread_legacy_lot_type_rules_group_header_t md_instrument_definition_spread_legacy_lot_type_rules_group_header;
     md_instrument_definition_spread_legacy_lot_type_rules_group_t md_instrument_definition_spread_legacy_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_spread_legacy_legacy_legs_group_header_t md_instrument_definition_spread_legacy_legacy_legs_group_header;
@@ -1474,6 +1500,7 @@ struct headers_t {
     md_instrument_definition_option_legacy_feed_types_group_header_t md_instrument_definition_option_legacy_feed_types_group_header;
     md_instrument_definition_option_legacy_feed_types_group_t md_instrument_definition_option_legacy_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_option_legacy_inst_attrib_group_header_t md_instrument_definition_option_legacy_inst_attrib_group_header;
+    md_instrument_definition_option_legacy_inst_attrib_group_t md_instrument_definition_option_legacy_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_option_legacy_lot_type_rules_group_header_t md_instrument_definition_option_legacy_lot_type_rules_group_header;
     md_instrument_definition_option_legacy_lot_type_rules_group_t md_instrument_definition_option_legacy_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_option_legacy_option_underlyings_group_header_t md_instrument_definition_option_legacy_option_underlyings_group_header;
@@ -1513,6 +1540,7 @@ struct headers_t {
     md_instrument_definition_future_feed_types_group_header_t md_instrument_definition_future_feed_types_group_header;
     md_instrument_definition_future_feed_types_group_t md_instrument_definition_future_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_future_inst_attrib_group_header_t md_instrument_definition_future_inst_attrib_group_header;
+    md_instrument_definition_future_inst_attrib_group_t md_instrument_definition_future_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_future_lot_type_rules_group_header_t md_instrument_definition_future_lot_type_rules_group_header;
     md_instrument_definition_future_lot_type_rules_group_t md_instrument_definition_future_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_option_t md_instrument_definition_option;
@@ -1520,6 +1548,7 @@ struct headers_t {
     md_instrument_definition_option_feed_types_group_header_t md_instrument_definition_option_feed_types_group_header;
     md_instrument_definition_option_feed_types_group_t md_instrument_definition_option_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_option_inst_attrib_group_header_t md_instrument_definition_option_inst_attrib_group_header;
+    md_instrument_definition_option_inst_attrib_group_t md_instrument_definition_option_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_option_lot_type_rules_group_header_t md_instrument_definition_option_lot_type_rules_group_header;
     md_instrument_definition_option_lot_type_rules_group_t md_instrument_definition_option_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_option_option_underlyings_group_header_t md_instrument_definition_option_option_underlyings_group_header;
@@ -1531,6 +1560,7 @@ struct headers_t {
     md_instrument_definition_spread_feed_types_group_header_t md_instrument_definition_spread_feed_types_group_header;
     md_instrument_definition_spread_feed_types_group_t md_instrument_definition_spread_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_spread_inst_attrib_group_header_t md_instrument_definition_spread_inst_attrib_group_header;
+    md_instrument_definition_spread_inst_attrib_group_t md_instrument_definition_spread_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_spread_lot_type_rules_group_header_t md_instrument_definition_spread_lot_type_rules_group_header;
     md_instrument_definition_spread_lot_type_rules_group_t md_instrument_definition_spread_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_spread_legs_group_header_t md_instrument_definition_spread_legs_group_header;
@@ -1688,6 +1718,7 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
     }
 
     state parse_md_instrument_definition_future_legacy_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_future_legacy_inst_attrib_group.next);
         meta.md_instrument_definition_future_legacy_inst_attrib_group_remaining = meta.md_instrument_definition_future_legacy_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_future_legacy_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_future_legacy_lot_type_rules_group;
@@ -1760,6 +1791,7 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
     }
 
     state parse_md_instrument_definition_spread_legacy_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_spread_legacy_inst_attrib_group.next);
         meta.md_instrument_definition_spread_legacy_inst_attrib_group_remaining = meta.md_instrument_definition_spread_legacy_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_spread_legacy_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_spread_legacy_lot_type_rules_group;
@@ -2007,6 +2039,7 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
     }
 
     state parse_md_instrument_definition_option_legacy_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_option_legacy_inst_attrib_group.next);
         meta.md_instrument_definition_option_legacy_inst_attrib_group_remaining = meta.md_instrument_definition_option_legacy_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_option_legacy_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_option_legacy_lot_type_rules_group;
@@ -2378,6 +2411,7 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
     }
 
     state parse_md_instrument_definition_future_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_future_inst_attrib_group.next);
         meta.md_instrument_definition_future_inst_attrib_group_remaining = meta.md_instrument_definition_future_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_future_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_future_lot_type_rules_group;
@@ -2450,6 +2484,7 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
     }
 
     state parse_md_instrument_definition_option_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_option_inst_attrib_group.next);
         meta.md_instrument_definition_option_inst_attrib_group_remaining = meta.md_instrument_definition_option_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_option_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_option_lot_type_rules_group;
@@ -2558,6 +2593,7 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
     }
 
     state parse_md_instrument_definition_spread_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_spread_inst_attrib_group.next);
         meta.md_instrument_definition_spread_inst_attrib_group_remaining = meta.md_instrument_definition_spread_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_spread_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_spread_lot_type_rules_group;
@@ -2824,6 +2860,7 @@ control CmeGlobexMdp3UdpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_future_legacy_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_future_legacy_feed_types_group);
         packet.emit(hdr.md_instrument_definition_future_legacy_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_future_legacy_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_future_legacy_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_future_legacy_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_spread_legacy);
@@ -2831,6 +2868,7 @@ control CmeGlobexMdp3UdpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_spread_legacy_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_spread_legacy_feed_types_group);
         packet.emit(hdr.md_instrument_definition_spread_legacy_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_spread_legacy_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_spread_legacy_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_spread_legacy_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_spread_legacy_legacy_legs_group_header);
@@ -2857,6 +2895,7 @@ control CmeGlobexMdp3UdpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_option_legacy_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_option_legacy_feed_types_group);
         packet.emit(hdr.md_instrument_definition_option_legacy_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_option_legacy_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_option_legacy_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_option_legacy_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_option_legacy_option_underlyings_group_header);
@@ -2896,6 +2935,7 @@ control CmeGlobexMdp3UdpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_future_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_future_feed_types_group);
         packet.emit(hdr.md_instrument_definition_future_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_future_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_future_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_future_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_option);
@@ -2903,6 +2943,7 @@ control CmeGlobexMdp3UdpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_option_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_option_feed_types_group);
         packet.emit(hdr.md_instrument_definition_option_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_option_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_option_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_option_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_option_option_underlyings_group_header);
@@ -2914,6 +2955,7 @@ control CmeGlobexMdp3UdpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_spread_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_spread_feed_types_group);
         packet.emit(hdr.md_instrument_definition_spread_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_spread_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_spread_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_spread_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_spread_legs_group_header);

@@ -389,6 +389,7 @@ header auction_imbalance_19_message_t {
     bit<1> last_volume_msg;
     bit<1> last_trade_msg;
     bit<8> md_update_action;
+    bit<16> imbalance_condition;
     bit<64> md_entry_size_quantity_optional;
     bit<64> md_entry_timestamp;
     bit<32> rpt_seq;
@@ -496,6 +497,7 @@ header last_trade_price_27_message_t {
     bit<1> last_volume_msg;
     bit<1> last_trade_msg;
     bit<8> trading_session_id;
+    bit<16> trade_condition;
     bit<64> md_future_price;
     bit<64> md_entry_size_quantity;
     bit<32> trade_id;
@@ -593,6 +595,7 @@ header trade_53_message_t {
     bit<1> last_volume_msg;
     bit<1> last_trade_msg;
     bit<8> trading_session_id;
+    bit<16> trade_condition;
     bit<64> md_future_price;
     bit<64> md_entry_size_quantity;
     bit<32> trade_id;
@@ -616,6 +619,7 @@ header forward_trade_54_message_t {
     bit<1> last_volume_msg;
     bit<1> last_trade_msg;
     bit<8> trading_session_id;
+    bit<16> trade_condition;
     bit<64> md_future_price;
     bit<64> md_entry_size_quantity;
     bit<32> trade_id;

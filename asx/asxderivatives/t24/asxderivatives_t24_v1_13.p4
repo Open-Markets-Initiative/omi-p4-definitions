@@ -205,6 +205,9 @@ header custom_market_order_added_message_t {
     bit<32> order_book_priority;
     bit<32> quantity;
     bit<8> legs;
+}
+
+header custom_market_order_added_message_contract_legs_t {
     bit<32> contract_number;
     bit<8> side;
     bit<16> ratio;
@@ -405,6 +408,7 @@ header volume_and_open_interest_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<16> custom_market_order_added_message_contract_legs_remaining;
 }
 
 struct headers_t {
@@ -424,6 +428,7 @@ struct headers_t {
     implied_order_replaced_message_t implied_order_replaced_message[MAX_MESSAGES];
     implied_order_deleted_message_t implied_order_deleted_message[MAX_MESSAGES];
     custom_market_order_added_message_t custom_market_order_added_message[MAX_MESSAGES];
+    custom_market_order_added_message_contract_legs_t custom_market_order_added_message_contract_legs[MAX_MESSAGES];
     custom_market_order_replaced_message_t custom_market_order_replaced_message[MAX_MESSAGES];
     custom_market_order_deleted_message_t custom_market_order_deleted_message[MAX_MESSAGES];
     order_executed_message_t order_executed_message[MAX_MESSAGES];
@@ -580,7 +585,17 @@ parser AsxderivativesT24Parser(packet_in packet, out headers_t hdr, inout metada
     state parse_custom_market_order_added_message {
         packet.extract(hdr.custom_market_order_added_message.next);
         meta.dispatched = 1;
-        transition parse_message;
+        meta.custom_market_order_added_message_contract_legs_remaining = 16w6;
+        transition parse_custom_market_order_added_message_contract_legs;
+    }
+
+    state parse_custom_market_order_added_message_contract_legs {
+        packet.extract(hdr.custom_market_order_added_message_contract_legs.next);
+        meta.custom_market_order_added_message_contract_legs_remaining = meta.custom_market_order_added_message_contract_legs_remaining - 1;
+        transition select(meta.custom_market_order_added_message_contract_legs_remaining) {
+            16w0: parse_message;
+            default: parse_custom_market_order_added_message_contract_legs;
+        }
     }
 
     state parse_custom_market_order_replaced_message {
@@ -725,6 +740,7 @@ control AsxderivativesT24Deparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.implied_order_replaced_message);
         packet.emit(hdr.implied_order_deleted_message);
         packet.emit(hdr.custom_market_order_added_message);
+        packet.emit(hdr.custom_market_order_added_message_contract_legs);
         packet.emit(hdr.custom_market_order_replaced_message);
         packet.emit(hdr.custom_market_order_deleted_message);
         packet.emit(hdr.order_executed_message);

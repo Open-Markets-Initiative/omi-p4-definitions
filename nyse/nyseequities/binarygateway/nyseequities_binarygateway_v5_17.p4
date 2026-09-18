@@ -125,6 +125,7 @@ header new_order_single_and_cancel_replace_request_message_t {
     bit<8> mpsubid_1;
     bit<64> cl_ord_id;
     bit<64> orig_cl_ord_id;
+    bit<64> bitfield_order_instructions;
     bit<64> price;
     bit<32> order_qty;
     bit<32> min_qty;
@@ -310,6 +311,7 @@ header order_and_cancel_replace_acknowledgement_message_t {
     bit<8> mpsubid_1;
     bit<64> cl_ord_id;
     bit<64> orig_cl_ord_id;
+    bit<64> bitfield_order_instructions;
     bit<64> price;
     bit<32> order_qty;
     bit<32> min_qty;

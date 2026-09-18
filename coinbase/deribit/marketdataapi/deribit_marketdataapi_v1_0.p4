@@ -35,6 +35,7 @@ header packet_header_t {
     bit<64> sending_time;
     bit<64> seq_num;
     bit<32> channel_id;
+    bit<16> packet_type;
     bit<16> message_count;
 }
 
@@ -42,6 +43,7 @@ header md_message_t {
     bit<16> message_length;
     bit<16> template_id;
     bit<16> schema_version;
+    bit<16> message_flags;
     bit<64> transact_time;
 }
 
@@ -155,6 +157,7 @@ header trade_summary_message_t {
     bit<64> mark_price;
     bit<64> index_price;
     bit<32> trade_count;
+    bit<32> taker_flags;
 }
 
 header trade_message_t {
@@ -163,6 +166,7 @@ header trade_message_t {
     bit<64> maker_order_id;
     bit<64> fill_qty_mantissa;
     bit<64> fill_price;
+    bit<32> maker_flags;
 }
 
 header block_trade_message_t {
@@ -175,6 +179,7 @@ header block_trade_message_t {
     bit<64> mark_price;
     bit<64> index_price;
     bit<64> implied_volatility;
+    bit<32> taker_flags;
     bit<16> number_of_legs;
 }
 

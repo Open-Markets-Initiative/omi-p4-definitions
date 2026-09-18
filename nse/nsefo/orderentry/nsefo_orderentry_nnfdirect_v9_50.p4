@@ -67,6 +67,12 @@ header sign_on_request_in_message_t {
     bit<112> ws_class_name;
     bit<8> broker_status;
     bit<8> show_index;
+    bit<1> normal_market;
+    bit<1> oddlot_market;
+    bit<1> spot_market;
+    bit<1> auction_market;
+    bit<11> reserved_212;
+    bit<1> pre_open;
     bit<16> member_type;
     bit<8> clearing_status;
     bit<200> broker_name;
@@ -96,6 +102,12 @@ header sign_on_request_out_message_t {
     bit<112> reserved_14;
     bit<8> broker_status;
     bit<8> show_index;
+    bit<1> normal_market;
+    bit<1> oddlot_market;
+    bit<1> spot_market;
+    bit<1> auction_market;
+    bit<11> reserved_212;
+    bit<1> pre_open;
     bit<16> member_type;
     bit<8> clearing_status;
     bit<200> broker_name;
@@ -140,6 +152,10 @@ header system_information_out_message_t {
     bit<32> board_lot_quantity;
     bit<32> tick_size;
     bit<16> maximum_gtc_days;
+    bit<1> eligible_aon;
+    bit<1> minimum_fill;
+    bit<1> books_merged;
+    bit<13> reserved_113;
     bit<16> disclosed_quantity_percent_allowed;
     bit<32> risk_free_interest_rate;
 }
@@ -264,6 +280,21 @@ header order_entry_message_t {
     bit<32> entry_date_time;
     bit<32> minimum_fill_aon_volume;
     bit<32> last_modified;
+    bit<1> ato;
+    bit<1> market;
+    bit<1> sl;
+    bit<1> mit;
+    bit<1> day;
+    bit<1> gtc;
+    bit<1> ioc;
+    bit<1> aon;
+    bit<1> mf;
+    bit<1> matched_ind;
+    bit<1> traded;
+    bit<1> modified;
+    bit<1> frozen;
+    bit<1> order_pre_open;
+    bit<2> reserved_12;
     bit<16> branch_id;
     bit<32> trader_id;
     bit<40> broker_id;
@@ -369,6 +400,21 @@ header spread_order_entry_message_t {
     bit<32> entry_date_time_1;
     bit<32> min_fill_aon_1;
     bit<32> last_modified_1;
+    bit<1> ato;
+    bit<1> market;
+    bit<1> sl;
+    bit<1> mit;
+    bit<1> day;
+    bit<1> gtc;
+    bit<1> ioc;
+    bit<1> aon;
+    bit<1> mf;
+    bit<1> matched_ind;
+    bit<1> traded;
+    bit<1> modified;
+    bit<1> frozen;
+    bit<1> order_pre_open;
+    bit<2> reserved_12;
     bit<16> branch_id_1;
     bit<32> trader_id_1;
     bit<40> broker_id_1;
@@ -394,13 +440,16 @@ header spread_order_entry_message_t {
     bit<64> last_activity_reference;
     bit<416> reserved_52;
     bit<32> price_diff;
+}
+
+header spread_order_entry_message_ms_spd_leg_info_t {
     bit<32> token_2;
-    bit<48> instrument_name_2;
-    bit<80> symbol_2;
-    bit<32> expiry_date_2;
-    bit<32> strike_price_2;
-    bit<16> option_type_2;
-    bit<16> ca_level_2;
+    bit<48> instrument_name;
+    bit<80> symbol;
+    bit<32> expiry_date;
+    bit<32> strike_price;
+    bit<16> option_type;
+    bit<16> ca_level;
     bit<40> op_broker_id_2;
     bit<8> fillerx_2;
     bit<16> order_type_2;
@@ -413,13 +462,28 @@ header spread_order_entry_message_t {
     bit<32> price_2;
     bit<32> trigger_price_2;
     bit<32> min_fill_aon_2;
+    bit<1> ato;
+    bit<1> market;
+    bit<1> sl;
+    bit<1> mit;
+    bit<1> day;
+    bit<1> gtc;
+    bit<1> ioc;
+    bit<1> aon;
+    bit<1> mf;
+    bit<1> matched_ind;
+    bit<1> traded;
+    bit<1> modified;
+    bit<1> frozen;
+    bit<1> order_pre_open;
+    bit<2> reserved_12;
     bit<8> open_close_2;
-    bit<3> reserved_68_2;
-    bit<1> stpc_2;
-    bit<2> reserved_34_2;
-    bit<1> col_2;
-    bit<1> boc_2;
-    bit<8> reserved_1_2;
+    bit<3> reserved_68;
+    bit<1> stpc;
+    bit<2> reserved_34;
+    bit<1> col;
+    bit<1> boc;
+    bit<8> reserved_1;
     bit<8> filler_y;
 }
 
@@ -435,6 +499,21 @@ header trade_confirmation_message_t {
     bit<32> remaining_volume;
     bit<32> disclosed_volume_remaining;
     bit<32> price;
+    bit<1> ato;
+    bit<1> market;
+    bit<1> sl;
+    bit<1> mit;
+    bit<1> day;
+    bit<1> gtc;
+    bit<1> ioc;
+    bit<1> aon;
+    bit<1> mf;
+    bit<1> matched_ind;
+    bit<1> traded;
+    bit<1> modified;
+    bit<1> frozen;
+    bit<1> order_pre_open;
+    bit<2> reserved_12;
     bit<32> good_till_date;
     bit<32> fill_number;
     bit<32> fill_quantity;
@@ -482,6 +561,9 @@ header user_order_limit_update_message_t {
     bit<200> user_name;
     bit<32> user_id;
     bit<16> user_type;
+}
+
+header user_order_limit_update_message_instrument_user_t {
     bit<64> branch_buy_value_limit;
     bit<64> branch_sell_value_limit;
     bit<64> branch_used_buy_value_limit;
@@ -531,6 +613,9 @@ header report_header_body_t {
 header report_statistics_body_t {
     bit<8> reserved_1;
     bit<16> number_of_records;
+}
+
+header report_statistics_body_mkt_stats_data_t {
     bit<48> instrument_name;
     bit<80> symbol;
     bit<32> expiry_date;
@@ -559,6 +644,9 @@ header enhanced_market_statistics_report_message_t {
     bit<8> message_type;
     bit<8> reserved_1;
     bit<16> number_of_records;
+}
+
+header enhanced_market_statistics_report_message_enhncd_mkt_stats_data_t {
     bit<48> instrument_name;
     bit<80> symbol;
     bit<32> expiry_date;
@@ -592,6 +680,9 @@ header industry_index_report_message_t {
     bit<8> message_type;
     bit<8> reserved_1;
     bit<16> number_of_industry_records;
+}
+
+header industry_index_report_message_industry_index_t {
     bit<120> industry_name;
     bit<32> opening;
     bit<32> high;
@@ -604,6 +695,9 @@ header sector_index_report_message_t {
     bit<8> message_type;
     bit<120> industry_name;
     bit<16> number_of_industry_records;
+}
+
+header sector_index_report_message_index_data_t {
     bit<120> sector_name;
     bit<32> index_value;
 }
@@ -625,6 +719,9 @@ header spread_report_header_body_t {
 header spread_report_statistics_body_t {
     bit<8> reserved_1;
     bit<16> no_of_records;
+}
+
+header spread_report_statistics_body_spd_stats_data_t {
     bit<16> market_type;
     bit<48> instrumentname_1;
     bit<80> symbol_1;
@@ -719,6 +816,9 @@ header branch_order_value_limit_update_message_t {
     bit<40> broker_id;
     bit<200> reserved_25;
     bit<16> branch_id;
+}
+
+header branch_order_value_limit_update_message_branch_limits_t {
     bit<64> branch_buy_value_limit;
     bit<64> branch_sell_value_limit;
     bit<128> reserved_16;
@@ -731,6 +831,9 @@ header user_order_value_limit_update_message_t {
     bit<208> reserved_26;
     bit<32> user_id;
     bit<16> reserved_2;
+}
+
+header user_order_value_limit_update_message_user_limits_t {
     bit<256> reserved_32;
     bit<64> user_order_buy_value_limit;
     bit<64> user_order_sell_value_limit;
@@ -851,6 +954,21 @@ header order_entry_body_t {
     bit<32> entry_date_time;
     bit<32> minimum_fill_aon_volume;
     bit<32> last_modified;
+    bit<1> ato;
+    bit<1> market;
+    bit<1> sl;
+    bit<1> mit;
+    bit<1> day;
+    bit<1> gtc;
+    bit<1> ioc;
+    bit<1> aon;
+    bit<1> mf;
+    bit<1> matched_ind;
+    bit<1> traded;
+    bit<1> modified;
+    bit<1> frozen;
+    bit<1> order_pre_open;
+    bit<2> reserved_12;
     bit<16> branch_id;
     bit<32> trader_id;
     bit<40> broker_id;
@@ -914,6 +1032,21 @@ header spread_order_body_t {
     bit<32> entry_date_time_1;
     bit<32> min_fill_aon_1;
     bit<32> last_modified_1;
+    bit<1> ato;
+    bit<1> market;
+    bit<1> sl;
+    bit<1> mit;
+    bit<1> day;
+    bit<1> gtc;
+    bit<1> ioc;
+    bit<1> aon;
+    bit<1> mf;
+    bit<1> matched_ind;
+    bit<1> traded;
+    bit<1> modified;
+    bit<1> frozen;
+    bit<1> order_pre_open;
+    bit<2> reserved_12;
     bit<16> branch_id_1;
     bit<32> trader_id_1;
     bit<40> broker_id_1;
@@ -939,13 +1072,16 @@ header spread_order_body_t {
     bit<64> last_activity_reference;
     bit<416> reserved_52;
     bit<32> price_diff;
+}
+
+header spread_order_body_ms_spd_leg_info_t {
     bit<32> token_2;
-    bit<48> instrument_name_2;
-    bit<80> symbol_2;
-    bit<32> expiry_date_2;
-    bit<32> strike_price_2;
-    bit<16> option_type_2;
-    bit<16> ca_level_2;
+    bit<48> instrument_name;
+    bit<80> symbol;
+    bit<32> expiry_date;
+    bit<32> strike_price;
+    bit<16> option_type;
+    bit<16> ca_level;
     bit<40> op_broker_id_2;
     bit<8> fillerx_2;
     bit<16> order_type_2;
@@ -958,18 +1094,43 @@ header spread_order_body_t {
     bit<32> price_2;
     bit<32> trigger_price_2;
     bit<32> min_fill_aon_2;
+    bit<1> ato;
+    bit<1> market;
+    bit<1> sl;
+    bit<1> mit;
+    bit<1> day;
+    bit<1> gtc;
+    bit<1> ioc;
+    bit<1> aon;
+    bit<1> mf;
+    bit<1> matched_ind;
+    bit<1> traded;
+    bit<1> modified;
+    bit<1> frozen;
+    bit<1> order_pre_open;
+    bit<2> reserved_12;
     bit<8> open_close_2;
-    bit<3> reserved_68_2;
-    bit<1> stpc_2;
-    bit<2> reserved_34_2;
-    bit<1> col_2;
-    bit<1> boc_2;
-    bit<8> reserved_1_2;
+    bit<3> reserved_68;
+    bit<1> stpc;
+    bit<2> reserved_34;
+    bit<1> col;
+    bit<1> boc;
+    bit<8> reserved_1;
     bit<8> filler_y;
 }
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<16> spread_order_entry_message_ms_spd_leg_info_remaining;
+    bit<16> user_order_limit_update_message_instrument_user_remaining;
+    bit<16> report_statistics_body_mkt_stats_data_remaining;
+    bit<16> enhanced_market_statistics_report_message_enhncd_mkt_stats_data_remaining;
+    bit<16> industry_index_report_message_industry_index_remaining;
+    bit<16> sector_index_report_message_index_data_remaining;
+    bit<16> spread_report_statistics_body_spd_stats_data_remaining;
+    bit<16> branch_order_value_limit_update_message_branch_limits_remaining;
+    bit<16> user_order_value_limit_update_message_user_limits_remaining;
+    bit<16> spread_order_body_ms_spd_leg_info_remaining;
 }
 
 struct headers_t {
@@ -993,22 +1154,29 @@ struct headers_t {
     price_modification_message_t price_modification_message;
     trade_inquiry_message_t trade_inquiry_message;
     spread_order_entry_message_t spread_order_entry_message;
+    spread_order_entry_message_ms_spd_leg_info_t spread_order_entry_message_ms_spd_leg_info[MAX_MESSAGES];
     trade_confirmation_message_t trade_confirmation_message;
     user_order_limit_update_message_t user_order_limit_update_message;
+    user_order_limit_update_message_instrument_user_t user_order_limit_update_message_instrument_user[MAX_MESSAGES];
     dealer_limit_update_message_t dealer_limit_update_message;
     spread_order_limit_update_message_t spread_order_limit_update_message;
     control_message_to_trader_message_t control_message_to_trader_message;
     market_statistics_report_message_t market_statistics_report_message;
     report_header_body_t report_header_body;
     report_statistics_body_t report_statistics_body;
+    report_statistics_body_mkt_stats_data_t report_statistics_body_mkt_stats_data[MAX_MESSAGES];
     report_trailer_body_t report_trailer_body;
     enhanced_market_statistics_report_message_t enhanced_market_statistics_report_message;
+    enhanced_market_statistics_report_message_enhncd_mkt_stats_data_t enhanced_market_statistics_report_message_enhncd_mkt_stats_data[MAX_MESSAGES];
     market_index_report_message_t market_index_report_message;
     industry_index_report_message_t industry_index_report_message;
+    industry_index_report_message_industry_index_t industry_index_report_message_industry_index[MAX_MESSAGES];
     sector_index_report_message_t sector_index_report_message;
+    sector_index_report_message_index_data_t sector_index_report_message_index_data[MAX_MESSAGES];
     spread_bhavcopy_message_t spread_bhavcopy_message;
     spread_report_header_body_t spread_report_header_body;
     spread_report_statistics_body_t spread_report_statistics_body;
+    spread_report_statistics_body_spd_stats_data_t spread_report_statistics_body_spd_stats_data[MAX_MESSAGES];
     global_indices_message_t global_indices_message;
     global_contracts_message_t global_contracts_message;
     secure_box_registration_request_in_message_t secure_box_registration_request_in_message;
@@ -1017,7 +1185,9 @@ struct headers_t {
     box_sign_off_message_t box_sign_off_message;
     contingency_broadcast_message_t contingency_broadcast_message;
     branch_order_value_limit_update_message_t branch_order_value_limit_update_message;
+    branch_order_value_limit_update_message_branch_limits_t branch_order_value_limit_update_message_branch_limits[MAX_MESSAGES];
     user_order_value_limit_update_message_t user_order_value_limit_update_message;
+    user_order_value_limit_update_message_user_limits_t user_order_value_limit_update_message_user_limits[MAX_MESSAGES];
     normal_order_limit_update_message_t normal_order_limit_update_message;
     reset_user_password_message_t reset_user_password_message;
     collateral_user_status_change_request_message_t collateral_user_status_change_request_message;
@@ -1030,6 +1200,7 @@ struct headers_t {
     giveup_confirmation_message_t giveup_confirmation_message;
     order_entry_body_t order_entry_body;
     spread_order_body_t spread_order_body;
+    spread_order_body_ms_spd_leg_info_t spread_order_body_ms_spd_leg_info[MAX_MESSAGES];
 }
 
 parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -1266,7 +1437,17 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_spread_order_entry_message {
         packet.extract(hdr.spread_order_entry_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.spread_order_entry_message_ms_spd_leg_info_remaining = 16w2;
+        transition parse_spread_order_entry_message_ms_spd_leg_info;
+    }
+
+    state parse_spread_order_entry_message_ms_spd_leg_info {
+        packet.extract(hdr.spread_order_entry_message_ms_spd_leg_info.next);
+        meta.spread_order_entry_message_ms_spd_leg_info_remaining = meta.spread_order_entry_message_ms_spd_leg_info_remaining - 1;
+        transition select(meta.spread_order_entry_message_ms_spd_leg_info_remaining) {
+            16w0: accept;
+            default: parse_spread_order_entry_message_ms_spd_leg_info;
+        }
     }
 
     state parse_trade_confirmation_message {
@@ -1278,7 +1459,17 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_user_order_limit_update_message {
         packet.extract(hdr.user_order_limit_update_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.user_order_limit_update_message_instrument_user_remaining = 16w2;
+        transition parse_user_order_limit_update_message_instrument_user;
+    }
+
+    state parse_user_order_limit_update_message_instrument_user {
+        packet.extract(hdr.user_order_limit_update_message_instrument_user.next);
+        meta.user_order_limit_update_message_instrument_user_remaining = meta.user_order_limit_update_message_instrument_user_remaining - 1;
+        transition select(meta.user_order_limit_update_message_instrument_user_remaining) {
+            16w0: accept;
+            default: parse_user_order_limit_update_message_instrument_user;
+        }
     }
 
     state parse_dealer_limit_update_message {
@@ -1325,7 +1516,17 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_report_statistics_body {
         packet.extract(hdr.report_statistics_body);
         meta.dispatched = 1;
-        transition accept;
+        meta.report_statistics_body_mkt_stats_data_remaining = 16w4;
+        transition parse_report_statistics_body_mkt_stats_data;
+    }
+
+    state parse_report_statistics_body_mkt_stats_data {
+        packet.extract(hdr.report_statistics_body_mkt_stats_data.next);
+        meta.report_statistics_body_mkt_stats_data_remaining = meta.report_statistics_body_mkt_stats_data_remaining - 1;
+        transition select(meta.report_statistics_body_mkt_stats_data_remaining) {
+            16w0: accept;
+            default: parse_report_statistics_body_mkt_stats_data;
+        }
     }
 
     state parse_report_trailer_body {
@@ -1337,7 +1538,17 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_enhanced_market_statistics_report_message {
         packet.extract(hdr.enhanced_market_statistics_report_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.enhanced_market_statistics_report_message_enhncd_mkt_stats_data_remaining = 16w4;
+        transition parse_enhanced_market_statistics_report_message_enhncd_mkt_stats_data;
+    }
+
+    state parse_enhanced_market_statistics_report_message_enhncd_mkt_stats_data {
+        packet.extract(hdr.enhanced_market_statistics_report_message_enhncd_mkt_stats_data.next);
+        meta.enhanced_market_statistics_report_message_enhncd_mkt_stats_data_remaining = meta.enhanced_market_statistics_report_message_enhncd_mkt_stats_data_remaining - 1;
+        transition select(meta.enhanced_market_statistics_report_message_enhncd_mkt_stats_data_remaining) {
+            16w0: accept;
+            default: parse_enhanced_market_statistics_report_message_enhncd_mkt_stats_data;
+        }
     }
 
     state parse_market_index_report_message {
@@ -1349,13 +1560,33 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_industry_index_report_message {
         packet.extract(hdr.industry_index_report_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.industry_index_report_message_industry_index_remaining = 16w10;
+        transition parse_industry_index_report_message_industry_index;
+    }
+
+    state parse_industry_index_report_message_industry_index {
+        packet.extract(hdr.industry_index_report_message_industry_index.next);
+        meta.industry_index_report_message_industry_index_remaining = meta.industry_index_report_message_industry_index_remaining - 1;
+        transition select(meta.industry_index_report_message_industry_index_remaining) {
+            16w0: accept;
+            default: parse_industry_index_report_message_industry_index;
+        }
     }
 
     state parse_sector_index_report_message {
         packet.extract(hdr.sector_index_report_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.sector_index_report_message_index_data_remaining = 16w10;
+        transition parse_sector_index_report_message_index_data;
+    }
+
+    state parse_sector_index_report_message_index_data {
+        packet.extract(hdr.sector_index_report_message_index_data.next);
+        meta.sector_index_report_message_index_data_remaining = meta.sector_index_report_message_index_data_remaining - 1;
+        transition select(meta.sector_index_report_message_index_data_remaining) {
+            16w0: accept;
+            default: parse_sector_index_report_message_index_data;
+        }
     }
 
     state parse_spread_bhavcopy_message {
@@ -1384,7 +1615,17 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_spread_report_statistics_body {
         packet.extract(hdr.spread_report_statistics_body);
         meta.dispatched = 1;
-        transition accept;
+        meta.spread_report_statistics_body_spd_stats_data_remaining = 16w3;
+        transition parse_spread_report_statistics_body_spd_stats_data;
+    }
+
+    state parse_spread_report_statistics_body_spd_stats_data {
+        packet.extract(hdr.spread_report_statistics_body_spd_stats_data.next);
+        meta.spread_report_statistics_body_spd_stats_data_remaining = meta.spread_report_statistics_body_spd_stats_data_remaining - 1;
+        transition select(meta.spread_report_statistics_body_spd_stats_data_remaining) {
+            16w0: accept;
+            default: parse_spread_report_statistics_body_spd_stats_data;
+        }
     }
 
     state parse_global_indices_message {
@@ -1442,13 +1683,33 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_branch_order_value_limit_update_message {
         packet.extract(hdr.branch_order_value_limit_update_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.branch_order_value_limit_update_message_branch_limits_remaining = 16w2;
+        transition parse_branch_order_value_limit_update_message_branch_limits;
+    }
+
+    state parse_branch_order_value_limit_update_message_branch_limits {
+        packet.extract(hdr.branch_order_value_limit_update_message_branch_limits.next);
+        meta.branch_order_value_limit_update_message_branch_limits_remaining = meta.branch_order_value_limit_update_message_branch_limits_remaining - 1;
+        transition select(meta.branch_order_value_limit_update_message_branch_limits_remaining) {
+            16w0: accept;
+            default: parse_branch_order_value_limit_update_message_branch_limits;
+        }
     }
 
     state parse_user_order_value_limit_update_message {
         packet.extract(hdr.user_order_value_limit_update_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.user_order_value_limit_update_message_user_limits_remaining = 16w2;
+        transition parse_user_order_value_limit_update_message_user_limits;
+    }
+
+    state parse_user_order_value_limit_update_message_user_limits {
+        packet.extract(hdr.user_order_value_limit_update_message_user_limits.next);
+        meta.user_order_value_limit_update_message_user_limits_remaining = meta.user_order_value_limit_update_message_user_limits_remaining - 1;
+        transition select(meta.user_order_value_limit_update_message_user_limits_remaining) {
+            16w0: accept;
+            default: parse_user_order_value_limit_update_message_user_limits;
+        }
     }
 
     state parse_normal_order_limit_update_message {
@@ -1529,7 +1790,17 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_spread_order_body {
         packet.extract(hdr.spread_order_body);
         meta.dispatched = 1;
-        transition accept;
+        meta.spread_order_body_ms_spd_leg_info_remaining = 16w2;
+        transition parse_spread_order_body_ms_spd_leg_info;
+    }
+
+    state parse_spread_order_body_ms_spd_leg_info {
+        packet.extract(hdr.spread_order_body_ms_spd_leg_info.next);
+        meta.spread_order_body_ms_spd_leg_info_remaining = meta.spread_order_body_ms_spd_leg_info_remaining - 1;
+        transition select(meta.spread_order_body_ms_spd_leg_info_remaining) {
+            16w0: accept;
+            default: parse_spread_order_body_ms_spd_leg_info;
+        }
     }
 
 }
@@ -1582,22 +1853,29 @@ control NsefoOrderentryDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.price_modification_message);
         packet.emit(hdr.trade_inquiry_message);
         packet.emit(hdr.spread_order_entry_message);
+        packet.emit(hdr.spread_order_entry_message_ms_spd_leg_info);
         packet.emit(hdr.trade_confirmation_message);
         packet.emit(hdr.user_order_limit_update_message);
+        packet.emit(hdr.user_order_limit_update_message_instrument_user);
         packet.emit(hdr.dealer_limit_update_message);
         packet.emit(hdr.spread_order_limit_update_message);
         packet.emit(hdr.control_message_to_trader_message);
         packet.emit(hdr.market_statistics_report_message);
         packet.emit(hdr.report_header_body);
         packet.emit(hdr.report_statistics_body);
+        packet.emit(hdr.report_statistics_body_mkt_stats_data);
         packet.emit(hdr.report_trailer_body);
         packet.emit(hdr.enhanced_market_statistics_report_message);
+        packet.emit(hdr.enhanced_market_statistics_report_message_enhncd_mkt_stats_data);
         packet.emit(hdr.market_index_report_message);
         packet.emit(hdr.industry_index_report_message);
+        packet.emit(hdr.industry_index_report_message_industry_index);
         packet.emit(hdr.sector_index_report_message);
+        packet.emit(hdr.sector_index_report_message_index_data);
         packet.emit(hdr.spread_bhavcopy_message);
         packet.emit(hdr.spread_report_header_body);
         packet.emit(hdr.spread_report_statistics_body);
+        packet.emit(hdr.spread_report_statistics_body_spd_stats_data);
         packet.emit(hdr.global_indices_message);
         packet.emit(hdr.global_contracts_message);
         packet.emit(hdr.secure_box_registration_request_in_message);
@@ -1606,7 +1884,9 @@ control NsefoOrderentryDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.box_sign_off_message);
         packet.emit(hdr.contingency_broadcast_message);
         packet.emit(hdr.branch_order_value_limit_update_message);
+        packet.emit(hdr.branch_order_value_limit_update_message_branch_limits);
         packet.emit(hdr.user_order_value_limit_update_message);
+        packet.emit(hdr.user_order_value_limit_update_message_user_limits);
         packet.emit(hdr.normal_order_limit_update_message);
         packet.emit(hdr.reset_user_password_message);
         packet.emit(hdr.collateral_user_status_change_request_message);
@@ -1619,6 +1899,7 @@ control NsefoOrderentryDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.giveup_confirmation_message);
         packet.emit(hdr.order_entry_body);
         packet.emit(hdr.spread_order_body);
+        packet.emit(hdr.spread_order_body_ms_spd_leg_info);
     }
 }
 

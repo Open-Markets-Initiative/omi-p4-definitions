@@ -307,9 +307,9 @@ header trade_reversal_md_trade_entry_grp_comp_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> add_complex_instrument_instrmt_leg_grp_comp_remaining;
-    bit<8> instrument_summary_md_instrument_entry_grp_comp_remaining;
-    bit<8> trade_reversal_md_trade_entry_grp_comp_remaining;
+    bit<16> add_complex_instrument_instrmt_leg_grp_comp_remaining;
+    bit<16> instrument_summary_md_instrument_entry_grp_comp_remaining;
+    bit<16> trade_reversal_md_trade_entry_grp_comp_remaining;
 }
 
 struct headers_t {
@@ -374,18 +374,15 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state parse_add_complex_instrument {
         packet.extract(hdr.add_complex_instrument);
         meta.dispatched = 1;
-        meta.add_complex_instrument_instrmt_leg_grp_comp_remaining = hdr.add_complex_instrument.no_legs;
-        transition select(meta.add_complex_instrument_instrmt_leg_grp_comp_remaining) {
-            8w0: accept;
-            default: parse_add_complex_instrument_instrmt_leg_grp_comp;
-        }
+        meta.add_complex_instrument_instrmt_leg_grp_comp_remaining = 16w20;
+        transition parse_add_complex_instrument_instrmt_leg_grp_comp;
     }
 
     state parse_add_complex_instrument_instrmt_leg_grp_comp {
         packet.extract(hdr.add_complex_instrument_instrmt_leg_grp_comp.next);
         meta.add_complex_instrument_instrmt_leg_grp_comp_remaining = meta.add_complex_instrument_instrmt_leg_grp_comp_remaining - 1;
         transition select(meta.add_complex_instrument_instrmt_leg_grp_comp_remaining) {
-            8w0: accept;
+            16w0: accept;
             default: parse_add_complex_instrument_instrmt_leg_grp_comp;
         }
     }
@@ -435,18 +432,15 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state parse_instrument_summary {
         packet.extract(hdr.instrument_summary);
         meta.dispatched = 1;
-        meta.instrument_summary_md_instrument_entry_grp_comp_remaining = hdr.instrument_summary.no_md_entries;
-        transition select(meta.instrument_summary_md_instrument_entry_grp_comp_remaining) {
-            8w0: accept;
-            default: parse_instrument_summary_md_instrument_entry_grp_comp;
-        }
+        meta.instrument_summary_md_instrument_entry_grp_comp_remaining = 16w15;
+        transition parse_instrument_summary_md_instrument_entry_grp_comp;
     }
 
     state parse_instrument_summary_md_instrument_entry_grp_comp {
         packet.extract(hdr.instrument_summary_md_instrument_entry_grp_comp.next);
         meta.instrument_summary_md_instrument_entry_grp_comp_remaining = meta.instrument_summary_md_instrument_entry_grp_comp_remaining - 1;
         transition select(meta.instrument_summary_md_instrument_entry_grp_comp_remaining) {
-            8w0: accept;
+            16w0: accept;
             default: parse_instrument_summary_md_instrument_entry_grp_comp;
         }
     }
@@ -526,18 +520,15 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state parse_trade_reversal {
         packet.extract(hdr.trade_reversal);
         meta.dispatched = 1;
-        meta.trade_reversal_md_trade_entry_grp_comp_remaining = hdr.trade_reversal.no_md_entries;
-        transition select(meta.trade_reversal_md_trade_entry_grp_comp_remaining) {
-            8w0: accept;
-            default: parse_trade_reversal_md_trade_entry_grp_comp;
-        }
+        meta.trade_reversal_md_trade_entry_grp_comp_remaining = 16w15;
+        transition parse_trade_reversal_md_trade_entry_grp_comp;
     }
 
     state parse_trade_reversal_md_trade_entry_grp_comp {
         packet.extract(hdr.trade_reversal_md_trade_entry_grp_comp.next);
         meta.trade_reversal_md_trade_entry_grp_comp_remaining = meta.trade_reversal_md_trade_entry_grp_comp_remaining - 1;
         transition select(meta.trade_reversal_md_trade_entry_grp_comp_remaining) {
-            8w0: accept;
+            16w0: accept;
             default: parse_trade_reversal_md_trade_entry_grp_comp;
         }
     }

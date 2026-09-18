@@ -134,6 +134,7 @@ header new_order_message_order_clearing_fields_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
     bit<8> account_type_cross;
     bit<8> trading_capacity_cross;
@@ -412,6 +413,7 @@ header cancel_replace_message_cancel_replace_clearing_fields_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
 }
 
@@ -525,6 +527,7 @@ header quotes_message_clearing_dataset_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
     bit<144> free_text;
 }
@@ -617,6 +620,7 @@ header quote_request_message_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
     bit<8> rfq_type;
     bit<8> block_length_short;
@@ -937,6 +941,7 @@ header mm_sign_in_message_t {
     bit<64> clearing_firm_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
     bit<144> free_text;
     bit<128> long_client_id;
@@ -961,6 +966,7 @@ header mm_sign_in_ack_message_t {
     bit<64> clearing_firm_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
     bit<144> free_text;
     bit<128> long_client_id;
@@ -1123,6 +1129,7 @@ header new_wholesale_order_message_wholesale_client_group_t {
     bit<128> long_client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
     bit<144> free_text;
     bit<16> non_executing_client_id;
@@ -1266,6 +1273,7 @@ header cross_order_message_cross_clearing_fields_group_t {
     bit<128> long_client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction;
     bit<8> account_type;
     bit<8> trading_capacity_optional;
@@ -1318,6 +1326,7 @@ header wave_for_liquidity_message_t {
     bit<64> ioi_id;
     bit<8> ioi_transaction_type;
     bit<64> original_ioiid;
+    bit<16> target_counterparties;
     bit<32> symbol_index;
     bit<8> emm;
     bit<8> ioi_side;

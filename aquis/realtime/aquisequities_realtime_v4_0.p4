@@ -78,6 +78,7 @@ header trade_t {
     bit<32> order_ref;
     bit<32> trade_ref;
     bit<64> timestamp;
+    bit<32> binary_mmt;
     bit<7> reserved_7;
     bit<1> unrestricted_liquidity_indicator;
 }
@@ -88,6 +89,7 @@ header trade_bust_message_t {
     bit<64> price;
     bit<32> trade_ref;
     bit<64> timestamp;
+    bit<32> binary_mmt;
 }
 
 header tick_table_data_message_t {
@@ -104,6 +106,7 @@ header security_definition_message_t {
     bit<24> currency;
     bit<32> mic;
     bit<8> tick_table_id;
+    bit<16> security_definition_flags;
     bit<160> reserved;
     bit<64> lot_size;
     bit<8> lot_size_decimal;

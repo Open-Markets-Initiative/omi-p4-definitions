@@ -72,6 +72,7 @@ header outright_instrument_definition_message_t {
     bit<32> product_id;
     bit<8> product_group;
     bit<8> trading_status;
+    bit<16> definition_flags;
 }
 
 header spread_instrument_definition_message_t {
@@ -101,6 +102,7 @@ header spread_instrument_definition_message_t {
     bit<32> leg_1_instrument_id;
     bit<32> leg_2_instrument_id;
     bit<8> spread_buy_convention;
+    bit<16> definition_flags;
 }
 
 header option_instrument_definition_message_t {
@@ -127,6 +129,7 @@ header option_instrument_definition_message_t {
     bit<32> underlying_instrument_id;
     bit<8> product_group;
     bit<8> trading_status;
+    bit<16> definition_flags;
 }
 
 header trading_status_update_message_t {
@@ -352,6 +355,7 @@ header start_of_option_instrument_snapshot_message_t {
     bit<16> trading_session_date;
     bit<8> product_group;
     bit<8> trading_status;
+    bit<16> definition_flags;
 }
 
 header order_snapshot_message_t {
@@ -387,6 +391,7 @@ header end_of_snapshot_message_t {
     bit<32> next_bid_implied_qty;
     bit<32> next_ask_implied_qty;
     bit<64> prior_settlement_price_optional;
+    bit<16> definition_flags;
 }
 
 header retransmit_request_message_t {

@@ -267,9 +267,9 @@ header add_complex_instrument_message_instrmt_leg_grp_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> instrument_summary_message_md_instrument_entry_grp_remaining;
-    bit<8> trade_reversal_message_md_trade_entry_grp_remaining;
-    bit<8> add_complex_instrument_message_instrmt_leg_grp_remaining;
+    bit<16> instrument_summary_message_md_instrument_entry_grp_remaining;
+    bit<16> trade_reversal_message_md_trade_entry_grp_remaining;
+    bit<16> add_complex_instrument_message_instrmt_leg_grp_remaining;
 }
 
 struct headers_t {
@@ -350,18 +350,15 @@ parser BseindiaEobiParser(packet_in packet, out headers_t hdr, inout metadata_t 
     state parse_instrument_summary_message {
         packet.extract(hdr.instrument_summary_message);
         meta.dispatched = 1;
-        meta.instrument_summary_message_md_instrument_entry_grp_remaining = hdr.instrument_summary_message.no_md_entries;
-        transition select(meta.instrument_summary_message_md_instrument_entry_grp_remaining) {
-            8w0: accept;
-            default: parse_instrument_summary_message_md_instrument_entry_grp;
-        }
+        meta.instrument_summary_message_md_instrument_entry_grp_remaining = 16w15;
+        transition parse_instrument_summary_message_md_instrument_entry_grp;
     }
 
     state parse_instrument_summary_message_md_instrument_entry_grp {
         packet.extract(hdr.instrument_summary_message_md_instrument_entry_grp.next);
         meta.instrument_summary_message_md_instrument_entry_grp_remaining = meta.instrument_summary_message_md_instrument_entry_grp_remaining - 1;
         transition select(meta.instrument_summary_message_md_instrument_entry_grp_remaining) {
-            8w0: accept;
+            16w0: accept;
             default: parse_instrument_summary_message_md_instrument_entry_grp;
         }
     }
@@ -429,18 +426,15 @@ parser BseindiaEobiParser(packet_in packet, out headers_t hdr, inout metadata_t 
     state parse_trade_reversal_message {
         packet.extract(hdr.trade_reversal_message);
         meta.dispatched = 1;
-        meta.trade_reversal_message_md_trade_entry_grp_remaining = hdr.trade_reversal_message.no_md_entries;
-        transition select(meta.trade_reversal_message_md_trade_entry_grp_remaining) {
-            8w0: accept;
-            default: parse_trade_reversal_message_md_trade_entry_grp;
-        }
+        meta.trade_reversal_message_md_trade_entry_grp_remaining = 16w15;
+        transition parse_trade_reversal_message_md_trade_entry_grp;
     }
 
     state parse_trade_reversal_message_md_trade_entry_grp {
         packet.extract(hdr.trade_reversal_message_md_trade_entry_grp.next);
         meta.trade_reversal_message_md_trade_entry_grp_remaining = meta.trade_reversal_message_md_trade_entry_grp_remaining - 1;
         transition select(meta.trade_reversal_message_md_trade_entry_grp_remaining) {
-            8w0: accept;
+            16w0: accept;
             default: parse_trade_reversal_message_md_trade_entry_grp;
         }
     }
@@ -478,18 +472,15 @@ parser BseindiaEobiParser(packet_in packet, out headers_t hdr, inout metadata_t 
     state parse_add_complex_instrument_message {
         packet.extract(hdr.add_complex_instrument_message);
         meta.dispatched = 1;
-        meta.add_complex_instrument_message_instrmt_leg_grp_remaining = hdr.add_complex_instrument_message.no_legs;
-        transition select(meta.add_complex_instrument_message_instrmt_leg_grp_remaining) {
-            8w0: accept;
-            default: parse_add_complex_instrument_message_instrmt_leg_grp;
-        }
+        meta.add_complex_instrument_message_instrmt_leg_grp_remaining = 16w5;
+        transition parse_add_complex_instrument_message_instrmt_leg_grp;
     }
 
     state parse_add_complex_instrument_message_instrmt_leg_grp {
         packet.extract(hdr.add_complex_instrument_message_instrmt_leg_grp.next);
         meta.add_complex_instrument_message_instrmt_leg_grp_remaining = meta.add_complex_instrument_message_instrmt_leg_grp_remaining - 1;
         transition select(meta.add_complex_instrument_message_instrmt_leg_grp_remaining) {
-            8w0: accept;
+            16w0: accept;
             default: parse_add_complex_instrument_message_instrmt_leg_grp;
         }
     }

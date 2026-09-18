@@ -466,6 +466,10 @@ header md_instrument_definition_future_inst_attrib_group_header_t {
     bit<8> num_in_group;
 }
 
+header md_instrument_definition_future_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
+}
+
 header md_instrument_definition_future_lot_type_rules_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
@@ -559,6 +563,10 @@ header md_instrument_definition_option_feed_types_group_t {
 header md_instrument_definition_option_inst_attrib_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_instrument_definition_option_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
 }
 
 header md_instrument_definition_option_lot_type_rules_group_header_t {
@@ -676,6 +684,10 @@ header md_instrument_definition_spread_inst_attrib_group_header_t {
     bit<8> num_in_group;
 }
 
+header md_instrument_definition_spread_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
+}
+
 header md_instrument_definition_spread_lot_type_rules_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
@@ -783,6 +795,10 @@ header md_instrument_definition_fixed_income_inst_attrib_group_header_t {
     bit<8> num_in_group;
 }
 
+header md_instrument_definition_fixed_income_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
+}
+
 header md_instrument_definition_fixed_income_lot_type_rules_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
@@ -866,6 +882,10 @@ header md_instrument_definition_repo_feed_types_group_t {
 header md_instrument_definition_repo_inst_attrib_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_instrument_definition_repo_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
 }
 
 header md_instrument_definition_repo_lot_type_rules_group_header_t {
@@ -1097,6 +1117,10 @@ header md_instrument_definition_fx_feed_types_group_t {
 header md_instrument_definition_fx_inst_attrib_group_header_t {
     bit<16> block_length;
     bit<8> num_in_group;
+}
+
+header md_instrument_definition_fx_inst_attrib_group_t {
+    bit<32> inst_attrib_value;
 }
 
 header md_instrument_definition_fx_fx_lot_type_rules_group_header_t {
@@ -1450,6 +1474,7 @@ struct headers_t {
     md_instrument_definition_future_feed_types_group_header_t md_instrument_definition_future_feed_types_group_header;
     md_instrument_definition_future_feed_types_group_t md_instrument_definition_future_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_future_inst_attrib_group_header_t md_instrument_definition_future_inst_attrib_group_header;
+    md_instrument_definition_future_inst_attrib_group_t md_instrument_definition_future_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_future_lot_type_rules_group_header_t md_instrument_definition_future_lot_type_rules_group_header;
     md_instrument_definition_future_lot_type_rules_group_t md_instrument_definition_future_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_option_t md_instrument_definition_option;
@@ -1457,6 +1482,7 @@ struct headers_t {
     md_instrument_definition_option_feed_types_group_header_t md_instrument_definition_option_feed_types_group_header;
     md_instrument_definition_option_feed_types_group_t md_instrument_definition_option_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_option_inst_attrib_group_header_t md_instrument_definition_option_inst_attrib_group_header;
+    md_instrument_definition_option_inst_attrib_group_t md_instrument_definition_option_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_option_lot_type_rules_group_header_t md_instrument_definition_option_lot_type_rules_group_header;
     md_instrument_definition_option_lot_type_rules_group_t md_instrument_definition_option_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_option_option_underlyings_group_header_t md_instrument_definition_option_option_underlyings_group_header;
@@ -1468,6 +1494,7 @@ struct headers_t {
     md_instrument_definition_spread_feed_types_group_header_t md_instrument_definition_spread_feed_types_group_header;
     md_instrument_definition_spread_feed_types_group_t md_instrument_definition_spread_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_spread_inst_attrib_group_header_t md_instrument_definition_spread_inst_attrib_group_header;
+    md_instrument_definition_spread_inst_attrib_group_t md_instrument_definition_spread_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_spread_lot_type_rules_group_header_t md_instrument_definition_spread_lot_type_rules_group_header;
     md_instrument_definition_spread_lot_type_rules_group_t md_instrument_definition_spread_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_spread_legs_group_header_t md_instrument_definition_spread_legs_group_header;
@@ -1477,6 +1504,7 @@ struct headers_t {
     md_instrument_definition_fixed_income_feed_types_group_header_t md_instrument_definition_fixed_income_feed_types_group_header;
     md_instrument_definition_fixed_income_feed_types_group_t md_instrument_definition_fixed_income_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_fixed_income_inst_attrib_group_header_t md_instrument_definition_fixed_income_inst_attrib_group_header;
+    md_instrument_definition_fixed_income_inst_attrib_group_t md_instrument_definition_fixed_income_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_fixed_income_lot_type_rules_group_header_t md_instrument_definition_fixed_income_lot_type_rules_group_header;
     md_instrument_definition_fixed_income_lot_type_rules_group_t md_instrument_definition_fixed_income_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_repo_t md_instrument_definition_repo;
@@ -1484,6 +1512,7 @@ struct headers_t {
     md_instrument_definition_repo_feed_types_group_header_t md_instrument_definition_repo_feed_types_group_header;
     md_instrument_definition_repo_feed_types_group_t md_instrument_definition_repo_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_repo_inst_attrib_group_header_t md_instrument_definition_repo_inst_attrib_group_header;
+    md_instrument_definition_repo_inst_attrib_group_t md_instrument_definition_repo_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_repo_lot_type_rules_group_header_t md_instrument_definition_repo_lot_type_rules_group_header;
     md_instrument_definition_repo_lot_type_rules_group_t md_instrument_definition_repo_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_repo_repo_underlyings_group_header_t md_instrument_definition_repo_repo_underlyings_group_header;
@@ -1503,6 +1532,7 @@ struct headers_t {
     md_instrument_definition_fx_feed_types_group_header_t md_instrument_definition_fx_feed_types_group_header;
     md_instrument_definition_fx_feed_types_group_t md_instrument_definition_fx_feed_types_group[MAX_MESSAGES];
     md_instrument_definition_fx_inst_attrib_group_header_t md_instrument_definition_fx_inst_attrib_group_header;
+    md_instrument_definition_fx_inst_attrib_group_t md_instrument_definition_fx_inst_attrib_group[MAX_MESSAGES];
     md_instrument_definition_fx_fx_lot_type_rules_group_header_t md_instrument_definition_fx_fx_lot_type_rules_group_header;
     md_instrument_definition_fx_fx_lot_type_rules_group_t md_instrument_definition_fx_fx_lot_type_rules_group[MAX_MESSAGES];
     md_instrument_definition_fx_trading_sessions_group_header_t md_instrument_definition_fx_trading_sessions_group_header;
@@ -1892,6 +1922,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_md_instrument_definition_future_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_future_inst_attrib_group.next);
         meta.md_instrument_definition_future_inst_attrib_group_remaining = meta.md_instrument_definition_future_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_future_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_future_lot_type_rules_group;
@@ -1964,6 +1995,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_md_instrument_definition_option_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_option_inst_attrib_group.next);
         meta.md_instrument_definition_option_inst_attrib_group_remaining = meta.md_instrument_definition_option_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_option_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_option_lot_type_rules_group;
@@ -2072,6 +2104,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_md_instrument_definition_spread_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_spread_inst_attrib_group.next);
         meta.md_instrument_definition_spread_inst_attrib_group_remaining = meta.md_instrument_definition_spread_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_spread_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_spread_lot_type_rules_group;
@@ -2162,6 +2195,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_md_instrument_definition_fixed_income_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_fixed_income_inst_attrib_group.next);
         meta.md_instrument_definition_fixed_income_inst_attrib_group_remaining = meta.md_instrument_definition_fixed_income_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_fixed_income_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_fixed_income_lot_type_rules_group;
@@ -2234,6 +2268,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_md_instrument_definition_repo_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_repo_inst_attrib_group.next);
         meta.md_instrument_definition_repo_inst_attrib_group_remaining = meta.md_instrument_definition_repo_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_repo_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_repo_lot_type_rules_group;
@@ -2418,6 +2453,7 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_md_instrument_definition_fx_inst_attrib_group {
+        packet.extract(hdr.md_instrument_definition_fx_inst_attrib_group.next);
         meta.md_instrument_definition_fx_inst_attrib_group_remaining = meta.md_instrument_definition_fx_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_fx_inst_attrib_group_remaining) {
             8w0: read_md_instrument_definition_fx_fx_lot_type_rules_group;
@@ -2737,6 +2773,7 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_future_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_future_feed_types_group);
         packet.emit(hdr.md_instrument_definition_future_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_future_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_future_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_future_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_option);
@@ -2744,6 +2781,7 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_option_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_option_feed_types_group);
         packet.emit(hdr.md_instrument_definition_option_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_option_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_option_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_option_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_option_option_underlyings_group_header);
@@ -2755,6 +2793,7 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_spread_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_spread_feed_types_group);
         packet.emit(hdr.md_instrument_definition_spread_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_spread_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_spread_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_spread_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_spread_legs_group_header);
@@ -2764,6 +2803,7 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_fixed_income_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_fixed_income_feed_types_group);
         packet.emit(hdr.md_instrument_definition_fixed_income_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_fixed_income_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_fixed_income_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_fixed_income_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_repo);
@@ -2771,6 +2811,7 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_repo_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_repo_feed_types_group);
         packet.emit(hdr.md_instrument_definition_repo_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_repo_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_repo_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_repo_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_repo_repo_underlyings_group_header);
@@ -2790,6 +2831,7 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_fx_feed_types_group_header);
         packet.emit(hdr.md_instrument_definition_fx_feed_types_group);
         packet.emit(hdr.md_instrument_definition_fx_inst_attrib_group_header);
+        packet.emit(hdr.md_instrument_definition_fx_inst_attrib_group);
         packet.emit(hdr.md_instrument_definition_fx_fx_lot_type_rules_group_header);
         packet.emit(hdr.md_instrument_definition_fx_fx_lot_type_rules_group);
         packet.emit(hdr.md_instrument_definition_fx_trading_sessions_group_header);

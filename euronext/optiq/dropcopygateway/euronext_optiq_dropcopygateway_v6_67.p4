@@ -53,6 +53,7 @@ header dc_market_status_change_message_t {
     bit<64> event_time;
     bit<8> book_state;
     bit<8> status_reason;
+    bit<16> phase_qualifier;
     bit<8> trading_period;
     bit<8> trading_side;
     bit<8> price_limits;
@@ -216,6 +217,7 @@ header long_order_message_long_order_clearing_fields_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction_optional;
 }
 
@@ -471,6 +473,7 @@ header trade_bust_notification_message_t {
     bit<96> account_number;
     bit<8> account_type;
     bit<8> lp_role_optional;
+    bit<16> open_close;
     bit<32> original_invest_decis_w_firm_short_code;
     bit<32> original_non_exec_broker_short_code;
     bit<32> event_client_id_short_code;
@@ -582,6 +585,7 @@ header dc_quote_message_d_c_quote_message_clearing_dataset_group_t {
     bit<64> client_id;
     bit<96> account_number;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<16> clearing_instruction_optional;
     bit<144> free_text;
 }
@@ -823,6 +827,7 @@ header dc_trade_message_d_c_trade_message_matched_orders_group_t {
     bit<64> order_px;
     bit<64> client_id;
     bit<8> technical_origin;
+    bit<16> open_close;
     bit<64> client_order_id;
     bit<64> firm_id;
     bit<16> oe_partition_id_optional;

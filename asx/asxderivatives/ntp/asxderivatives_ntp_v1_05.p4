@@ -124,6 +124,9 @@ header combination_symbol_directory_message_t {
     bit<32> price_fractional_denominator;
     bit<32> price_minimum_tick;
     bit<8> legs;
+}
+
+header combination_symbol_directory_message_combination_leg_t {
     bit<32> tradeable_instrument_id_leg;
     bit<8> side_leg;
     bit<32> ratio_leg;
@@ -142,6 +145,9 @@ header bundles_symbol_directory_t {
     bit<32> price_fractional_denominator;
     bit<32> price_minimum_tick;
     bit<8> legs;
+}
+
+header bundles_symbol_directory_bundle_leg_t {
     bit<32> tradeable_instrument_id_leg;
     bit<8> side_leg;
     bit<32> ratio_leg;
@@ -371,6 +377,8 @@ header volume_and_open_interest_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<16> combination_symbol_directory_message_combination_leg_remaining;
+    bit<16> bundles_symbol_directory_bundle_leg_remaining;
 }
 
 struct headers_t {
@@ -381,7 +389,9 @@ struct headers_t {
     future_symbol_directory_message_t future_symbol_directory_message[MAX_MESSAGES];
     options_symbol_directory_message_t options_symbol_directory_message[MAX_MESSAGES];
     combination_symbol_directory_message_t combination_symbol_directory_message[MAX_MESSAGES];
+    combination_symbol_directory_message_combination_leg_t combination_symbol_directory_message_combination_leg[MAX_MESSAGES];
     bundles_symbol_directory_t bundles_symbol_directory[MAX_MESSAGES];
+    bundles_symbol_directory_bundle_leg_t bundles_symbol_directory_bundle_leg[MAX_MESSAGES];
     order_book_state_message_t order_book_state_message[MAX_MESSAGES];
     add_order_message_t add_order_message[MAX_MESSAGES];
     order_volume_cancelled_message_t order_volume_cancelled_message[MAX_MESSAGES];
@@ -484,13 +494,33 @@ parser AsxderivativesNtpParser(packet_in packet, out headers_t hdr, inout metada
     state parse_combination_symbol_directory_message {
         packet.extract(hdr.combination_symbol_directory_message.next);
         meta.dispatched = 1;
-        transition parse_message;
+        meta.combination_symbol_directory_message_combination_leg_remaining = 16w6;
+        transition parse_combination_symbol_directory_message_combination_leg;
+    }
+
+    state parse_combination_symbol_directory_message_combination_leg {
+        packet.extract(hdr.combination_symbol_directory_message_combination_leg.next);
+        meta.combination_symbol_directory_message_combination_leg_remaining = meta.combination_symbol_directory_message_combination_leg_remaining - 1;
+        transition select(meta.combination_symbol_directory_message_combination_leg_remaining) {
+            16w0: parse_message;
+            default: parse_combination_symbol_directory_message_combination_leg;
+        }
     }
 
     state parse_bundles_symbol_directory {
         packet.extract(hdr.bundles_symbol_directory.next);
         meta.dispatched = 1;
-        transition parse_message;
+        meta.bundles_symbol_directory_bundle_leg_remaining = 16w20;
+        transition parse_bundles_symbol_directory_bundle_leg;
+    }
+
+    state parse_bundles_symbol_directory_bundle_leg {
+        packet.extract(hdr.bundles_symbol_directory_bundle_leg.next);
+        meta.bundles_symbol_directory_bundle_leg_remaining = meta.bundles_symbol_directory_bundle_leg_remaining - 1;
+        transition select(meta.bundles_symbol_directory_bundle_leg_remaining) {
+            16w0: parse_message;
+            default: parse_bundles_symbol_directory_bundle_leg;
+        }
     }
 
     state parse_order_book_state_message {
@@ -650,7 +680,9 @@ control AsxderivativesNtpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.future_symbol_directory_message);
         packet.emit(hdr.options_symbol_directory_message);
         packet.emit(hdr.combination_symbol_directory_message);
+        packet.emit(hdr.combination_symbol_directory_message_combination_leg);
         packet.emit(hdr.bundles_symbol_directory);
+        packet.emit(hdr.bundles_symbol_directory_bundle_leg);
         packet.emit(hdr.order_book_state_message);
         packet.emit(hdr.add_order_message);
         packet.emit(hdr.order_volume_cancelled_message);

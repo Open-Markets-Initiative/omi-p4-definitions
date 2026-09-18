@@ -34,6 +34,7 @@
 header market_data_packet_header_t {
     bit<64> packet_time;
     bit<32> packet_sequence_number;
+    bit<16> packet_flags;
     bit<16> channel_id;
     bit<16> frame;
     bit<16> block_length;
@@ -211,6 +212,7 @@ header market_status_change_message_market_states_group_t {
     bit<64> event_time;
     bit<8> book_state;
     bit<8> status_reason;
+    bit<16> phase_qualifier;
     bit<8> trading_period_optional;
     bit<8> trading_side;
     bit<8> price_limits;
@@ -235,6 +237,7 @@ header timetable_message_t {
 header timetable_message_timetables_group_t {
     bit<64> phase_time;
     bit<8> phase_id;
+    bit<16> phase_qualifier;
     bit<8> trading_period;
     bit<8> order_entry_qualifier;
     bit<8> session;
@@ -416,6 +419,7 @@ header contract_standing_data_message_t {
     bit<32> underlying_mic;
     bit<96> underlying_isin_code;
     bit<32> underlying_expiry;
+    bit<16> order_type_rules;
     bit<8> settlement_method;
     bit<24> trading_currency;
     bit<8> strike_price_decimals_ratio;
@@ -449,6 +453,7 @@ header contract_standing_data_message_contract_emm_properties_group_t {
     bit<16> tick_size_index_id;
     bit<16> pattern_id;
     bit<64> lot_size_optional;
+    bit<64> strategy_authorized;
     bit<8> dynamic_collar_logic;
     bit<8> collar_max_unhalt_nb;
     bit<32> collar_unhalt_delay;
