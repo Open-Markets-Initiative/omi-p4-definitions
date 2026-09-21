@@ -199,7 +199,7 @@ header auction_notification_message_t {
     bit<8> auction_side;
     bit<32> matched_volume;
     bit<32> imbalance_volume;
-    bit<32> reserved;
+    bit<32> reserved_4;
 }
 
 header complex_auction_notification_message_t {

@@ -33,7 +33,7 @@
 
 header packet_header_t {
     bit<8> channel_id;
-    bit<8> reserved;
+    bit<8> packet_reserved;
     bit<16> sequence_version;
     bit<32> sequence_number;
     bit<64> sending_time;
@@ -52,7 +52,7 @@ header sequence_message_t {
 header empty_book_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -65,7 +65,7 @@ header empty_book_message_t {
 
 header channel_reset_11_message_t {
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -79,7 +79,7 @@ header channel_reset_11_message_t {
 header security_status_3_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -100,7 +100,7 @@ header security_group_phase_10_message_t {
     bit<24> security_group;
     bit<40> offset_3_padding_5;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -301,7 +301,7 @@ header security_definition_message_instr_attribs_group_t {
 header news_5_message_t {
     bit<64> security_id_optional;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -323,7 +323,7 @@ header news_5_message_t {
 header opening_price_15_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -344,7 +344,7 @@ header opening_price_15_message_t {
 header theoretical_opening_price_16_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -362,7 +362,7 @@ header theoretical_opening_price_16_message_t {
 header closing_price_17_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -381,7 +381,7 @@ header closing_price_17_message_t {
 header auction_imbalance_19_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -398,7 +398,7 @@ header auction_imbalance_19_message_t {
 header price_band_20_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -418,7 +418,7 @@ header price_band_20_message_t {
 header quantity_band_21_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -435,7 +435,7 @@ header quantity_band_21_message_t {
 header price_band_22_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -455,7 +455,7 @@ header price_band_22_message_t {
 header high_price_24_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -472,7 +472,7 @@ header high_price_24_message_t {
 header low_price_25_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -489,7 +489,7 @@ header low_price_25_message_t {
 header last_trade_price_27_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -526,7 +526,7 @@ header snapshot_full_refresh_header_30_message_t {
 header order_mb_o_50_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -549,7 +549,7 @@ header order_mb_o_50_message_t {
 header delete_order_mb_o_51_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -569,7 +569,7 @@ header delete_order_mb_o_51_message_t {
 header mass_delete_orders_mb_o_52_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -587,7 +587,7 @@ header mass_delete_orders_mb_o_52_message_t {
 header trade_53_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -611,7 +611,7 @@ header trade_53_message_t {
 header forward_trade_54_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -651,7 +651,7 @@ header execution_summary_55_message_t {
 header execution_statistics_56_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -671,7 +671,7 @@ header execution_statistics_56_message_t {
 header trade_bust_57_message_t {
     bit<64> security_id;
     bit<1> end_of_event;
-    bit<1> reserved_1;
+    bit<1> reserved;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;

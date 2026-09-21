@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Aquis AquisEquities TcpHeader Atp v1.0
+// P4_16 (v1model) definition for: Aquis TcpHeader Atp v1.0
 // 
 // Protocol:
 //   Organization: Aquis Exchange

@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: BlueOceanAts BlueEquities MemoirTopOfBook Sbe v1.3
+// P4_16 (v1model) definition for: BlueOceanAts MemoirTopOfBook Sbe v1.3
 // 
 // Protocol:
 //   Organization: Blue Ocean Technologies

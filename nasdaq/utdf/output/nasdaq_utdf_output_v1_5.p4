@@ -443,7 +443,7 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.count) {
-            16w0: accept;
+            16w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }
     }
@@ -677,6 +677,11 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         packet.extract(hdr.end_of_consolidated_last_sale_eligibility.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

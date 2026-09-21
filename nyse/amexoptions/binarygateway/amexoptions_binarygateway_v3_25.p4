@@ -317,6 +317,8 @@ header minimum_price_variant_class_reference_data_message_t {
     bit<64> transact_time_timestamp_8;
     bit<160> mpv_class_name;
     bit<16> mpv_class_id;
+    bit<64> rpimpv;
+    bit<64> luldmpv;
 }
 
 header minimum_price_variant_level_reference_data_message_t {
@@ -559,6 +561,7 @@ header risk_control_alert_message_t {
     bit<32> mpid;
     bit<80> market_maker;
     bit<32> mp_sub_id;
+    bit<32> reserved_4;
     bit<40> clearing_number;
     bit<32> risk_user_crd;
     bit<8> risk_user_type;

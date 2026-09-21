@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Iex IexOptions Session Sbe v1.0
+// P4_16 (v1model) definition for: Iex IexOptions Session Sbe v1.01
 // 
 // Protocol:
 //   Organization: Investors Exchange
 //   Protocol: Session
 //   Encoding: Simple Binary Encoding
-//   Version: 1.0
-//   Date: 6/1/2026
-//   Specification: IEX Options Binary Session Protocol Specification v1.00
+//   Version: 1.01
+//   Date: 7/17/2026
+//   Specification: IEX Options Binary Session Protocol Specification v1.01
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -111,7 +111,7 @@ struct headers_t {
     subsession_leave_response_message_t subsession_leave_response_message;
 }
 
-parser IexoptionsSessionParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser IexoptionsSessionClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.template_id) {
@@ -209,12 +209,12 @@ parser IexoptionsSessionParser(packet_in packet, out headers_t hdr, inout metada
 
 }
 
-control IexoptionsSessionVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IexoptionsSessionClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IexoptionsSessionIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IexoptionsSessionClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -225,17 +225,17 @@ control IexoptionsSessionIngress(inout headers_t hdr, inout metadata_t meta, ino
     }
 }
 
-control IexoptionsSessionEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IexoptionsSessionClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control IexoptionsSessionComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IexoptionsSessionClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IexoptionsSessionDeparser(packet_out packet, in headers_t hdr) {
+control IexoptionsSessionClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.login_request_message);
@@ -252,10 +252,10 @@ control IexoptionsSessionDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    IexoptionsSessionParser(),
-    IexoptionsSessionVerifyChecksum(),
-    IexoptionsSessionIngress(),
-    IexoptionsSessionEgress(),
-    IexoptionsSessionComputeChecksum(),
-    IexoptionsSessionDeparser()
+    IexoptionsSessionClientParser(),
+    IexoptionsSessionClientVerifyChecksum(),
+    IexoptionsSessionClientIngress(),
+    IexoptionsSessionClientEgress(),
+    IexoptionsSessionClientComputeChecksum(),
+    IexoptionsSessionClientDeparser()
 ) main;

@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: A2X A2XEquities Rtmdf Amd v1.3.2
+// P4_16 (v1model) definition for: A2X Rtmdf Amd v1.3.2
 // 
 // Protocol:
 //   Organization: A2X Markets
@@ -147,7 +147,7 @@ parser A2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadat
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_count) {
-            8w0: accept;
+            8w0: parse_message_header_message_empty;
             default: parse_message_header_message;
         }
     }
@@ -233,6 +233,11 @@ parser A2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadat
         packet.extract(hdr.market_at_close.next);
         meta.dispatched = 1;
         transition parse_message_header_message;
+    }
+
+    state parse_message_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

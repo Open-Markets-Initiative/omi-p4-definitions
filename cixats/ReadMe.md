@@ -5,7 +5,7 @@
 
 | [Protocol][Omi.CixAts.Protocol.Definitions] | [Encoding][Omi.Encoding.Definitions] | Version | Date | Size | [Status][Omi.Glossary.Status] | [Testing][Omi.Glossary.Testing] | [Documentation][Omi.CixAts.Specifications] |
 | --- | --- | --- | ---: | ---: | --- | --- | --- |
-| [MarketDataFeed][CixAts.CixAspen.MarketDataFeed] | [Aspen][Omi.Encoding.Aspen] | [1.4][CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Definition] | 4/9/2026 | 302 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Url] - [pdf][CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Pdf] |
+| [MarketDataFeed][CixAts.CixAspen.MarketDataFeed] | [Aspen][Omi.Encoding.Aspen] | [1.4][CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Definition] | 4/9/2026 | 307 | [Active][Omi.Glossary.Status.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Url] - [pdf][CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Pdf] |
 
 
 <p align="center"><a href="https://www.thecix.ca" title="CIX Trading Inc. Website"><img src="https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/raw/main/About/Icons/Website.png" alt="Website" width="32" height="32"></a>&nbsp;&nbsp;<a href="https://www.linkedin.com/company/cix-trading" title="CIX Trading Inc. on LinkedIn"><img src="https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/raw/main/About/Icons/LinkedIn.png" alt="LinkedIn" width="32" height="32"></a></p>
@@ -30,6 +30,6 @@
 [CixAspen.Platform]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/tree/main/Organizations/CixAts/Protocols/CixAspen "CixAts CixAspen"
 [CixAts.CixAspen.MarketDataFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/CixAts/Protocols/CixAspen/MarketDataFeed.md "CIX Market Data Feed"
 
-[CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/cixats/marketdatafeed/cixats_cixaspen_marketdatafeed_v1_4.p4 "CixAts CixAspen MarketDataFeed Aspen v1.4 P4 Definition"
+[CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Definition]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/blob/main/cixats/marketdatafeed/cixats_cixaspen_marketdatafeed_v1_4.p4 "CixAts MarketDataFeed Aspen v1.4 P4 Definition"
 [CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Url]: https://www.thecix.ca/market-data "CIX Trading Inc. 1.4 Url"
 [CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.Pdf]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/CixAts/Specifications/CixAspen/MarketDataFeed/CixAts.CixAspen.MarketDataFeed.Aspen.v1.4.pdf "CIX Trading Inc. 1.4 Pdf"

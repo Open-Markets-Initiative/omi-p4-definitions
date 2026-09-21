@@ -624,7 +624,7 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.number_of_msgs) {
-            16w0: accept;
+            16w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }
     }
@@ -997,6 +997,11 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
         packet.extract(hdr.old_style_options_trade_and_market_stats_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

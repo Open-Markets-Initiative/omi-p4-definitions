@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: 24X 24XEquities MemoirTopOfBook Sbe v1.3
+// P4_16 (v1model) definition for: 24X MemoirTopOfBook Sbe v1.3
 // 
 // Protocol:
 //   Organization: 24 National Exchange

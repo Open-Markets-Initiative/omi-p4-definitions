@@ -155,6 +155,7 @@ header simple_new_order_message_t {
     bit<64> order_qty;
     bit<64> price_optional;
     bit<16> prefix;
+    bit<16> offset_2_padding_2;
     bit<32> document;
     bit<8> memo_length;
 }
@@ -182,6 +183,7 @@ header simple_modify_order_message_t {
     bit<64> order_id_optional;
     bit<64> origclordid;
     bit<16> prefix;
+    bit<16> offset_2_padding_2;
     bit<32> document;
     bit<8> memo_length;
 }
@@ -215,6 +217,7 @@ header new_order_single_message_t {
     bit<32> custody_account;
     bit<32> custody_allocation_type;
     bit<16> prefix;
+    bit<16> offset_2_padding_2;
     bit<32> document;
     bit<8> desk_id_length;
     bit<8> memo_length;
@@ -252,6 +255,7 @@ header order_cancel_replace_request_message_t {
     bit<32> custody_account;
     bit<32> custody_allocation_type;
     bit<16> prefix;
+    bit<16> offset_2_padding_2;
     bit<32> document;
     bit<8> desk_id_length;
     bit<8> memo_length;
@@ -826,6 +830,7 @@ header order_mass_action_request_message_t {
     bit<48> asset;
     bit<64> security_id_optional;
     bit<16> prefix;
+    bit<16> offset_2_padding_2;
     bit<32> document;
 }
 
@@ -849,6 +854,7 @@ header order_mass_action_report_message_t {
     bit<48> asset;
     bit<64> security_id_optional;
     bit<16> prefix;
+    bit<16> offset_2_padding_2;
     bit<32> document;
     bit<8> text_length;
 }

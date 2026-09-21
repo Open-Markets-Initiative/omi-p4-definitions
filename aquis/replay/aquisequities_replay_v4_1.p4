@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Aquis AquisEquities Replay Amd v4.1
+// P4_16 (v1model) definition for: Aquis Replay Amd v4.1
 // 
 // Protocol:
 //   Organization: Aquis Exchange

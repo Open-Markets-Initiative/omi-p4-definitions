@@ -1,0 +1,956 @@
+// P4_16 (v1model) definition for: Nyse TexasEquities BinaryGateway PillarStream v6.0
+// 
+// Protocol:
+//   Organization: New York Stock Exchange
+//   Protocol: Binary Gateway
+//   Encoding: Pillar Stream Protocol
+//   Version: 6.0
+//   Date: 08/14/2026
+//   Specification: NYSE_Pillar_Gateway_Binary_Protocol_Specification.pdf
+// 
+// Byte order: little (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: Public/GPLv3
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header login_message_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<128> username;
+    bit<256> password;
+    bit<32> mic;
+    bit<160> version;
+}
+
+header login_response_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<128> username;
+    bit<8> status;
+}
+
+header stream_avail_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> value;
+    bit<64> next_seq;
+    bit<8> access;
+}
+
+header heartbeat_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+}
+
+header open_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> value;
+    bit<64> start_seq;
+    bit<64> end_seq;
+    bit<8> access;
+    bit<8> mode;
+}
+
+header open_response_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> value;
+    bit<8> status;
+    bit<8> access;
+}
+
+header close_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> value;
+}
+
+header close_response_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> value;
+    bit<8> status;
+}
+
+header seq_msg_t {
+    bit<16> msg_type;
+    bit<16> msg_length;
+    bit<32> sess;
+    bit<32> value;
+    bit<64> seq;
+    bit<32> reserved_4;
+    bit<64> timestamp;
+    bit<16> seq_msg_type;
+    bit<16> seq_msg_length;
+}
+
+header session_configuration_request_message_t {
+    bit<128> username;
+    bit<8> cancel_on_disconnect;
+    bit<8> throttle_preference;
+    bit<8> self_trade_prevention;
+    bit<8> order_priority_update_ack_subscription;
+    bit<8> bold_designation;
+    bit<392> reserved_49;
+}
+
+header new_order_single_and_cancel_replace_request_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<32> mmid;
+    bit<8> mpsubid_1;
+    bit<64> cl_ord_id;
+    bit<64> orig_cl_ord_id;
+    bit<64> bitfield_order_instructions;
+    bit<64> price;
+    bit<32> order_qty;
+    bit<32> min_qty;
+    bit<64> user_data;
+}
+
+header order_cancel_request_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<64> cl_ord_id;
+    bit<64> orig_cl_ord_id;
+}
+
+header order_modify_request_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<64> cl_ord_id;
+    bit<64> orig_cl_ord_id;
+    bit<32> order_qty;
+    bit<8> side;
+    bit<8> locate_reqd_u_81;
+}
+
+header bulk_cancel_request_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<32> mmid;
+    bit<64> cl_ord_id;
+    bit<40> deliver_to_comp_id;
+    bit<8> bulk_cancel_type;
+    bit<8> side;
+}
+
+header symbol_subscription_request_message_t {
+    bit<32> symbol_id;
+    bit<128> username;
+}
+
+header manual_action_response_message_t {
+    bit<32> symbol_id;
+    bit<64> cl_ord_id;
+    bit<32> sess;
+    bit<32> value;
+    bit<64> seq;
+    bit<8> sell_indicator;
+    bit<32> intraday_sell_short_qty;
+    bit<8> mpsubid_1;
+    bit<8> locate_reqd_u_81;
+    bit<8> self_trade_type_bits;
+    bit<64> user_data;
+    bit<8> manual_response_type;
+    bit<160> dmm_reject_reason;
+}
+
+header risk_limit_update_request_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<80> market_maker_nul;
+    bit<32> mpsubid_4;
+    bit<32> reserved_4;
+    bit<40> clearing_number;
+    bit<64> cl_ord_id;
+    bit<32> risk_user_crd;
+    bit<8> risk_user_type;
+    bit<8> risk_control_type;
+    bit<8> risk_control_activation;
+    bit<64> usd_limit;
+    bit<32> time_limit;
+    bit<32> percentage_limit;
+    bit<32> count_limit;
+    bit<8> breach_action_request;
+    bit<8> ioc_attribution;
+    bit<8> risk_range_id;
+    bit<64> risk_minimum_value;
+    bit<8> price_scale;
+    bit<1520> reserved_190;
+}
+
+header risk_action_request_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<80> market_maker_nul;
+    bit<32> mpsubid_4;
+    bit<32> reserved_4;
+    bit<40> clearing_number;
+    bit<64> cl_ord_id;
+    bit<32> risk_user_crd;
+    bit<8> risk_user_type;
+    bit<8> risk_control_type;
+    bit<8> risk_action_type;
+    bit<8> risk_range_id;
+    bit<1592> reserved_199;
+}
+
+header equities_symbol_reference_data_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<192> nyse_symbol;
+    bit<32> listed_mic;
+    bit<8> round_lot_size;
+    bit<8> adv_risk_range_id;
+    bit<56> reserved_7;
+    bit<16> mpv_class_id;
+    bit<8> test_symbol_indicator;
+}
+
+header dmm_symbol_reference_data_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<192> nyse_symbol;
+    bit<64> book;
+    bit<32> mpid;
+    bit<24> dmm_unit_num;
+    bit<16> post;
+    bit<64> median_volume;
+    bit<64> rd_seq;
+    bit<64> ridge_price;
+    bit<64> ppp_1;
+    bit<64> ppp_2;
+    bit<64> ppp_3;
+    bit<64> open_on_trade_max_qty;
+    bit<64> close_on_trade_max_qty;
+    bit<64> lmocp;
+}
+
+header minimum_price_variant_class_reference_data_message_t {
+    bit<64> transact_time;
+    bit<160> mpv_class_name;
+    bit<16> mpv_class_id;
+    bit<64> rpimpv;
+    bit<64> luldmpv;
+}
+
+header minimum_price_variant_level_reference_data_message_t {
+    bit<64> transact_time;
+    bit<192> mpv_level_name;
+    bit<64> price;
+    bit<64> quoting_mpv;
+    bit<64> trading_mpv;
+    bit<16> mpv_class_id;
+}
+
+header mpid_configuration_message_t {
+    bit<64> transact_time;
+    bit<8> mpid_status;
+    bit<32> mpid;
+    bit<128> username;
+    bit<400> reserved_50;
+}
+
+header mmid_configuration_message_t {
+    bit<64> transact_time;
+    bit<80> market_maker;
+    bit<32> mmid;
+    bit<128> username;
+    bit<800> reserved_100;
+}
+
+header session_configuration_acknowledgement_message_t {
+    bit<64> transact_time;
+    bit<8> user_session_type;
+    bit<8> user_session_status;
+    bit<128> username;
+    bit<32> mic;
+    bit<8> cancel_on_disconnect;
+    bit<8> throttle_preference;
+    bit<16> throttle_window;
+    bit<16> throttle_threshold;
+    bit<8> symbol_eligibility;
+    bit<32> max_order_quantity;
+    bit<8> self_trade_prevention;
+    bit<8> order_priority_update_ack_subscription;
+    bit<8> ack_status;
+    bit<8> bold_designation;
+    bit<392> reserved_49;
+}
+
+header order_and_cancel_replace_acknowledgement_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<32> mmid;
+    bit<8> mpsubid_1;
+    bit<64> cl_ord_id;
+    bit<64> orig_cl_ord_id;
+    bit<64> bitfield_order_instructions;
+    bit<64> price;
+    bit<32> order_qty;
+    bit<32> min_qty;
+    bit<64> order_id;
+    bit<32> leaves_qty;
+    bit<64> working_price;
+    bit<8> working_away_from_display;
+    bit<32> pre_liquidity_indicator;
+    bit<16> reason_code;
+    bit<8> ack_type;
+    bit<7> unused_7;
+    bit<1> throttled;
+    bit<64> user_data;
+}
+
+header order_modify_cancel_request_acknowledgment_and_urout_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<64> order_id;
+    bit<64> ref_cl_ord_id;
+    bit<64> orig_cl_ord_id;
+    bit<64> price;
+    bit<32> order_qty;
+    bit<32> leaves_qty;
+    bit<8> side;
+    bit<8> locate_reqd_u_81;
+    bit<16> reason_code;
+    bit<8> ack_type;
+    bit<7> unused_7;
+    bit<1> throttled;
+    bit<64> user_data;
+}
+
+header order_priority_update_acknowledgment_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<64> order_id;
+    bit<64> cl_ord_id;
+    bit<64> working_price;
+    bit<32> order_qty;
+    bit<8> working_away_from_display;
+    bit<32> pre_liquidity_indicator;
+    bit<8> ack_type;
+    bit<64> user_data;
+}
+
+header execution_report_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<64> order_id;
+    bit<64> cl_ord_id;
+    bit<64> deal_id;
+    bit<64> last_px;
+    bit<32> leaves_qty;
+    bit<32> cum_qty;
+    bit<32> last_qty;
+    bit<32> liquidity_indicator;
+    bit<5> unused_5;
+    bit<3> executed_trading_session;
+    bit<24> reserved_3;
+    bit<8> locate_reqd_u_81;
+    bit<8> participant_type;
+    bit<16> reason_code;
+    bit<64> user_data;
+}
+
+header trade_bust_correct_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<64> order_id;
+    bit<64> cl_ord_id;
+    bit<32> sess;
+    bit<32> value;
+    bit<64> seq;
+    bit<64> deal_id;
+    bit<64> last_px;
+    bit<32> last_qty;
+    bit<16> reason_code;
+    bit<64> user_data;
+}
+
+header application_layer_reject_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<64> cl_ord_id;
+    bit<16> reason_code;
+    bit<8> reject_type;
+    bit<64> user_data;
+    bit<32> reserved_4;
+}
+
+header symbol_subscription_acknowledgement_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<128> username;
+    bit<8> subscription_status;
+}
+
+header gt_begin_message_t {
+    bit<64> transact_time;
+}
+
+header gt_end_message_t {
+    bit<64> transact_time;
+}
+
+header auction_price_data_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<8> imbalance_side;
+    bit<8> side_of_unpaired_qty;
+    bit<32> imbalance_volume;
+    bit<64> price;
+    bit<32> paired_qty;
+    bit<32> unpaired_qty;
+    bit<32> buy_dmm_available_qty;
+    bit<32> sell_dmm_available_qty;
+}
+
+header auction_request_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<8> auction_type;
+    bit<64> ssr_filing_price;
+}
+
+header manual_action_request_message_t {
+    bit<64> transact_time;
+    bit<32> symbol_id;
+    bit<32> introducing_badge_id;
+    bit<32> mpid;
+    bit<32> mmid;
+    bit<32> sess;
+    bit<32> value;
+    bit<64> seq;
+    bit<8> side;
+    bit<64> price;
+    bit<32> dmm_requested_qty;
+    bit<32> dmm_available_qty;
+    bit<32> dmm_allocated_qty;
+    bit<64> ssr_filing_price;
+    bit<8> manual_override;
+    bit<160> manual_override_reason;
+    bit<8> manual_action_type;
+}
+
+header risk_control_acknowledgement_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<80> market_maker_nul;
+    bit<32> mpsubid_4;
+    bit<32> reserved_4;
+    bit<40> clearing_number;
+    bit<64> cl_ord_id;
+    bit<8> risk_ack_type;
+    bit<32> risk_user_crd;
+    bit<8> risk_user_type;
+    bit<8> risk_control_type;
+    bit<8> risk_control_activation;
+    bit<8> risk_action_type;
+    bit<64> usd_limit;
+    bit<32> time_limit;
+    bit<32> percentage_limit;
+    bit<32> count_limit;
+    bit<8> breach_action_response;
+    bit<8> ioc_attribution;
+    bit<64> usd_calculation_1;
+    bit<64> usd_calculation_2;
+    bit<64> usd_calculation_3;
+    bit<64> usd_calculation_4;
+    bit<32> count_calculation;
+    bit<8> blocked_by_breach_indicator;
+    bit<8> blocked_by_kill_switch_indicator;
+    bit<8> reinstatement_required_by_self;
+    bit<8> reinstatement_required_by_other;
+    bit<8> risk_range_id;
+    bit<64> risk_minimum_value;
+    bit<8> price_scale;
+    bit<1520> reserved_190;
+}
+
+header risk_control_alert_message_t {
+    bit<32> symbol_id;
+    bit<32> mpid;
+    bit<80> market_maker_nul;
+    bit<32> mpsubid_4;
+    bit<32> reserved_4;
+    bit<40> clearing_number;
+    bit<32> risk_user_crd;
+    bit<8> risk_user_type;
+    bit<8> risk_control_type;
+    bit<64> usd_limit;
+    bit<32> time_limit;
+    bit<32> percentage_limit;
+    bit<32> count_limit;
+    bit<8> breach_action_response;
+    bit<8> ioc_attribution;
+    bit<64> usd_calculation_1;
+    bit<64> usd_calculation_2;
+    bit<64> usd_calculation_3;
+    bit<64> usd_calculation_4;
+    bit<32> count_calculation;
+    bit<8> risk_action_type;
+    bit<8> threshold_breach_level;
+    bit<8> blocked_by_breach_indicator;
+    bit<8> blocked_by_kill_switch_indicator;
+    bit<8> reinstatement_required_by_self;
+    bit<8> reinstatement_required_by_other;
+    bit<1600> reserved_200;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+}
+
+struct headers_t {
+    login_message_t login_message;
+    login_response_t login_response;
+    stream_avail_t stream_avail;
+    heartbeat_t heartbeat;
+    open_t open;
+    open_response_t open_response;
+    close_t close;
+    close_response_t close_response;
+    seq_msg_t seq_msg;
+    session_configuration_request_message_t session_configuration_request_message;
+    new_order_single_and_cancel_replace_request_message_t new_order_single_and_cancel_replace_request_message;
+    order_cancel_request_message_t order_cancel_request_message;
+    order_modify_request_message_t order_modify_request_message;
+    bulk_cancel_request_message_t bulk_cancel_request_message;
+    symbol_subscription_request_message_t symbol_subscription_request_message;
+    manual_action_response_message_t manual_action_response_message;
+    risk_limit_update_request_message_t risk_limit_update_request_message;
+    risk_action_request_message_t risk_action_request_message;
+    equities_symbol_reference_data_message_t equities_symbol_reference_data_message;
+    dmm_symbol_reference_data_message_t dmm_symbol_reference_data_message;
+    minimum_price_variant_class_reference_data_message_t minimum_price_variant_class_reference_data_message;
+    minimum_price_variant_level_reference_data_message_t minimum_price_variant_level_reference_data_message;
+    mpid_configuration_message_t mpid_configuration_message;
+    mmid_configuration_message_t mmid_configuration_message;
+    session_configuration_acknowledgement_message_t session_configuration_acknowledgement_message;
+    order_and_cancel_replace_acknowledgement_message_t order_and_cancel_replace_acknowledgement_message;
+    order_modify_cancel_request_acknowledgment_and_urout_message_t order_modify_cancel_request_acknowledgment_and_urout_message;
+    order_priority_update_acknowledgment_message_t order_priority_update_acknowledgment_message;
+    execution_report_message_t execution_report_message;
+    trade_bust_correct_message_t trade_bust_correct_message;
+    application_layer_reject_message_t application_layer_reject_message;
+    symbol_subscription_acknowledgement_message_t symbol_subscription_acknowledgement_message;
+    gt_begin_message_t gt_begin_message;
+    gt_end_message_t gt_end_message;
+    auction_price_data_message_t auction_price_data_message;
+    auction_request_message_t auction_request_message;
+    manual_action_request_message_t manual_action_request_message;
+    risk_control_acknowledgement_message_t risk_control_acknowledgement_message;
+    risk_control_alert_message_t risk_control_alert_message;
+}
+
+parser TexasequitiesBinarygatewayParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        transition select(packet.lookahead<bit<16>>()) {
+            16w0x102: parse_login_message;
+            16w0x202: parse_login_response;
+            16w0x302: parse_stream_avail;
+            16w0x402: parse_heartbeat;
+            16w0x502: parse_open;
+            16w0x602: parse_open_response;
+            16w0x702: parse_close;
+            16w0x802: parse_close_response;
+            16w0x509: parse_seq_msg;
+            default: accept;
+        }
+    }
+
+    state parse_login_message {
+        packet.extract(hdr.login_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_response {
+        packet.extract(hdr.login_response);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_stream_avail {
+        packet.extract(hdr.stream_avail);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_heartbeat {
+        packet.extract(hdr.heartbeat);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_open {
+        packet.extract(hdr.open);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_open_response {
+        packet.extract(hdr.open_response);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_close {
+        packet.extract(hdr.close);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_close_response {
+        packet.extract(hdr.close_response);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_seq_msg {
+        packet.extract(hdr.seq_msg);
+        meta.dispatched = 1;
+        transition select(hdr.seq_msg.seq_msg_type) {
+            16w0x2002: parse_session_configuration_request_message;
+            16w0x8202: parse_sequenced_filler_message;
+            16w0x4002: parse_new_order_single_and_cancel_replace_request_message;
+            16w0x8002: parse_order_cancel_request_message;
+            16w0x7002: parse_order_modify_request_message;
+            16w0x8102: parse_bulk_cancel_request_message;
+            16w0x4603: parse_symbol_subscription_request_message;
+            16w0x4303: parse_tg_begin_message;
+            16w0x4403: parse_tg_end_message;
+            16w0x5403: parse_manual_action_response_message;
+            16w0x3003: parse_risk_limit_update_request_message;
+            16w0x3103: parse_risk_action_request_message;
+            16w0x3202: parse_equities_symbol_reference_data_message;
+            16w0x3208: parse_dmm_symbol_reference_data_message;
+            16w0x3002: parse_minimum_price_variant_class_reference_data_message;
+            16w0x3102: parse_minimum_price_variant_level_reference_data_message;
+            16w0x7202: parse_mpid_configuration_message;
+            16w0x7302: parse_mmid_configuration_message;
+            16w0x2102: parse_session_configuration_acknowledgement_message;
+            16w0x6002: parse_order_and_cancel_replace_acknowledgement_message;
+            16w0x7102: parse_order_modify_cancel_request_acknowledgment_and_urout_message;
+            16w0x6202: parse_order_priority_update_acknowledgment_message;
+            16w0x9002: parse_execution_report_message;
+            16w0x9202: parse_trade_bust_correct_message;
+            16w0x6302: parse_application_layer_reject_message;
+            16w0x4703: parse_symbol_subscription_acknowledgement_message;
+            16w0x4903: parse_gt_begin_message;
+            16w0x5003: parse_gt_end_message;
+            16w0x5203: parse_auction_price_data_message;
+            16w0x4803: parse_auction_request_message;
+            16w0x5303: parse_manual_action_request_message;
+            16w0x3203: parse_risk_control_acknowledgement_message;
+            16w0x3303: parse_risk_control_alert_message;
+            default: accept;
+        }
+    }
+
+    state parse_session_configuration_request_message {
+        packet.extract(hdr.session_configuration_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_sequenced_filler_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_new_order_single_and_cancel_replace_request_message {
+        packet.extract(hdr.new_order_single_and_cancel_replace_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_cancel_request_message {
+        packet.extract(hdr.order_cancel_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_modify_request_message {
+        packet.extract(hdr.order_modify_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_bulk_cancel_request_message {
+        packet.extract(hdr.bulk_cancel_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_symbol_subscription_request_message {
+        packet.extract(hdr.symbol_subscription_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_tg_begin_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_tg_end_message {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_manual_action_response_message {
+        packet.extract(hdr.manual_action_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_risk_limit_update_request_message {
+        packet.extract(hdr.risk_limit_update_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_risk_action_request_message {
+        packet.extract(hdr.risk_action_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_equities_symbol_reference_data_message {
+        packet.extract(hdr.equities_symbol_reference_data_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_dmm_symbol_reference_data_message {
+        packet.extract(hdr.dmm_symbol_reference_data_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_minimum_price_variant_class_reference_data_message {
+        packet.extract(hdr.minimum_price_variant_class_reference_data_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_minimum_price_variant_level_reference_data_message {
+        packet.extract(hdr.minimum_price_variant_level_reference_data_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_mpid_configuration_message {
+        packet.extract(hdr.mpid_configuration_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_mmid_configuration_message {
+        packet.extract(hdr.mmid_configuration_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_session_configuration_acknowledgement_message {
+        packet.extract(hdr.session_configuration_acknowledgement_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_and_cancel_replace_acknowledgement_message {
+        packet.extract(hdr.order_and_cancel_replace_acknowledgement_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_modify_cancel_request_acknowledgment_and_urout_message {
+        packet.extract(hdr.order_modify_cancel_request_acknowledgment_and_urout_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_priority_update_acknowledgment_message {
+        packet.extract(hdr.order_priority_update_acknowledgment_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_execution_report_message {
+        packet.extract(hdr.execution_report_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_trade_bust_correct_message {
+        packet.extract(hdr.trade_bust_correct_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_application_layer_reject_message {
+        packet.extract(hdr.application_layer_reject_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_symbol_subscription_acknowledgement_message {
+        packet.extract(hdr.symbol_subscription_acknowledgement_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_gt_begin_message {
+        packet.extract(hdr.gt_begin_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_gt_end_message {
+        packet.extract(hdr.gt_end_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_auction_price_data_message {
+        packet.extract(hdr.auction_price_data_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_auction_request_message {
+        packet.extract(hdr.auction_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_manual_action_request_message {
+        packet.extract(hdr.manual_action_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_risk_control_acknowledgement_message {
+        packet.extract(hdr.risk_control_acknowledgement_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_risk_control_alert_message {
+        packet.extract(hdr.risk_control_alert_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+}
+
+control TexasequitiesBinarygatewayVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control TexasequitiesBinarygatewayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control TexasequitiesBinarygatewayEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control TexasequitiesBinarygatewayComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control TexasequitiesBinarygatewayDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.login_message);
+        packet.emit(hdr.login_response);
+        packet.emit(hdr.stream_avail);
+        packet.emit(hdr.heartbeat);
+        packet.emit(hdr.open);
+        packet.emit(hdr.open_response);
+        packet.emit(hdr.close);
+        packet.emit(hdr.close_response);
+        packet.emit(hdr.seq_msg);
+        packet.emit(hdr.session_configuration_request_message);
+        packet.emit(hdr.new_order_single_and_cancel_replace_request_message);
+        packet.emit(hdr.order_cancel_request_message);
+        packet.emit(hdr.order_modify_request_message);
+        packet.emit(hdr.bulk_cancel_request_message);
+        packet.emit(hdr.symbol_subscription_request_message);
+        packet.emit(hdr.manual_action_response_message);
+        packet.emit(hdr.risk_limit_update_request_message);
+        packet.emit(hdr.risk_action_request_message);
+        packet.emit(hdr.equities_symbol_reference_data_message);
+        packet.emit(hdr.dmm_symbol_reference_data_message);
+        packet.emit(hdr.minimum_price_variant_class_reference_data_message);
+        packet.emit(hdr.minimum_price_variant_level_reference_data_message);
+        packet.emit(hdr.mpid_configuration_message);
+        packet.emit(hdr.mmid_configuration_message);
+        packet.emit(hdr.session_configuration_acknowledgement_message);
+        packet.emit(hdr.order_and_cancel_replace_acknowledgement_message);
+        packet.emit(hdr.order_modify_cancel_request_acknowledgment_and_urout_message);
+        packet.emit(hdr.order_priority_update_acknowledgment_message);
+        packet.emit(hdr.execution_report_message);
+        packet.emit(hdr.trade_bust_correct_message);
+        packet.emit(hdr.application_layer_reject_message);
+        packet.emit(hdr.symbol_subscription_acknowledgement_message);
+        packet.emit(hdr.gt_begin_message);
+        packet.emit(hdr.gt_end_message);
+        packet.emit(hdr.auction_price_data_message);
+        packet.emit(hdr.auction_request_message);
+        packet.emit(hdr.manual_action_request_message);
+        packet.emit(hdr.risk_control_acknowledgement_message);
+        packet.emit(hdr.risk_control_alert_message);
+    }
+}
+
+V1Switch(
+    TexasequitiesBinarygatewayParser(),
+    TexasequitiesBinarygatewayVerifyChecksum(),
+    TexasequitiesBinarygatewayIngress(),
+    TexasequitiesBinarygatewayEgress(),
+    TexasequitiesBinarygatewayComputeChecksum(),
+    TexasequitiesBinarygatewayDeparser()
+) main;

@@ -76,7 +76,7 @@ parser NsefoSnapshotTcpParser(packet_in packet, out headers_t hdr, inout metadat
     state start {
         packet.extract(hdr.snapshot_header);
         transition select(hdr.snapshot_header.number_of_records) {
-            32w0: accept;
+            32w0: parse_snapshot_header_message_empty;
             default: parse_snapshot_header_message;
         }
     }
@@ -100,6 +100,11 @@ parser NsefoSnapshotTcpParser(packet_in packet, out headers_t hdr, inout metadat
         packet.extract(hdr.new_spread_order_message.next);
         meta.dispatched = 1;
         transition parse_snapshot_header_message;
+    }
+
+    state parse_snapshot_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

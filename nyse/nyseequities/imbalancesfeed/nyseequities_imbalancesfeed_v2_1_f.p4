@@ -195,7 +195,7 @@ parser NyseequitiesImbalancesfeedParser(packet_in packet, out headers_t hdr, ino
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
-            8w0: accept;
+            8w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }
     }
@@ -289,6 +289,11 @@ parser NyseequitiesImbalancesfeedParser(packet_in packet, out headers_t hdr, ino
         packet.extract(hdr.imbalance_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: CixAts CixAspen MarketDataFeed Aspen v1.4
+// P4_16 (v1model) definition for: CixAts MarketDataFeed Aspen v1.4
 // 
 // Protocol:
 //   Organization: CIX Trading Inc.
@@ -165,7 +165,7 @@ parser CixatsCixaspenMarketdatafeedParser(packet_in packet, out headers_t hdr, i
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.count) {
-            16w0: accept;
+            16w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }
     }
@@ -245,6 +245,11 @@ parser CixatsCixaspenMarketdatafeedParser(packet_in packet, out headers_t hdr, i
         packet.extract(hdr.trade_correct_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

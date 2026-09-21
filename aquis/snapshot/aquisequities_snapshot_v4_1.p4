@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Aquis AquisEquities Snapshot Amd v4.1
+// P4_16 (v1model) definition for: Aquis Snapshot Amd v4.1
 // 
 // Protocol:
 //   Organization: Aquis Exchange
@@ -93,7 +93,7 @@ parser AquisequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout me
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
-            8w0: accept;
+            8w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }
     }
@@ -131,6 +131,11 @@ parser AquisequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout me
         packet.extract(hdr.ma_c_book_entry_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

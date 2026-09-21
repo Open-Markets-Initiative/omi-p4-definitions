@@ -501,6 +501,7 @@ header risk_control_alert_message_t {
     bit<32> mpid;
     bit<80> market_maker_nul;
     bit<32> mpsubid_4;
+    bit<32> reserved_4;
     bit<40> clearing_number;
     bit<32> risk_user_crd;
     bit<8> risk_user_type;

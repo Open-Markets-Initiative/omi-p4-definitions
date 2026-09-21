@@ -83,13 +83,13 @@ header trade_message_t {
     bit<8> is_implied_spread_at_market_open;
     bit<8> is_adjusted_trade;
     bit<8> aggressor_side;
-    bit<1> is_rfc_crossing;
-    bit<1> is_leg_deal_outside_ipl;
-    bit<1> has_no_direct_outright_originator;
-    bit<1> is_vertical_split;
-    bit<1> has_no_direct_outright_taker;
-    bit<1> is_option_strategy_hedge;
     bit<2> unused_2;
+    bit<1> is_option_strategy_hedge;
+    bit<1> has_no_direct_outright_taker;
+    bit<1> is_vertical_split;
+    bit<1> has_no_direct_outright_originator;
+    bit<1> is_leg_deal_outside_ipl;
+    bit<1> is_rfc_crossing;
     bit<24> off_market_trade_type;
     bit<32> sequence_within_millis;
     bit<64> request_trading_engine_received_timestamp;
@@ -551,8 +551,8 @@ header add_or_modify_order_message_t {
     bit<8> is_implied;
     bit<8> is_rfq;
     bit<64> order_entry_date_time;
-    bit<1> is_modify_order;
     bit<7> unused_7;
+    bit<1> is_modify_order;
     bit<32> sequence_within_millis;
     bit<64> modification_timestamp;
     bit<64> request_trading_engine_received_timestamp;
@@ -723,7 +723,7 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.number_of_msgs) {
-            16w0: accept;
+            16w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }
     }
@@ -1155,6 +1155,11 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
         packet.extract(hdr.rfq_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

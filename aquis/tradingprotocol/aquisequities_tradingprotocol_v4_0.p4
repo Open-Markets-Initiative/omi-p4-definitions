@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Aquis AquisEquities TradingProtocol Atp v4.0
+// P4_16 (v1model) definition for: Aquis TradingProtocol Atp v4.0
 // 
 // Protocol:
 //   Organization: Aquis Exchange

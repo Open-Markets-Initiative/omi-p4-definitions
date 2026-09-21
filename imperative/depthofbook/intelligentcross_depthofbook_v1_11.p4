@@ -1,0 +1,291 @@
+// P4_16 (v1model) definition for: Imperative DepthOfBook Aspen v1.11
+// 
+// Protocol:
+//   Organization: Imperative Execution
+//   Protocol: Depth Of Book
+//   Encoding: Aspen
+//   Version: 1.11
+//   Date: 7/30/2020
+//   Specification: IntelligentCrossMarketDataFeedSpec.v.1.11.pdf
+// 
+// Byte order: little (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: Public/GPLv3
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header packet_header_t {
+    bit<72> market_day_identifier;
+    bit<8> feed_identifier;
+    bit<64> sequence;
+    bit<16> count;
+}
+
+header packet_header_message_t {
+    bit<16> length;
+    bit<8> message_type;
+}
+
+header market_event_message_t {
+    bit<16> reserved_2;
+    bit<64> timestamp;
+    bit<8> event;
+}
+
+header symbol_information_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<88> symbol;
+    bit<8> listing_market;
+    bit<8> reserved_1;
+    bit<32> round_lot_size;
+}
+
+header symbol_state_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<88> symbol;
+    bit<8> state_;
+    bit<8> reserved_1;
+    bit<32> info;
+}
+
+header new_order_add_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<8> side;
+    bit<32> shares;
+    bit<88> symbol;
+    bit<64> price;
+    bit<32> reserved_4;
+}
+
+header order_partial_cancel_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> shares_canceled;
+}
+
+header order_cancel_all_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<64> order_id;
+}
+
+header order_updated_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> shares;
+    bit<64> price;
+}
+
+header order_executed_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<64> order_id;
+    bit<32> shares;
+    bit<64> execution_id;
+    bit<8> reserved_1;
+    bit<64> price;
+}
+
+header trade_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<64> reserved_8;
+    bit<8> reserved_1;
+    bit<32> shares;
+    bit<88> symbol;
+    bit<64> price;
+    bit<64> execution_id;
+}
+
+header trade_break_message_t {
+    bit<16> symbol_id;
+    bit<64> timestamp;
+    bit<64> execution_id;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+}
+
+struct headers_t {
+    packet_header_t packet_header;
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    market_event_message_t market_event_message[MAX_MESSAGES];
+    symbol_information_message_t symbol_information_message[MAX_MESSAGES];
+    symbol_state_message_t symbol_state_message[MAX_MESSAGES];
+    new_order_add_message_t new_order_add_message[MAX_MESSAGES];
+    order_partial_cancel_message_t order_partial_cancel_message[MAX_MESSAGES];
+    order_cancel_all_message_t order_cancel_all_message[MAX_MESSAGES];
+    order_updated_message_t order_updated_message[MAX_MESSAGES];
+    order_executed_message_t order_executed_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
+    trade_break_message_t trade_break_message[MAX_MESSAGES];
+}
+
+parser IntelligentcrossDepthofbookParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.count) {
+            16w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
+        }
+    }
+
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.message_type) {
+            8w0x41: parse_market_event_message;
+            8w0x42: parse_symbol_information_message;
+            8w0x43: parse_symbol_state_message;
+            8w0x44: parse_new_order_add_message;
+            8w0x46: parse_order_partial_cancel_message;
+            8w0x47: parse_order_cancel_all_message;
+            8w0x48: parse_order_updated_message;
+            8w0x4a: parse_order_executed_message;
+            8w0x4b: parse_trade_message;
+            8w0x4d: parse_trade_break_message;
+            default: accept;
+        }
+    }
+
+    state parse_market_event_message {
+        packet.extract(hdr.market_event_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_symbol_information_message {
+        packet.extract(hdr.symbol_information_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_symbol_state_message {
+        packet.extract(hdr.symbol_state_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_new_order_add_message {
+        packet.extract(hdr.new_order_add_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_order_partial_cancel_message {
+        packet.extract(hdr.order_partial_cancel_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_order_cancel_all_message {
+        packet.extract(hdr.order_cancel_all_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_order_updated_message {
+        packet.extract(hdr.order_updated_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_order_executed_message {
+        packet.extract(hdr.order_executed_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_trade_message {
+        packet.extract(hdr.trade_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_trade_break_message {
+        packet.extract(hdr.trade_break_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+}
+
+control IntelligentcrossDepthofbookVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control IntelligentcrossDepthofbookIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control IntelligentcrossDepthofbookEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control IntelligentcrossDepthofbookComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control IntelligentcrossDepthofbookDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.packet_header_message);
+        packet.emit(hdr.market_event_message);
+        packet.emit(hdr.symbol_information_message);
+        packet.emit(hdr.symbol_state_message);
+        packet.emit(hdr.new_order_add_message);
+        packet.emit(hdr.order_partial_cancel_message);
+        packet.emit(hdr.order_cancel_all_message);
+        packet.emit(hdr.order_updated_message);
+        packet.emit(hdr.order_executed_message);
+        packet.emit(hdr.trade_message);
+        packet.emit(hdr.trade_break_message);
+    }
+}
+
+V1Switch(
+    IntelligentcrossDepthofbookParser(),
+    IntelligentcrossDepthofbookVerifyChecksum(),
+    IntelligentcrossDepthofbookIngress(),
+    IntelligentcrossDepthofbookEgress(),
+    IntelligentcrossDepthofbookComputeChecksum(),
+    IntelligentcrossDepthofbookDeparser()
+) main;

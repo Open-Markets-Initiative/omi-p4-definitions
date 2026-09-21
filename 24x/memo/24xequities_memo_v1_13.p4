@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: 24X 24XEquities Memo Sbe v1.13
+// P4_16 (v1model) definition for: 24X Memo Sbe v1.13
 // 
 // Protocol:
 //   Organization: 24 National Exchange

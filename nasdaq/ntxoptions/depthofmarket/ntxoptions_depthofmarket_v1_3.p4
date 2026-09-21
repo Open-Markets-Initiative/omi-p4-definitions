@@ -249,7 +249,7 @@ header net_order_imbalance_indicator_message_t {
     bit<32> imbalance_price;
     bit<32> imbalance_volume;
     bit<8> customer_firm_indicator;
-    bit<24> reserved;
+    bit<24> reserved_3;
 }
 
 struct metadata_t {

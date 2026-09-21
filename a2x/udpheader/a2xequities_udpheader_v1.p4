@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: A2X A2XEquities UdpHeader Amd v1
+// P4_16 (v1model) definition for: A2X UdpHeader Amd v1
 // 
 // Protocol:
 //   Organization: A2X Markets

@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: A2X A2XEquities Snapshot Amd v1.3.2
+// P4_16 (v1model) definition for: A2X Snapshot Amd v1.3.2
 // 
 // Protocol:
 //   Organization: A2X Markets
@@ -53,7 +53,7 @@ header book_status_message_t {
     bit<1> trading;
     bit<1> mac_open;
     bit<1> mac_run;
-    bit<5> unused;
+    bit<5> unused_5;
     bit<16> entries;
     bit<32> closing_buy_qty;
     bit<32> closing_sell_qty;
@@ -91,7 +91,7 @@ parser A2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout meta
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.message_count) {
-            8w0: accept;
+            8w0: parse_message_header_message_empty;
             default: parse_message_header_message;
         }
     }
@@ -135,6 +135,11 @@ parser A2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout meta
         packet.extract(hdr.market_at_close_book_entry_message.next);
         meta.dispatched = 1;
         transition parse_message_header_message;
+    }
+
+    state parse_message_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

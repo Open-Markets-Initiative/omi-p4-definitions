@@ -587,7 +587,7 @@ struct headers_t {
     risk_control_alert_message_t risk_control_alert_message;
 }
 
-parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser IexoptionsBinaryorderentryServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
         transition select(hdr.message_header.schema_id) {
@@ -942,12 +942,12 @@ parser IexoptionsBinaryorderentryParser(packet_in packet, out headers_t hdr, ino
 
 }
 
-control IexoptionsBinaryorderentryVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IexoptionsBinaryorderentryServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IexoptionsBinaryorderentryIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IexoptionsBinaryorderentryServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -958,17 +958,17 @@ control IexoptionsBinaryorderentryIngress(inout headers_t hdr, inout metadata_t 
     }
 }
 
-control IexoptionsBinaryorderentryEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control IexoptionsBinaryorderentryServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control IexoptionsBinaryorderentryComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control IexoptionsBinaryorderentryServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control IexoptionsBinaryorderentryDeparser(packet_out packet, in headers_t hdr) {
+control IexoptionsBinaryorderentryServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
         packet.emit(hdr.login_request_message);
@@ -1016,10 +1016,10 @@ control IexoptionsBinaryorderentryDeparser(packet_out packet, in headers_t hdr) 
 }
 
 V1Switch(
-    IexoptionsBinaryorderentryParser(),
-    IexoptionsBinaryorderentryVerifyChecksum(),
-    IexoptionsBinaryorderentryIngress(),
-    IexoptionsBinaryorderentryEgress(),
-    IexoptionsBinaryorderentryComputeChecksum(),
-    IexoptionsBinaryorderentryDeparser()
+    IexoptionsBinaryorderentryServerParser(),
+    IexoptionsBinaryorderentryServerVerifyChecksum(),
+    IexoptionsBinaryorderentryServerIngress(),
+    IexoptionsBinaryorderentryServerEgress(),
+    IexoptionsBinaryorderentryServerComputeChecksum(),
+    IexoptionsBinaryorderentryServerDeparser()
 ) main;

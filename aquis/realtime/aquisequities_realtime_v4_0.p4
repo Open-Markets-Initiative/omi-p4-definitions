@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Aquis AquisEquities RealTime Amd v4.0
+// P4_16 (v1model) definition for: Aquis RealTime Amd v4.0
 // 
 // Protocol:
 //   Organization: Aquis Exchange
@@ -107,7 +107,7 @@ header security_definition_message_t {
     bit<32> mic;
     bit<8> tick_table_id;
     bit<16> security_definition_flags;
-    bit<160> reserved;
+    bit<160> reserved_20;
     bit<64> lot_size;
     bit<8> lot_size_decimal;
 }
@@ -161,7 +161,7 @@ parser AquisequitiesRealtimeParser(packet_in packet, out headers_t hdr, inout me
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
-            8w0: accept;
+            8w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }
     }
@@ -241,6 +241,11 @@ parser AquisequitiesRealtimeParser(packet_in packet, out headers_t hdr, inout me
         packet.extract(hdr.ma_c_update_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
+    }
+
+    state parse_packet_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
     }
 
 }

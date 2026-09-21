@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: BlueOceanAts BlueEquities Memo Sbe v1.13
+// P4_16 (v1model) definition for: BlueOceanAts Memo Sbe v1.13
 // 
 // Protocol:
 //   Organization: Blue Ocean Technologies

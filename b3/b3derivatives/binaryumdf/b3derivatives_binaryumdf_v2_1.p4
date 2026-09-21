@@ -33,7 +33,7 @@
 
 header packet_header_t {
     bit<8> channel_id;
-    bit<8> reserved;
+    bit<8> packet_reserved;
     bit<16> sequence_version;
     bit<32> sequence_number;
     bit<64> sending_time;

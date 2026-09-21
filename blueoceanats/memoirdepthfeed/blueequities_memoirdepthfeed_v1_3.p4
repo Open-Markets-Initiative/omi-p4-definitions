@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: BlueOceanAts BlueEquities MemoirDepthFeed Sbe v1.3
+// P4_16 (v1model) definition for: BlueOceanAts MemoirDepthFeed Sbe v1.3
 // 
 // Protocol:
 //   Organization: Blue Ocean Technologies
