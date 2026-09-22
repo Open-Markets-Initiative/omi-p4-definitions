@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView Itch v4.1
+// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView Itch v3.0
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: TotalView Itch
 //   Encoding: Itch
-//   Version: 4.1
-//   Date: 06/12/2014
-//   Specification: NQTV-ITCH-V4_1.pdf
+//   Version: 3.0
+//   Date: 09/16/2008
+//   Specification: Nasdaq TotalView ITCH (3.0).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -33,151 +33,121 @@
 
 header packet_header_t {
     bit<80> session;
-    bit<64> sequence_number;
-    bit<16> message_count;
+    bit<32> sequence;
+    bit<16> count;
 }
 
 header message_t {
-    bit<16> message_length;
+    bit<16> length;
     bit<8> message_type;
 }
 
-header timestamp_message_t {
-    bit<32> second;
+header seconds_message_t {
+    bit<40> second;
+}
+
+header milliseconds_message_t {
+    bit<24> millisecond;
 }
 
 header system_event_message_t {
-    bit<32> nanoseconds;
     bit<8> event_code;
 }
 
 header stock_directory_message_t {
-    bit<32> nanoseconds;
-    bit<64> stock;
+    bit<48> stock_alphabetic_6;
     bit<8> market_category;
     bit<8> financial_status_indicator;
-    bit<32> round_lot_size;
+    bit<48> round_lot_size;
     bit<8> round_lots_only;
 }
 
 header stock_trading_action_message_t {
-    bit<32> nanoseconds;
-    bit<64> stock;
+    bit<48> stock_alphanumeric_6;
     bit<8> trading_state;
     bit<8> reserved;
     bit<32> reason;
 }
 
-header reg_sho_short_sale_price_test_restricted_indicator_message_t {
-    bit<32> nanoseconds;
-    bit<64> stock;
-    bit<8> reg_sho_action;
-}
-
 header market_participant_position_message_t {
-    bit<32> nanoseconds;
     bit<32> mpid;
-    bit<64> stock;
+    bit<48> stock_alphanumeric_6;
     bit<8> primary_market_maker;
     bit<8> market_maker_mode;
     bit<8> market_participant_state;
 }
 
 header add_order_message_t {
-    bit<32> nanoseconds;
-    bit<64> order_reference_number;
+    bit<72> order_reference_number;
     bit<8> side;
-    bit<32> shares;
-    bit<64> stock;
-    bit<32> price;
+    bit<48> shares_numeric_6;
+    bit<48> stock_alphanumeric_6;
+    bit<80> price;
 }
 
 header add_order_with_mpid_message_t {
-    bit<32> nanoseconds;
-    bit<64> order_reference_number;
+    bit<72> order_reference_number;
     bit<8> side;
-    bit<32> shares;
-    bit<64> stock;
-    bit<32> price;
+    bit<48> shares_numeric_6;
+    bit<48> stock_alphanumeric_6;
+    bit<80> price;
     bit<32> attribution;
 }
 
 header order_executed_message_t {
-    bit<32> nanoseconds;
-    bit<64> order_reference_number;
-    bit<32> executed_shares;
-    bit<64> match_number;
+    bit<72> order_reference_number;
+    bit<48> executed_shares;
+    bit<72> match_number;
 }
 
 header order_executed_with_price_message_t {
-    bit<32> nanoseconds;
-    bit<64> order_reference_number;
-    bit<32> executed_shares;
-    bit<64> match_number;
+    bit<72> order_reference_number;
+    bit<48> executed_shares;
+    bit<72> match_number;
     bit<8> printable;
-    bit<32> execution_price;
+    bit<80> execution_price;
 }
 
 header order_cancel_message_t {
-    bit<32> nanoseconds;
-    bit<64> order_reference_number;
-    bit<32> canceled_shares;
+    bit<72> order_reference_number;
+    bit<48> canceled_shares;
 }
 
 header order_delete_message_t {
-    bit<32> nanoseconds;
-    bit<64> order_reference_number;
-}
-
-header order_replace_message_t {
-    bit<32> nanoseconds;
-    bit<64> original_order_reference_number;
-    bit<64> new_order_reference_number;
-    bit<32> shares;
-    bit<32> price;
+    bit<72> order_reference_number;
 }
 
 header trade_message_t {
-    bit<32> nanoseconds;
-    bit<64> order_reference_number;
+    bit<72> order_reference_number;
     bit<8> side;
-    bit<32> shares;
-    bit<64> stock;
-    bit<32> price;
-    bit<64> match_number;
+    bit<48> shares_numeric_6;
+    bit<48> stock_alphanumeric_6;
+    bit<80> price;
+    bit<72> match_number;
 }
 
 header cross_trade_message_t {
-    bit<32> nanoseconds;
-    bit<64> cross_shares;
-    bit<64> stock;
-    bit<32> cross_price;
-    bit<64> match_number;
+    bit<72> shares_numeric_9;
+    bit<48> stock_alphanumeric_6;
+    bit<80> cross_price;
+    bit<72> match_number;
     bit<8> cross_type;
 }
 
 header broken_trade_message_t {
-    bit<32> nanoseconds;
-    bit<64> match_number;
+    bit<72> match_number;
 }
 
 header net_order_imbalance_indicator_message_t {
-    bit<32> nanoseconds;
-    bit<64> paired_shares;
-    bit<64> imbalance_shares;
+    bit<72> paired_shares;
+    bit<72> imbalance_shares;
     bit<8> imbalance_direction;
-    bit<64> stock;
-    bit<32> far_price;
-    bit<32> near_price;
-    bit<32> current_reference_price;
+    bit<48> stock_alphanumeric_6;
+    bit<80> far_price;
+    bit<80> near_price;
+    bit<80> current_reference_price;
     bit<8> cross_type;
     bit<8> price_variation_indicator;
-}
-
-header retail_price_improvement_indicator_message_t {
-    bit<32> nanoseconds;
-    bit<64> stock;
-    bit<8> interest_flag;
 }
 
 struct metadata_t {
@@ -187,11 +157,11 @@ struct metadata_t {
 struct headers_t {
     packet_header_t packet_header;
     message_t message[MAX_MESSAGES];
-    timestamp_message_t timestamp_message[MAX_MESSAGES];
+    seconds_message_t seconds_message[MAX_MESSAGES];
+    milliseconds_message_t milliseconds_message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     stock_directory_message_t stock_directory_message[MAX_MESSAGES];
     stock_trading_action_message_t stock_trading_action_message[MAX_MESSAGES];
-    reg_sho_short_sale_price_test_restricted_indicator_message_t reg_sho_short_sale_price_test_restricted_indicator_message[MAX_MESSAGES];
     market_participant_position_message_t market_participant_position_message[MAX_MESSAGES];
     add_order_message_t add_order_message[MAX_MESSAGES];
     add_order_with_mpid_message_t add_order_with_mpid_message[MAX_MESSAGES];
@@ -199,20 +169,18 @@ struct headers_t {
     order_executed_with_price_message_t order_executed_with_price_message[MAX_MESSAGES];
     order_cancel_message_t order_cancel_message[MAX_MESSAGES];
     order_delete_message_t order_delete_message[MAX_MESSAGES];
-    order_replace_message_t order_replace_message[MAX_MESSAGES];
     trade_message_t trade_message[MAX_MESSAGES];
     cross_trade_message_t cross_trade_message[MAX_MESSAGES];
     broken_trade_message_t broken_trade_message[MAX_MESSAGES];
     net_order_imbalance_indicator_message_t net_order_imbalance_indicator_message[MAX_MESSAGES];
-    retail_price_improvement_indicator_message_t retail_price_improvement_indicator_message[MAX_MESSAGES];
 }
 
 parser NsmequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
-        transition select(hdr.packet_header.message_count) {
-            16w0: parse_heartbeat;
-            16w65535: parse_end_of_session;
+        transition select(hdr.packet_header.count) {
+            16w0x0: parse_heartbeat;
+            16w0xffff: parse_end_of_session;
             default: parse_message;
         }
     }
@@ -230,11 +198,11 @@ parser NsmequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout met
     state parse_message {
         packet.extract(hdr.message.next);
         transition select(hdr.message.last.message_type) {
-            8w0x54: parse_timestamp_message;
+            8w0x54: parse_seconds_message;
+            8w0x4d: parse_milliseconds_message;
             8w0x53: parse_system_event_message;
             8w0x52: parse_stock_directory_message;
             8w0x48: parse_stock_trading_action_message;
-            8w0x59: parse_reg_sho_short_sale_price_test_restricted_indicator_message;
             8w0x4c: parse_market_participant_position_message;
             8w0x41: parse_add_order_message;
             8w0x46: parse_add_order_with_mpid_message;
@@ -242,18 +210,22 @@ parser NsmequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout met
             8w0x43: parse_order_executed_with_price_message;
             8w0x58: parse_order_cancel_message;
             8w0x44: parse_order_delete_message;
-            8w0x55: parse_order_replace_message;
             8w0x50: parse_trade_message;
             8w0x51: parse_cross_trade_message;
             8w0x42: parse_broken_trade_message;
             8w0x49: parse_net_order_imbalance_indicator_message;
-            8w0x4e: parse_retail_price_improvement_indicator_message;
             default: accept;
         }
     }
 
-    state parse_timestamp_message {
-        packet.extract(hdr.timestamp_message.next);
+    state parse_seconds_message {
+        packet.extract(hdr.seconds_message.next);
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_milliseconds_message {
+        packet.extract(hdr.milliseconds_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -272,12 +244,6 @@ parser NsmequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_stock_trading_action_message {
         packet.extract(hdr.stock_trading_action_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_reg_sho_short_sale_price_test_restricted_indicator_message {
-        packet.extract(hdr.reg_sho_short_sale_price_test_restricted_indicator_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -324,12 +290,6 @@ parser NsmequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout met
         transition parse_message;
     }
 
-    state parse_order_replace_message {
-        packet.extract(hdr.order_replace_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
     state parse_trade_message {
         packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
@@ -350,12 +310,6 @@ parser NsmequitiesTotalviewParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_net_order_imbalance_indicator_message {
         packet.extract(hdr.net_order_imbalance_indicator_message.next);
-        meta.dispatched = 1;
-        transition parse_message;
-    }
-
-    state parse_retail_price_improvement_indicator_message {
-        packet.extract(hdr.retail_price_improvement_indicator_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -392,11 +346,11 @@ control NsmequitiesTotalviewDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
-        packet.emit(hdr.timestamp_message);
+        packet.emit(hdr.seconds_message);
+        packet.emit(hdr.milliseconds_message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.stock_directory_message);
         packet.emit(hdr.stock_trading_action_message);
-        packet.emit(hdr.reg_sho_short_sale_price_test_restricted_indicator_message);
         packet.emit(hdr.market_participant_position_message);
         packet.emit(hdr.add_order_message);
         packet.emit(hdr.add_order_with_mpid_message);
@@ -404,12 +358,10 @@ control NsmequitiesTotalviewDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.order_executed_with_price_message);
         packet.emit(hdr.order_cancel_message);
         packet.emit(hdr.order_delete_message);
-        packet.emit(hdr.order_replace_message);
         packet.emit(hdr.trade_message);
         packet.emit(hdr.cross_trade_message);
         packet.emit(hdr.broken_trade_message);
         packet.emit(hdr.net_order_imbalance_indicator_message);
-        packet.emit(hdr.retail_price_improvement_indicator_message);
     }
 }
 

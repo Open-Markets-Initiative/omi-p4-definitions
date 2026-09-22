@@ -162,7 +162,7 @@ header add_order_message_t {
     bit<32> volume;
     bit<8> side;
     bit<40> firm_id;
-    bit<8> reserved_11;
+    bit<8> reserved_1;
 }
 
 header modify_order_message_t {
@@ -174,7 +174,7 @@ header modify_order_message_t {
     bit<32> volume;
     bit<8> position_change;
     bit<8> side;
-    bit<8> reserved_11;
+    bit<8> reserved_1;
 }
 
 header delete_order_message_t {
@@ -182,7 +182,7 @@ header delete_order_message_t {
     bit<32> symbol_index;
     bit<32> symbol_seq_num;
     bit<64> order_id;
-    bit<8> reserved_11;
+    bit<8> reserved_1;
 }
 
 header order_execution_message_t {
@@ -194,7 +194,7 @@ header order_execution_message_t {
     bit<32> price;
     bit<32> volume;
     bit<8> printable_flag;
-    bit<8> reserved_11;
+    bit<8> reserved_1;
     bit<8> trade_cond_1;
     bit<8> trade_cond_2;
     bit<8> trade_cond_3;
@@ -249,7 +249,7 @@ header add_order_refresh_message_t {
     bit<32> volume;
     bit<8> side;
     bit<40> firm_id;
-    bit<8> reserved_11;
+    bit<8> reserved_1;
 }
 
 header non_displayed_trade_message_t {

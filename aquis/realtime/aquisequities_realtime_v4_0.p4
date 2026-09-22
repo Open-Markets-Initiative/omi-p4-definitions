@@ -48,7 +48,7 @@ header order_add_t {
     bit<64> price;
     bit<32> order_ref;
     bit<64> timestamp;
-    bit<7> reserved_7;
+    bit<7> unused_7;
     bit<1> unrestricted_liquidity_indicator;
 }
 
@@ -56,7 +56,7 @@ header order_cancel_t {
     bit<16> security_id;
     bit<32> order_ref;
     bit<64> timestamp;
-    bit<7> reserved_7;
+    bit<7> unused_7;
     bit<1> unrestricted_liquidity_indicator;
 }
 
@@ -66,7 +66,7 @@ header order_modify_t {
     bit<64> price;
     bit<32> order_ref;
     bit<64> timestamp;
-    bit<7> reserved_7;
+    bit<7> unused_7;
     bit<1> unrestricted_liquidity_indicator;
 }
 
@@ -79,7 +79,7 @@ header trade_t {
     bit<32> trade_ref;
     bit<64> timestamp;
     bit<32> binary_mmt;
-    bit<7> reserved_7;
+    bit<7> unused_7;
     bit<1> unrestricted_liquidity_indicator;
 }
 
@@ -115,7 +115,7 @@ header security_definition_message_t {
 header security_status_message_t {
     bit<16> security_id;
     bit<8> trading_status;
-    bit<5> reserved_5;
+    bit<5> unused_5;
     bit<1> mac_run;
     bit<1> mac_open;
     bit<1> trading;

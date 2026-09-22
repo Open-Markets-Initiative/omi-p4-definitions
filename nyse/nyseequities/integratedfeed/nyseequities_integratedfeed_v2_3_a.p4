@@ -197,74 +197,6 @@ header delete_order_message_t {
     bit<8> num_parity_splits;
 }
 
-header trade_cancel_message_t {
-    bit<32> source_time_ns;
-    bit<32> symbol_index;
-    bit<32> symbol_seq_num;
-    bit<32> trade_id;
-}
-
-header cross_trade_message_t {
-    bit<32> source_time_ns;
-    bit<32> symbol_index;
-    bit<32> symbol_seq_num;
-    bit<32> cross_id;
-    bit<32> price;
-    bit<32> volume;
-    bit<8> cross_type;
-}
-
-header cross_correction_message_t {
-    bit<32> source_time_ns;
-    bit<32> symbol_index;
-    bit<32> symbol_seq_num;
-    bit<32> cross_id;
-    bit<32> volume;
-}
-
-header retail_price_improvement_message_t {
-    bit<32> source_time_ns;
-    bit<32> symbol_index;
-    bit<32> symbol_seq_num;
-    bit<8> rpi_indicator;
-}
-
-header add_order_refresh_message_t {
-    bit<32> source_time;
-    bit<32> source_time_ns;
-    bit<32> symbol_index;
-    bit<32> symbol_seq_num;
-    bit<64> order_id;
-    bit<32> price;
-    bit<32> volume;
-    bit<8> side;
-    bit<40> firm_id;
-    bit<8> num_parity_splits;
-}
-
-header imbalance_message_t {
-    bit<32> source_time;
-    bit<32> source_time_ns;
-    bit<32> symbol_index;
-    bit<32> symbol_seq_num;
-    bit<32> reference_price;
-    bit<32> paired_qty;
-    bit<32> total_imbalance_qty;
-    bit<32> market_imbalance_qty;
-    bit<16> auction_time;
-    bit<8> auction_type;
-    bit<8> imbalance_side;
-    bit<32> continuous_book_clearing_price;
-    bit<32> closing_only_clearing_price;
-    bit<32> ssr_filing_price;
-    bit<32> indicative_match_price;
-    bit<32> upper_collar;
-    bit<32> lower_collar;
-    bit<8> auction_status;
-    bit<8> freeze_status;
-    bit<8> num_extensions;
-}
-
 header order_execution_message_t {
     bit<32> source_time_ns;
     bit<32> symbol_index;
@@ -287,6 +219,77 @@ header non_displayed_trade_message_t {
     bit<32> volume;
     bit<8> printable_flag;
     bit<32> db_exec_id;
+}
+
+header trade_cancel_message_t {
+    bit<32> source_time_ns;
+    bit<32> symbol_index;
+    bit<32> symbol_seq_num;
+    bit<32> trade_id;
+}
+
+header retail_price_improvement_message_t {
+    bit<32> source_time_ns;
+    bit<32> symbol_index;
+    bit<32> symbol_seq_num;
+    bit<8> rpi_indicator;
+}
+
+header cross_trade_message_t {
+    bit<32> source_time_ns;
+    bit<32> symbol_index;
+    bit<32> symbol_seq_num;
+    bit<32> cross_id;
+    bit<32> price;
+    bit<32> volume;
+    bit<8> cross_type;
+}
+
+header cross_correction_message_t {
+    bit<32> source_time_ns;
+    bit<32> symbol_index;
+    bit<32> symbol_seq_num;
+    bit<32> cross_id;
+    bit<32> volume;
+}
+
+header imbalance_message_t {
+    bit<32> source_time;
+    bit<32> source_time_ns;
+    bit<32> symbol_index;
+    bit<32> symbol_seq_num;
+    bit<32> reference_price;
+    bit<32> paired_qty;
+    bit<32> total_imbalance_qty;
+    bit<32> market_imbalance_qty;
+    bit<16> auction_time;
+    bit<8> auction_type;
+    bit<8> imbalance_side;
+    bit<32> continuous_book_clearing_price;
+    bit<32> auction_interest_clearing_price;
+    bit<32> ssr_filing_price;
+    bit<32> indicative_match_price;
+    bit<32> upper_collar;
+    bit<32> lower_collar;
+    bit<8> auction_status;
+    bit<8> freeze_status;
+    bit<8> num_extensions;
+    bit<32> unpaired_qty;
+    bit<8> unpaired_side;
+    bit<8> significant_imbalance;
+}
+
+header add_order_refresh_message_t {
+    bit<32> source_time;
+    bit<32> source_time_ns;
+    bit<32> symbol_index;
+    bit<32> symbol_seq_num;
+    bit<64> order_id;
+    bit<32> price;
+    bit<32> volume;
+    bit<8> side;
+    bit<40> firm_id;
+    bit<8> num_parity_splits;
 }
 
 header stock_summary_message_t {
@@ -323,14 +326,14 @@ struct headers_t {
     modify_order_message_t modify_order_message[MAX_MESSAGES];
     replace_order_message_t replace_order_message[MAX_MESSAGES];
     delete_order_message_t delete_order_message[MAX_MESSAGES];
-    trade_cancel_message_t trade_cancel_message[MAX_MESSAGES];
-    cross_trade_message_t cross_trade_message[MAX_MESSAGES];
-    cross_correction_message_t cross_correction_message[MAX_MESSAGES];
-    retail_price_improvement_message_t retail_price_improvement_message[MAX_MESSAGES];
-    add_order_refresh_message_t add_order_refresh_message[MAX_MESSAGES];
-    imbalance_message_t imbalance_message[MAX_MESSAGES];
     order_execution_message_t order_execution_message[MAX_MESSAGES];
     non_displayed_trade_message_t non_displayed_trade_message[MAX_MESSAGES];
+    trade_cancel_message_t trade_cancel_message[MAX_MESSAGES];
+    retail_price_improvement_message_t retail_price_improvement_message[MAX_MESSAGES];
+    cross_trade_message_t cross_trade_message[MAX_MESSAGES];
+    cross_correction_message_t cross_correction_message[MAX_MESSAGES];
+    imbalance_message_t imbalance_message[MAX_MESSAGES];
+    add_order_refresh_message_t add_order_refresh_message[MAX_MESSAGES];
     stock_summary_message_t stock_summary_message[MAX_MESSAGES];
 }
 
@@ -362,14 +365,14 @@ parser NyseequitiesIntegratedfeedParser(packet_in packet, out headers_t hdr, ino
             16w0x6500: parse_modify_order_message;
             16w0x6800: parse_replace_order_message;
             16w0x6600: parse_delete_order_message;
-            16w0x7000: parse_trade_cancel_message;
-            16w0x6f00: parse_cross_trade_message;
-            16w0x7100: parse_cross_correction_message;
-            16w0x7200: parse_retail_price_improvement_message;
-            16w0x6a00: parse_add_order_refresh_message;
-            16w0x6900: parse_imbalance_message;
             16w0x6700: parse_order_execution_message;
             16w0x6e00: parse_non_displayed_trade_message;
+            16w0x7000: parse_trade_cancel_message;
+            16w0x7200: parse_retail_price_improvement_message;
+            16w0x6f00: parse_cross_trade_message;
+            16w0x7100: parse_cross_correction_message;
+            16w0x6900: parse_imbalance_message;
+            16w0x6a00: parse_add_order_refresh_message;
             16w0xdf00: parse_stock_summary_message;
             default: accept;
         }
@@ -471,8 +474,26 @@ parser NyseequitiesIntegratedfeedParser(packet_in packet, out headers_t hdr, ino
         transition parse_packet_header_message;
     }
 
+    state parse_order_execution_message {
+        packet.extract(hdr.order_execution_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_non_displayed_trade_message {
+        packet.extract(hdr.non_displayed_trade_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
     state parse_trade_cancel_message {
         packet.extract(hdr.trade_cancel_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_retail_price_improvement_message {
+        packet.extract(hdr.retail_price_improvement_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
     }
@@ -489,32 +510,14 @@ parser NyseequitiesIntegratedfeedParser(packet_in packet, out headers_t hdr, ino
         transition parse_packet_header_message;
     }
 
-    state parse_retail_price_improvement_message {
-        packet.extract(hdr.retail_price_improvement_message.next);
-        meta.dispatched = 1;
-        transition parse_packet_header_message;
-    }
-
-    state parse_add_order_refresh_message {
-        packet.extract(hdr.add_order_refresh_message.next);
-        meta.dispatched = 1;
-        transition parse_packet_header_message;
-    }
-
     state parse_imbalance_message {
         packet.extract(hdr.imbalance_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
     }
 
-    state parse_order_execution_message {
-        packet.extract(hdr.order_execution_message.next);
-        meta.dispatched = 1;
-        transition parse_packet_header_message;
-    }
-
-    state parse_non_displayed_trade_message {
-        packet.extract(hdr.non_displayed_trade_message.next);
+    state parse_add_order_refresh_message {
+        packet.extract(hdr.add_order_refresh_message.next);
         meta.dispatched = 1;
         transition parse_packet_header_message;
     }
@@ -578,14 +581,14 @@ control NyseequitiesIntegratedfeedDeparser(packet_out packet, in headers_t hdr) 
         packet.emit(hdr.modify_order_message);
         packet.emit(hdr.replace_order_message);
         packet.emit(hdr.delete_order_message);
-        packet.emit(hdr.trade_cancel_message);
-        packet.emit(hdr.cross_trade_message);
-        packet.emit(hdr.cross_correction_message);
-        packet.emit(hdr.retail_price_improvement_message);
-        packet.emit(hdr.add_order_refresh_message);
-        packet.emit(hdr.imbalance_message);
         packet.emit(hdr.order_execution_message);
         packet.emit(hdr.non_displayed_trade_message);
+        packet.emit(hdr.trade_cancel_message);
+        packet.emit(hdr.retail_price_improvement_message);
+        packet.emit(hdr.cross_trade_message);
+        packet.emit(hdr.cross_correction_message);
+        packet.emit(hdr.imbalance_message);
+        packet.emit(hdr.add_order_refresh_message);
         packet.emit(hdr.stock_summary_message);
     }
 }
