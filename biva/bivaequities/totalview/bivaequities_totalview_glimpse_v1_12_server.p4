@@ -41,8 +41,8 @@ header debug_packet_t {
 }
 
 header login_accepted_packet_t {
-    bit<80> session;
-    bit<64> sequence_number;
+    bit<80> accepted_session;
+    bit<160> accepted_sequence_number;
 }
 
 header login_rejected_packet_t {

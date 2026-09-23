@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "jnx/jnxequities/pts/jnxequities_pts_v1_7_moldudp64.p4"
+PROGRAM = "jnx/jnxequities/pts/jnxequities_pts_v1_7_udp.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "jnxequities_pts_v1_7.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

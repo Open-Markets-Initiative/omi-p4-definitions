@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "nasdaq/nsmequities/totalview/nsmequities_totalview_v5_0_2023.p4"
+PROGRAM = "nasdaq/nsmequities/totalview/nsmequities_totalview_v5_0_2023_udp.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "nsmequities_totalview_v5_0_2023.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
