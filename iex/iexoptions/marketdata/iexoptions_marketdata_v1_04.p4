@@ -226,6 +226,10 @@ header sequenced_packet_message_t {
     bit<8> num_in_group;
 }
 
+header sequenced_packet_message_sequenced_packet_message_messages_group_t {
+    bit<16> message_length;
+}
+
 header session_shutdown_message_t {
     bit<32> channel_id;
     bit<64> sequence_number;
@@ -263,6 +267,7 @@ header snapshot_header_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<8> sequenced_packet_message_sequenced_packet_message_messages_group_remaining;
 }
 
 struct headers_t {
@@ -289,6 +294,7 @@ struct headers_t {
     tops_trade_break_message_t tops_trade_break_message;
     heartbeat_message_t heartbeat_message;
     sequenced_packet_message_t sequenced_packet_message;
+    sequenced_packet_message_sequenced_packet_message_messages_group_t sequenced_packet_message_sequenced_packet_message_messages_group[MAX_MESSAGES];
     session_shutdown_message_t session_shutdown_message;
     sequence_number_reset_message_t sequence_number_reset_message;
     retransmission_request_message_t retransmission_request_message;
@@ -462,7 +468,20 @@ parser IexoptionsMarketdataParser(packet_in packet, out headers_t hdr, inout met
     state parse_sequenced_packet_message {
         packet.extract(hdr.sequenced_packet_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.sequenced_packet_message_sequenced_packet_message_messages_group_remaining = hdr.sequenced_packet_message.num_in_group;
+        transition select(meta.sequenced_packet_message_sequenced_packet_message_messages_group_remaining) {
+            8w0: accept;
+            default: parse_sequenced_packet_message_sequenced_packet_message_messages_group;
+        }
+    }
+
+    state parse_sequenced_packet_message_sequenced_packet_message_messages_group {
+        packet.extract(hdr.sequenced_packet_message_sequenced_packet_message_messages_group.next);
+        meta.sequenced_packet_message_sequenced_packet_message_messages_group_remaining = meta.sequenced_packet_message_sequenced_packet_message_messages_group_remaining - 1;
+        transition select(meta.sequenced_packet_message_sequenced_packet_message_messages_group_remaining) {
+            8w0: accept;
+            default: parse_sequenced_packet_message_sequenced_packet_message_messages_group;
+        }
     }
 
     state parse_session_shutdown_message {
@@ -558,6 +577,7 @@ control IexoptionsMarketdataDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.tops_trade_break_message);
         packet.emit(hdr.heartbeat_message);
         packet.emit(hdr.sequenced_packet_message);
+        packet.emit(hdr.sequenced_packet_message_sequenced_packet_message_messages_group);
         packet.emit(hdr.session_shutdown_message);
         packet.emit(hdr.sequence_number_reset_message);
         packet.emit(hdr.retransmission_request_message);
