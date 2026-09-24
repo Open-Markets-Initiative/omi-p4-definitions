@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header packet_header_t {
+header client_packet_header_t {
     bit<8> client_packet_type;
 }
 
@@ -51,15 +51,15 @@ struct metadata_t {
 }
 
 struct headers_t {
-    packet_header_t packet_header;
+    client_packet_header_t client_packet_header;
     debug_packet_t debug_packet;
     login_request_packet_t login_request_packet;
 }
 
 parser NsmequitiesTotalviewClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.packet_header);
-        transition select(hdr.packet_header.client_packet_type) {
+        packet.extract(hdr.client_packet_header);
+        transition select(hdr.client_packet_header.client_packet_type) {
             8w0x2b: parse_debug_packet;
             8w0x4c: parse_login_request_packet;
             8w0x55: parse_unsequenced_data_packet;
@@ -114,7 +114,7 @@ control NsmequitiesTotalviewClientComputeChecksum(inout headers_t hdr, inout met
 
 control NsmequitiesTotalviewClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.packet_header);
+        packet.emit(hdr.client_packet_header);
         packet.emit(hdr.debug_packet);
         packet.emit(hdr.login_request_packet);
     }
