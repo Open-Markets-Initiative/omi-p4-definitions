@@ -283,7 +283,7 @@ header odd_lot_quote_message_long_form_t {
 }
 
 header debug_packet_t {
-    bit<8> text;
+    bit<8> debug_text;
 }
 
 header login_accepted_packet_t {

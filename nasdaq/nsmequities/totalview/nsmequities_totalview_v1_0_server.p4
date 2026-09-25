@@ -49,7 +49,7 @@ header login_rejected_packet_t {
 }
 
 header sequenced_data_packet_t {
-    bit<56> time_stamp;
+    bit<56> timestamp;
     bit<8> message_type;
 }
 

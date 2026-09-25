@@ -37,7 +37,7 @@ header client_packet_header_t {
 }
 
 header debug_packet_t {
-    bit<8> text;
+    bit<8> debug_text;
 }
 
 header login_request_packet_t {

@@ -39,7 +39,7 @@ header packet_header_t {
 
 header message_t {
     bit<16> length;
-    bit<64> time_stamp;
+    bit<64> timestamp;
     bit<8> message_type;
 }
 
