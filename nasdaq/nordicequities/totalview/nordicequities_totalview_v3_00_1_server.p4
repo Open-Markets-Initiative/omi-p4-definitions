@@ -6,7 +6,7 @@
 //   Encoding: Glimpse
 //   Version: 3.00.1
 //   Date: 12/01/2015
-//   Specification: Nasdaq Nordic INET Equity GLIMPSE (3.00.1).pdf
+//   Specification: Nordic-Equity---Glimpse-3.00.1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

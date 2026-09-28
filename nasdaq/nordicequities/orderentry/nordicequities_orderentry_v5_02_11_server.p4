@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq NordicEquities OrderEntry Ouch v5.01.14
+// P4_16 (v1model) definition for: Nasdaq NordicEquities OrderEntry Ouch v5.02.11
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: Nordic Ouch 5 Order Entry
 //   Encoding: Ouch
-//   Version: 5.01.14
-//   Date: 11/12/2025
-//   Specification: OUCH5-for-Nasdaq-Nordic-5.01.14.pdf
+//   Version: 5.02.11
+//   Date: 09/23/2026
+//   Specification: OUCH5-for-Nasdaq-Nordic-5.02.11.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -31,32 +31,41 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header client_packet_header_t {
+header server_packet_header_t {
     bit<16> packet_length;
-    bit<8> client_packet_type;
+    bit<8> server_packet_type;
 }
 
 header debug_packet_t {
     bit<8> debug_text;
 }
 
-header login_request_packet_t {
-    bit<48> username;
-    bit<80> password;
-    bit<80> requested_session;
-    bit<160> requested_sequence_number;
+header login_accepted_packet_t {
+    bit<80> accepted_session;
+    bit<160> accepted_sequence_number;
 }
 
-header unsequenced_data_packet_t {
-    bit<8> unsequenced_message_type;
+header login_rejected_packet_t {
+    bit<8> reject_reason_code;
 }
 
-header enter_order_message_t {
+header sequenced_data_packet_t {
+    bit<8> sequenced_message_type;
+}
+
+header system_event_message_t {
+    bit<64> timestamp;
+    bit<8> event_code;
+}
+
+header order_accepted_message_t {
+    bit<64> timestamp;
     bit<32> user_ref_num;
-    bit<8> buy_sell_indicator;
-    bit<32> quantity;
-    bit<32> order_book;
     bit<32> price;
+    bit<64> order_reference_number;
+    bit<8> buy_sell_indicator;
+    bit<32> order_book;
+    bit<32> quantity;
     bit<48> user;
     bit<32> execution_within_firm;
     bit<32> investment_decision_within_firm_short_code;
@@ -188,30 +197,153 @@ header customer_order_capacity_t {
     bit<8> customer_order_capacity_value;
 }
 
-header replace_order_message_t {
+header target_strategy_t {
+    bit<8> target_strategy_value;
+}
+
+header min_rate_t {
+    bit<16> min_rate_value;
+}
+
+header max_rate_t {
+    bit<16> max_rate_value;
+}
+
+header conditional_type_t {
+    bit<8> conditional_type_value;
+}
+
+header firm_up_id_t {
+    bit<32> firm_up_id_value;
+}
+
+header order_replaced_message_t {
+    bit<64> timestamp;
     bit<32> orig_user_ref_num;
     bit<32> new_user_ref_num;
-    bit<32> quantity;
     bit<32> price;
+    bit<64> order_reference_number;
+    bit<8> buy_sell_indicator;
+    bit<32> order_book;
+    bit<32> quantity;
     bit<48> user;
     bit<16> appendage_length;
     bit<8> length;
     bit<8> tag;
 }
 
-header cancel_order_message_t {
+header cancelled_order_message_t {
+    bit<64> timestamp;
     bit<32> user_ref_num;
-    bit<32> quantity;
-    bit<48> user;
+    bit<32> decrement_quantity;
+    bit<8> cancel_reason;
 }
 
-header mmi_notification_request_message_t {
+header cancel_pending_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<8> cancel_pending_reason;
+}
+
+header replace_pending_message_t {
+    bit<64> timestamp;
+    bit<32> orig_user_ref_num;
+    bit<32> user_ref_num;
+    bit<8> replace_pending_reason;
+}
+
+header executed_order_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<32> executed_quantity;
+    bit<32> execution_price;
+    bit<8> liquidity_flag;
+    bit<32> match_number;
+    bit<32> contra_firm;
+    bit<8> trading_mode;
+    bit<8> transaction_category;
+    bit<8> transaction_type_algo_indicator;
+    bit<1> liquidity_self_trade;
+    bit<1> liquidity_top_of_book;
+    bit<1> liquidity_internalized;
+    bit<2> liquidity_indicator;
+    bit<3> reserved_13;
+    bit<8> last_market;
+    bit<8> transaction_type_benchmark_or_reference_price_indicator;
+}
+
+header broken_trade_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<32> match_number;
+    bit<8> broken_trade_reason;
+    bit<8> trading_mode;
+    bit<8> transaction_category;
+    bit<8> transaction_type_algo_indicator;
+}
+
+header rejected_order_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<16> rejected_order_reason;
+}
+
+header cancel_rejected_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<16> cancel_rejected_reason;
+}
+
+header order_restated_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<8> restate_reason;
+    bit<16> appendage_length;
+    bit<8> length;
+    bit<8> tag;
+}
+
+header mmo_refresh_request_message_t {
+    bit<64> timestamp;
+    bit<32> firm_value;
+    bit<32> order_book;
+    bit<8> mmo_refresh_reason;
+}
+
+header account_query_response_message_t {
+    bit<64> timestamp;
+    bit<32> next_user_ref_num;
+}
+
+header gtc_cancelled_message_t {
+    bit<64> timestamp;
+    bit<32> original_order_entry_date_value;
+    bit<64> original_order_reference_number_value;
+    bit<16> reason;
+}
+
+header response_to_mmi_notification_message_t {
+    bit<64> timestamp;
     bit<32> user_ref_num;
     bit<32> order_book;
     bit<8> instruction;
     bit<8> add_or_remove;
     bit<32> firm_value;
     bit<48> user;
+    bit<8> instruction_status;
+}
+
+header pending_order_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<8> pending_order_reason;
+}
+
+header stream_status_message_t {
+    bit<64> timestamp;
+    bit<32> user_ref_num;
+    bit<16> cum_rate;
+    bit<8> status;
 }
 
 struct metadata_t {
@@ -219,11 +351,13 @@ struct metadata_t {
 }
 
 struct headers_t {
-    client_packet_header_t client_packet_header;
+    server_packet_header_t server_packet_header;
     debug_packet_t debug_packet;
-    login_request_packet_t login_request_packet;
-    unsequenced_data_packet_t unsequenced_data_packet;
-    enter_order_message_t enter_order_message;
+    login_accepted_packet_t login_accepted_packet;
+    login_rejected_packet_t login_rejected_packet;
+    sequenced_data_packet_t sequenced_data_packet;
+    system_event_message_t system_event_message;
+    order_accepted_message_t order_accepted_message;
     clearing_account_t clearing_account;
     clearing_account_type_t clearing_account_type;
     clearing_firm_t clearing_firm;
@@ -253,20 +387,38 @@ struct headers_t {
     order_condition_t order_condition;
     cumulative_quantity_t cumulative_quantity;
     customer_order_capacity_t customer_order_capacity;
-    replace_order_message_t replace_order_message;
-    cancel_order_message_t cancel_order_message;
-    mmi_notification_request_message_t mmi_notification_request_message;
+    target_strategy_t target_strategy;
+    min_rate_t min_rate;
+    max_rate_t max_rate;
+    conditional_type_t conditional_type;
+    firm_up_id_t firm_up_id;
+    order_replaced_message_t order_replaced_message;
+    cancelled_order_message_t cancelled_order_message;
+    cancel_pending_message_t cancel_pending_message;
+    replace_pending_message_t replace_pending_message;
+    executed_order_message_t executed_order_message;
+    broken_trade_message_t broken_trade_message;
+    rejected_order_message_t rejected_order_message;
+    cancel_rejected_message_t cancel_rejected_message;
+    order_restated_message_t order_restated_message;
+    mmo_refresh_request_message_t mmo_refresh_request_message;
+    account_query_response_message_t account_query_response_message;
+    gtc_cancelled_message_t gtc_cancelled_message;
+    response_to_mmi_notification_message_t response_to_mmi_notification_message;
+    pending_order_message_t pending_order_message;
+    stream_status_message_t stream_status_message;
 }
 
-parser NordicequitiesOrderentryClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NordicequitiesOrderentryServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.client_packet_header);
-        transition select(hdr.client_packet_header.client_packet_type) {
+        packet.extract(hdr.server_packet_header);
+        transition select(hdr.server_packet_header.server_packet_type) {
             8w0x2b: parse_debug_packet;
-            8w0x4c: parse_login_request_packet;
-            8w0x55: parse_unsequenced_data_packet;
-            8w0x52: parse_client_heartbeat;
-            8w0x4f: parse_logout_request;
+            8w0x41: parse_login_accepted_packet;
+            8w0x4a: parse_login_rejected_packet;
+            8w0x53: parse_sequenced_data_packet;
+            8w0x48: parse_server_heartbeat;
+            8w0x5a: parse_end_of_session;
             default: accept;
         }
     }
@@ -277,29 +429,53 @@ parser NordicequitiesOrderentryClientParser(packet_in packet, out headers_t hdr,
         transition accept;
     }
 
-    state parse_login_request_packet {
-        packet.extract(hdr.login_request_packet);
+    state parse_login_accepted_packet {
+        packet.extract(hdr.login_accepted_packet);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_unsequenced_data_packet {
-        packet.extract(hdr.unsequenced_data_packet);
+    state parse_login_rejected_packet {
+        packet.extract(hdr.login_rejected_packet);
         meta.dispatched = 1;
-        transition select(hdr.unsequenced_data_packet.unsequenced_message_type) {
-            8w0x4f: parse_enter_order_message;
-            8w0x55: parse_replace_order_message;
-            8w0x58: parse_cancel_order_message;
-            8w0x51: parse_account_query_message;
-            8w0x4d: parse_mmi_notification_request_message;
+        transition accept;
+    }
+
+    state parse_sequenced_data_packet {
+        packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
+        transition select(hdr.sequenced_data_packet.sequenced_message_type) {
+            8w0x53: parse_system_event_message;
+            8w0x41: parse_order_accepted_message;
+            8w0x55: parse_order_replaced_message;
+            8w0x43: parse_cancelled_order_message;
+            8w0x50: parse_cancel_pending_message;
+            8w0x4e: parse_replace_pending_message;
+            8w0x45: parse_executed_order_message;
+            8w0x42: parse_broken_trade_message;
+            8w0x4a: parse_rejected_order_message;
+            8w0x49: parse_cancel_rejected_message;
+            8w0x54: parse_order_restated_message;
+            8w0x57: parse_mmo_refresh_request_message;
+            8w0x51: parse_account_query_response_message;
+            8w0x47: parse_gtc_cancelled_message;
+            8w0x52: parse_response_to_mmi_notification_message;
+            8w0x4d: parse_pending_order_message;
+            8w0x44: parse_stream_status_message;
             default: accept;
         }
     }
 
-    state parse_enter_order_message {
-        packet.extract(hdr.enter_order_message);
+    state parse_system_event_message {
+        packet.extract(hdr.system_event_message);
         meta.dispatched = 1;
-        transition select(hdr.enter_order_message.tag) {
+        transition accept;
+    }
+
+    state parse_order_accepted_message {
+        packet.extract(hdr.order_accepted_message);
+        meta.dispatched = 1;
+        transition select(hdr.order_accepted_message.tag) {
             8w1: parse_clearing_account;
             8w2: parse_clearing_account_type;
             8w3: parse_clearing_firm;
@@ -329,6 +505,11 @@ parser NordicequitiesOrderentryClientParser(packet_in packet, out headers_t hdr,
             8w27: parse_order_condition;
             8w28: parse_cumulative_quantity;
             8w29: parse_customer_order_capacity;
+            8w30: parse_target_strategy;
+            8w31: parse_min_rate;
+            8w32: parse_max_rate;
+            8w33: parse_conditional_type;
+            8w34: parse_firm_up_id;
             default: accept;
         }
     }
@@ -507,10 +688,40 @@ parser NordicequitiesOrderentryClientParser(packet_in packet, out headers_t hdr,
         transition accept;
     }
 
-    state parse_replace_order_message {
-        packet.extract(hdr.replace_order_message);
+    state parse_target_strategy {
+        packet.extract(hdr.target_strategy);
         meta.dispatched = 1;
-        transition select(hdr.replace_order_message.tag) {
+        transition accept;
+    }
+
+    state parse_min_rate {
+        packet.extract(hdr.min_rate);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_max_rate {
+        packet.extract(hdr.max_rate);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_conditional_type {
+        packet.extract(hdr.conditional_type);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_firm_up_id {
+        packet.extract(hdr.firm_up_id);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_replaced_message {
+        packet.extract(hdr.order_replaced_message);
+        meta.dispatched = 1;
+        transition select(hdr.order_replaced_message.tag) {
             8w1: parse_clearing_account;
             8w2: parse_clearing_account_type;
             8w3: parse_clearing_firm;
@@ -540,45 +751,153 @@ parser NordicequitiesOrderentryClientParser(packet_in packet, out headers_t hdr,
             8w27: parse_order_condition;
             8w28: parse_cumulative_quantity;
             8w29: parse_customer_order_capacity;
+            8w30: parse_target_strategy;
+            8w31: parse_min_rate;
+            8w32: parse_max_rate;
+            8w33: parse_conditional_type;
+            8w34: parse_firm_up_id;
             default: accept;
         }
     }
 
-    state parse_cancel_order_message {
-        packet.extract(hdr.cancel_order_message);
+    state parse_cancelled_order_message {
+        packet.extract(hdr.cancelled_order_message);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_account_query_message {
+    state parse_cancel_pending_message {
+        packet.extract(hdr.cancel_pending_message);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_mmi_notification_request_message {
-        packet.extract(hdr.mmi_notification_request_message);
+    state parse_replace_pending_message {
+        packet.extract(hdr.replace_pending_message);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_client_heartbeat {
+    state parse_executed_order_message {
+        packet.extract(hdr.executed_order_message);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_logout_request {
+    state parse_broken_trade_message {
+        packet.extract(hdr.broken_trade_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_rejected_order_message {
+        packet.extract(hdr.rejected_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_cancel_rejected_message {
+        packet.extract(hdr.cancel_rejected_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_restated_message {
+        packet.extract(hdr.order_restated_message);
+        meta.dispatched = 1;
+        transition select(hdr.order_restated_message.tag) {
+            8w1: parse_clearing_account;
+            8w2: parse_clearing_account_type;
+            8w3: parse_clearing_firm;
+            8w4: parse_client_reference;
+            8w5: parse_cross_type;
+            8w6: parse_dea_indicator;
+            8w7: parse_display;
+            8w8: parse_display_price;
+            8w9: parse_display_quantity;
+            8w10: parse_expire_time;
+            8w11: parse_firm;
+            8w12: parse_liquidity_provision_indicator;
+            8w13: parse_max_floor;
+            8w14: parse_minimum_quantity;
+            8w15: parse_order_reference;
+            8w16: parse_original_order_entry_date;
+            8w17: parse_original_order_reference_number;
+            8w18: parse_peg_difference;
+            8w19: parse_peg_type;
+            8w20: parse_random_reserve;
+            8w21: parse_secondary_order_reference_number;
+            8w22: parse_stp_action;
+            8w23: parse_stp_level;
+            8w24: parse_stp_trader_group;
+            8w25: parse_time_in_force;
+            8w26: parse_trading_at_closing_price;
+            8w27: parse_order_condition;
+            8w28: parse_cumulative_quantity;
+            8w29: parse_customer_order_capacity;
+            8w30: parse_target_strategy;
+            8w31: parse_min_rate;
+            8w32: parse_max_rate;
+            8w33: parse_conditional_type;
+            8w34: parse_firm_up_id;
+            default: accept;
+        }
+    }
+
+    state parse_mmo_refresh_request_message {
+        packet.extract(hdr.mmo_refresh_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_account_query_response_message {
+        packet.extract(hdr.account_query_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_gtc_cancelled_message {
+        packet.extract(hdr.gtc_cancelled_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_response_to_mmi_notification_message {
+        packet.extract(hdr.response_to_mmi_notification_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_pending_order_message {
+        packet.extract(hdr.pending_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_stream_status_message {
+        packet.extract(hdr.stream_status_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session {
         meta.dispatched = 1;
         transition accept;
     }
 
 }
 
-control NordicequitiesOrderentryClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicequitiesOrderentryServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesOrderentryClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicequitiesOrderentryServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -589,23 +908,25 @@ control NordicequitiesOrderentryClientIngress(inout headers_t hdr, inout metadat
     }
 }
 
-control NordicequitiesOrderentryClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicequitiesOrderentryServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control NordicequitiesOrderentryClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicequitiesOrderentryServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
+control NordicequitiesOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.client_packet_header);
+        packet.emit(hdr.server_packet_header);
         packet.emit(hdr.debug_packet);
-        packet.emit(hdr.login_request_packet);
-        packet.emit(hdr.unsequenced_data_packet);
-        packet.emit(hdr.enter_order_message);
+        packet.emit(hdr.login_accepted_packet);
+        packet.emit(hdr.login_rejected_packet);
+        packet.emit(hdr.sequenced_data_packet);
+        packet.emit(hdr.system_event_message);
+        packet.emit(hdr.order_accepted_message);
         packet.emit(hdr.clearing_account);
         packet.emit(hdr.clearing_account_type);
         packet.emit(hdr.clearing_firm);
@@ -635,17 +956,34 @@ control NordicequitiesOrderentryClientDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.order_condition);
         packet.emit(hdr.cumulative_quantity);
         packet.emit(hdr.customer_order_capacity);
-        packet.emit(hdr.replace_order_message);
-        packet.emit(hdr.cancel_order_message);
-        packet.emit(hdr.mmi_notification_request_message);
+        packet.emit(hdr.target_strategy);
+        packet.emit(hdr.min_rate);
+        packet.emit(hdr.max_rate);
+        packet.emit(hdr.conditional_type);
+        packet.emit(hdr.firm_up_id);
+        packet.emit(hdr.order_replaced_message);
+        packet.emit(hdr.cancelled_order_message);
+        packet.emit(hdr.cancel_pending_message);
+        packet.emit(hdr.replace_pending_message);
+        packet.emit(hdr.executed_order_message);
+        packet.emit(hdr.broken_trade_message);
+        packet.emit(hdr.rejected_order_message);
+        packet.emit(hdr.cancel_rejected_message);
+        packet.emit(hdr.order_restated_message);
+        packet.emit(hdr.mmo_refresh_request_message);
+        packet.emit(hdr.account_query_response_message);
+        packet.emit(hdr.gtc_cancelled_message);
+        packet.emit(hdr.response_to_mmi_notification_message);
+        packet.emit(hdr.pending_order_message);
+        packet.emit(hdr.stream_status_message);
     }
 }
 
 V1Switch(
-    NordicequitiesOrderentryClientParser(),
-    NordicequitiesOrderentryClientVerifyChecksum(),
-    NordicequitiesOrderentryClientIngress(),
-    NordicequitiesOrderentryClientEgress(),
-    NordicequitiesOrderentryClientComputeChecksum(),
-    NordicequitiesOrderentryClientDeparser()
+    NordicequitiesOrderentryServerParser(),
+    NordicequitiesOrderentryServerVerifyChecksum(),
+    NordicequitiesOrderentryServerIngress(),
+    NordicequitiesOrderentryServerEgress(),
+    NordicequitiesOrderentryServerComputeChecksum(),
+    NordicequitiesOrderentryServerDeparser()
 ) main;

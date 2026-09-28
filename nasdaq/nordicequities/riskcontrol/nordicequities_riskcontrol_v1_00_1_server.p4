@@ -1,0 +1,338 @@
+// P4_16 (v1model) definition for: Nasdaq NordicEquities RiskControl Binary v1.00.1
+// 
+// Protocol:
+//   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
+//   Protocol: Nordic Pre-Trade Risk Management
+//   Encoding: Binary
+//   Version: 1.00.1
+//   Date: 02/10/2026
+//   Specification: Nasdaq-Nordic---PRM-v.1.00.1.pdf
+// 
+// Byte order: big (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: Public/GPLv3
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header server_packet_header_t {
+    bit<16> packet_length;
+    bit<8> server_packet_type;
+}
+
+header debug_packet_t {
+    bit<8> debug_text;
+}
+
+header login_accepted_packet_t {
+    bit<80> accepted_session;
+    bit<160> accepted_sequence_number;
+}
+
+header login_rejected_packet_t {
+    bit<8> reject_reason_code;
+}
+
+header sequenced_data_packet_t {
+    bit<8> sequenced_message_type;
+}
+
+header account_query_response_message_t {
+    bit<32> user_ref_num;
+}
+
+header account_settings_response_message_t {
+    bit<32> user_ref_num;
+    bit<48> prm_account;
+    bit<32> repeated_order_generation;
+    bit<8> trigger_restrict_symbol_on_repeated_order_generation;
+    bit<8> in_auction_market_order_prevention;
+    bit<8> in_auction_fat_finger_protection;
+    bit<8> in_auction_market_order_protection;
+    bit<8> block_and_cancel;
+}
+
+header order_book_restriction_response_message_t {
+    bit<32> user_ref_num;
+    bit<64> timestamp;
+    bit<48> prm_account;
+    bit<32> order_book;
+    bit<8> state_;
+}
+
+header market_segment_restriction_response_message_t {
+    bit<32> user_ref_num;
+    bit<64> timestamp;
+    bit<48> prm_account;
+    bit<16> market_segment;
+    bit<8> state_;
+}
+
+header limit_settings_response_message_t {
+    bit<32> user_ref_num;
+    bit<48> prm_account;
+    bit<24> currency;
+    bit<64> max_quantity;
+    bit<64> max_value;
+    bit<64> unused;
+    bit<64> total_risk_value;
+    bit<64> trade_buy_value;
+    bit<64> trade_sell_value;
+    bit<64> trade_net_value;
+    bit<64> open_order_buy_value;
+    bit<64> open_order_sell_value;
+    bit<64> open_order_net_value;
+    bit<64> max_quantity_auction;
+    bit<64> max_value_auction;
+}
+
+header account_currency_setting_response_message_t {
+    bit<32> user_ref_num;
+    bit<48> prm_account;
+    bit<24> currency;
+    bit<8> reject_all_flag;
+    bit<8> blow_through_protection;
+}
+
+header reject_message_t {
+    bit<32> user_ref_num;
+    bit<8> reason;
+}
+
+header api_port_rate_breach_message_t {
+    bit<64> timestamp;
+}
+
+header account_rate_breach_message_t {
+    bit<64> timestamp;
+    bit<8> state_;
+    bit<48> prm_account;
+}
+
+header accumulated_values_message_t {
+    bit<48> prm_account;
+    bit<24> currency;
+    bit<64> last_update_time;
+    bit<64> risk_total_value;
+    bit<64> trades_buy_value;
+    bit<64> trades_sell_value;
+    bit<64> trades_total_value;
+    bit<64> orders_buy_value;
+    bit<64> orders_sell_value;
+    bit<64> orders_total_value;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+}
+
+struct headers_t {
+    server_packet_header_t server_packet_header;
+    debug_packet_t debug_packet;
+    login_accepted_packet_t login_accepted_packet;
+    login_rejected_packet_t login_rejected_packet;
+    sequenced_data_packet_t sequenced_data_packet;
+    account_query_response_message_t account_query_response_message;
+    account_settings_response_message_t account_settings_response_message;
+    order_book_restriction_response_message_t order_book_restriction_response_message;
+    market_segment_restriction_response_message_t market_segment_restriction_response_message;
+    limit_settings_response_message_t limit_settings_response_message;
+    account_currency_setting_response_message_t account_currency_setting_response_message;
+    reject_message_t reject_message;
+    api_port_rate_breach_message_t api_port_rate_breach_message;
+    account_rate_breach_message_t account_rate_breach_message;
+    accumulated_values_message_t accumulated_values_message;
+}
+
+parser NordicequitiesRiskcontrolServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.server_packet_header);
+        transition select(hdr.server_packet_header.server_packet_type) {
+            8w0x2b: parse_debug_packet;
+            8w0x41: parse_login_accepted_packet;
+            8w0x4a: parse_login_rejected_packet;
+            8w0x53: parse_sequenced_data_packet;
+            8w0x48: parse_server_heartbeat;
+            8w0x5a: parse_end_of_session;
+            default: accept;
+        }
+    }
+
+    state parse_debug_packet {
+        packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_accepted_packet {
+        packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_rejected_packet {
+        packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_sequenced_data_packet {
+        packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
+        transition select(hdr.sequenced_data_packet.sequenced_message_type) {
+            8w0x51: parse_account_query_response_message;
+            8w0x43: parse_account_settings_response_message;
+            8w0x52: parse_order_book_restriction_response_message;
+            8w0x53: parse_market_segment_restriction_response_message;
+            8w0x4c: parse_limit_settings_response_message;
+            8w0x46: parse_account_currency_setting_response_message;
+            8w0x4a: parse_reject_message;
+            8w0x50: parse_api_port_rate_breach_message;
+            8w0x42: parse_account_rate_breach_message;
+            8w0x56: parse_accumulated_values_message;
+            default: accept;
+        }
+    }
+
+    state parse_account_query_response_message {
+        packet.extract(hdr.account_query_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_account_settings_response_message {
+        packet.extract(hdr.account_settings_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_book_restriction_response_message {
+        packet.extract(hdr.order_book_restriction_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_market_segment_restriction_response_message {
+        packet.extract(hdr.market_segment_restriction_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_limit_settings_response_message {
+        packet.extract(hdr.limit_settings_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_account_currency_setting_response_message {
+        packet.extract(hdr.account_currency_setting_response_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_reject_message {
+        packet.extract(hdr.reject_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_api_port_rate_breach_message {
+        packet.extract(hdr.api_port_rate_breach_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_account_rate_breach_message {
+        packet.extract(hdr.account_rate_breach_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_accumulated_values_message {
+        packet.extract(hdr.accumulated_values_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+}
+
+control NordicequitiesRiskcontrolServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control NordicequitiesRiskcontrolServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control NordicequitiesRiskcontrolServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control NordicequitiesRiskcontrolServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control NordicequitiesRiskcontrolServerDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.server_packet_header);
+        packet.emit(hdr.debug_packet);
+        packet.emit(hdr.login_accepted_packet);
+        packet.emit(hdr.login_rejected_packet);
+        packet.emit(hdr.sequenced_data_packet);
+        packet.emit(hdr.account_query_response_message);
+        packet.emit(hdr.account_settings_response_message);
+        packet.emit(hdr.order_book_restriction_response_message);
+        packet.emit(hdr.market_segment_restriction_response_message);
+        packet.emit(hdr.limit_settings_response_message);
+        packet.emit(hdr.account_currency_setting_response_message);
+        packet.emit(hdr.reject_message);
+        packet.emit(hdr.api_port_rate_breach_message);
+        packet.emit(hdr.account_rate_breach_message);
+        packet.emit(hdr.accumulated_values_message);
+    }
+}
+
+V1Switch(
+    NordicequitiesRiskcontrolServerParser(),
+    NordicequitiesRiskcontrolServerVerifyChecksum(),
+    NordicequitiesRiskcontrolServerIngress(),
+    NordicequitiesRiskcontrolServerEgress(),
+    NordicequitiesRiskcontrolServerComputeChecksum(),
+    NordicequitiesRiskcontrolServerDeparser()
+) main;

@@ -1,10 +1,10 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities NoiView Itch v2.1.20110502
+// P4_16 (v1model) definition for: Nasdaq NsmEquities NoiView Itch v2.1.2011.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: Net Order Imbalance View
 //   Encoding: Itch
-//   Version: 2.1.20110502
+//   Version: 2.1.2011.1
 //   Date: 05/02/2011
 //   Specification: NQNoiview-v2_1.pdf
 // 

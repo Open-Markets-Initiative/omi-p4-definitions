@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities NoiView Itch v2.0.20100702
+// P4_16 (v1model) definition for: Nasdaq NsmEquities NoiView Itch v2.1.2011.2
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: Net Order Imbalance View
 //   Encoding: Itch
-//   Version: 2.0.20100702
-//   Date: 07/02/2010
-//   Specification: Noiview-v2spec.pdf
+//   Version: 2.1.2011.2
+//   Date: 11/01/2011
+//   Specification: NQNoiview-v2_1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -48,7 +48,7 @@ header system_event_message_t {
 }
 
 header stock_directory_message_t {
-    bit<48> stock;
+    bit<64> stock;
     bit<8> market_category;
     bit<8> financial_status_indicator;
     bit<48> round_lot_size;
@@ -56,17 +56,21 @@ header stock_directory_message_t {
 }
 
 header stock_trading_action_message_t {
-    bit<48> stock;
-    bit<8> trading_state;
-    bit<8> reserved_1;
+    bit<64> stock;
+    bit<8> current_trading_state;
     bit<32> reason;
+}
+
+header reg_sho_restriction_message_t {
+    bit<64> stock;
+    bit<8> reg_sho_action;
 }
 
 header noii_message_t {
     bit<72> paired_shares;
     bit<72> imbalance_shares;
     bit<8> imbalance_direction;
-    bit<48> stock;
+    bit<64> stock;
     bit<80> far_price;
     bit<80> near_price;
     bit<80> current_reference_price;
@@ -84,6 +88,7 @@ struct headers_t {
     system_event_message_t system_event_message[MAX_MESSAGES];
     stock_directory_message_t stock_directory_message[MAX_MESSAGES];
     stock_trading_action_message_t stock_trading_action_message[MAX_MESSAGES];
+    reg_sho_restriction_message_t reg_sho_restriction_message[MAX_MESSAGES];
     noii_message_t noii_message[MAX_MESSAGES];
 }
 
@@ -113,6 +118,7 @@ parser NsmequitiesNoiviewParser(packet_in packet, out headers_t hdr, inout metad
             8w0x53: parse_system_event_message;
             8w0x52: parse_stock_directory_message;
             8w0x48: parse_stock_trading_action_message;
+            8w0x59: parse_reg_sho_restriction_message;
             8w0x49: parse_noii_message;
             default: accept;
         }
@@ -132,6 +138,12 @@ parser NsmequitiesNoiviewParser(packet_in packet, out headers_t hdr, inout metad
 
     state parse_stock_trading_action_message {
         packet.extract(hdr.stock_trading_action_message.next);
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_reg_sho_restriction_message {
+        packet.extract(hdr.reg_sho_restriction_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -177,6 +189,7 @@ control NsmequitiesNoiviewDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.stock_directory_message);
         packet.emit(hdr.stock_trading_action_message);
+        packet.emit(hdr.reg_sho_restriction_message);
         packet.emit(hdr.noii_message);
     }
 }

@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nasdaq NordicEquities TotalView Glimpse v3.00.1
+// P4_16 (v1model) definition for: Nasdaq NordicDerivatives DepthOfBook Glimpse v2.22.4
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Nordic Equity TotalView
+//   Protocol: Genium INET Depth Of Book
 //   Encoding: Glimpse
-//   Version: 3.00.1
-//   Date: 12/01/2015
-//   Specification: Nordic-Equity---Glimpse-3.00.1.pdf
+//   Version: 2.22.4
+//   Date: 8/16/2017
+//   Specification: Nasdaq Nordic Genium INET GLIMPSE Protocol Specification (a2.22.4).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
@@ -67,7 +67,7 @@ struct headers_t {
     unsequenced_data_packet_unsequenced_message_t unsequenced_data_packet_unsequenced_message;
 }
 
-parser NordicequitiesTotalviewClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NordicderivativesDepthofbookClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.client_packet_header);
         transition select(hdr.client_packet_header.client_packet_type) {
@@ -111,12 +111,12 @@ parser NordicequitiesTotalviewClientParser(packet_in packet, out headers_t hdr, 
 
 }
 
-control NordicequitiesTotalviewClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicderivativesDepthofbookClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesTotalviewClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicderivativesDepthofbookClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -127,17 +127,17 @@ control NordicequitiesTotalviewClientIngress(inout headers_t hdr, inout metadata
     }
 }
 
-control NordicequitiesTotalviewClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NordicderivativesDepthofbookClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control NordicequitiesTotalviewClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NordicderivativesDepthofbookClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NordicequitiesTotalviewClientDeparser(packet_out packet, in headers_t hdr) {
+control NordicderivativesDepthofbookClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
         packet.emit(hdr.debug_packet);
@@ -148,10 +148,10 @@ control NordicequitiesTotalviewClientDeparser(packet_out packet, in headers_t hd
 }
 
 V1Switch(
-    NordicequitiesTotalviewClientParser(),
-    NordicequitiesTotalviewClientVerifyChecksum(),
-    NordicequitiesTotalviewClientIngress(),
-    NordicequitiesTotalviewClientEgress(),
-    NordicequitiesTotalviewClientComputeChecksum(),
-    NordicequitiesTotalviewClientDeparser()
+    NordicderivativesDepthofbookClientParser(),
+    NordicderivativesDepthofbookClientVerifyChecksum(),
+    NordicderivativesDepthofbookClientIngress(),
+    NordicderivativesDepthofbookClientEgress(),
+    NordicderivativesDepthofbookClientComputeChecksum(),
+    NordicderivativesDepthofbookClientDeparser()
 ) main;

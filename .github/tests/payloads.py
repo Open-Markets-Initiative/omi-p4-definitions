@@ -70,7 +70,7 @@ def blocks(data):
 def transport(link, frame):
     """The transport payload of a frame: the ip packet its link type carries, cut to the length ip states, then the udp or tcp data."""
     if link == 113:
-        packet = frame[16:] if len(frame) >= 16 and frame[14:16] == b"\x08\x00" else None
+        packet = ethernet(frame, 14) if len(frame) >= 16 else None
     elif link == 276:
         packet = frame[20:] if len(frame) >= 20 and frame[0:2] == b"\x08\x00" else None
     elif link == 0:
@@ -78,7 +78,7 @@ def transport(link, frame):
     elif link == 101:
         packet = frame
     else:
-        packet = ethernet(frame)
+        packet = ethernet(frame, 12)
 
     if packet is None or len(packet) < 20 or packet[0] >> 4 != 4:
         return None
@@ -97,13 +97,13 @@ def transport(link, frame):
     return None
 
 
-def ethernet(frame):
-    """The ip packet of an ethernet frame, stepping over any 802.1Q vlan tags; None when the frame carries something else."""
-    if len(frame) < 14:
+def ethernet(frame, ethertype):
+    """The ip packet behind an ethertype field, stepping over any 802.1Q vlan tags; None when the field names something else."""
+    if len(frame) < ethertype + 2:
         return None
 
-    kind = struct.unpack(">H", frame[12:14])[0]
-    packet = frame[14:]
+    kind = struct.unpack(">H", frame[ethertype:ethertype + 2])[0]
+    packet = frame[ethertype + 2:]
 
     while kind in (0x8100, 0x88a8) and len(packet) >= 4:
         kind = struct.unpack(">H", packet[2:4])[0]

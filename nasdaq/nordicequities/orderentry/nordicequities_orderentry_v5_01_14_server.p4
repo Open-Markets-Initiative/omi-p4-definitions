@@ -6,7 +6,7 @@
 //   Encoding: Ouch
 //   Version: 5.01.14
 //   Date: 11/12/2025
-//   Specification: Nasdaq Nordic INET OUCH5 (5.01.14).pdf
+//   Specification: OUCH5-for-Nasdaq-Nordic-5.01.14.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
