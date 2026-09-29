@@ -91,14 +91,6 @@ header active_qp_self_replenishment_set_limit_message_t {
     bit<32> set_value;
 }
 
-header rapid_fire_config_request_message_t {
-    bit<32> badge;
-    bit<104> underlying_symbol;
-    bit<16> percentage;
-    bit<16> interval;
-    bit<32> cum_qty;
-}
-
 header simple_quote_block_short_form_message_t {
     bit<32> badge;
     bit<64> message_id;
@@ -271,7 +263,6 @@ struct headers_t {
     add_complex_instrument_request_message_complex_legs_t add_complex_instrument_request_message_complex_legs[MAX_MESSAGES];
     mm_parameter_definition_request_message_t mm_parameter_definition_request_message;
     active_qp_self_replenishment_set_limit_message_t active_qp_self_replenishment_set_limit_message;
-    rapid_fire_config_request_message_t rapid_fire_config_request_message;
     simple_quote_block_short_form_message_t simple_quote_block_short_form_message;
     simple_quote_block_short_form_message_simple_quotes_t simple_quote_block_short_form_message_simple_quotes[MAX_MESSAGES];
     simple_quote_block_short_form_detailed_message_t simple_quote_block_short_form_detailed_message;
@@ -324,7 +315,6 @@ parser MrxoptionsQuotingClientParser(packet_in packet, out headers_t hdr, inout 
             16w0x4143: parse_add_complex_instrument_request_message;
             16w0x4145: parse_mm_parameter_definition_request_message;
             16w0x4147: parse_active_qp_self_replenishment_set_limit_message;
-            16w0x4146: parse_rapid_fire_config_request_message;
             16w0x5141: parse_simple_quote_block_short_form_message;
             16w0x5161: parse_simple_quote_block_short_form_detailed_message;
             16w0x514d: parse_simple_quote_block_long_form_message;
@@ -373,12 +363,6 @@ parser MrxoptionsQuotingClientParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_active_qp_self_replenishment_set_limit_message {
         packet.extract(hdr.active_qp_self_replenishment_set_limit_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_rapid_fire_config_request_message {
-        packet.extract(hdr.rapid_fire_config_request_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -576,7 +560,6 @@ control MrxoptionsQuotingClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.add_complex_instrument_request_message_complex_legs);
         packet.emit(hdr.mm_parameter_definition_request_message);
         packet.emit(hdr.active_qp_self_replenishment_set_limit_message);
-        packet.emit(hdr.rapid_fire_config_request_message);
         packet.emit(hdr.simple_quote_block_short_form_message);
         packet.emit(hdr.simple_quote_block_short_form_message_simple_quotes);
         packet.emit(hdr.simple_quote_block_short_form_detailed_message);

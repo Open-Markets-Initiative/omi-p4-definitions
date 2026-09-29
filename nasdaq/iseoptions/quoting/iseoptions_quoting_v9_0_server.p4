@@ -111,16 +111,6 @@ header mm_parameter_definition_notification_message_t {
     bit<256> reserved_32;
 }
 
-header rapid_fire_config_notification_message_t {
-    bit<32> seconds;
-    bit<32> nanoseconds;
-    bit<32> badge;
-    bit<104> underlying;
-    bit<16> percentage;
-    bit<16> interval;
-    bit<32> volume;
-}
-
 header active_qp_self_replenishment_parameter_definition_notification_message_t {
     bit<32> seconds;
     bit<32> nanoseconds;
@@ -319,11 +309,6 @@ header active_qp_self_replenishment_set_limit_reply_message_t {
     bit<8> status_code;
 }
 
-header rapid_fire_config_reply_message_t {
-    bit<32> badge;
-    bit<8> status_code;
-}
-
 header quote_block_reply_message_t {
     bit<32> badge;
     bit<64> message_id;
@@ -459,7 +444,6 @@ struct headers_t {
     complex_msar_reject_message_t complex_msar_reject_message;
     underlying_permission_notification_message_t underlying_permission_notification_message;
     mm_parameter_definition_notification_message_t mm_parameter_definition_notification_message;
-    rapid_fire_config_notification_message_t rapid_fire_config_notification_message;
     active_qp_self_replenishment_parameter_definition_notification_message_t active_qp_self_replenishment_parameter_definition_notification_message;
     system_event_message_t system_event_message;
     simple_instrument_directory_message_t simple_instrument_directory_message;
@@ -479,7 +463,6 @@ struct headers_t {
     add_complex_instrument_reply_message_t add_complex_instrument_reply_message;
     mm_parameter_definition_reply_message_t mm_parameter_definition_reply_message;
     active_qp_self_replenishment_set_limit_reply_message_t active_qp_self_replenishment_set_limit_reply_message;
-    rapid_fire_config_reply_message_t rapid_fire_config_reply_message;
     quote_block_reply_message_t quote_block_reply_message;
     quote_block_reply_message_quote_responses_t quote_block_reply_message_quote_responses[MAX_MESSAGES];
     detailed_quote_block_reply_message_t detailed_quote_block_reply_message;
@@ -537,7 +520,6 @@ parser IseoptionsQuotingServerParser(packet_in packet, out headers_t hdr, inout 
             16w0x534e: parse_complex_msar_reject_message;
             16w0x4150: parse_underlying_permission_notification_message;
             16w0x414a: parse_mm_parameter_definition_notification_message;
-            16w0x4166: parse_rapid_fire_config_notification_message;
             16w0x414b: parse_active_qp_self_replenishment_parameter_definition_notification_message;
             16w0x4153: parse_system_event_message;
             16w0x4144: parse_simple_instrument_directory_message;
@@ -587,12 +569,6 @@ parser IseoptionsQuotingServerParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_mm_parameter_definition_notification_message {
         packet.extract(hdr.mm_parameter_definition_notification_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_rapid_fire_config_notification_message {
-        packet.extract(hdr.rapid_fire_config_notification_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -696,7 +672,6 @@ parser IseoptionsQuotingServerParser(packet_in packet, out headers_t hdr, inout 
             16w0x4163: parse_add_complex_instrument_reply_message;
             16w0x4165: parse_mm_parameter_definition_reply_message;
             16w0x4167: parse_active_qp_self_replenishment_set_limit_reply_message;
-            16w0x4141: parse_rapid_fire_config_reply_message;
             16w0x5153: parse_quote_block_reply_message;
             16w0x5173: parse_detailed_quote_block_reply_message;
             16w0x5072: parse_underlying_purge_reply_message;
@@ -730,12 +705,6 @@ parser IseoptionsQuotingServerParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_active_qp_self_replenishment_set_limit_reply_message {
         packet.extract(hdr.active_qp_self_replenishment_set_limit_reply_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_rapid_fire_config_reply_message {
-        packet.extract(hdr.rapid_fire_config_reply_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -884,7 +853,6 @@ control IseoptionsQuotingServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.complex_msar_reject_message);
         packet.emit(hdr.underlying_permission_notification_message);
         packet.emit(hdr.mm_parameter_definition_notification_message);
-        packet.emit(hdr.rapid_fire_config_notification_message);
         packet.emit(hdr.active_qp_self_replenishment_parameter_definition_notification_message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.simple_instrument_directory_message);
@@ -904,7 +872,6 @@ control IseoptionsQuotingServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.add_complex_instrument_reply_message);
         packet.emit(hdr.mm_parameter_definition_reply_message);
         packet.emit(hdr.active_qp_self_replenishment_set_limit_reply_message);
-        packet.emit(hdr.rapid_fire_config_reply_message);
         packet.emit(hdr.quote_block_reply_message);
         packet.emit(hdr.quote_block_reply_message_quote_responses);
         packet.emit(hdr.detailed_quote_block_reply_message);

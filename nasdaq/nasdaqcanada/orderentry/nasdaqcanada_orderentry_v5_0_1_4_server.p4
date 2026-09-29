@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Nasdaq CanadaEquities OrderEntry Ouch v5.0.1.4
+// P4_16 (v1model) definition for: Nasdaq NasdaqCanada OrderEntry Ouch v5.0.1.4
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
@@ -194,7 +194,7 @@ struct headers_t {
     account_query_response_message_t account_query_response_message;
 }
 
-parser CanadaequitiesOrderentryServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.server_packet_header);
         transition select(hdr.server_packet_header.server_packet_type) {
@@ -647,12 +647,12 @@ parser CanadaequitiesOrderentryServerParser(packet_in packet, out headers_t hdr,
 
 }
 
-control CanadaequitiesOrderentryServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NasdaqcanadaOrderentryServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CanadaequitiesOrderentryServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NasdaqcanadaOrderentryServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -663,17 +663,17 @@ control CanadaequitiesOrderentryServerIngress(inout headers_t hdr, inout metadat
     }
 }
 
-control CanadaequitiesOrderentryServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NasdaqcanadaOrderentryServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control CanadaequitiesOrderentryServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NasdaqcanadaOrderentryServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CanadaequitiesOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
+control NasdaqcanadaOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
         packet.emit(hdr.debug_packet);
@@ -695,10 +695,10 @@ control CanadaequitiesOrderentryServerDeparser(packet_out packet, in headers_t h
 }
 
 V1Switch(
-    CanadaequitiesOrderentryServerParser(),
-    CanadaequitiesOrderentryServerVerifyChecksum(),
-    CanadaequitiesOrderentryServerIngress(),
-    CanadaequitiesOrderentryServerEgress(),
-    CanadaequitiesOrderentryServerComputeChecksum(),
-    CanadaequitiesOrderentryServerDeparser()
+    NasdaqcanadaOrderentryServerParser(),
+    NasdaqcanadaOrderentryServerVerifyChecksum(),
+    NasdaqcanadaOrderentryServerIngress(),
+    NasdaqcanadaOrderentryServerEgress(),
+    NasdaqcanadaOrderentryServerComputeChecksum(),
+    NasdaqcanadaOrderentryServerDeparser()
 ) main;

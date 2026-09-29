@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Nasdaq CanadaEquities Chixmd Itch v3.4.1.23
+// P4_16 (v1model) definition for: Nasdaq NasdaqCanada Chixmd Itch v3.4.1.23
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
@@ -174,7 +174,7 @@ struct headers_t {
     stock_status_message_t stock_status_message;
 }
 
-parser CanadaequitiesChixmdServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NasdaqcanadaChixmdServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.server_packet_header);
         transition select(hdr.server_packet_header.server_packet_type) {
@@ -291,12 +291,12 @@ parser CanadaequitiesChixmdServerParser(packet_in packet, out headers_t hdr, ino
 
 }
 
-control CanadaequitiesChixmdServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NasdaqcanadaChixmdServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CanadaequitiesChixmdServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NasdaqcanadaChixmdServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -307,17 +307,17 @@ control CanadaequitiesChixmdServerIngress(inout headers_t hdr, inout metadata_t 
     }
 }
 
-control CanadaequitiesChixmdServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NasdaqcanadaChixmdServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control CanadaequitiesChixmdServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NasdaqcanadaChixmdServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CanadaequitiesChixmdServerDeparser(packet_out packet, in headers_t hdr) {
+control NasdaqcanadaChixmdServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
         packet.emit(hdr.debug_packet);
@@ -339,10 +339,10 @@ control CanadaequitiesChixmdServerDeparser(packet_out packet, in headers_t hdr) 
 }
 
 V1Switch(
-    CanadaequitiesChixmdServerParser(),
-    CanadaequitiesChixmdServerVerifyChecksum(),
-    CanadaequitiesChixmdServerIngress(),
-    CanadaequitiesChixmdServerEgress(),
-    CanadaequitiesChixmdServerComputeChecksum(),
-    CanadaequitiesChixmdServerDeparser()
+    NasdaqcanadaChixmdServerParser(),
+    NasdaqcanadaChixmdServerVerifyChecksum(),
+    NasdaqcanadaChixmdServerIngress(),
+    NasdaqcanadaChixmdServerEgress(),
+    NasdaqcanadaChixmdServerComputeChecksum(),
+    NasdaqcanadaChixmdServerDeparser()
 ) main;

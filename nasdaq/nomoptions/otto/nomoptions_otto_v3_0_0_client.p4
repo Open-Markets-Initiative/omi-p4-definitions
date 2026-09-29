@@ -83,8 +83,7 @@ header new_order_long_form_message_t {
     bit<8> stock_leg_short_sale;
     bit<32> stock_leg_mpid;
     bit<8> stock_capacity;
-    bit<8> session_eligibility;
-    bit<64> reserved_8;
+    bit<72> reserved_9;
     bit<8> number_of_flex_legs;
 }
 
@@ -185,21 +184,6 @@ header new_cross_order_message_flex_leg_prices_t {
     bit<64> reserved_8;
 }
 
-header add_complex_instrument_message_t {
-    bit<32> firm_id;
-    bit<128> cl_request_id;
-    bit<16> product_id;
-    bit<104> product_name;
-    bit<8> num_legs;
-}
-
-header add_complex_instrument_message_complex_instrument_legs_t {
-    bit<8> leg_type;
-    bit<32> leg_instrument_id;
-    bit<8> leg_side;
-    bit<16> leg_ratio;
-}
-
 header modify_trade_message_t {
     bit<32> firm_id;
     bit<32> instrument_id;
@@ -231,17 +215,10 @@ header member_kill_switch_request_message_t {
     bit<8> kill_action;
 }
 
-header subscription_request_message_t {
-    bit<32> firm_id;
-    bit<128> cl_request_id;
-    bit<128> subscription;
-}
-
 struct metadata_t {
     bit<1> dispatched;
     bit<8> new_order_long_form_message_flex_leg_prices_remaining;
     bit<8> new_cross_order_message_flex_leg_prices_remaining;
-    bit<8> add_complex_instrument_message_complex_instrument_legs_remaining;
     bit<16> modify_trade_message_trade_splits_remaining;
 }
 
@@ -258,12 +235,9 @@ struct headers_t {
     mass_cancel_message_t mass_cancel_message;
     new_cross_order_message_t new_cross_order_message;
     new_cross_order_message_flex_leg_prices_t new_cross_order_message_flex_leg_prices[MAX_MESSAGES];
-    add_complex_instrument_message_t add_complex_instrument_message;
-    add_complex_instrument_message_complex_instrument_legs_t add_complex_instrument_message_complex_instrument_legs[MAX_MESSAGES];
     modify_trade_message_t modify_trade_message;
     modify_trade_message_trade_splits_t modify_trade_message_trade_splits[MAX_MESSAGES];
     member_kill_switch_request_message_t member_kill_switch_request_message;
-    subscription_request_message_t subscription_request_message;
 }
 
 parser NomoptionsOttoClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -301,10 +275,8 @@ parser NomoptionsOttoClientParser(packet_in packet, out headers_t hdr, inout met
             8w0x43: parse_cancel_order_message;
             8w0x55: parse_mass_cancel_message;
             8w0x58: parse_new_cross_order_message;
-            8w0x53: parse_add_complex_instrument_message;
             8w0x4d: parse_modify_trade_message;
             8w0x4b: parse_member_kill_switch_request_message;
-            8w0x46: parse_subscription_request_message;
             default: accept;
         }
     }
@@ -371,25 +343,6 @@ parser NomoptionsOttoClientParser(packet_in packet, out headers_t hdr, inout met
         }
     }
 
-    state parse_add_complex_instrument_message {
-        packet.extract(hdr.add_complex_instrument_message);
-        meta.dispatched = 1;
-        meta.add_complex_instrument_message_complex_instrument_legs_remaining = hdr.add_complex_instrument_message.num_legs;
-        transition select(meta.add_complex_instrument_message_complex_instrument_legs_remaining) {
-            8w0: accept;
-            default: parse_add_complex_instrument_message_complex_instrument_legs;
-        }
-    }
-
-    state parse_add_complex_instrument_message_complex_instrument_legs {
-        packet.extract(hdr.add_complex_instrument_message_complex_instrument_legs.next);
-        meta.add_complex_instrument_message_complex_instrument_legs_remaining = meta.add_complex_instrument_message_complex_instrument_legs_remaining - 1;
-        transition select(meta.add_complex_instrument_message_complex_instrument_legs_remaining) {
-            8w0: accept;
-            default: parse_add_complex_instrument_message_complex_instrument_legs;
-        }
-    }
-
     state parse_modify_trade_message {
         packet.extract(hdr.modify_trade_message);
         meta.dispatched = 1;
@@ -411,12 +364,6 @@ parser NomoptionsOttoClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_member_kill_switch_request_message {
         packet.extract(hdr.member_kill_switch_request_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_subscription_request_message {
-        packet.extract(hdr.subscription_request_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -473,12 +420,9 @@ control NomoptionsOttoClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.mass_cancel_message);
         packet.emit(hdr.new_cross_order_message);
         packet.emit(hdr.new_cross_order_message_flex_leg_prices);
-        packet.emit(hdr.add_complex_instrument_message);
-        packet.emit(hdr.add_complex_instrument_message_complex_instrument_legs);
         packet.emit(hdr.modify_trade_message);
         packet.emit(hdr.modify_trade_message_trade_splits);
         packet.emit(hdr.member_kill_switch_request_message);
-        packet.emit(hdr.subscription_request_message);
     }
 }
 

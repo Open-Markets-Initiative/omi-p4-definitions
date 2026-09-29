@@ -163,8 +163,7 @@ header order_accepted_long_form_message_t {
     bit<8> stock_leg_short_sale;
     bit<32> stock_leg_mpid;
     bit<8> stock_capacity;
-    bit<8> session_eligibility;
-    bit<64> reserved_8;
+    bit<72> reserved_9;
     bit<8> number_of_flex_legs;
 }
 

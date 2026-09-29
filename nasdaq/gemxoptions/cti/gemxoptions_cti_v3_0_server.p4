@@ -80,30 +80,6 @@ header options_directory_message_t {
     bit<128> reserved_16;
 }
 
-header complex_order_strategy_message_t {
-    bit<32> seconds;
-    bit<32> nanoseconds;
-    bit<8> version;
-    bit<32> strategy_id;
-    bit<104> underlying_symbol;
-    bit<8> action_;
-    bit<128> reserved_16;
-    bit<8> number_of_legs;
-}
-
-header complex_order_strategy_message_strategy_legs_t {
-    bit<32> leg_option_id;
-    bit<64> leg_security_symbol;
-    bit<7> leg_expiration_year;
-    bit<4> leg_expiration_month;
-    bit<5> leg_expiration_day;
-    bit<32> leg_strike_price;
-    bit<8> leg_option_kind;
-    bit<8> leg_side;
-    bit<32> leg_ratio;
-    bit<64> reserved_8;
-}
-
 header security_trading_action_message_t {
     bit<32> seconds;
     bit<32> nanoseconds;
@@ -115,14 +91,6 @@ header security_trading_action_message_t {
     bit<5> expiration_day;
     bit<32> strike_price;
     bit<8> option_kind;
-    bit<8> current_trading_state;
-}
-
-header complex_trading_action_message_t {
-    bit<32> seconds;
-    bit<32> nanoseconds;
-    bit<8> version;
-    bit<32> strategy_id;
     bit<8> current_trading_state;
 }
 
@@ -242,7 +210,6 @@ header cancel_trade_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> complex_order_strategy_message_strategy_legs_remaining;
 }
 
 struct headers_t {
@@ -253,10 +220,7 @@ struct headers_t {
     sequenced_data_packet_t sequenced_data_packet;
     system_event_message_t system_event_message;
     options_directory_message_t options_directory_message;
-    complex_order_strategy_message_t complex_order_strategy_message;
-    complex_order_strategy_message_strategy_legs_t complex_order_strategy_message_strategy_legs[MAX_MESSAGES];
     security_trading_action_message_t security_trading_action_message;
-    complex_trading_action_message_t complex_trading_action_message;
     trade_message_t trade_message;
     cancel_trade_message_t cancel_trade_message;
 }
@@ -299,9 +263,7 @@ parser GemxoptionsCtiServerParser(packet_in packet, out headers_t hdr, inout met
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x53: parse_system_event_message;
             8w0x44: parse_options_directory_message;
-            8w0x52: parse_complex_order_strategy_message;
             8w0x48: parse_security_trading_action_message;
-            8w0x49: parse_complex_trading_action_message;
             8w0x54: parse_trade_message;
             8w0x56: parse_cancel_trade_message;
             default: accept;
@@ -320,33 +282,8 @@ parser GemxoptionsCtiServerParser(packet_in packet, out headers_t hdr, inout met
         transition accept;
     }
 
-    state parse_complex_order_strategy_message {
-        packet.extract(hdr.complex_order_strategy_message);
-        meta.dispatched = 1;
-        meta.complex_order_strategy_message_strategy_legs_remaining = hdr.complex_order_strategy_message.number_of_legs;
-        transition select(meta.complex_order_strategy_message_strategy_legs_remaining) {
-            8w0: accept;
-            default: parse_complex_order_strategy_message_strategy_legs;
-        }
-    }
-
-    state parse_complex_order_strategy_message_strategy_legs {
-        packet.extract(hdr.complex_order_strategy_message_strategy_legs.next);
-        meta.complex_order_strategy_message_strategy_legs_remaining = meta.complex_order_strategy_message_strategy_legs_remaining - 1;
-        transition select(meta.complex_order_strategy_message_strategy_legs_remaining) {
-            8w0: accept;
-            default: parse_complex_order_strategy_message_strategy_legs;
-        }
-    }
-
     state parse_security_trading_action_message {
         packet.extract(hdr.security_trading_action_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_complex_trading_action_message {
-        packet.extract(hdr.complex_trading_action_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -410,10 +347,7 @@ control GemxoptionsCtiServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.options_directory_message);
-        packet.emit(hdr.complex_order_strategy_message);
-        packet.emit(hdr.complex_order_strategy_message_strategy_legs);
         packet.emit(hdr.security_trading_action_message);
-        packet.emit(hdr.complex_trading_action_message);
         packet.emit(hdr.trade_message);
         packet.emit(hdr.cancel_trade_message);
     }

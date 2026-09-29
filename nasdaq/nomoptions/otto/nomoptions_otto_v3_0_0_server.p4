@@ -79,23 +79,6 @@ header simple_instrument_directory_message_t {
     bit<128> reserved_16;
 }
 
-header complex_instrument_directory_message_t {
-    bit<64> timestamp;
-    bit<16> product_id;
-    bit<104> product_name;
-    bit<32> instrument_id;
-    bit<8> reserved_1;
-    bit<8> num_legs;
-}
-
-header complex_instrument_directory_message_complex_directory_legs_t {
-    bit<8> leg_type;
-    bit<32> leg_instrument_id;
-    bit<8> leg_side;
-    bit<16> leg_ratio;
-    bit<8> leg_id;
-}
-
 header instrument_trading_action_message_t {
     bit<64> timestamp;
     bit<16> product_id;
@@ -163,8 +146,7 @@ header order_accepted_long_form_message_t {
     bit<8> stock_leg_short_sale;
     bit<32> stock_leg_mpid;
     bit<8> stock_capacity;
-    bit<8> session_eligibility;
-    bit<64> reserved_8;
+    bit<72> reserved_9;
     bit<8> number_of_flex_legs;
 }
 
@@ -333,13 +315,6 @@ header mass_cancel_response_message_t {
     bit<32> num_pending;
 }
 
-header add_complex_instrument_response_message_t {
-    bit<64> timestamp;
-    bit<32> firm_id;
-    bit<128> cl_request_id;
-    bit<32> instrument_id;
-}
-
 header modify_trade_response_message_t {
     bit<64> timestamp;
     bit<32> firm_id;
@@ -348,12 +323,6 @@ header modify_trade_response_message_t {
     bit<128> cl_ord_id;
     bit<32> cross_id;
     bit<32> match_id;
-}
-
-header subscription_response_message_t {
-    bit<64> timestamp;
-    bit<32> firm_id;
-    bit<128> cl_request_id;
 }
 
 header reject_message_t {
@@ -374,7 +343,6 @@ header pending_response_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> complex_instrument_directory_message_complex_directory_legs_remaining;
     bit<8> auction_notification_message_flex_dac_legs_remaining;
     bit<8> order_accepted_long_form_message_flex_legs_remaining;
 }
@@ -387,8 +355,6 @@ struct headers_t {
     sequenced_data_packet_t sequenced_data_packet;
     system_event_message_t system_event_message;
     simple_instrument_directory_message_t simple_instrument_directory_message;
-    complex_instrument_directory_message_t complex_instrument_directory_message;
-    complex_instrument_directory_message_complex_directory_legs_t complex_instrument_directory_message_complex_directory_legs[MAX_MESSAGES];
     instrument_trading_action_message_t instrument_trading_action_message;
     auction_notification_message_t auction_notification_message;
     auction_notification_message_flex_dac_legs_t auction_notification_message_flex_dac_legs[MAX_MESSAGES];
@@ -402,9 +368,7 @@ struct headers_t {
     cross_order_accepted_message_t cross_order_accepted_message;
     member_kill_switch_notification_message_t member_kill_switch_notification_message;
     mass_cancel_response_message_t mass_cancel_response_message;
-    add_complex_instrument_response_message_t add_complex_instrument_response_message;
     modify_trade_response_message_t modify_trade_response_message;
-    subscription_response_message_t subscription_response_message;
     reject_message_t reject_message;
     pending_response_message_t pending_response_message;
 }
@@ -447,7 +411,6 @@ parser NomoptionsOttoServerParser(packet_in packet, out headers_t hdr, inout met
         transition select(hdr.sequenced_data_packet.sequenced_message_type) {
             8w0x7a: parse_system_event_message;
             8w0x6f: parse_simple_instrument_directory_message;
-            8w0x73: parse_complex_instrument_directory_message;
             8w0x69: parse_instrument_trading_action_message;
             8w0x6e: parse_auction_notification_message;
             8w0x61: parse_order_accepted_long_form_message;
@@ -459,9 +422,7 @@ parser NomoptionsOttoServerParser(packet_in packet, out headers_t hdr, inout met
             8w0x78: parse_cross_order_accepted_message;
             8w0x6b: parse_member_kill_switch_notification_message;
             8w0x75: parse_mass_cancel_response_message;
-            8w0x64: parse_add_complex_instrument_response_message;
             8w0x6d: parse_modify_trade_response_message;
-            8w0x66: parse_subscription_response_message;
             8w0x6a: parse_reject_message;
             8w0x70: parse_pending_response_message;
             default: accept;
@@ -478,25 +439,6 @@ parser NomoptionsOttoServerParser(packet_in packet, out headers_t hdr, inout met
         packet.extract(hdr.simple_instrument_directory_message);
         meta.dispatched = 1;
         transition accept;
-    }
-
-    state parse_complex_instrument_directory_message {
-        packet.extract(hdr.complex_instrument_directory_message);
-        meta.dispatched = 1;
-        meta.complex_instrument_directory_message_complex_directory_legs_remaining = hdr.complex_instrument_directory_message.num_legs;
-        transition select(meta.complex_instrument_directory_message_complex_directory_legs_remaining) {
-            8w0: accept;
-            default: parse_complex_instrument_directory_message_complex_directory_legs;
-        }
-    }
-
-    state parse_complex_instrument_directory_message_complex_directory_legs {
-        packet.extract(hdr.complex_instrument_directory_message_complex_directory_legs.next);
-        meta.complex_instrument_directory_message_complex_directory_legs_remaining = meta.complex_instrument_directory_message_complex_directory_legs_remaining - 1;
-        transition select(meta.complex_instrument_directory_message_complex_directory_legs_remaining) {
-            8w0: accept;
-            default: parse_complex_instrument_directory_message_complex_directory_legs;
-        }
     }
 
     state parse_instrument_trading_action_message {
@@ -591,20 +533,8 @@ parser NomoptionsOttoServerParser(packet_in packet, out headers_t hdr, inout met
         transition accept;
     }
 
-    state parse_add_complex_instrument_response_message {
-        packet.extract(hdr.add_complex_instrument_response_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
     state parse_modify_trade_response_message {
         packet.extract(hdr.modify_trade_response_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_subscription_response_message {
-        packet.extract(hdr.subscription_response_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -668,8 +598,6 @@ control NomoptionsOttoServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.simple_instrument_directory_message);
-        packet.emit(hdr.complex_instrument_directory_message);
-        packet.emit(hdr.complex_instrument_directory_message_complex_directory_legs);
         packet.emit(hdr.instrument_trading_action_message);
         packet.emit(hdr.auction_notification_message);
         packet.emit(hdr.auction_notification_message_flex_dac_legs);
@@ -683,9 +611,7 @@ control NomoptionsOttoServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.cross_order_accepted_message);
         packet.emit(hdr.member_kill_switch_notification_message);
         packet.emit(hdr.mass_cancel_response_message);
-        packet.emit(hdr.add_complex_instrument_response_message);
         packet.emit(hdr.modify_trade_response_message);
-        packet.emit(hdr.subscription_response_message);
         packet.emit(hdr.reject_message);
         packet.emit(hdr.pending_response_message);
     }
