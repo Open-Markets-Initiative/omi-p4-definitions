@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 5.0
 //   Date: 02/13/2026
-//   Specification: PSXTVITCHSpecification.pdf
+//   Specification: 2-13 PSXTVITCHSpecification.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

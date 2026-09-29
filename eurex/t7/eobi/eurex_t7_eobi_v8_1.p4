@@ -419,11 +419,8 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state parse_add_complex_instrument {
         packet.extract(hdr.add_complex_instrument);
         meta.dispatched = 1;
-        meta.add_complex_instrument_instrmt_leg_grp_comp_remaining = hdr.add_complex_instrument.no_legs;
-        transition select(meta.add_complex_instrument_instrmt_leg_grp_comp_remaining) {
-            8w0: accept;
-            default: parse_add_complex_instrument_instrmt_leg_grp_comp;
-        }
+        meta.add_complex_instrument_instrmt_leg_grp_comp_remaining = 8w20;
+        transition parse_add_complex_instrument_instrmt_leg_grp_comp;
     }
 
     state parse_add_complex_instrument_instrmt_leg_grp_comp {
@@ -480,11 +477,8 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state parse_instrument_summary {
         packet.extract(hdr.instrument_summary);
         meta.dispatched = 1;
-        meta.instrument_summary_md_instrument_entry_grp_comp_remaining = hdr.instrument_summary.no_md_entries;
-        transition select(meta.instrument_summary_md_instrument_entry_grp_comp_remaining) {
-            8w0: accept;
-            default: parse_instrument_summary_md_instrument_entry_grp_comp;
-        }
+        meta.instrument_summary_md_instrument_entry_grp_comp_remaining = 8w15;
+        transition parse_instrument_summary_md_instrument_entry_grp_comp;
     }
 
     state parse_instrument_summary_md_instrument_entry_grp_comp {
@@ -499,11 +493,8 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state parse_mass_instrument_state_change {
         packet.extract(hdr.mass_instrument_state_change);
         meta.dispatched = 1;
-        meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining = hdr.mass_instrument_state_change.no_related_sym;
-        transition select(meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining) {
-            8w0: accept;
-            default: parse_mass_instrument_state_change_sec_mass_stat_grp_comp;
-        }
+        meta.mass_instrument_state_change_sec_mass_stat_grp_comp_remaining = 8w24;
+        transition parse_mass_instrument_state_change_sec_mass_stat_grp_comp;
     }
 
     state parse_mass_instrument_state_change_sec_mass_stat_grp_comp {
@@ -590,11 +581,8 @@ parser EurexT7EobiParser(packet_in packet, out headers_t hdr, inout metadata_t m
     state parse_trade_reversal {
         packet.extract(hdr.trade_reversal);
         meta.dispatched = 1;
-        meta.trade_reversal_md_trade_entry_grp_comp_remaining = hdr.trade_reversal.no_md_entries;
-        transition select(meta.trade_reversal_md_trade_entry_grp_comp_remaining) {
-            8w0: accept;
-            default: parse_trade_reversal_md_trade_entry_grp_comp;
-        }
+        meta.trade_reversal_md_trade_entry_grp_comp_remaining = 8w15;
+        transition parse_trade_reversal_md_trade_entry_grp_comp;
     }
 
     state parse_trade_reversal_md_trade_entry_grp_comp {

@@ -51,7 +51,7 @@ header system_event_message_t {
 header trade_report_message_t {
     bit<16> tracking_number;
     bit<48> timestamp;
-    bit<48> client_timestamp;
+    bit<64> client_timestamp;
     bit<8> originating_market_center_identifier;
     bit<64> issue_symbol;
     bit<8> security_class;
@@ -65,7 +65,7 @@ header trade_report_message_t {
 header trade_cancel_error_message_t {
     bit<16> tracking_number;
     bit<48> timestamp;
-    bit<48> client_timestamp;
+    bit<64> client_timestamp;
     bit<8> originating_market_center_identifier;
     bit<64> issue_symbol;
     bit<8> security_class;
@@ -79,7 +79,7 @@ header trade_cancel_error_message_t {
 header trade_correction_message_t {
     bit<16> tracking_number;
     bit<48> timestamp;
-    bit<48> client_timestamp;
+    bit<64> client_timestamp;
     bit<8> originating_market_center_identifier;
     bit<64> issue_symbol;
     bit<8> security_class;

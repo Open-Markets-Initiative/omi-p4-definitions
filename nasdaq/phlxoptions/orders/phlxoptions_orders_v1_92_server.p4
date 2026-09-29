@@ -1,0 +1,480 @@
+// P4_16 (v1model) definition for: Nasdaq PhlxOptions Orders Itch v1.92
+// 
+// Protocol:
+//   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
+//   Protocol: PHLX Orders
+//   Encoding: Itch
+//   Version: 1.92
+//   Date: 04/25/2025
+//   Specification: topoplusorders - TCP Update.pdf
+// 
+// Byte order: big (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: Public/GPLv3
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header server_packet_header_t {
+    bit<16> packet_length;
+    bit<8> server_packet_type;
+}
+
+header debug_packet_t {
+    bit<8> debug_text;
+}
+
+header login_accepted_packet_t {
+    bit<80> accepted_session;
+    bit<160> accepted_sequence_number;
+}
+
+header login_rejected_packet_t {
+    bit<8> reject_reason_code;
+}
+
+header sequenced_data_packet_t {
+    bit<8> sequenced_message_type;
+}
+
+header system_event_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<8> event_code;
+    bit<8> version;
+}
+
+header options_directory_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> option_id;
+    bit<40> security_symbol;
+    bit<7> year;
+    bit<4> month;
+    bit<5> day;
+    bit<32> explicit_strike_price;
+    bit<8> option_type;
+    bit<8> source;
+    bit<104> underlying_symbol;
+    bit<8> option_closing_type;
+    bit<8> phlx_tradable;
+}
+
+header complex_order_strategy_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> strategy_id;
+    bit<8> source;
+    bit<104> underlying_symbol;
+    bit<8> action_;
+    bit<8> number_of_legs;
+}
+
+header complex_order_strategy_message_complex_order_strategy_leg_t {
+    bit<32> option_id;
+    bit<40> security_symbol;
+    bit<7> year;
+    bit<4> month;
+    bit<5> day;
+    bit<32> explicit_strike_price;
+    bit<8> option_type;
+    bit<8> side;
+    bit<32> leg_ratio;
+}
+
+header security_trading_action_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> option_id;
+    bit<40> security_symbol;
+    bit<7> year;
+    bit<4> month;
+    bit<5> day;
+    bit<32> explicit_strike_price;
+    bit<8> option_type;
+    bit<8> current_trading_state;
+}
+
+header complex_trading_action_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> strategy_id;
+    bit<8> current_trading_state;
+}
+
+header security_open_closed_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> option_id;
+    bit<40> security_symbol;
+    bit<7> year;
+    bit<4> month;
+    bit<5> day;
+    bit<32> explicit_strike_price;
+    bit<8> option_type;
+    bit<8> open_state;
+}
+
+header strategy_open_closed_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> strategy_id;
+    bit<8> open_state;
+}
+
+header simple_order_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> option_id;
+    bit<40> security_symbol;
+    bit<7> year;
+    bit<4> month;
+    bit<5> day;
+    bit<32> explicit_strike_price;
+    bit<8> option_type;
+    bit<32> order_id;
+    bit<8> side;
+    bit<32> original_order_volume;
+    bit<32> executable_order_volume;
+    bit<8> order_status;
+    bit<8> order_type;
+    bit<8> market_qualifier;
+    bit<32> limit_price;
+    bit<8> all_or_none;
+    bit<8> time_in_force;
+    bit<8> customer_firm_indicator;
+    bit<8> open_close_indicator;
+}
+
+header complex_order_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> strategy_id;
+    bit<32> order_id;
+    bit<8> side;
+    bit<32> original_order_volume;
+    bit<32> executable_order_volume;
+    bit<8> order_status;
+    bit<8> order_type;
+    bit<32> limit_price;
+    bit<8> debit_or_credit;
+    bit<8> all_or_none;
+    bit<8> time_in_force;
+    bit<8> customer_firm_indicator;
+    bit<104> underlying_symbol;
+    bit<8> number_of_legs;
+}
+
+header complex_order_message_complex_order_leg_t {
+    bit<8> leg_open_close_indicator;
+    bit<32> option_id;
+    bit<40> security_symbol;
+    bit<7> year;
+    bit<4> month;
+    bit<5> day;
+    bit<32> explicit_strike_price;
+    bit<8> option_type;
+    bit<8> side;
+    bit<32> leg_ratio;
+}
+
+header auction_notification_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> option_id;
+    bit<40> security_symbol;
+    bit<7> year;
+    bit<4> month;
+    bit<5> day;
+    bit<32> explicit_strike_price;
+    bit<8> option_type;
+    bit<32> auction_id;
+    bit<8> auction_type;
+    bit<32> price;
+    bit<8> auction_side;
+    bit<32> matched_volume;
+    bit<32> imbalance_volume;
+    bit<8> customer_firm_indicator;
+    bit<24> reserved_3;
+}
+
+header complex_auction_notification_message_t {
+    bit<32> seconds;
+    bit<32> nanoseconds;
+    bit<32> strategy_id;
+    bit<32> auction_id;
+    bit<8> auction_type;
+    bit<32> price;
+    bit<8> auction_side;
+    bit<8> debit_or_credit;
+    bit<32> volume;
+}
+
+header end_of_replay_sequence_message_t {
+    bit<160> end_of_replay_sequence_number;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_order_strategy_message_complex_order_strategy_leg_remaining;
+    bit<8> complex_order_message_complex_order_leg_remaining;
+}
+
+struct headers_t {
+    server_packet_header_t server_packet_header;
+    debug_packet_t debug_packet;
+    login_accepted_packet_t login_accepted_packet;
+    login_rejected_packet_t login_rejected_packet;
+    sequenced_data_packet_t sequenced_data_packet;
+    system_event_message_t system_event_message;
+    options_directory_message_t options_directory_message;
+    complex_order_strategy_message_t complex_order_strategy_message;
+    complex_order_strategy_message_complex_order_strategy_leg_t complex_order_strategy_message_complex_order_strategy_leg[MAX_MESSAGES];
+    security_trading_action_message_t security_trading_action_message;
+    complex_trading_action_message_t complex_trading_action_message;
+    security_open_closed_message_t security_open_closed_message;
+    strategy_open_closed_message_t strategy_open_closed_message;
+    simple_order_message_t simple_order_message;
+    complex_order_message_t complex_order_message;
+    complex_order_message_complex_order_leg_t complex_order_message_complex_order_leg[MAX_MESSAGES];
+    auction_notification_message_t auction_notification_message;
+    complex_auction_notification_message_t complex_auction_notification_message;
+    end_of_replay_sequence_message_t end_of_replay_sequence_message;
+}
+
+parser PhlxoptionsOrdersServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.server_packet_header);
+        transition select(hdr.server_packet_header.server_packet_type) {
+            8w0x2b: parse_debug_packet;
+            8w0x41: parse_login_accepted_packet;
+            8w0x4a: parse_login_rejected_packet;
+            8w0x53: parse_sequenced_data_packet;
+            8w0x48: parse_server_heartbeat_packet;
+            8w0x5a: parse_end_of_session_packet;
+            default: accept;
+        }
+    }
+
+    state parse_debug_packet {
+        packet.extract(hdr.debug_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_accepted_packet {
+        packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_rejected_packet {
+        packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_sequenced_data_packet {
+        packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
+        transition select(hdr.sequenced_data_packet.sequenced_message_type) {
+            8w0x53: parse_system_event_message;
+            8w0x44: parse_options_directory_message;
+            8w0x52: parse_complex_order_strategy_message;
+            8w0x48: parse_security_trading_action_message;
+            8w0x49: parse_complex_trading_action_message;
+            8w0x50: parse_security_open_closed_message;
+            8w0x51: parse_strategy_open_closed_message;
+            8w0x4f: parse_simple_order_message;
+            8w0x58: parse_complex_order_message;
+            8w0x41: parse_auction_notification_message;
+            8w0x43: parse_complex_auction_notification_message;
+            8w0x4d: parse_end_of_replay_sequence_message;
+            default: accept;
+        }
+    }
+
+    state parse_system_event_message {
+        packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_options_directory_message {
+        packet.extract(hdr.options_directory_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_complex_order_strategy_message {
+        packet.extract(hdr.complex_order_strategy_message);
+        meta.dispatched = 1;
+        meta.complex_order_strategy_message_complex_order_strategy_leg_remaining = hdr.complex_order_strategy_message.number_of_legs;
+        transition select(meta.complex_order_strategy_message_complex_order_strategy_leg_remaining) {
+            8w0: accept;
+            default: parse_complex_order_strategy_message_complex_order_strategy_leg;
+        }
+    }
+
+    state parse_complex_order_strategy_message_complex_order_strategy_leg {
+        packet.extract(hdr.complex_order_strategy_message_complex_order_strategy_leg.next);
+        meta.complex_order_strategy_message_complex_order_strategy_leg_remaining = meta.complex_order_strategy_message_complex_order_strategy_leg_remaining - 1;
+        transition select(meta.complex_order_strategy_message_complex_order_strategy_leg_remaining) {
+            8w0: accept;
+            default: parse_complex_order_strategy_message_complex_order_strategy_leg;
+        }
+    }
+
+    state parse_security_trading_action_message {
+        packet.extract(hdr.security_trading_action_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_complex_trading_action_message {
+        packet.extract(hdr.complex_trading_action_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_security_open_closed_message {
+        packet.extract(hdr.security_open_closed_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_strategy_open_closed_message {
+        packet.extract(hdr.strategy_open_closed_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_simple_order_message {
+        packet.extract(hdr.simple_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_complex_order_message {
+        packet.extract(hdr.complex_order_message);
+        meta.dispatched = 1;
+        meta.complex_order_message_complex_order_leg_remaining = hdr.complex_order_message.number_of_legs;
+        transition select(meta.complex_order_message_complex_order_leg_remaining) {
+            8w0: accept;
+            default: parse_complex_order_message_complex_order_leg;
+        }
+    }
+
+    state parse_complex_order_message_complex_order_leg {
+        packet.extract(hdr.complex_order_message_complex_order_leg.next);
+        meta.complex_order_message_complex_order_leg_remaining = meta.complex_order_message_complex_order_leg_remaining - 1;
+        transition select(meta.complex_order_message_complex_order_leg_remaining) {
+            8w0: accept;
+            default: parse_complex_order_message_complex_order_leg;
+        }
+    }
+
+    state parse_auction_notification_message {
+        packet.extract(hdr.auction_notification_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_complex_auction_notification_message {
+        packet.extract(hdr.complex_auction_notification_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_replay_sequence_message {
+        packet.extract(hdr.end_of_replay_sequence_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session_packet {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+}
+
+control PhlxoptionsOrdersServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control PhlxoptionsOrdersServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control PhlxoptionsOrdersServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control PhlxoptionsOrdersServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control PhlxoptionsOrdersServerDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.server_packet_header);
+        packet.emit(hdr.debug_packet);
+        packet.emit(hdr.login_accepted_packet);
+        packet.emit(hdr.login_rejected_packet);
+        packet.emit(hdr.sequenced_data_packet);
+        packet.emit(hdr.system_event_message);
+        packet.emit(hdr.options_directory_message);
+        packet.emit(hdr.complex_order_strategy_message);
+        packet.emit(hdr.complex_order_strategy_message_complex_order_strategy_leg);
+        packet.emit(hdr.security_trading_action_message);
+        packet.emit(hdr.complex_trading_action_message);
+        packet.emit(hdr.security_open_closed_message);
+        packet.emit(hdr.strategy_open_closed_message);
+        packet.emit(hdr.simple_order_message);
+        packet.emit(hdr.complex_order_message);
+        packet.emit(hdr.complex_order_message_complex_order_leg);
+        packet.emit(hdr.auction_notification_message);
+        packet.emit(hdr.complex_auction_notification_message);
+        packet.emit(hdr.end_of_replay_sequence_message);
+    }
+}
+
+V1Switch(
+    PhlxoptionsOrdersServerParser(),
+    PhlxoptionsOrdersServerVerifyChecksum(),
+    PhlxoptionsOrdersServerIngress(),
+    PhlxoptionsOrdersServerEgress(),
+    PhlxoptionsOrdersServerComputeChecksum(),
+    PhlxoptionsOrdersServerDeparser()
+) main;
