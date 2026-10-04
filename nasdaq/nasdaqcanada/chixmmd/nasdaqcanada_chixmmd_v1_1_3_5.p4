@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nasdaq NasdaqCanada Chixmmd Itch v1.1.3.5
+// P4_16 (v1model) definition for: Nasdaq NasdaqCanada Chixmmd AsciiItch v1.1.3.5
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: CHIXMMD Multicast Market Data
-//   Encoding: Itch
+//   Encoding: Ascii Itch
 //   Version: 1.1.3.5
 //   Date: 02/24/2025
 //   Specification: Nasdaq-Canada-Multicast-Market-Data-Specification-CHIXMMD-1.1-V3.5.pdf

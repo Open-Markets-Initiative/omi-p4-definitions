@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView Itch v2.0.a
+// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView AsciiItch v2.0.a
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: TotalView Itch
-//   Encoding: Itch
+//   Encoding: Ascii Itch
 //   Version: 2.0.a
 //   Date: 02/15/2007
 //   Specification: Nasdaq TotalView ITCH (2.0a).pdf
@@ -41,7 +41,7 @@ header debug_packet_t {
 
 header login_accepted_packet_t {
     bit<80> session;
-    bit<80> sequence_number;
+    bit<32> sequence_number;
 }
 
 header login_rejected_packet_t {

@@ -135,6 +135,9 @@ header message_unavailable_message_t {
 header refresh_header_message_t {
     bit<16> current_refresh_pkt;
     bit<16> total_refresh_pkts;
+}
+
+header full_refresh_header_t {
     bit<32> last_seq_num;
     bit<32> last_symbol_seq_num;
 }
@@ -205,6 +208,7 @@ struct headers_t {
     refresh_request_message_t refresh_request_message[MAX_MESSAGES];
     message_unavailable_message_t message_unavailable_message[MAX_MESSAGES];
     refresh_header_message_t refresh_header_message[MAX_MESSAGES];
+    full_refresh_header_t full_refresh_header[MAX_MESSAGES];
     request_response_message_t request_response_message[MAX_MESSAGES];
     heartbeat_response_message_t heartbeat_response_message[MAX_MESSAGES];
     orderbook_snapshot_message_t orderbook_snapshot_message[MAX_MESSAGES];
@@ -298,6 +302,19 @@ parser AmexequitiesOpenbookaggregatedParser(packet_in packet, out headers_t hdr,
     state parse_refresh_header_message {
         packet.extract(hdr.refresh_header_message.next);
         meta.dispatched = 1;
+        transition select(hdr.refresh_header_message.last.current_refresh_pkt) {
+            16w0x100: parse_full_refresh_header;
+            default: accept;
+        }
+    }
+
+    state parse_full_refresh_header {
+        packet.extract(hdr.full_refresh_header.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_message;
+    }
+
+    state parse_short_refresh_header {
         transition parse_packet_header_message;
     }
 
@@ -372,6 +389,7 @@ control AmexequitiesOpenbookaggregatedDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.refresh_request_message);
         packet.emit(hdr.message_unavailable_message);
         packet.emit(hdr.refresh_header_message);
+        packet.emit(hdr.full_refresh_header);
         packet.emit(hdr.request_response_message);
         packet.emit(hdr.heartbeat_response_message);
         packet.emit(hdr.orderbook_snapshot_message);

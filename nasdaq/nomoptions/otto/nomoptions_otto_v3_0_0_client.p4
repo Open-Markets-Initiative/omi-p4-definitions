@@ -36,10 +36,6 @@ header client_packet_header_t {
     bit<8> client_packet_type;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_request_packet_t {
     bit<48> username;
     bit<80> password;
@@ -215,6 +211,10 @@ header member_kill_switch_request_message_t {
     bit<8> kill_action;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<8> new_order_long_form_message_flex_leg_prices_remaining;
@@ -224,7 +224,6 @@ struct metadata_t {
 
 struct headers_t {
     client_packet_header_t client_packet_header;
-    debug_packet_t debug_packet;
     login_request_packet_t login_request_packet;
     unsequenced_data_packet_t unsequenced_data_packet;
     new_order_long_form_message_t new_order_long_form_message;
@@ -238,6 +237,7 @@ struct headers_t {
     modify_trade_message_t modify_trade_message;
     modify_trade_message_trade_splits_t modify_trade_message_trade_splits[MAX_MESSAGES];
     member_kill_switch_request_message_t member_kill_switch_request_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NomoptionsOttoClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -254,8 +254,8 @@ parser NomoptionsOttoClientParser(packet_in packet, out headers_t hdr, inout met
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.client_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -409,7 +409,7 @@ control NomoptionsOttoClientComputeChecksum(inout headers_t hdr, inout metadata_
 control NomoptionsOttoClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
-        packet.emit(hdr.debug_packet);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
         packet.emit(hdr.new_order_long_form_message);

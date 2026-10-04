@@ -121,7 +121,12 @@ header next_shares_quotation_message_t {
     bit<48> timestamp;
     bit<64> next_shares_symbol;
     bit<8> security_class;
-    bit<32> nasdaq_best_bid;
+    bit<32> nasdaq_best_bid_proxy_price;
+    bit<32> nasdaq_best_bid_size;
+    bit<32> nasdaq_best_bid_nav_premium_discount_amount;
+    bit<32> nasdaq_best_offer_proxy_price;
+    bit<32> nasdaq_best_offer_size;
+    bit<32> nasdaq_best_offer_nav_premium_discount_amount;
 }
 
 struct metadata_t {

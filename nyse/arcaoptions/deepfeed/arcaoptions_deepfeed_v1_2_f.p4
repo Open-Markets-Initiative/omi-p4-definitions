@@ -147,6 +147,9 @@ header security_status_message_t {
 header refresh_header_message_t {
     bit<16> current_refresh_pkt;
     bit<16> total_refresh_pkts;
+}
+
+header full_refresh_header_t {
     bit<32> last_seq_num;
     bit<32> last_symbol_seq_num;
 }
@@ -337,6 +340,7 @@ struct headers_t {
     symbol_clear_message_t symbol_clear_message[MAX_MESSAGES];
     security_status_message_t security_status_message[MAX_MESSAGES];
     refresh_header_message_t refresh_header_message[MAX_MESSAGES];
+    full_refresh_header_t full_refresh_header[MAX_MESSAGES];
     outright_series_index_mapping_t outright_series_index_mapping[MAX_MESSAGES];
     options_status_message_t options_status_message[MAX_MESSAGES];
     options_add_order_message_t options_add_order_message[MAX_MESSAGES];
@@ -469,6 +473,19 @@ parser ArcaoptionsDeepfeedParser(packet_in packet, out headers_t hdr, inout meta
     state parse_refresh_header_message {
         packet.extract(hdr.refresh_header_message.next);
         meta.dispatched = 1;
+        transition select(hdr.refresh_header_message.last.current_refresh_pkt) {
+            16w0x100: parse_full_refresh_header;
+            default: accept;
+        }
+    }
+
+    state parse_full_refresh_header {
+        packet.extract(hdr.full_refresh_header.next);
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_short_refresh_header {
         transition parse_message;
     }
 
@@ -600,6 +617,7 @@ control ArcaoptionsDeepfeedDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.symbol_clear_message);
         packet.emit(hdr.security_status_message);
         packet.emit(hdr.refresh_header_message);
+        packet.emit(hdr.full_refresh_header);
         packet.emit(hdr.outright_series_index_mapping);
         packet.emit(hdr.options_status_message);
         packet.emit(hdr.options_add_order_message);

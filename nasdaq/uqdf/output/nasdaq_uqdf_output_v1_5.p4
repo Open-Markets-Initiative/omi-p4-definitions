@@ -33,8 +33,8 @@
 
 header packet_header_t {
     bit<80> session;
-    bit<64> sequence;
-    bit<16> count;
+    bit<64> sequence_number;
+    bit<16> message_count;
 }
 
 header packet_header_message_t {
@@ -334,7 +334,7 @@ struct headers_t {
 parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
-        transition select(hdr.packet_header.count) {
+        transition select(hdr.packet_header.message_count) {
             16w0: parse_packet_header_message_empty;
             default: parse_packet_header_message;
         }

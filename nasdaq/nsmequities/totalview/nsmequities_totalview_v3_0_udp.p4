@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView Itch v3.0
+// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView AsciiItch v3.0
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: TotalView Itch
-//   Encoding: Itch
+//   Encoding: Ascii Itch
 //   Version: 3.0
 //   Date: 09/16/2008
 //   Specification: Nasdaq TotalView ITCH (3.0).pdf
@@ -33,12 +33,12 @@
 
 header packet_header_t {
     bit<80> session;
-    bit<32> sequence;
-    bit<16> count;
+    bit<32> sequence_number;
+    bit<16> message_count;
 }
 
 header message_t {
-    bit<16> length;
+    bit<16> message_length;
     bit<8> message_type;
 }
 
@@ -65,7 +65,7 @@ header stock_directory_message_t {
 header stock_trading_action_message_t {
     bit<48> stock_alphanumeric_6;
     bit<8> trading_state;
-    bit<8> reserved;
+    bit<8> reserved_1;
     bit<32> reason;
 }
 
@@ -178,7 +178,7 @@ struct headers_t {
 parser NsmequitiesTotalviewUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
-        transition select(hdr.packet_header.count) {
+        transition select(hdr.packet_header.message_count) {
             16w0x0: parse_heartbeat;
             16w0xffff: parse_end_of_session;
             default: parse_message;

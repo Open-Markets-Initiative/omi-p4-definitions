@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView Itch v3.1
+// P4_16 (v1model) definition for: Nasdaq NsmEquities TotalView AsciiItch v3.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: TotalView Itch
-//   Encoding: Itch
+//   Encoding: Ascii Itch
 //   Version: 3.1
 //   Date: 10/06/2010
 //   Specification: Nasdaq TotalView ITCH (3.1).pdf
@@ -75,7 +75,7 @@ header stock_directory_message_t {
 header stock_trading_action_message_t {
     bit<48> stock_alpha_6;
     bit<8> trading_state;
-    bit<8> reserved;
+    bit<8> reserved_1;
     bit<32> reason;
 }
 

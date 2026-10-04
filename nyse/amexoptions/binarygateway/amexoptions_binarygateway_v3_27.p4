@@ -159,6 +159,12 @@ header new_bulk_quote_type_243_message_t {
     bit<8> self_trade_type_u_81;
     bit<32> group_id;
     bit<64> mm_sent_time;
+    bit<32> series_index;
+    bit<3> unused_3;
+    bit<3> mm_quote_type;
+    bit<2> side_2;
+    bit<64> price;
+    bit<32> order_qty;
 }
 
 header new_bulk_quote_type_259_message_t {
@@ -169,6 +175,12 @@ header new_bulk_quote_type_259_message_t {
     bit<8> self_trade_type_u_81;
     bit<32> group_id;
     bit<64> mm_sent_time;
+    bit<32> series_index;
+    bit<3> unused_3;
+    bit<3> mm_quote_type;
+    bit<2> side_2;
+    bit<64> price;
+    bit<32> order_qty;
 }
 
 header new_order_cross_message_t {
@@ -407,6 +419,16 @@ header bulk_quote_acknowledgment_type_294_message_t {
     bit<8> repeating_groups;
 }
 
+header bulk_quote_acknowledgment_type_294_message_quote_ack_group_t {
+    bit<32> series_index;
+    bit<8> side_u_81;
+    bit<8> ack_type;
+    bit<64> price;
+    bit<32> quantity;
+    bit<16> reason_code;
+    bit<8> working_away_from_display;
+}
+
 header bulk_quote_acknowledgment_message_t {
     bit<64> transact_time_timestamp_8;
     bit<32> mpid;
@@ -418,6 +440,17 @@ header bulk_quote_acknowledgment_message_t {
     bit<8> self_trade_type_u_81;
     bit<32> group_id;
     bit<8> repeating_groups;
+}
+
+header bulk_quote_acknowledgment_message_quote_ack_with_id_group_t {
+    bit<32> series_index;
+    bit<8> side_u_81;
+    bit<8> ack_type;
+    bit<64> price;
+    bit<32> quantity;
+    bit<16> reason_code;
+    bit<8> working_away_from_display;
+    bit<64> order_id;
 }
 
 header order_single_complex_modify_cancel_request_acknowledgment_and_urout_message_t {
@@ -603,6 +636,8 @@ header complex_series_request_acknowledgement_message_leg_group_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<8> bulk_quote_acknowledgment_type_294_message_quote_ack_group_remaining;
+    bit<8> bulk_quote_acknowledgment_message_quote_ack_with_id_group_remaining;
     bit<8> complex_series_request_acknowledgement_message_leg_group_remaining;
 }
 
@@ -637,7 +672,9 @@ struct headers_t {
     session_configuration_acknowledgement_message_t session_configuration_acknowledgement_message;
     order_and_cancel_replace_acknowledgement_message_t order_and_cancel_replace_acknowledgement_message;
     bulk_quote_acknowledgment_type_294_message_t bulk_quote_acknowledgment_type_294_message;
+    bulk_quote_acknowledgment_type_294_message_quote_ack_group_t bulk_quote_acknowledgment_type_294_message_quote_ack_group[MAX_MESSAGES];
     bulk_quote_acknowledgment_message_t bulk_quote_acknowledgment_message;
+    bulk_quote_acknowledgment_message_quote_ack_with_id_group_t bulk_quote_acknowledgment_message_quote_ack_with_id_group[MAX_MESSAGES];
     order_single_complex_modify_cancel_request_acknowledgment_and_urout_message_t order_single_complex_modify_cancel_request_acknowledgment_and_urout_message;
     order_priority_update_acknowledgment_message_t order_priority_update_acknowledgment_message;
     execution_report_message_t execution_report_message;
@@ -880,13 +917,39 @@ parser AmexoptionsBinarygatewayParser(packet_in packet, out headers_t hdr, inout
     state parse_bulk_quote_acknowledgment_type_294_message {
         packet.extract(hdr.bulk_quote_acknowledgment_type_294_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.bulk_quote_acknowledgment_type_294_message_quote_ack_group_remaining = hdr.bulk_quote_acknowledgment_type_294_message.repeating_groups;
+        transition select(meta.bulk_quote_acknowledgment_type_294_message_quote_ack_group_remaining) {
+            8w0: accept;
+            default: parse_bulk_quote_acknowledgment_type_294_message_quote_ack_group;
+        }
+    }
+
+    state parse_bulk_quote_acknowledgment_type_294_message_quote_ack_group {
+        packet.extract(hdr.bulk_quote_acknowledgment_type_294_message_quote_ack_group.next);
+        meta.bulk_quote_acknowledgment_type_294_message_quote_ack_group_remaining = meta.bulk_quote_acknowledgment_type_294_message_quote_ack_group_remaining - 1;
+        transition select(meta.bulk_quote_acknowledgment_type_294_message_quote_ack_group_remaining) {
+            8w0: accept;
+            default: parse_bulk_quote_acknowledgment_type_294_message_quote_ack_group;
+        }
     }
 
     state parse_bulk_quote_acknowledgment_message {
         packet.extract(hdr.bulk_quote_acknowledgment_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.bulk_quote_acknowledgment_message_quote_ack_with_id_group_remaining = hdr.bulk_quote_acknowledgment_message.repeating_groups;
+        transition select(meta.bulk_quote_acknowledgment_message_quote_ack_with_id_group_remaining) {
+            8w0: accept;
+            default: parse_bulk_quote_acknowledgment_message_quote_ack_with_id_group;
+        }
+    }
+
+    state parse_bulk_quote_acknowledgment_message_quote_ack_with_id_group {
+        packet.extract(hdr.bulk_quote_acknowledgment_message_quote_ack_with_id_group.next);
+        meta.bulk_quote_acknowledgment_message_quote_ack_with_id_group_remaining = meta.bulk_quote_acknowledgment_message_quote_ack_with_id_group_remaining - 1;
+        transition select(meta.bulk_quote_acknowledgment_message_quote_ack_with_id_group_remaining) {
+            8w0: accept;
+            default: parse_bulk_quote_acknowledgment_message_quote_ack_with_id_group;
+        }
     }
 
     state parse_order_single_complex_modify_cancel_request_acknowledgment_and_urout_message {
@@ -1010,7 +1073,9 @@ control AmexoptionsBinarygatewayDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.session_configuration_acknowledgement_message);
         packet.emit(hdr.order_and_cancel_replace_acknowledgement_message);
         packet.emit(hdr.bulk_quote_acknowledgment_type_294_message);
+        packet.emit(hdr.bulk_quote_acknowledgment_type_294_message_quote_ack_group);
         packet.emit(hdr.bulk_quote_acknowledgment_message);
+        packet.emit(hdr.bulk_quote_acknowledgment_message_quote_ack_with_id_group);
         packet.emit(hdr.order_single_complex_modify_cancel_request_acknowledgment_and_urout_message);
         packet.emit(hdr.order_priority_update_acknowledgment_message);
         packet.emit(hdr.execution_report_message);

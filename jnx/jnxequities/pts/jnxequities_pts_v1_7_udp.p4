@@ -31,9 +31,9 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header udp_packet_header_t {
-    bit<80> udp_session;
-    bit<64> udp_sequence_number;
+header packet_header_t {
+    bit<80> session;
+    bit<64> sequence_number;
     bit<16> message_count;
 }
 
@@ -132,7 +132,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    udp_packet_header_t udp_packet_header;
+    packet_header_t packet_header;
     message_t message[MAX_MESSAGES];
     seconds_message_t seconds_message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
@@ -149,8 +149,8 @@ struct headers_t {
 
 parser JnxequitiesPtsUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.udp_packet_header);
-        transition select(hdr.udp_packet_header.message_count) {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
             16w0: parse_heartbeat;
             16w65535: parse_end_of_session;
             default: parse_message;
@@ -281,7 +281,7 @@ control JnxequitiesPtsUdpComputeChecksum(inout headers_t hdr, inout metadata_t m
 
 control JnxequitiesPtsUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.udp_packet_header);
+        packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
         packet.emit(hdr.seconds_message);
         packet.emit(hdr.system_event_message);

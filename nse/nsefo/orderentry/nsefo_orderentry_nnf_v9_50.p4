@@ -1304,7 +1304,7 @@ header giveup_confirmation_message_t {
     bit<8> deleted;
 }
 
-header order_entry_body_t {
+header order_cancellation_confirmation_message_t {
     bit<8> participant_type;
     bit<8> reserved_1;
     bit<16> competitor_period;
@@ -1382,130 +1382,6 @@ header order_entry_body_t {
     bit<416> reserved_52;
 }
 
-header spread_order_body_t {
-    bit<8> participant_type_1;
-    bit<8> filler_1;
-    bit<16> competitor_period_1;
-    bit<16> solicitor_period_1;
-    bit<8> mod_cxl_by_1;
-    bit<8> filler_9;
-    bit<16> reason_code_1;
-    bit<16> start_alpha_1;
-    bit<16> end_alpha_1;
-    bit<32> token_1;
-    bit<48> instrument_name;
-    bit<80> symbol;
-    bit<32> expiry_date;
-    bit<32> strike_price;
-    bit<16> option_type;
-    bit<16> ca_level;
-    bit<40> op_broker_id_1;
-    bit<8> fillerx_1;
-    bit<24> filler_options_1;
-    bit<8> fillery_1;
-    bit<16> order_type_1;
-    bit<64> order_number_1;
-    bit<80> account_number_1;
-    bit<16> book_type_1;
-    bit<16> buy_sell_1;
-    bit<32> disclosed_vol_1;
-    bit<32> disclosed_vol_remaining_1;
-    bit<32> total_vol_remaining_1;
-    bit<32> volume_1;
-    bit<32> volume_filled_today_1;
-    bit<32> price_1;
-    bit<32> trigger_price_1;
-    bit<32> good_till_date_1;
-    bit<32> entry_date_time_1;
-    bit<32> min_fill_aon_1;
-    bit<32> last_modified_1;
-    bit<1> ato;
-    bit<1> market;
-    bit<1> sl;
-    bit<1> mit;
-    bit<1> day;
-    bit<1> gtc;
-    bit<1> ioc;
-    bit<1> aon;
-    bit<1> mf;
-    bit<1> matched_ind;
-    bit<1> traded;
-    bit<1> modified;
-    bit<1> frozen;
-    bit<1> order_pre_open;
-    bit<2> reserved_12;
-    bit<16> branch_id_1;
-    bit<32> trader_id_1;
-    bit<40> broker_id_1;
-    bit<192> c_ord_filler;
-    bit<8> open_close_1;
-    bit<96> settlor_1;
-    bit<16> pro_client_1;
-    bit<16> settlement_period_1;
-    bit<3> reserved_68;
-    bit<1> stpc;
-    bit<2> reserved_34;
-    bit<1> col;
-    bit<1> boc;
-    bit<8> reserved_1;
-    bit<16> filler_116;
-    bit<8> filler_17;
-    bit<8> filler_18;
-    bit<64> nnf_field;
-    bit<64> mkt_replay;
-    bit<80> pan;
-    bit<32> algo_id;
-    bit<16> reserved_2;
-    bit<64> last_activity_reference;
-    bit<416> reserved_52;
-    bit<32> price_diff;
-}
-
-header spread_order_body_ms_spd_leg_info_t {
-    bit<32> token_2;
-    bit<48> instrument_name;
-    bit<80> symbol;
-    bit<32> expiry_date;
-    bit<32> strike_price;
-    bit<16> option_type;
-    bit<16> ca_level;
-    bit<40> op_broker_id_2;
-    bit<8> fillerx_2;
-    bit<16> order_type_2;
-    bit<16> buy_sell_2;
-    bit<32> disclosed_vol_2;
-    bit<32> disclosed_vol_remaining_2;
-    bit<32> total_vol_remaining_2;
-    bit<32> volume_2;
-    bit<32> volume_filled_today_2;
-    bit<32> price_2;
-    bit<32> trigger_price_2;
-    bit<32> min_fill_aon_2;
-    bit<1> ato;
-    bit<1> market;
-    bit<1> sl;
-    bit<1> mit;
-    bit<1> day;
-    bit<1> gtc;
-    bit<1> ioc;
-    bit<1> aon;
-    bit<1> mf;
-    bit<1> matched_ind;
-    bit<1> traded;
-    bit<1> modified;
-    bit<1> frozen;
-    bit<1> order_pre_open;
-    bit<2> reserved_12;
-    bit<8> open_close_2;
-    bit<3> reserved_68;
-    bit<1> stpc;
-    bit<2> reserved_34;
-    bit<1> col;
-    bit<1> boc;
-    bit<8> reserved_1;
-    bit<8> filler_y;
-}
-
 struct metadata_t {
     bit<1> dispatched;
     bit<16> spread_order_entry_message_ms_spd_leg_info_remaining;
@@ -1517,7 +1393,6 @@ struct metadata_t {
     bit<16> spread_report_statistics_body_spd_stats_data_remaining;
     bit<16> branch_order_value_limit_update_message_branch_limits_remaining;
     bit<16> user_order_value_limit_update_message_user_limits_remaining;
-    bit<16> spread_order_body_ms_spd_leg_info_remaining;
 }
 
 struct headers_t {
@@ -1590,9 +1465,7 @@ struct headers_t {
     user_address_unlock_confirm_message_t user_address_unlock_confirm_message;
     user_address_unlock_approve_message_t user_address_unlock_approve_message;
     giveup_confirmation_message_t giveup_confirmation_message;
-    order_entry_body_t order_entry_body;
-    spread_order_body_t spread_order_body;
-    spread_order_body_ms_spd_leg_info_t spread_order_body_ms_spd_leg_info[MAX_MESSAGES];
+    order_cancellation_confirmation_message_t order_cancellation_confirmation_message;
 }
 
 parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -2195,34 +2068,9 @@ parser NsefoOrderentryParser(packet_in packet, out headers_t hdr, inout metadata
     }
 
     state parse_order_cancellation_confirmation_message {
-        meta.dispatched = 1;
-        transition select(hdr.message_header.message_length) {
-            16w316: parse_order_entry_body;
-            16w480: parse_spread_order_body;
-            default: accept;
-        }
-    }
-
-    state parse_order_entry_body {
-        packet.extract(hdr.order_entry_body);
+        packet.extract(hdr.order_cancellation_confirmation_message);
         meta.dispatched = 1;
         transition accept;
-    }
-
-    state parse_spread_order_body {
-        packet.extract(hdr.spread_order_body);
-        meta.dispatched = 1;
-        meta.spread_order_body_ms_spd_leg_info_remaining = 16w2;
-        transition parse_spread_order_body_ms_spd_leg_info;
-    }
-
-    state parse_spread_order_body_ms_spd_leg_info {
-        packet.extract(hdr.spread_order_body_ms_spd_leg_info.next);
-        meta.spread_order_body_ms_spd_leg_info_remaining = meta.spread_order_body_ms_spd_leg_info_remaining - 1;
-        transition select(meta.spread_order_body_ms_spd_leg_info_remaining) {
-            16w0: accept;
-            default: parse_spread_order_body_ms_spd_leg_info;
-        }
     }
 
 }
@@ -2324,9 +2172,7 @@ control NsefoOrderentryDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.user_address_unlock_confirm_message);
         packet.emit(hdr.user_address_unlock_approve_message);
         packet.emit(hdr.giveup_confirmation_message);
-        packet.emit(hdr.order_entry_body);
-        packet.emit(hdr.spread_order_body);
-        packet.emit(hdr.spread_order_body_ms_spd_leg_info);
+        packet.emit(hdr.order_cancellation_confirmation_message);
     }
 }
 
