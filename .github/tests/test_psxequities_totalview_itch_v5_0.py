@@ -10,12 +10,12 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "nasdaq/psxequities/totalview/psxequities_totalview_v5_0.p4"
-JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "psxequities_totalview_v5_0.json")
+PROGRAM = "nasdaq/psxequities/totalview/psxequities_totalview_itch_v5_0.p4"
+JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "psxequities_totalview_itch_v5_0.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 
 
-class PsxequitiesTotalviewV50Tests(unittest.TestCase):
+class PsxequitiesTotalviewItchV50Tests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

@@ -140,7 +140,7 @@ header add_order_no_mpid_attribution_message_t {
     bit<48> timestamp;
     bit<64> order_reference_number;
     bit<8> buy_sell_indicator;
-    bit<32> shares_integer_4;
+    bit<32> shares;
     bit<64> stock;
     bit<32> price;
 }
@@ -151,7 +151,7 @@ header add_order_with_mpid_attribution_message_t {
     bit<48> timestamp;
     bit<64> order_reference_number;
     bit<8> buy_sell_indicator;
-    bit<32> shares_integer_4;
+    bit<32> shares;
     bit<64> stock;
     bit<32> price;
     bit<32> attribution;
@@ -198,7 +198,7 @@ header order_replace_message_t {
     bit<48> timestamp;
     bit<64> original_order_reference_number;
     bit<64> new_order_reference_number;
-    bit<32> shares_integer_4;
+    bit<32> shares;
     bit<32> price;
 }
 
@@ -208,7 +208,7 @@ header trade_message_non_cross_t {
     bit<48> timestamp;
     bit<64> order_reference_number;
     bit<8> buy_sell_indicator;
-    bit<32> shares_integer_4;
+    bit<32> shares;
     bit<64> stock;
     bit<32> price;
     bit<64> match_number;
@@ -218,7 +218,7 @@ header cross_trade_message_t {
     bit<16> stock_locate;
     bit<16> tracking_number;
     bit<48> timestamp;
-    bit<64> shares_integer_8;
+    bit<64> cross_shares;
     bit<64> stock;
     bit<32> cross_price;
     bit<64> match_number;
