@@ -38,7 +38,7 @@ header packet_header_t {
     bit<64> sent_date_time;
 }
 
-header packet_header_message_t {
+header message_t {
     bit<8> message_type;
     bit<16> length;
 }
@@ -559,7 +559,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_message_t packet_header_message[MAX_MESSAGES];
+    message_t message[MAX_MESSAGES];
     market_snapshot_message_t market_snapshot_message[MAX_MESSAGES];
     trade_message_t trade_message[MAX_MESSAGES];
     spot_market_trade_message_t spot_market_trade_message[MAX_MESSAGES];
@@ -609,14 +609,19 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.number_of_msgs) {
-            16w0: parse_packet_header_message_empty;
-            default: parse_packet_header_message;
+            16w0: parse_heartbeat;
+            default: parse_message;
         }
     }
 
-    state parse_packet_header_message {
-        packet.extract(hdr.packet_header_message.next);
-        transition select(hdr.packet_header_message.last.message_type) {
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_message {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
             8w0x43: parse_market_snapshot_message;
             8w0x47: parse_trade_message;
             8w0x59: parse_spot_market_trade_message;
@@ -662,109 +667,109 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
     state parse_market_snapshot_message {
         packet.extract(hdr.market_snapshot_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_spot_market_trade_message {
         packet.extract(hdr.spot_market_trade_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_investigated_trade_message {
         packet.extract(hdr.investigated_trade_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_cancelled_trade_message {
         packet.extract(hdr.cancelled_trade_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_market_statistics_message {
         packet.extract(hdr.market_statistics_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_market_state_change_message {
         packet.extract(hdr.market_state_change_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_system_text_message {
         packet.extract(hdr.system_text_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_open_interest_message {
         packet.extract(hdr.open_interest_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_open_price_message {
         packet.extract(hdr.open_price_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_close_price_message {
         packet.extract(hdr.close_price_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_settlement_price_message {
         packet.extract(hdr.settlement_price_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_index_prices_message {
         packet.extract(hdr.index_prices_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_end_of_day_market_summary_message {
         packet.extract(hdr.end_of_day_market_summary_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_market_event_message {
         packet.extract(hdr.market_event_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_pre_open_price_indicator_message {
         packet.extract(hdr.pre_open_price_indicator_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_strip_info_message {
         packet.extract(hdr.strip_info_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_interval_price_limit_notification_message {
         packet.extract(hdr.interval_price_limit_notification_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_new_futures_strategy_definition_message {
@@ -772,7 +777,7 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
         meta.dispatched = 1;
         meta.new_futures_strategy_definition_message_leg_definition_remaining = hdr.new_futures_strategy_definition_message.last.number_of_leg_definitions;
         transition select(meta.new_futures_strategy_definition_message_leg_definition_remaining) {
-            8w0: parse_packet_header_message;
+            8w0: parse_message;
             default: parse_new_futures_strategy_definition_message_leg_definition;
         }
     }
@@ -781,7 +786,7 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
         packet.extract(hdr.new_futures_strategy_definition_message_leg_definition.next);
         meta.new_futures_strategy_definition_message_leg_definition_remaining = meta.new_futures_strategy_definition_message_leg_definition_remaining - 1;
         transition select(meta.new_futures_strategy_definition_message_leg_definition_remaining) {
-            8w0: parse_packet_header_message;
+            8w0: parse_message;
             default: parse_new_futures_strategy_definition_message_leg_definition;
         }
     }
@@ -789,14 +794,14 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
     state parse_new_expiry_message {
         packet.extract(hdr.new_expiry_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_special_field_message {
         packet.extract(hdr.special_field_message.next);
         meta.dispatched = 1;
         transition select(hdr.special_field_message.last.number_of_special_fields) {
-            8w0: parse_packet_header_message;
+            8w0: parse_message;
             default: parse_special_field_message_special_field;
         }
     }
@@ -810,7 +815,7 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
             8w4: parse_alt_vwap;
             8w5: parse_alt_last_trade_price;
             8w6: parse_aon;
-            default: parse_packet_header_message;
+            default: parse_message;
         }
     }
 
@@ -847,67 +852,67 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
     state parse_market_snapshot_order_message {
         packet.extract(hdr.market_snapshot_order_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_add_or_modify_order_message {
         packet.extract(hdr.add_or_modify_order_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_delete_order_message {
         packet.extract(hdr.delete_order_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_message_bundle_marker {
         packet.extract(hdr.message_bundle_marker.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_fixing_transition_message {
         packet.extract(hdr.fixing_transition_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_fixing_lockdown_message {
         packet.extract(hdr.fixing_lockdown_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_fixing_indicative_price_message_message {
         packet.extract(hdr.fixing_indicative_price_message_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_market_snapshot_price_level_message {
         packet.extract(hdr.market_snapshot_price_level_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_add_price_level_message {
         packet.extract(hdr.add_price_level_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_change_price_level_message {
         packet.extract(hdr.change_price_level_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_delete_price_level_message {
         packet.extract(hdr.delete_price_level_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_new_options_strategy_definition_message {
@@ -933,7 +938,7 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
         packet.extract(hdr.new_options_strategy_definition_message_hedge_definition_header);
         meta.new_options_strategy_definition_message_hedge_definition_remaining = hdr.new_options_strategy_definition_message_hedge_definition_header.number_of_hedge_definitions;
         transition select(meta.new_options_strategy_definition_message_hedge_definition_remaining) {
-            8w0: parse_packet_header_message;
+            8w0: parse_message;
             default: parse_new_options_strategy_definition_message_hedge_definition;
         }
     }
@@ -942,7 +947,7 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
         packet.extract(hdr.new_options_strategy_definition_message_hedge_definition.next);
         meta.new_options_strategy_definition_message_hedge_definition_remaining = meta.new_options_strategy_definition_message_hedge_definition_remaining - 1;
         transition select(meta.new_options_strategy_definition_message_hedge_definition_remaining) {
-            8w0: parse_packet_header_message;
+            8w0: parse_message;
             default: parse_new_options_strategy_definition_message_hedge_definition;
         }
     }
@@ -950,36 +955,31 @@ parser IcefuturesMdfParser(packet_in packet, out headers_t hdr, inout metadata_t
     state parse_new_options_market_definition_message {
         packet.extract(hdr.new_options_market_definition_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_rfq_message {
         packet.extract(hdr.rfq_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_option_open_interest_message {
         packet.extract(hdr.option_open_interest_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_option_settlement_price_message {
         packet.extract(hdr.option_settlement_price_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        transition parse_message;
     }
 
     state parse_old_style_options_trade_and_market_stats_message {
         packet.extract(hdr.old_style_options_trade_and_market_stats_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
-    }
-
-    state parse_packet_header_message_empty {
-        meta.dispatched = 1;
-        transition accept;
+        transition parse_message;
     }
 
 }
@@ -1013,7 +1013,7 @@ control IcefuturesMdfComputeChecksum(inout headers_t hdr, inout metadata_t meta)
 control IcefuturesMdfDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_message);
+        packet.emit(hdr.message);
         packet.emit(hdr.market_snapshot_message);
         packet.emit(hdr.trade_message);
         packet.emit(hdr.spot_market_trade_message);

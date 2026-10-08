@@ -39,12 +39,12 @@ class JnxequitiesPtsV16Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Itch.v1.6/OrderReplacedMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_shortsellingpricerestrictionstatemessage(self):
-        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Itch.v1.6/ShortSellingPriceRestrictionStateMessage.pcap"):
+    def test_secondsmessage(self):
+        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Itch.v1.6/SecondsMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_timestampsecondsmessage(self):
-        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Itch.v1.6/TimestampSecondsMessage.pcap"):
+    def test_shortsellingpricerestrictionstatemessage(self):
+        for payload in payloads.of("omi-data-packets/Jnx/JnxEquities.Pts.Itch.v1.6/ShortSellingPriceRestrictionStateMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

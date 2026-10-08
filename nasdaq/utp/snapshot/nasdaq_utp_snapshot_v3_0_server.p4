@@ -282,10 +282,6 @@ header odd_lot_quote_message_long_form_t {
     bit<32> bolo_best_ask_market_participant_identifier;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_accepted_packet_t {
     bit<80> accepted_session;
     bit<160> accepted_sequence_number;
@@ -321,7 +317,6 @@ struct headers_t {
     quote_message_t quote_message;
     utp_combined_quote_message_long_form_t utp_combined_quote_message_long_form;
     odd_lot_quote_message_long_form_t odd_lot_quote_message_long_form;
-    debug_packet_t debug_packet;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
 }
@@ -488,7 +483,6 @@ parser NasdaqUtpSnapshotServerParser(packet_in packet, out headers_t hdr, inout 
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
         transition accept;
     }
@@ -566,7 +560,6 @@ control NasdaqUtpSnapshotServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.quote_message);
         packet.emit(hdr.utp_combined_quote_message_long_form);
         packet.emit(hdr.odd_lot_quote_message_long_form);
-        packet.emit(hdr.debug_packet);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
     }

@@ -36,10 +36,6 @@ header server_packet_header_t {
     bit<8> server_packet_type;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_accepted_packet_t {
     bit<80> accepted_session;
     bit<160> accepted_sequence_number;
@@ -346,13 +342,16 @@ header stream_status_message_t {
     bit<8> status;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
 
 struct headers_t {
     server_packet_header_t server_packet_header;
-    debug_packet_t debug_packet;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
     sequenced_data_packet_t sequenced_data_packet;
@@ -407,6 +406,7 @@ struct headers_t {
     response_to_mmi_notification_message_t response_to_mmi_notification_message;
     pending_order_message_t pending_order_message;
     stream_status_message_t stream_status_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NordicequitiesOrderentryServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -424,8 +424,8 @@ parser NordicequitiesOrderentryServerParser(packet_in packet, out headers_t hdr,
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.server_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -921,7 +921,7 @@ control NordicequitiesOrderentryServerComputeChecksum(inout headers_t hdr, inout
 control NordicequitiesOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
-        packet.emit(hdr.debug_packet);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
         packet.emit(hdr.sequenced_data_packet);

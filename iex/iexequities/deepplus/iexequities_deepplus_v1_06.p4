@@ -52,7 +52,16 @@ header snapshot_start_message_t {
 }
 
 header snapshot_data_message_t {
-    bit<8> iex_tp_header;
+    bit<8> version;
+    bit<8> reserved;
+    bit<16> message_protocol_id;
+    bit<32> channel_id;
+    bit<32> session_id;
+    bit<16> payload_length;
+    bit<16> message_count;
+    bit<64> stream_offset;
+    bit<64> first_message_sequence_number;
+    bit<64> send_time;
     bit<16> iex_tp_message_block_length;
     bit<16> iex_tp_message_length;
     bit<8> iex_tp_message_type;

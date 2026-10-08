@@ -622,10 +622,6 @@ header symbol_state_inquiry_response_message_t {
     bit<8> symbol_state;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_request_packet_t {
     bit<48> username;
     bit<80> password;
@@ -712,7 +708,6 @@ struct headers_t {
     end_of_day_message_t end_of_day_message;
     sequence_inquiry_response_message_t sequence_inquiry_response_message;
     symbol_state_inquiry_response_message_t symbol_state_inquiry_response_message;
-    debug_packet_t debug_packet;
     login_request_packet_t login_request_packet;
 }
 
@@ -1266,7 +1261,6 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
         transition accept;
     }
@@ -1379,7 +1373,6 @@ control NasdaqUtpInputClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.end_of_day_message);
         packet.emit(hdr.sequence_inquiry_response_message);
         packet.emit(hdr.symbol_state_inquiry_response_message);
-        packet.emit(hdr.debug_packet);
         packet.emit(hdr.login_request_packet);
     }
 }

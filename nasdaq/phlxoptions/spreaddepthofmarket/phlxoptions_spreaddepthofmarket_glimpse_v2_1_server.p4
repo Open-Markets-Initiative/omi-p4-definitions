@@ -36,10 +36,6 @@ header server_packet_header_t {
     bit<8> server_packet_type;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_accepted_packet_t {
     bit<80> accepted_session;
     bit<160> accepted_sequence_number;
@@ -118,6 +114,10 @@ header snapshot_message_t {
     bit<160> sequence_number;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<8> complex_strategy_directory_message_leg_information_remaining;
@@ -125,7 +125,6 @@ struct metadata_t {
 
 struct headers_t {
     server_packet_header_t server_packet_header;
-    debug_packet_t debug_packet;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
     sequenced_data_packet_t sequenced_data_packet;
@@ -136,6 +135,7 @@ struct headers_t {
     add_order_short_form_message_t add_order_short_form_message;
     add_order_long_form_message_t add_order_long_form_message;
     snapshot_message_t snapshot_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser PhlxoptionsSpreaddepthofmarketServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -153,8 +153,8 @@ parser PhlxoptionsSpreaddepthofmarketServerParser(packet_in packet, out headers_
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.server_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -274,7 +274,7 @@ control PhlxoptionsSpreaddepthofmarketServerComputeChecksum(inout headers_t hdr,
 control PhlxoptionsSpreaddepthofmarketServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
-        packet.emit(hdr.debug_packet);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
         packet.emit(hdr.sequenced_data_packet);

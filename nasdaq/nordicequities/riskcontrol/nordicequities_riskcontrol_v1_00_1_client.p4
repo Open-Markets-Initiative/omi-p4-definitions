@@ -36,10 +36,6 @@ header client_packet_header_t {
     bit<8> client_packet_type;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_request_packet_t {
     bit<48> username;
     bit<80> password;
@@ -102,13 +98,16 @@ header modify_account_currency_setting_message_t {
     bit<8> blow_through_protection;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
 
 struct headers_t {
     client_packet_header_t client_packet_header;
-    debug_packet_t debug_packet;
     login_request_packet_t login_request_packet;
     unsequenced_data_packet_t unsequenced_data_packet;
     modify_account_settings_message_t modify_account_settings_message;
@@ -116,6 +115,7 @@ struct headers_t {
     modify_market_segment_restriction_message_t modify_market_segment_restriction_message;
     modify_limit_settings_message_t modify_limit_settings_message;
     modify_account_currency_setting_message_t modify_account_currency_setting_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NordicequitiesRiskcontrolClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -132,8 +132,8 @@ parser NordicequitiesRiskcontrolClientParser(packet_in packet, out headers_t hdr
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.client_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -233,7 +233,7 @@ control NordicequitiesRiskcontrolClientComputeChecksum(inout headers_t hdr, inou
 control NordicequitiesRiskcontrolClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
-        packet.emit(hdr.debug_packet);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
         packet.emit(hdr.modify_account_settings_message);

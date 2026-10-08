@@ -36,10 +36,6 @@ header server_packet_header_t {
     bit<8> server_packet_type;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_accepted_packet_t {
     bit<80> accepted_session;
     bit<160> accepted_sequence_number;
@@ -136,13 +132,16 @@ header order_executed_message_t {
     bit<1> passive_aggressive_indicator;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
 
 struct headers_t {
     server_packet_header_t server_packet_header;
-    debug_packet_t debug_packet;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
     sequenced_data_packet_t sequenced_data_packet;
@@ -151,6 +150,7 @@ struct headers_t {
     order_replaced_message_t order_replaced_message;
     order_cancelled_message_t order_cancelled_message;
     order_executed_message_t order_executed_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser AsxsecuritiesTradeServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -168,8 +168,8 @@ parser AsxsecuritiesTradeServerParser(packet_in packet, out headers_t hdr, inout
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.server_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -269,7 +269,7 @@ control AsxsecuritiesTradeServerComputeChecksum(inout headers_t hdr, inout metad
 control AsxsecuritiesTradeServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
-        packet.emit(hdr.debug_packet);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
         packet.emit(hdr.sequenced_data_packet);

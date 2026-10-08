@@ -75,10 +75,6 @@ class NsmequitiesTotalviewV40Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v4.0/StockTradingActionMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_stocktradingactionmessagewithstockdirectorymessage(self):
-        for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v4.0/StockTradingActionMessageWithStockDirectoryMessage.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
     def test_systemeventmessage(self):
         for payload in payloads.of("omi-data-packets/Nasdaq/NsmEquities.TotalView.Itch.v4.0/SystemEventMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")

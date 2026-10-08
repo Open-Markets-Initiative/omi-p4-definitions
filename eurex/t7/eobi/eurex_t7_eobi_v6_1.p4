@@ -35,12 +35,12 @@ header packet_header_t {
     bit<16> body_len;
     bit<16> template_id;
     bit<32> msg_seq_num;
-    bit<64> appl_seq_num;
+    bit<32> appl_seq_num;
     bit<32> market_segment_id;
     bit<8> partition_id;
     bit<8> completion_indicator;
     bit<8> appl_seq_reset_indicator;
-    bit<8> pad_1;
+    bit<40> pad5;
     bit<64> transact_time;
     bit<16> body_len_2;
     bit<16> template_id_2;
@@ -54,7 +54,7 @@ header add_complex_instrument_t {
     bit<8> product_complex;
     bit<8> implied_market_indicator;
     bit<8> no_legs;
-    bit<8> pad_1;
+    bit<8> pad1;
 }
 
 header add_complex_instrument_instrmt_leg_grp_comp_t {

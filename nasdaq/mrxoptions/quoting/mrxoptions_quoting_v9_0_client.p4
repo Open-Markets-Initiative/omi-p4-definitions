@@ -36,10 +36,6 @@ header client_packet_header_t {
     bit<8> client_packet_type;
 }
 
-header debug_packet_t {
-    bit<8> debug_text;
-}
-
 header login_request_packet_t {
     bit<48> username;
     bit<80> password;
@@ -255,7 +251,6 @@ struct metadata_t {
 
 struct headers_t {
     client_packet_header_t client_packet_header;
-    debug_packet_t debug_packet;
     login_request_packet_t login_request_packet;
     unsequenced_data_packet_t unsequenced_data_packet;
     notification_subscription_request_message_t notification_subscription_request_message;
@@ -296,7 +291,6 @@ parser MrxoptionsQuotingClientParser(packet_in packet, out headers_t hdr, inout 
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
         transition accept;
     }
@@ -552,7 +546,6 @@ control MrxoptionsQuotingClientComputeChecksum(inout headers_t hdr, inout metada
 control MrxoptionsQuotingClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
-        packet.emit(hdr.debug_packet);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
         packet.emit(hdr.notification_subscription_request_message);
