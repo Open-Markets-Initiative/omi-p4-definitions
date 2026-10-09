@@ -10,7 +10,7 @@ sys.path.insert(0, ".github/tests")
 import payloads
 import switch
 
-PROGRAM = "nyse/nyseequities/binarygateway/nyseequities_binarygateway_v5_17.p4"
+PROGRAM = "nyse/nyseequities/binarygateway/nyseequities_binarygateway_v5_17_clientpillarmessage.p4"
 JSON = os.path.join(os.environ.get("RUNNER_TEMP", "/tmp"), "nyseequities_binarygateway_v5_17.json")
 P4C = os.environ.get("P4C", "p4c-bm2-ss")
 

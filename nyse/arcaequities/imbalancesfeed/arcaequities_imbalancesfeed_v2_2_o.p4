@@ -74,7 +74,8 @@ header symbol_index_mapping_message_t {
     bit<8> round_lot;
     bit<16> mpv;
     bit<16> unit_of_trade;
-    bit<16> reserved_2;
+    bit<8> late_close_eligible;
+    bit<8> eth_eligible;
 }
 
 header symbol_clear_message_t {
