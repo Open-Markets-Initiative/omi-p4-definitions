@@ -39,11 +39,6 @@ header message_header_t {
     bit<16> version;
 }
 
-header login_request_message_t {
-    bit<128> logon_id;
-    bit<256> token;
-}
-
 header login_response_message_t {
     bit<128> logon_id;
     bit<8> status;
@@ -72,19 +67,9 @@ header sequenced_message_header_message_t {
     bit<64> timestamp;
 }
 
-header subsession_join_message_t {
-    bit<64> subsession_id;
-    bit<32> start_sequence;
-    bit<32> end_sequence;
-}
-
 header subsession_join_response_message_t {
     bit<64> subsession_id;
     bit<8> status;
-}
-
-header subsession_leave_message_t {
-    bit<64> subsession_id;
 }
 
 header subsession_leave_response_message_t {
@@ -99,41 +84,35 @@ struct metadata_t {
 
 struct headers_t {
     message_header_t message_header;
-    login_request_message_t login_request_message;
     login_response_message_t login_response_message;
     gateway_heartbeat_message_t gateway_heartbeat_message;
     gateway_heartbeat_message_sub_sessions_group_t gateway_heartbeat_message_sub_sessions_group[MAX_MESSAGES];
     terminate_message_t terminate_message;
     sequenced_message_header_message_t sequenced_message_header_message;
-    subsession_join_message_t subsession_join_message;
     subsession_join_response_message_t subsession_join_response_message;
-    subsession_leave_message_t subsession_leave_message;
     subsession_leave_response_message_t subsession_leave_response_message;
 }
 
 parser IexoptionsSessionServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
-            16w0x100: parse_login_request_message;
-            16w0x200: parse_login_response_message;
-            16w0x300: parse_gateway_heartbeat_message;
-            16w0x400: parse_client_heartbeat_message;
-            16w0x500: parse_logout_request_message;
-            16w0x600: parse_terminate_message;
-            16w0x700: parse_sequenced_message_header_message;
-            16w0x800: parse_subsession_join_message;
-            16w0x900: parse_subsession_join_response_message;
-            16w0xa00: parse_subsession_leave_message;
-            16w0xb00: parse_subsession_leave_response_message;
+        transition select(hdr.message_header.schema_id) {
+            16w0x204e: parse_server_session_message;
             default: accept;
         }
     }
 
-    state parse_login_request_message {
-        packet.extract(hdr.login_request_message);
+    state parse_server_session_message {
         meta.dispatched = 1;
-        transition accept;
+        transition select(hdr.message_header.template_id) {
+            16w0x200: parse_login_response_message;
+            16w0x300: parse_gateway_heartbeat_message;
+            16w0x600: parse_terminate_message;
+            16w0x700: parse_sequenced_message_header_message;
+            16w0x900: parse_subsession_join_response_message;
+            16w0xb00: parse_subsession_leave_response_message;
+            default: accept;
+        }
     }
 
     state parse_login_response_message {
@@ -161,16 +140,6 @@ parser IexoptionsSessionServerParser(packet_in packet, out headers_t hdr, inout 
         }
     }
 
-    state parse_client_heartbeat_message {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_logout_request_message {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
     state parse_terminate_message {
         packet.extract(hdr.terminate_message);
         meta.dispatched = 1;
@@ -183,20 +152,8 @@ parser IexoptionsSessionServerParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
-    state parse_subsession_join_message {
-        packet.extract(hdr.subsession_join_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
     state parse_subsession_join_response_message {
         packet.extract(hdr.subsession_join_response_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_subsession_leave_message {
-        packet.extract(hdr.subsession_leave_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -238,15 +195,12 @@ control IexoptionsSessionServerComputeChecksum(inout headers_t hdr, inout metada
 control IexoptionsSessionServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.message_header);
-        packet.emit(hdr.login_request_message);
         packet.emit(hdr.login_response_message);
         packet.emit(hdr.gateway_heartbeat_message);
         packet.emit(hdr.gateway_heartbeat_message_sub_sessions_group);
         packet.emit(hdr.terminate_message);
         packet.emit(hdr.sequenced_message_header_message);
-        packet.emit(hdr.subsession_join_message);
         packet.emit(hdr.subsession_join_response_message);
-        packet.emit(hdr.subsession_leave_message);
         packet.emit(hdr.subsession_leave_response_message);
     }
 }

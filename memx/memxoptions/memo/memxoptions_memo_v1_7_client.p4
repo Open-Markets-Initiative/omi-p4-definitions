@@ -284,6 +284,18 @@ header mass_cancel_clear_lockout_request_message_t {
     bit<64> lockout_id;
 }
 
+header mass_cancel_bulk_clear_all_lockouts_request_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+}
+
+header mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<32> efid_optional;
+    bit<48> underlier_optional;
+}
+
 header allocation_instruction_message_t {
     bit<64> sending_time;
     bit<160> alloc_id;
@@ -312,18 +324,6 @@ header allocation_instruction_message_requested_allocations_group_t {
     bit<8> alloc_position_effect;
     bit<8> block_length_short;
     bit<8> num_in_group;
-}
-
-header mass_cancel_bulk_clear_all_lockouts_request_message_t {
-    bit<64> sending_time;
-    bit<160> clordid;
-}
-
-header mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message_t {
-    bit<64> sending_time;
-    bit<160> clordid;
-    bit<32> efid_optional;
-    bit<48> underlier_optional;
 }
 
 struct metadata_t {
@@ -370,12 +370,12 @@ struct headers_t {
     order_cancel_request_message_t order_cancel_request_message;
     mass_cancel_request_message_t mass_cancel_request_message;
     mass_cancel_clear_lockout_request_message_t mass_cancel_clear_lockout_request_message;
+    mass_cancel_bulk_clear_all_lockouts_request_message_t mass_cancel_bulk_clear_all_lockouts_request_message;
+    mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message_t mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message;
     allocation_instruction_message_t allocation_instruction_message;
     allocation_instruction_message_execution_allocations_group_t allocation_instruction_message_execution_allocations_group[MAX_MESSAGES];
     allocation_instruction_message_requested_allocations_group_header_t allocation_instruction_message_requested_allocations_group_header;
     allocation_instruction_message_requested_allocations_group_t allocation_instruction_message_requested_allocations_group[MAX_MESSAGES];
-    mass_cancel_bulk_clear_all_lockouts_request_message_t mass_cancel_bulk_clear_all_lockouts_request_message;
-    mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message_t mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message;
 }
 
 parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -428,9 +428,9 @@ parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout me
             8w7: parse_order_cancel_request_message;
             8w8: parse_mass_cancel_request_message;
             8w9: parse_mass_cancel_clear_lockout_request_message;
-            8w10: parse_allocation_instruction_message;
             8w32: parse_mass_cancel_bulk_clear_all_lockouts_request_message;
             8w33: parse_mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message;
+            8w10: parse_allocation_instruction_message;
             default: accept;
         }
     }
@@ -626,6 +626,18 @@ parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout me
         transition accept;
     }
 
+    state parse_mass_cancel_bulk_clear_all_lockouts_request_message {
+        packet.extract(hdr.mass_cancel_bulk_clear_all_lockouts_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message {
+        packet.extract(hdr.mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_allocation_instruction_message {
         packet.extract(hdr.allocation_instruction_message);
         meta.dispatched = 1;
@@ -661,18 +673,6 @@ parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout me
             8w0: accept;
             default: parse_allocation_instruction_message_requested_allocations_group;
         }
-    }
-
-    state parse_mass_cancel_bulk_clear_all_lockouts_request_message {
-        packet.extract(hdr.mass_cancel_bulk_clear_all_lockouts_request_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message {
-        packet.extract(hdr.mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message);
-        meta.dispatched = 1;
-        transition accept;
     }
 
 }
@@ -733,12 +733,12 @@ control MemxoptionsMemoClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.order_cancel_request_message);
         packet.emit(hdr.mass_cancel_request_message);
         packet.emit(hdr.mass_cancel_clear_lockout_request_message);
+        packet.emit(hdr.mass_cancel_bulk_clear_all_lockouts_request_message);
+        packet.emit(hdr.mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message);
         packet.emit(hdr.allocation_instruction_message);
         packet.emit(hdr.allocation_instruction_message_execution_allocations_group);
         packet.emit(hdr.allocation_instruction_message_requested_allocations_group_header);
         packet.emit(hdr.allocation_instruction_message_requested_allocations_group);
-        packet.emit(hdr.mass_cancel_bulk_clear_all_lockouts_request_message);
-        packet.emit(hdr.mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message);
     }
 }
 

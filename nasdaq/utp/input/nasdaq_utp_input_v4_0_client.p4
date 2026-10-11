@@ -629,6 +629,10 @@ header login_request_packet_t {
     bit<160> requested_sequence_number;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_remaining;
@@ -709,6 +713,7 @@ struct headers_t {
     sequence_inquiry_response_message_t sequence_inquiry_response_message;
     symbol_state_inquiry_response_message_t symbol_state_inquiry_response_message;
     login_request_packet_t login_request_packet;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -1262,6 +1267,7 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_debug_packet {
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.client_tcp_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -1373,6 +1379,7 @@ control NasdaqUtpInputClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.end_of_day_message);
         packet.emit(hdr.sequence_inquiry_response_message);
         packet.emit(hdr.symbol_state_inquiry_response_message);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_request_packet);
     }
 }

@@ -104,6 +104,10 @@ header cancel_order_message_t {
     bit<48> shares;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
@@ -115,6 +119,7 @@ struct headers_t {
     enter_order_message_t enter_order_message;
     enter_order_message_with_cross_functionality_t enter_order_message_with_cross_functionality;
     cancel_order_message_t cancel_order_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NtxequitiesRashClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -132,6 +137,7 @@ parser NtxequitiesRashClientParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_debug_packet {
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.client_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -211,6 +217,7 @@ control NtxequitiesRashClientComputeChecksum(inout headers_t hdr, inout metadata
 control NtxequitiesRashClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
         packet.emit(hdr.enter_order_message);

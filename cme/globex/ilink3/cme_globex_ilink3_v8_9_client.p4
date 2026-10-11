@@ -346,6 +346,24 @@ header party_details_list_request_party_ids_group_t {
     bit<16> party_role;
 }
 
+header execution_ack_t {
+    bit<64> party_details_list_req_id;
+    bit<64> order_id;
+    bit<8> exec_ack_status;
+    bit<32> seq_num;
+    bit<160> clordid;
+    bit<64> sec_exec_id;
+    bit<64> last_px;
+    bit<32> security_id;
+    bit<32> last_qty;
+    bit<8> dk_reason;
+    bit<8> side;
+    bit<160> sender_id;
+    bit<64> sending_time_epoch;
+    bit<40> location;
+    bit<8> manual_order_indicator;
+}
+
 header request_for_quote_t {
     bit<64> party_details_list_req_id;
     bit<64> quote_req_id;
@@ -425,6 +443,111 @@ header security_definition_request_broken_dates_request_group_t {
     bit<16> broken_date_end;
 }
 
+header request_for_cross_t {
+    bit<64> cross_id;
+    bit<64> order_request_id;
+    bit<8> manual_order_indicator;
+    bit<32> seq_num;
+    bit<160> sender_id;
+    bit<8> cross_type;
+    bit<64> price;
+    bit<64> sending_time_epoch;
+    bit<40> location;
+    bit<32> security_id;
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header request_for_cross_sides_group_t {
+    bit<160> clordid;
+    bit<64> party_details_list_req_id;
+    bit<32> order_qty;
+    bit<8> side;
+    bit<8> side_time_in_force;
+}
+
+header mass_quote_request_t {
+    bit<64> party_details_list_req_id;
+    bit<64> sending_time_epoch;
+    bit<8> manual_order_indicator;
+    bit<32> seq_num;
+    bit<160> sender_id;
+    bit<64> quote_req_id_optional;
+    bit<40> location;
+    bit<32> quote_id;
+    bit<8> tot_no_quote_entries;
+    bit<8> mm_protection_reset;
+    bit<8> liquidity_flag;
+    bit<8> short_sale_type;
+    bit<8> quote_entry_open;
+    bit<8> quote_entry_control;
+    bit<480> reserved_60;
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header mass_quote_request_mass_quote_request_entries_group_t {
+    bit<32> security_id;
+    bit<64> price;
+    bit<32> order_qty;
+    bit<8> side_side;
+    bit<32> quote_entry_id;
+    bit<16> quote_set_id;
+}
+
+header quote_cancel_by_set_t {
+    bit<64> party_details_list_req_id;
+    bit<64> sending_time_epoch;
+    bit<8> manual_order_indicator;
+    bit<32> seq_num;
+    bit<160> sender_id;
+    bit<40> location;
+    bit<32> quote_id;
+    bit<8> cxl_linked_sessions;
+    bit<8> quote_entry_control;
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header quote_cancel_by_set_quote_cancel_by_set_entries_group_t {
+    bit<16> quote_set_id;
+}
+
+header quote_cancel_by_group_t {
+    bit<64> party_details_list_req_id;
+    bit<64> sending_time_epoch;
+    bit<8> manual_order_indicator;
+    bit<32> seq_num;
+    bit<160> sender_id;
+    bit<40> location;
+    bit<32> quote_id;
+    bit<8> cxl_linked_sessions;
+    bit<8> quote_entry_control;
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header quote_cancel_by_group_quote_cancel_by_group_entries_group_t {
+    bit<48> security_group;
+}
+
+header quote_cancel_by_instrument_t {
+    bit<64> party_details_list_req_id;
+    bit<64> sending_time_epoch;
+    bit<8> manual_order_indicator;
+    bit<32> seq_num;
+    bit<160> sender_id;
+    bit<40> location;
+    bit<32> quote_id;
+    bit<8> cxl_linked_sessions;
+    bit<16> block_length;
+    bit<8> num_in_group;
+}
+
+header quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_t {
+    bit<32> security_id;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<8> mass_quote_quote_entries_group_remaining;
@@ -438,6 +561,11 @@ struct metadata_t {
     bit<8> new_order_cross_sides_group_remaining;
     bit<8> security_definition_request_request_legs_group_remaining;
     bit<8> security_definition_request_broken_dates_request_group_remaining;
+    bit<8> request_for_cross_sides_group_remaining;
+    bit<8> mass_quote_request_mass_quote_request_entries_group_remaining;
+    bit<8> quote_cancel_by_set_quote_cancel_by_set_entries_group_remaining;
+    bit<8> quote_cancel_by_group_quote_cancel_by_group_entries_group_remaining;
+    bit<8> quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_remaining;
 }
 
 struct headers_t {
@@ -467,6 +595,7 @@ struct headers_t {
     party_details_list_request_requesting_party_ids_group_t party_details_list_request_requesting_party_ids_group[MAX_MESSAGES];
     party_details_list_request_party_ids_group_header_t party_details_list_request_party_ids_group_header;
     party_details_list_request_party_ids_group_t party_details_list_request_party_ids_group[MAX_MESSAGES];
+    execution_ack_t execution_ack;
     request_for_quote_t request_for_quote;
     request_for_quote_related_sym_group_t request_for_quote_related_sym_group[MAX_MESSAGES];
     new_order_cross_t new_order_cross;
@@ -475,6 +604,16 @@ struct headers_t {
     security_definition_request_request_legs_group_t security_definition_request_request_legs_group[MAX_MESSAGES];
     security_definition_request_broken_dates_request_group_header_t security_definition_request_broken_dates_request_group_header;
     security_definition_request_broken_dates_request_group_t security_definition_request_broken_dates_request_group[MAX_MESSAGES];
+    request_for_cross_t request_for_cross;
+    request_for_cross_sides_group_t request_for_cross_sides_group[MAX_MESSAGES];
+    mass_quote_request_t mass_quote_request;
+    mass_quote_request_mass_quote_request_entries_group_t mass_quote_request_mass_quote_request_entries_group[MAX_MESSAGES];
+    quote_cancel_by_set_t quote_cancel_by_set;
+    quote_cancel_by_set_quote_cancel_by_set_entries_group_t quote_cancel_by_set_quote_cancel_by_set_entries_group[MAX_MESSAGES];
+    quote_cancel_by_group_t quote_cancel_by_group;
+    quote_cancel_by_group_quote_cancel_by_group_entries_group_t quote_cancel_by_group_quote_cancel_by_group_entries_group[MAX_MESSAGES];
+    quote_cancel_by_instrument_t quote_cancel_by_instrument;
+    quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_t quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group[MAX_MESSAGES];
 }
 
 parser CmeGlobexIlink3ClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -496,9 +635,15 @@ parser CmeGlobexIlink3ClientParser(packet_in packet, out headers_t hdr, inout me
             16w0x1202: parse_order_mass_status_request;
             16w0x1502: parse_order_status_request;
             16w0x1902: parse_party_details_list_request;
+            16w0x1b02: parse_execution_ack;
             16w0x1f02: parse_request_for_quote;
             16w0x2002: parse_new_order_cross;
             16w0x3002: parse_security_definition_request;
+            16w0x3602: parse_request_for_cross;
+            16w0x3702: parse_mass_quote_request;
+            16w0x3802: parse_quote_cancel_by_set;
+            16w0x3902: parse_quote_cancel_by_group;
+            16w0x3a02: parse_quote_cancel_by_instrument;
             default: accept;
         }
     }
@@ -699,6 +844,12 @@ parser CmeGlobexIlink3ClientParser(packet_in packet, out headers_t hdr, inout me
         }
     }
 
+    state parse_execution_ack {
+        packet.extract(hdr.execution_ack);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_request_for_quote {
         packet.extract(hdr.request_for_quote);
         meta.dispatched = 1;
@@ -774,6 +925,101 @@ parser CmeGlobexIlink3ClientParser(packet_in packet, out headers_t hdr, inout me
         }
     }
 
+    state parse_request_for_cross {
+        packet.extract(hdr.request_for_cross);
+        meta.dispatched = 1;
+        meta.request_for_cross_sides_group_remaining = hdr.request_for_cross.num_in_group;
+        transition select(meta.request_for_cross_sides_group_remaining) {
+            8w0: accept;
+            default: parse_request_for_cross_sides_group;
+        }
+    }
+
+    state parse_request_for_cross_sides_group {
+        packet.extract(hdr.request_for_cross_sides_group.next);
+        meta.request_for_cross_sides_group_remaining = meta.request_for_cross_sides_group_remaining - 1;
+        transition select(meta.request_for_cross_sides_group_remaining) {
+            8w0: accept;
+            default: parse_request_for_cross_sides_group;
+        }
+    }
+
+    state parse_mass_quote_request {
+        packet.extract(hdr.mass_quote_request);
+        meta.dispatched = 1;
+        meta.mass_quote_request_mass_quote_request_entries_group_remaining = hdr.mass_quote_request.num_in_group;
+        transition select(meta.mass_quote_request_mass_quote_request_entries_group_remaining) {
+            8w0: accept;
+            default: parse_mass_quote_request_mass_quote_request_entries_group;
+        }
+    }
+
+    state parse_mass_quote_request_mass_quote_request_entries_group {
+        packet.extract(hdr.mass_quote_request_mass_quote_request_entries_group.next);
+        meta.mass_quote_request_mass_quote_request_entries_group_remaining = meta.mass_quote_request_mass_quote_request_entries_group_remaining - 1;
+        transition select(meta.mass_quote_request_mass_quote_request_entries_group_remaining) {
+            8w0: accept;
+            default: parse_mass_quote_request_mass_quote_request_entries_group;
+        }
+    }
+
+    state parse_quote_cancel_by_set {
+        packet.extract(hdr.quote_cancel_by_set);
+        meta.dispatched = 1;
+        meta.quote_cancel_by_set_quote_cancel_by_set_entries_group_remaining = hdr.quote_cancel_by_set.num_in_group;
+        transition select(meta.quote_cancel_by_set_quote_cancel_by_set_entries_group_remaining) {
+            8w0: accept;
+            default: parse_quote_cancel_by_set_quote_cancel_by_set_entries_group;
+        }
+    }
+
+    state parse_quote_cancel_by_set_quote_cancel_by_set_entries_group {
+        packet.extract(hdr.quote_cancel_by_set_quote_cancel_by_set_entries_group.next);
+        meta.quote_cancel_by_set_quote_cancel_by_set_entries_group_remaining = meta.quote_cancel_by_set_quote_cancel_by_set_entries_group_remaining - 1;
+        transition select(meta.quote_cancel_by_set_quote_cancel_by_set_entries_group_remaining) {
+            8w0: accept;
+            default: parse_quote_cancel_by_set_quote_cancel_by_set_entries_group;
+        }
+    }
+
+    state parse_quote_cancel_by_group {
+        packet.extract(hdr.quote_cancel_by_group);
+        meta.dispatched = 1;
+        meta.quote_cancel_by_group_quote_cancel_by_group_entries_group_remaining = hdr.quote_cancel_by_group.num_in_group;
+        transition select(meta.quote_cancel_by_group_quote_cancel_by_group_entries_group_remaining) {
+            8w0: accept;
+            default: parse_quote_cancel_by_group_quote_cancel_by_group_entries_group;
+        }
+    }
+
+    state parse_quote_cancel_by_group_quote_cancel_by_group_entries_group {
+        packet.extract(hdr.quote_cancel_by_group_quote_cancel_by_group_entries_group.next);
+        meta.quote_cancel_by_group_quote_cancel_by_group_entries_group_remaining = meta.quote_cancel_by_group_quote_cancel_by_group_entries_group_remaining - 1;
+        transition select(meta.quote_cancel_by_group_quote_cancel_by_group_entries_group_remaining) {
+            8w0: accept;
+            default: parse_quote_cancel_by_group_quote_cancel_by_group_entries_group;
+        }
+    }
+
+    state parse_quote_cancel_by_instrument {
+        packet.extract(hdr.quote_cancel_by_instrument);
+        meta.dispatched = 1;
+        meta.quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_remaining = hdr.quote_cancel_by_instrument.num_in_group;
+        transition select(meta.quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_remaining) {
+            8w0: accept;
+            default: parse_quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group;
+        }
+    }
+
+    state parse_quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group {
+        packet.extract(hdr.quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group.next);
+        meta.quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_remaining = meta.quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_remaining - 1;
+        transition select(meta.quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group_remaining) {
+            8w0: accept;
+            default: parse_quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group;
+        }
+    }
+
 }
 
 control CmeGlobexIlink3ClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -830,6 +1076,7 @@ control CmeGlobexIlink3ClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.party_details_list_request_requesting_party_ids_group);
         packet.emit(hdr.party_details_list_request_party_ids_group_header);
         packet.emit(hdr.party_details_list_request_party_ids_group);
+        packet.emit(hdr.execution_ack);
         packet.emit(hdr.request_for_quote);
         packet.emit(hdr.request_for_quote_related_sym_group);
         packet.emit(hdr.new_order_cross);
@@ -838,6 +1085,16 @@ control CmeGlobexIlink3ClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.security_definition_request_request_legs_group);
         packet.emit(hdr.security_definition_request_broken_dates_request_group_header);
         packet.emit(hdr.security_definition_request_broken_dates_request_group);
+        packet.emit(hdr.request_for_cross);
+        packet.emit(hdr.request_for_cross_sides_group);
+        packet.emit(hdr.mass_quote_request);
+        packet.emit(hdr.mass_quote_request_mass_quote_request_entries_group);
+        packet.emit(hdr.quote_cancel_by_set);
+        packet.emit(hdr.quote_cancel_by_set_quote_cancel_by_set_entries_group);
+        packet.emit(hdr.quote_cancel_by_group);
+        packet.emit(hdr.quote_cancel_by_group_quote_cancel_by_group_entries_group);
+        packet.emit(hdr.quote_cancel_by_instrument);
+        packet.emit(hdr.quote_cancel_by_instrument_quote_cancel_by_instrument_entries_group);
     }
 }
 

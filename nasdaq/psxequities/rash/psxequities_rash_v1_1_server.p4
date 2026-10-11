@@ -131,6 +131,10 @@ header broken_trade_message_t {
     bit<8> broken_trade_reason;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
@@ -147,6 +151,7 @@ struct headers_t {
     rejected_order_message_t rejected_order_message;
     executed_order_message_t executed_order_message;
     broken_trade_message_t broken_trade_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser PsxequitiesRashServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -165,6 +170,7 @@ parser PsxequitiesRashServerParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_debug_packet {
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.server_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -278,6 +284,7 @@ control PsxequitiesRashServerComputeChecksum(inout headers_t hdr, inout metadata
 control PsxequitiesRashServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
         packet.emit(hdr.sequenced_data_packet);

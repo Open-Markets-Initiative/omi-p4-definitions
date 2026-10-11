@@ -241,23 +241,6 @@ header utp_combined_quote_message_long_form_t {
     bit<8> bolo_appendage_indicator;
     bit<8> odd_lot_attachment_type;
     bit<16> odd_lot_attachment_count;
-    bit<8> nbbo_quote_condition;
-    bit<8> national_best_bid_market_center;
-    bit<64> national_best_bid_price;
-    bit<32> national_best_bid_size;
-    bit<8> national_best_ask_market_center;
-    bit<64> national_best_ask_price;
-    bit<32> national_best_ask_size;
-    bit<32> bid_adf_mpid;
-    bit<32> ask_adf_mpid;
-    bit<8> bolo_best_bid_market_center;
-    bit<64> bolo_bid_price;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<64> bolo_ask_price;
-    bit<16> bolo_ask_size;
-    bit<32> bolo_best_bid_market_participant_identifier;
-    bit<32> bolo_best_ask_market_participant_identifier;
 }
 
 header odd_lot_quote_message_long_form_t {
@@ -272,14 +255,6 @@ header odd_lot_quote_message_long_form_t {
     bit<8> bolo_appendage_indicator;
     bit<8> odd_lot_attachment_type;
     bit<16> odd_lot_attachment_count;
-    bit<8> bolo_best_bid_market_center;
-    bit<64> bolo_bid_price;
-    bit<16> bolo_bid_size;
-    bit<8> bolo_best_ask_market_center;
-    bit<64> bolo_ask_price;
-    bit<16> bolo_ask_size;
-    bit<32> bolo_best_bid_market_participant_identifier;
-    bit<32> bolo_best_ask_market_participant_identifier;
 }
 
 header login_accepted_packet_t {
@@ -289,6 +264,10 @@ header login_accepted_packet_t {
 
 header login_rejected_packet_t {
     bit<8> reject_reason_code;
+}
+
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
 }
 
 struct metadata_t {
@@ -319,6 +298,7 @@ struct headers_t {
     odd_lot_quote_message_long_form_t odd_lot_quote_message_long_form;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NasdaqUtpSnapshotServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -484,6 +464,7 @@ parser NasdaqUtpSnapshotServerParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_debug_packet {
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.server_tcp_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -560,6 +541,7 @@ control NasdaqUtpSnapshotServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.quote_message);
         packet.emit(hdr.utp_combined_quote_message_long_form);
         packet.emit(hdr.odd_lot_quote_message_long_form);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
     }

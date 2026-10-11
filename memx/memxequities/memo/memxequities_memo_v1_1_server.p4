@@ -44,6 +44,10 @@ header login_rejected_message_t {
     bit<8> login_reject_code;
 }
 
+header start_of_session_message_t {
+    bit<64> session_id;
+}
+
 header replay_begin_message_t {
     bit<64> next_sequence_number;
     bit<32> pending_message_count;
@@ -332,6 +336,7 @@ struct headers_t {
     common_header_t common_header;
     login_accepted_message_t login_accepted_message;
     login_rejected_message_t login_rejected_message;
+    start_of_session_message_t start_of_session_message;
     replay_begin_message_t replay_begin_message;
     replay_rejected_message_t replay_rejected_message;
     replay_complete_message_t replay_complete_message;
@@ -362,6 +367,7 @@ parser MemxequitiesMemoServerParser(packet_in packet, out headers_t hdr, inout m
         transition select(hdr.common_header.message_type) {
             8w1: parse_login_accepted_message;
             8w2: parse_login_rejected_message;
+            8w3: parse_start_of_session_message;
             8w5: parse_replay_begin_message;
             8w6: parse_replay_rejected_message;
             8w7: parse_replay_complete_message;
@@ -381,6 +387,12 @@ parser MemxequitiesMemoServerParser(packet_in packet, out headers_t hdr, inout m
 
     state parse_login_rejected_message {
         packet.extract(hdr.login_rejected_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_start_of_session_message {
+        packet.extract(hdr.start_of_session_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -567,6 +579,7 @@ control MemxequitiesMemoServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.common_header);
         packet.emit(hdr.login_accepted_message);
         packet.emit(hdr.login_rejected_message);
+        packet.emit(hdr.start_of_session_message);
         packet.emit(hdr.replay_begin_message);
         packet.emit(hdr.replay_rejected_message);
         packet.emit(hdr.replay_complete_message);

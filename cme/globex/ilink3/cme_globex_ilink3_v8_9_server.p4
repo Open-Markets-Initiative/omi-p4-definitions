@@ -804,24 +804,6 @@ header party_details_list_report_trd_reg_publications_group_t {
     bit<8> trd_reg_publication_reason;
 }
 
-header execution_ack_t {
-    bit<64> party_details_list_req_id;
-    bit<64> order_id;
-    bit<8> exec_ack_status;
-    bit<32> seq_num;
-    bit<160> clordid;
-    bit<64> sec_exec_id;
-    bit<64> last_px;
-    bit<32> security_id;
-    bit<32> last_qty;
-    bit<8> dk_reason;
-    bit<8> side;
-    bit<160> sender_id;
-    bit<64> sending_time_epoch;
-    bit<40> location;
-    bit<8> manual_order_indicator;
-}
-
 header mass_quote_ack_t {
     bit<32> seq_num;
     bit<64> uuid;
@@ -1420,7 +1402,6 @@ struct headers_t {
     party_details_list_report_party_details_group_t party_details_list_report_party_details_group[MAX_MESSAGES];
     party_details_list_report_trd_reg_publications_group_header_t party_details_list_report_trd_reg_publications_group_header;
     party_details_list_report_trd_reg_publications_group_t party_details_list_report_trd_reg_publications_group[MAX_MESSAGES];
-    execution_ack_t execution_ack;
     mass_quote_ack_t mass_quote_ack;
     mass_quote_ack_quote_ack_entries_group_t mass_quote_ack_quote_ack_entries_group[MAX_MESSAGES];
     request_for_quote_ack_t request_for_quote_ack;
@@ -1481,7 +1462,6 @@ parser CmeGlobexIlink3ServerParser(packet_in packet, out headers_t hdr, inout me
             16w0x1702: parse_order_cancel_reject;
             16w0x1802: parse_order_cancel_replace_reject;
             16w0x1a02: parse_party_details_list_report;
-            16w0x1b02: parse_execution_ack;
             16w0x2102: parse_mass_quote_ack;
             16w0x2202: parse_request_for_quote_ack;
             16w0x2402: parse_execution_report_trade_addendum_outright;
@@ -1806,12 +1786,6 @@ parser CmeGlobexIlink3ServerParser(packet_in packet, out headers_t hdr, inout me
             8w0: accept;
             default: parse_party_details_list_report_trd_reg_publications_group;
         }
-    }
-
-    state parse_execution_ack {
-        packet.extract(hdr.execution_ack);
-        meta.dispatched = 1;
-        transition accept;
     }
 
     state parse_mass_quote_ack {
@@ -2163,7 +2137,6 @@ control CmeGlobexIlink3ServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.party_details_list_report_party_details_group);
         packet.emit(hdr.party_details_list_report_trd_reg_publications_group_header);
         packet.emit(hdr.party_details_list_report_trd_reg_publications_group);
-        packet.emit(hdr.execution_ack);
         packet.emit(hdr.mass_quote_ack);
         packet.emit(hdr.mass_quote_ack_quote_ack_entries_group);
         packet.emit(hdr.request_for_quote_ack);

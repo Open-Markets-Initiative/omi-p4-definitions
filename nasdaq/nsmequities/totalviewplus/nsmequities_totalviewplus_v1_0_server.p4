@@ -264,6 +264,10 @@ header direct_listing_with_capital_raise_price_discovery_message_t {
     bit<32> upper_price_range_collar;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
@@ -296,6 +300,7 @@ struct headers_t {
     net_order_imbalance_indicator_message_t net_order_imbalance_indicator_message;
     retail_price_improvement_indicator_message_t retail_price_improvement_indicator_message;
     direct_listing_with_capital_raise_price_discovery_message_t direct_listing_with_capital_raise_price_discovery_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NsmequitiesTotalviewplusServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -314,6 +319,7 @@ parser NsmequitiesTotalviewplusServerParser(packet_in packet, out headers_t hdr,
 
     state parse_debug_packet {
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.server_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -539,6 +545,7 @@ control NsmequitiesTotalviewplusServerComputeChecksum(inout headers_t hdr, inout
 control NsmequitiesTotalviewplusServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
         packet.emit(hdr.sequenced_data_packet);

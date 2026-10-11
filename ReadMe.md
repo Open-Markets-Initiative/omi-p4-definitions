@@ -22,7 +22,7 @@ Updates are greatly appreciated; however, this entire repository is source gener
 
 | Protocol Count | Generated Lines |
 | --- | --- |
-| 1102 | 839,658 |
+| 1118 | 839,603 |
 
 ## Testing
 
@@ -43,7 +43,7 @@ Other generated code can be found at [Omi Repositories](https://github.com/Open-
 
 ## Exchanges
 
-> [24XEquities][24XEquities.Exchange] · [A2XEquities][A2XEquities.Exchange] · [AmexEquities][AmexEquities.Exchange] · [AmexOptions][AmexOptions.Exchange] · [AquisEquities][AquisEquities.Exchange] · [ArcaEquities][ArcaEquities.Exchange] · [ArcaOptions][ArcaOptions.Exchange] · [AsxDerivatives][AsxDerivatives.Exchange] · [AsxSecurities][AsxSecurities.Exchange] · [B3Derivatives][B3Derivatives.Exchange] · [BivaEquities][BivaEquities.Exchange] · [BorsaIstanbul][BorsaIstanbul.Exchange] · [BseIndia][BseIndia.Exchange] · [BxEquities][BxEquities.Exchange] · [CoinbaseDerivatives][CoinbaseDerivatives.Exchange] · [Deribit][Deribit.Exchange] · [FseEquities][FseEquities.Exchange] · [GemxOptions][GemxOptions.Exchange] · [IceFutures][IceFutures.Exchange] · [IexEquities][IexEquities.Exchange] · [IexOptions][IexOptions.Exchange] · [IseOptions][IseOptions.Exchange] · [JnxBonds][JnxBonds.Exchange] · [JnxEquities][JnxEquities.Exchange] · [MemxEquities][MemxEquities.Exchange] · [MemxOptions][MemxOptions.Exchange] · [MrxOptions][MrxOptions.Exchange] · [NasdaqCanada][NasdaqCanada.Exchange] · [NationalEquities][NationalEquities.Exchange] · [NfxFutures][NfxFutures.Exchange] · [NomOptions][NomOptions.Exchange] · [NordicDerivatives][NordicDerivatives.Exchange] · [NordicEquities][NordicEquities.Exchange] · [NseCd][NseCd.Exchange] · [NseCm][NseCm.Exchange] · [NseCom][NseCom.Exchange] · [NseEquities][NseEquities.Exchange] · [NseFo][NseFo.Exchange] · [NsmEquities][NsmEquities.Exchange] · [NtxEquities][NtxEquities.Exchange] · [NtxOptions][NtxOptions.Exchange] · [NyseEquities][NyseEquities.Exchange] · [NyseOptions][NyseOptions.Exchange] · [OseDerivatives][OseDerivatives.Exchange] · [PhlxOptions][PhlxOptions.Exchange] · [PsxEquities][PsxEquities.Exchange] · [SseEquities][SseEquities.Exchange] · [TexasEquities][TexasEquities.Exchange] · [TseEquities][TseEquities.Exchange] · [BlueEquities][BlueEquities.Ats] · [IntelligentCross][IntelligentCross.Ats] · [LinkAts][LinkAts.Ats] · [LinkNqb][LinkNqb.Ats] · [LynxAts][LynxAts.Ats] · [MoonAts][MoonAts.Ats] · [Nextrade][Nextrade.Ats] · [OmegaAts][OmegaAts.Ats] · [Overnight][Overnight.Ats]
+> [24XEquities][24XEquities.Exchange] · [A2XEquities][A2XEquities.Exchange] · [AmexEquities][AmexEquities.Exchange] · [AmexOptions][AmexOptions.Exchange] · [AquisEquities][AquisEquities.Exchange] · [ArcaEquities][ArcaEquities.Exchange] · [ArcaOptions][ArcaOptions.Exchange] · [AsxDerivatives][AsxDerivatives.Exchange] · [AsxSecurities][AsxSecurities.Exchange] · [B3Derivatives][B3Derivatives.Exchange] · [BivaEquities][BivaEquities.Exchange] · [BorsaIstanbul][BorsaIstanbul.Exchange] · [BseIndia][BseIndia.Exchange] · [BxEquities][BxEquities.Exchange] · [CoinbaseDerivatives][CoinbaseDerivatives.Exchange] · [Deribit][Deribit.Exchange] · [FseEquities][FseEquities.Exchange] · [GemxOptions][GemxOptions.Exchange] · [IceFutures][IceFutures.Exchange] · [IexEquities][IexEquities.Exchange] · [IexOptions][IexOptions.Exchange] · [IseOptions][IseOptions.Exchange] · [JnxBonds][JnxBonds.Exchange] · [JnxEquities][JnxEquities.Exchange] · [MemxEquities][MemxEquities.Exchange] · [MemxOptions][MemxOptions.Exchange] · [MrxOptions][MrxOptions.Exchange] · [NasdaqCanada][NasdaqCanada.Exchange] · [NationalEquities][NationalEquities.Exchange] · [NfxFutures][NfxFutures.Exchange] · [NomOptions][NomOptions.Exchange] · [NordicDerivatives][NordicDerivatives.Exchange] · [NordicEquities][NordicEquities.Exchange] · [NseCd][NseCd.Exchange] · [NseCm][NseCm.Exchange] · [NseCom][NseCom.Exchange] · [NseEquities][NseEquities.Exchange] · [NseFo][NseFo.Exchange] · [NsmEquities][NsmEquities.Exchange] · [NtxEquities][NtxEquities.Exchange] · [NtxOptions][NtxOptions.Exchange] · [NyseBonds][NyseBonds.Exchange] · [NyseEquities][NyseEquities.Exchange] · [NyseOptions][NyseOptions.Exchange] · [OseDerivatives][OseDerivatives.Exchange] · [PhlxOptions][PhlxOptions.Exchange] · [PsxEquities][PsxEquities.Exchange] · [SseEquities][SseEquities.Exchange] · [TexasEquities][TexasEquities.Exchange] · [TseEquities][TseEquities.Exchange] · [BlueEquities][BlueEquities.Ats] · [IntelligentCross][IntelligentCross.Ats] · [LinkAts][LinkAts.Ats] · [LinkNqb][LinkNqb.Ats] · [LynxAts][LynxAts.Ats] · [MoonAts][MoonAts.Ats] · [Nextrade][Nextrade.Ats] · [OmegaAts][OmegaAts.Ats] · [Overnight][Overnight.Ats]
 
 ## Platforms
 
@@ -111,6 +111,8 @@ Enjoy.
 [Omi.Encoding.PillarStream]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/PillarStream.md "PillarStream Encoding"
 [Omi.Encoding.Xdp]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Xdp.md "Xdp Encoding"
 [Omi.Encoding.Ultra]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Ultra.md "Ultra Encoding"
+[Omi.Encoding.Abp]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Abp.md "Abp Encoding"
+[Omi.Encoding.Pdp]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Pdp.md "Pdp Encoding"
 [Omi.Encoding.Link]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Link.md "Link Encoding"
 
 [24X.24XEquities.Memo]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/24X/Protocols/24XEquities/Memo.md "Members Orders"
@@ -315,6 +317,7 @@ Enjoy.
 [Nyse.AmexEquities.DepthFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/AmexEquities/DepthFeed.md "Depth Feed"
 [Nyse.AmexEquities.ImbalancesFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/AmexEquities/ImbalancesFeed.md "Imbalances Feed"
 [Nyse.AmexEquities.IntegratedFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/AmexEquities/IntegratedFeed.md "Integrated Feed"
+[Nyse.AmexEquities.IntegratedFeedStockSummary]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/AmexEquities/IntegratedFeedStockSummary.md "Integrated Feed Stock Summary"
 [Nyse.AmexEquities.OpenBook.Aggregated]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/AmexEquities/OpenBook.Aggregated.md "Open Book Aggregated"
 [Nyse.AmexEquities.OpenBook]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/AmexEquities/OpenBook.md "Open Book"
 [Nyse.AmexEquities.Trades]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/AmexEquities/Trades.md "Trades"
@@ -329,6 +332,7 @@ Enjoy.
 [Nyse.ArcaEquities.DepthFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/ArcaEquities/DepthFeed.md "Depth Feed"
 [Nyse.ArcaEquities.ImbalancesFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/ArcaEquities/ImbalancesFeed.md "Imbalances Feed"
 [Nyse.ArcaEquities.IntegratedFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/ArcaEquities/IntegratedFeed.md "Integrated Feed"
+[Nyse.ArcaEquities.IntegratedFeedStockSummary]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/ArcaEquities/IntegratedFeedStockSummary.md "Integrated Feed Stock Summary"
 [Nyse.ArcaEquities.Trades]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/ArcaEquities/Trades.md "Trades"
 [Nyse.ArcaOptions.ComplexFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/ArcaOptions/ComplexFeed.md "Complex Feed"
 [Nyse.ArcaOptions.DeepFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/ArcaOptions/DeepFeed.md "Deep Feed"
@@ -338,7 +342,11 @@ Enjoy.
 [Nyse.NationalEquities.Bqt]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NationalEquities/Bqt.md "Best Quote And Trade"
 [Nyse.NationalEquities.DepthFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NationalEquities/DepthFeed.md "Depth Feed"
 [Nyse.NationalEquities.IntegratedFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NationalEquities/IntegratedFeed.md "Integrated Feed"
+[Nyse.NationalEquities.IntegratedFeedStockSummary]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NationalEquities/IntegratedFeedStockSummary.md "Integrated Feed Stock Summary"
 [Nyse.NationalEquities.Trades]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NationalEquities/Trades.md "Trades"
+[Nyse.NyseBonds.DepthOfBook]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseBonds/DepthOfBook.md "DepthOfBook"
+[Nyse.NyseBonds.Quote]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseBonds/Quote.md "Quote"
+[Nyse.NyseBonds.Trades]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseBonds/Trades.md "Trades"
 [Nyse.NyseConsolidated.Bqt]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseConsolidated/Bqt.md ""
 [Nyse.NyseEquities.Bbo]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/Bbo.md "Best Bid And Offer"
 [Nyse.NyseEquities.BinaryGateway]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/BinaryGateway.md "Binary Gateway"
@@ -346,6 +354,7 @@ Enjoy.
 [Nyse.NyseEquities.DepthFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/DepthFeed.md "Depth Feed"
 [Nyse.NyseEquities.ImbalancesFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/ImbalancesFeed.md "Imbalances Feed"
 [Nyse.NyseEquities.IntegratedFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/IntegratedFeed.md "Integrated Feed"
+[Nyse.NyseEquities.IntegratedFeedStockSummary]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/IntegratedFeedStockSummary.md "Integrated Feed Stock Summary"
 [Nyse.NyseEquities.OpenBook.Aggregated]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/OpenBook.Aggregated.md "Open Book Aggregated"
 [Nyse.NyseEquities.OpenBook]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/OpenBook.md "Open Book"
 [Nyse.NyseEquities.Trades]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/NyseEquities/Trades.md "Trades"
@@ -357,6 +366,7 @@ Enjoy.
 [Nyse.TexasEquities.DepthFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/TexasEquities/DepthFeed.md "Depth Feed"
 [Nyse.TexasEquities.ImbalancesFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/TexasEquities/ImbalancesFeed.md "Imbalances Feed"
 [Nyse.TexasEquities.IntegratedFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/TexasEquities/IntegratedFeed.md "Integrated Feed"
+[Nyse.TexasEquities.IntegratedFeedStockSummary]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/TexasEquities/IntegratedFeedStockSummary.md "Integrated Feed Stock Summary"
 [Nyse.TexasEquities.Trades]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nyse/Protocols/TexasEquities/Trades.md "Trades"
 [OtcMarkets.LinkAts.ExtendedTrade]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/OtcMarkets/Protocols/LinkAts/ExtendedTrade.md ""
 [OtcMarkets.LinkAts.Headers]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/OtcMarkets/Protocols/LinkAts/Headers.md ""
@@ -468,6 +478,7 @@ Enjoy.
 [NsmEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/nsmequities "Nasdaq Stock Market"
 [NtxEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/ntxequities "Nasdaq Texas"
 [NtxOptions.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/ntxoptions "Nasdaq Texas Options"
+[NyseBonds.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nyse/nysebonds "Nyse Bonds"
 [NyseConsolidated.Consolidator]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nyse/nyseconsolidated "NYSE Consolidated"
 [NyseEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nyse/nyseequities "New York Stock Exchange Equities"
 [NyseOptions.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nyse/nyseoptions "New York Stock Exchange Options"

@@ -978,6 +978,15 @@ struct headers_t {
 parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.binary_packet_header);
+        transition select(hdr.binary_packet_header.schema_id) {
+            16w0x100: parse_mktdata_message;
+            16w0x200: parse_mdpsessionmgmt_message;
+            default: accept;
+        }
+    }
+
+    state parse_mktdata_message {
+        meta.dispatched = 1;
         transition select(hdr.binary_packet_header.template_id) {
             16w0x400: parse_channel_reset;
             16w0xc00: parse_admin_heartbeat;
@@ -998,16 +1007,6 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
             16w0x2a00: parse_md_incremental_refresh_trade_summary;
             16w0x2b00: parse_md_incremental_refresh_order_book;
             16w0x2c00: parse_snapshot_full_refresh_order_book;
-            16w0xc800: parse_negotiate;
-            16w0xc900: parse_negotiation_reject;
-            16w0xca00: parse_negotiation_response;
-            16w0xcb00: parse_terminate;
-            16w0xcd00: parse_market_data_request;
-            16w0xce00: parse_request_ack;
-            16w0xcf00: parse_request_reject;
-            16w0xd000: parse_security_list_request;
-            16w0xd100: parse_security_status_request;
-            16w0xd200: parse_subscriber_heartbeat;
             default: accept;
         }
     }
@@ -1569,6 +1568,23 @@ parser CmeGlobexMdp3UdpParser(packet_in packet, out headers_t hdr, inout metadat
         transition select(meta.snapshot_full_refresh_order_book_snapshot_full_refresh_order_book_group_remaining) {
             8w0: accept;
             default: parse_snapshot_full_refresh_order_book_snapshot_full_refresh_order_book_group;
+        }
+    }
+
+    state parse_mdpsessionmgmt_message {
+        meta.dispatched = 1;
+        transition select(hdr.binary_packet_header.template_id) {
+            16w0xc800: parse_negotiate;
+            16w0xc900: parse_negotiation_reject;
+            16w0xca00: parse_negotiation_response;
+            16w0xcb00: parse_terminate;
+            16w0xcd00: parse_market_data_request;
+            16w0xce00: parse_request_ack;
+            16w0xcf00: parse_request_reject;
+            16w0xd000: parse_security_list_request;
+            16w0xd100: parse_security_status_request;
+            16w0xd200: parse_subscriber_heartbeat;
+            default: accept;
         }
     }
 

@@ -238,6 +238,10 @@ header complex_msar_request_message_t {
     bit<32> reserved_4;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<8> add_complex_instrument_request_message_complex_legs_remaining;
@@ -275,6 +279,7 @@ struct headers_t {
     active_qp_self_replenishment_request_reentry_message_t active_qp_self_replenishment_request_reentry_message;
     simple_msar_request_message_t simple_msar_request_message;
     complex_msar_request_message_t complex_msar_request_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser MrxoptionsQuotingClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -292,6 +297,7 @@ parser MrxoptionsQuotingClientParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_debug_packet {
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.client_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -546,6 +552,7 @@ control MrxoptionsQuotingClientComputeChecksum(inout headers_t hdr, inout metada
 control MrxoptionsQuotingClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_packet_header);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_request_packet);
         packet.emit(hdr.unsequenced_data_packet);
         packet.emit(hdr.notification_subscription_request_message);

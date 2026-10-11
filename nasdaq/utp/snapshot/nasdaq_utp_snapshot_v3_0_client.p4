@@ -43,6 +43,10 @@ header login_request_packet_t {
     bit<160> requested_sequence_number;
 }
 
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
@@ -50,6 +54,7 @@ struct metadata_t {
 struct headers_t {
     client_tcp_packet_header_t client_tcp_packet_header;
     login_request_packet_t login_request_packet;
+    debug_packet_debug_text_t debug_packet_debug_text;
 }
 
 parser NasdaqUtpSnapshotClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -66,6 +71,7 @@ parser NasdaqUtpSnapshotClientParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_debug_packet {
         meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.client_tcp_packet_header.packet_length * 8);
         transition accept;
     }
 
@@ -116,6 +122,7 @@ control NasdaqUtpSnapshotClientComputeChecksum(inout headers_t hdr, inout metada
 control NasdaqUtpSnapshotClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.client_tcp_packet_header);
+        packet.emit(hdr.debug_packet_debug_text);
         packet.emit(hdr.login_request_packet);
     }
 }
