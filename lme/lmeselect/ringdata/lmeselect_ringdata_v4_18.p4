@@ -39,7 +39,7 @@ header packet_header_t {
     bit<64> send_time;
 }
 
-header packet_header_messages_t {
+header packet_header_message_t {
     bit<16> msg_size;
     bit<16> msg_type;
 }
@@ -118,7 +118,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_messages_t packet_header_messages[MAX_MESSAGES];
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
     sequence_reset_message_t sequence_reset_message[MAX_MESSAGES];
     market_state_product_message_t market_state_product_message[MAX_MESSAGES];
     market_data_order_message_t market_data_order_message[MAX_MESSAGES];
@@ -132,14 +132,14 @@ parser LmeselectRingdataParser(packet_in packet, out headers_t hdr, inout metada
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.msg_count) {
-            8w0: parse_packet_header_messages_empty;
-            default: parse_packet_header_messages;
+            8w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
         }
     }
 
-    state parse_packet_header_messages {
-        packet.extract(hdr.packet_header_messages.next);
-        transition select(hdr.packet_header_messages.last.msg_type) {
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             16w0x6400: parse_sequence_reset_message;
             16w0x3601: parse_market_state_product_message;
             16w0x4801: parse_market_data_order_message;
@@ -152,13 +152,13 @@ parser LmeselectRingdataParser(packet_in packet, out headers_t hdr, inout metada
     state parse_sequence_reset_message {
         packet.extract(hdr.sequence_reset_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_market_state_product_message {
         packet.extract(hdr.market_state_product_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_market_data_order_message {
@@ -166,7 +166,7 @@ parser LmeselectRingdataParser(packet_in packet, out headers_t hdr, inout metada
         meta.dispatched = 1;
         meta.market_data_order_message_order_legs_remaining = hdr.market_data_order_message.last.record_count;
         transition select(meta.market_data_order_message_order_legs_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_market_data_order_message_order_legs;
         }
     }
@@ -175,7 +175,7 @@ parser LmeselectRingdataParser(packet_in packet, out headers_t hdr, inout metada
         packet.extract(hdr.market_data_order_message_order_legs.next);
         meta.market_data_order_message_order_legs_remaining = meta.market_data_order_message_order_legs_remaining - 1;
         transition select(meta.market_data_order_message_order_legs_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_market_data_order_message_order_legs;
         }
     }
@@ -183,7 +183,7 @@ parser LmeselectRingdataParser(packet_in packet, out headers_t hdr, inout metada
     state parse_indicative_trade_price_message {
         packet.extract(hdr.indicative_trade_price_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_market_data_trade_message {
@@ -191,7 +191,7 @@ parser LmeselectRingdataParser(packet_in packet, out headers_t hdr, inout metada
         meta.dispatched = 1;
         meta.market_data_trade_message_trade_legs_remaining = hdr.market_data_trade_message.last.record_count;
         transition select(meta.market_data_trade_message_trade_legs_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_market_data_trade_message_trade_legs;
         }
     }
@@ -200,12 +200,12 @@ parser LmeselectRingdataParser(packet_in packet, out headers_t hdr, inout metada
         packet.extract(hdr.market_data_trade_message_trade_legs.next);
         meta.market_data_trade_message_trade_legs_remaining = meta.market_data_trade_message_trade_legs_remaining - 1;
         transition select(meta.market_data_trade_message_trade_legs_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_market_data_trade_message_trade_legs;
         }
     }
 
-    state parse_packet_header_messages_empty {
+    state parse_packet_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -241,7 +241,7 @@ control LmeselectRingdataComputeChecksum(inout headers_t hdr, inout metadata_t m
 control LmeselectRingdataDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_messages);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.market_state_product_message);
         packet.emit(hdr.market_data_order_message);

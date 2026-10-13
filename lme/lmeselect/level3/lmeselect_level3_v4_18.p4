@@ -39,7 +39,7 @@ header packet_header_t {
     bit<64> send_time;
 }
 
-header packet_header_messages_t {
+header packet_header_message_t {
     bit<16> msg_size;
     bit<16> msg_type;
 }
@@ -178,7 +178,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_messages_t packet_header_messages[MAX_MESSAGES];
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
     sequence_reset_message_t sequence_reset_message[MAX_MESSAGES];
     market_state_contract_message_t market_state_contract_message[MAX_MESSAGES];
     market_state_instrument_message_t market_state_instrument_message[MAX_MESSAGES];
@@ -197,14 +197,14 @@ parser LmeselectLevel3Parser(packet_in packet, out headers_t hdr, inout metadata
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.msg_count) {
-            8w0: parse_packet_header_messages_empty;
-            default: parse_packet_header_messages;
+            8w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
         }
     }
 
-    state parse_packet_header_messages {
-        packet.extract(hdr.packet_header_messages.next);
-        transition select(hdr.packet_header_messages.last.msg_type) {
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             16w0x6400: parse_sequence_reset_message;
             16w0x3701: parse_market_state_contract_message;
             16w0x3801: parse_market_state_instrument_message;
@@ -223,61 +223,61 @@ parser LmeselectLevel3Parser(packet_in packet, out headers_t hdr, inout metadata
     state parse_sequence_reset_message {
         packet.extract(hdr.sequence_reset_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_market_state_contract_message {
         packet.extract(hdr.market_state_contract_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_market_state_instrument_message {
         packet.extract(hdr.market_state_instrument_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_indicative_opening_price_message {
         packet.extract(hdr.indicative_opening_price_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_quote_request_message {
         packet.extract(hdr.quote_request_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_order_book_clear_message {
         packet.extract(hdr.order_book_clear_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_cross_request_message {
         packet.extract(hdr.cross_request_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_order_add_message {
         packet.extract(hdr.order_add_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_order_amend_message {
         packet.extract(hdr.order_amend_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_order_cancel_message {
         packet.extract(hdr.order_cancel_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_order_executed_message {
@@ -285,7 +285,7 @@ parser LmeselectLevel3Parser(packet_in packet, out headers_t hdr, inout metadata
         meta.dispatched = 1;
         meta.order_executed_message_executed_legs_remaining = hdr.order_executed_message.last.strategy_leg_count;
         transition select(meta.order_executed_message_executed_legs_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_order_executed_message_executed_legs;
         }
     }
@@ -294,12 +294,12 @@ parser LmeselectLevel3Parser(packet_in packet, out headers_t hdr, inout metadata
         packet.extract(hdr.order_executed_message_executed_legs.next);
         meta.order_executed_message_executed_legs_remaining = meta.order_executed_message_executed_legs_remaining - 1;
         transition select(meta.order_executed_message_executed_legs_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_order_executed_message_executed_legs;
         }
     }
 
-    state parse_packet_header_messages_empty {
+    state parse_packet_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -335,7 +335,7 @@ control LmeselectLevel3ComputeChecksum(inout headers_t hdr, inout metadata_t met
 control LmeselectLevel3Deparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_messages);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.market_state_contract_message);
         packet.emit(hdr.market_state_instrument_message);

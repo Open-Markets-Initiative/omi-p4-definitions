@@ -174,6 +174,7 @@ header quote_message_t {
     bit<32> bid_volume;
     bit<8> quote_condition;
     bit<8> rpi_indicator;
+    bit<32> reserved_4;
 }
 
 struct metadata_t {

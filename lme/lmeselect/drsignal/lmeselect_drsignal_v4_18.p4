@@ -39,7 +39,7 @@ header packet_header_t {
     bit<64> send_time;
 }
 
-header packet_header_messages_t {
+header packet_header_message_t {
     bit<16> msg_size;
     bit<16> msg_type;
 }
@@ -58,7 +58,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_messages_t packet_header_messages[MAX_MESSAGES];
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
     sequence_reset_message_t sequence_reset_message[MAX_MESSAGES];
     disaster_recovery_signal_message_t disaster_recovery_signal_message[MAX_MESSAGES];
 }
@@ -67,14 +67,14 @@ parser LmeselectDrsignalParser(packet_in packet, out headers_t hdr, inout metada
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.msg_count) {
-            8w0: parse_packet_header_messages_empty;
-            default: parse_packet_header_messages;
+            8w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
         }
     }
 
-    state parse_packet_header_messages {
-        packet.extract(hdr.packet_header_messages.next);
-        transition select(hdr.packet_header_messages.last.msg_type) {
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             16w0x6400: parse_sequence_reset_message;
             16w0x6900: parse_disaster_recovery_signal_message;
             default: accept;
@@ -84,16 +84,16 @@ parser LmeselectDrsignalParser(packet_in packet, out headers_t hdr, inout metada
     state parse_sequence_reset_message {
         packet.extract(hdr.sequence_reset_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_disaster_recovery_signal_message {
         packet.extract(hdr.disaster_recovery_signal_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
-    state parse_packet_header_messages_empty {
+    state parse_packet_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -129,7 +129,7 @@ control LmeselectDrsignalComputeChecksum(inout headers_t hdr, inout metadata_t m
 control LmeselectDrsignalDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_messages);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.disaster_recovery_signal_message);
     }

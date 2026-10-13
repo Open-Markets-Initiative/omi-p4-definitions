@@ -39,7 +39,7 @@ header packet_header_t {
     bit<64> send_time;
 }
 
-header packet_header_messages_t {
+header packet_header_message_t {
     bit<16> msg_size;
     bit<16> msg_type;
 }
@@ -74,7 +74,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_messages_t packet_header_messages[MAX_MESSAGES];
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
     sequence_reset_message_t sequence_reset_message[MAX_MESSAGES];
     warehouse_stock_movement_message_t warehouse_stock_movement_message[MAX_MESSAGES];
     warehouse_stock_movement_message_stock_records_t warehouse_stock_movement_message_stock_records[MAX_MESSAGES];
@@ -85,14 +85,14 @@ parser LmeselectWarehousestocksnapshotParser(packet_in packet, out headers_t hdr
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.msg_count) {
-            8w0: parse_packet_header_messages_empty;
-            default: parse_packet_header_messages;
+            8w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
         }
     }
 
-    state parse_packet_header_messages {
-        packet.extract(hdr.packet_header_messages.next);
-        transition select(hdr.packet_header_messages.last.msg_type) {
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             16w0x6400: parse_sequence_reset_message;
             16w0xaa01: parse_warehouse_stock_movement_message;
             16w0xcb00: parse_refresh_complete_message;
@@ -103,7 +103,7 @@ parser LmeselectWarehousestocksnapshotParser(packet_in packet, out headers_t hdr
     state parse_sequence_reset_message {
         packet.extract(hdr.sequence_reset_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_warehouse_stock_movement_message {
@@ -111,7 +111,7 @@ parser LmeselectWarehousestocksnapshotParser(packet_in packet, out headers_t hdr
         meta.dispatched = 1;
         meta.warehouse_stock_movement_message_stock_records_remaining = hdr.warehouse_stock_movement_message.last.record_count;
         transition select(meta.warehouse_stock_movement_message_stock_records_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_warehouse_stock_movement_message_stock_records;
         }
     }
@@ -120,7 +120,7 @@ parser LmeselectWarehousestocksnapshotParser(packet_in packet, out headers_t hdr
         packet.extract(hdr.warehouse_stock_movement_message_stock_records.next);
         meta.warehouse_stock_movement_message_stock_records_remaining = meta.warehouse_stock_movement_message_stock_records_remaining - 1;
         transition select(meta.warehouse_stock_movement_message_stock_records_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_warehouse_stock_movement_message_stock_records;
         }
     }
@@ -128,10 +128,10 @@ parser LmeselectWarehousestocksnapshotParser(packet_in packet, out headers_t hdr
     state parse_refresh_complete_message {
         packet.extract(hdr.refresh_complete_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
-    state parse_packet_header_messages_empty {
+    state parse_packet_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -167,7 +167,7 @@ control LmeselectWarehousestocksnapshotComputeChecksum(inout headers_t hdr, inou
 control LmeselectWarehousestocksnapshotDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_messages);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.warehouse_stock_movement_message);
         packet.emit(hdr.warehouse_stock_movement_message_stock_records);

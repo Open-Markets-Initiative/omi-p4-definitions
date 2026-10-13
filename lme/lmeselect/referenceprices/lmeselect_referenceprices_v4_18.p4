@@ -39,7 +39,7 @@ header packet_header_t {
     bit<64> send_time;
 }
 
-header packet_header_messages_t {
+header packet_header_message_t {
     bit<16> msg_size;
     bit<16> msg_type;
 }
@@ -118,7 +118,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_messages_t packet_header_messages[MAX_MESSAGES];
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
     sequence_reset_message_t sequence_reset_message[MAX_MESSAGES];
     reference_price_message_t reference_price_message[MAX_MESSAGES];
     reference_forward_curve_price_message_t reference_forward_curve_price_message[MAX_MESSAGES];
@@ -132,14 +132,14 @@ parser LmeselectReferencepricesParser(packet_in packet, out headers_t hdr, inout
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.msg_count) {
-            8w0: parse_packet_header_messages_empty;
-            default: parse_packet_header_messages;
+            8w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
         }
     }
 
-    state parse_packet_header_messages {
-        packet.extract(hdr.packet_header_messages.next);
-        transition select(hdr.packet_header_messages.last.msg_type) {
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             16w0x6400: parse_sequence_reset_message;
             16w0x9101: parse_reference_price_message;
             16w0x9201: parse_reference_forward_curve_price_message;
@@ -152,13 +152,13 @@ parser LmeselectReferencepricesParser(packet_in packet, out headers_t hdr, inout
     state parse_sequence_reset_message {
         packet.extract(hdr.sequence_reset_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_reference_price_message {
         packet.extract(hdr.reference_price_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_reference_forward_curve_price_message {
@@ -166,7 +166,7 @@ parser LmeselectReferencepricesParser(packet_in packet, out headers_t hdr, inout
         meta.dispatched = 1;
         meta.reference_forward_curve_price_message_curve_prices_remaining = hdr.reference_forward_curve_price_message.last.record_count;
         transition select(meta.reference_forward_curve_price_message_curve_prices_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_reference_forward_curve_price_message_curve_prices;
         }
     }
@@ -175,7 +175,7 @@ parser LmeselectReferencepricesParser(packet_in packet, out headers_t hdr, inout
         packet.extract(hdr.reference_forward_curve_price_message_curve_prices.next);
         meta.reference_forward_curve_price_message_curve_prices_remaining = meta.reference_forward_curve_price_message_curve_prices_remaining - 1;
         transition select(meta.reference_forward_curve_price_message_curve_prices_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_reference_forward_curve_price_message_curve_prices;
         }
     }
@@ -183,7 +183,7 @@ parser LmeselectReferencepricesParser(packet_in packet, out headers_t hdr, inout
     state parse_reference_fx_rate_message {
         packet.extract(hdr.reference_fx_rate_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_reference_volatility_price_message {
@@ -191,7 +191,7 @@ parser LmeselectReferencepricesParser(packet_in packet, out headers_t hdr, inout
         meta.dispatched = 1;
         meta.reference_volatility_price_message_volatility_points_remaining = hdr.reference_volatility_price_message.last.record_count;
         transition select(meta.reference_volatility_price_message_volatility_points_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_reference_volatility_price_message_volatility_points;
         }
     }
@@ -200,12 +200,12 @@ parser LmeselectReferencepricesParser(packet_in packet, out headers_t hdr, inout
         packet.extract(hdr.reference_volatility_price_message_volatility_points.next);
         meta.reference_volatility_price_message_volatility_points_remaining = meta.reference_volatility_price_message_volatility_points_remaining - 1;
         transition select(meta.reference_volatility_price_message_volatility_points_remaining) {
-            16w0: parse_packet_header_messages;
+            16w0: parse_packet_header_message;
             default: parse_reference_volatility_price_message_volatility_points;
         }
     }
 
-    state parse_packet_header_messages_empty {
+    state parse_packet_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -241,7 +241,7 @@ control LmeselectReferencepricesComputeChecksum(inout headers_t hdr, inout metad
 control LmeselectReferencepricesDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_messages);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.reference_price_message);
         packet.emit(hdr.reference_forward_curve_price_message);

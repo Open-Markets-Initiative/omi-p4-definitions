@@ -39,7 +39,7 @@ header packet_header_t {
     bit<64> send_time;
 }
 
-header packet_header_messages_t {
+header packet_header_message_t {
     bit<16> msg_size;
     bit<16> msg_type;
 }
@@ -127,7 +127,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_messages_t packet_header_messages[MAX_MESSAGES];
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
     sequence_reset_message_t sequence_reset_message[MAX_MESSAGES];
     open_interest_message_t open_interest_message[MAX_MESSAGES];
     open_interest_band_message_t open_interest_band_message[MAX_MESSAGES];
@@ -144,14 +144,14 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.msg_count) {
-            8w0: parse_packet_header_messages_empty;
-            default: parse_packet_header_messages;
+            8w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
         }
     }
 
-    state parse_packet_header_messages {
-        packet.extract(hdr.packet_header_messages.next);
-        transition select(hdr.packet_header_messages.last.msg_type) {
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             16w0x6400: parse_sequence_reset_message;
             16w0xa401: parse_open_interest_message;
             16w0xa501: parse_open_interest_band_message;
@@ -165,13 +165,13 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
     state parse_sequence_reset_message {
         packet.extract(hdr.sequence_reset_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_open_interest_message {
         packet.extract(hdr.open_interest_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_open_interest_band_message {
@@ -179,7 +179,7 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
         meta.dispatched = 1;
         meta.open_interest_band_message_date_bands_remaining = hdr.open_interest_band_message.last.date_band_count;
         transition select(meta.open_interest_band_message_date_bands_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_open_interest_band_message_date_bands;
         }
     }
@@ -188,7 +188,7 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
         packet.extract(hdr.open_interest_band_message_date_bands.next);
         meta.open_interest_band_message_date_bands_remaining = meta.open_interest_band_message_date_bands_remaining - 1;
         transition select(meta.open_interest_band_message_date_bands_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_open_interest_band_message_date_bands;
         }
     }
@@ -215,7 +215,7 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
     state read_position_band_message_short_position_bands {
         meta.position_band_message_short_position_bands_remaining = hdr.position_band_message.last.short_position_band_count;
         transition select(meta.position_band_message_short_position_bands_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_position_band_message_short_position_bands;
         }
     }
@@ -224,7 +224,7 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
         packet.extract(hdr.position_band_message_short_position_bands.next);
         meta.position_band_message_short_position_bands_remaining = meta.position_band_message_short_position_bands_remaining - 1;
         transition select(meta.position_band_message_short_position_bands_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_position_band_message_short_position_bands;
         }
     }
@@ -234,7 +234,7 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
         meta.dispatched = 1;
         meta.warrant_band_message_warrant_bands_remaining = hdr.warrant_band_message.last.band_count;
         transition select(meta.warrant_band_message_warrant_bands_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_warrant_band_message_warrant_bands;
         }
     }
@@ -243,7 +243,7 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
         packet.extract(hdr.warrant_band_message_warrant_bands.next);
         meta.warrant_band_message_warrant_bands_remaining = meta.warrant_band_message_warrant_bands_remaining - 1;
         transition select(meta.warrant_band_message_warrant_bands_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_warrant_band_message_warrant_bands;
         }
     }
@@ -251,10 +251,10 @@ parser LmeselectDailysummariesParser(packet_in packet, out headers_t hdr, inout 
     state parse_trading_volume_message {
         packet.extract(hdr.trading_volume_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
-    state parse_packet_header_messages_empty {
+    state parse_packet_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -290,7 +290,7 @@ control LmeselectDailysummariesComputeChecksum(inout headers_t hdr, inout metada
 control LmeselectDailysummariesDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_messages);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.open_interest_message);
         packet.emit(hdr.open_interest_band_message);

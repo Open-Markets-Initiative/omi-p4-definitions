@@ -39,7 +39,7 @@ header packet_header_t {
     bit<64> send_time;
 }
 
-header packet_header_messages_t {
+header packet_header_message_t {
     bit<16> msg_size;
     bit<16> msg_type;
 }
@@ -151,7 +151,7 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    packet_header_messages_t packet_header_messages[MAX_MESSAGES];
+    packet_header_message_t packet_header_message[MAX_MESSAGES];
     sequence_reset_message_t sequence_reset_message[MAX_MESSAGES];
     contract_definition_message_t contract_definition_message[MAX_MESSAGES];
     outright_definition_message_t outright_definition_message[MAX_MESSAGES];
@@ -165,14 +165,14 @@ parser LmeselectReferencedataParser(packet_in packet, out headers_t hdr, inout m
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.msg_count) {
-            8w0: parse_packet_header_messages_empty;
-            default: parse_packet_header_messages;
+            8w0: parse_packet_header_message_empty;
+            default: parse_packet_header_message;
         }
     }
 
-    state parse_packet_header_messages {
-        packet.extract(hdr.packet_header_messages.next);
-        transition select(hdr.packet_header_messages.last.msg_type) {
+    state parse_packet_header_message {
+        packet.extract(hdr.packet_header_message.next);
+        transition select(hdr.packet_header_message.last.msg_type) {
             16w0x6400: parse_sequence_reset_message;
             16w0x2c01: parse_contract_definition_message;
             16w0x2d01: parse_outright_definition_message;
@@ -186,19 +186,19 @@ parser LmeselectReferencedataParser(packet_in packet, out headers_t hdr, inout m
     state parse_sequence_reset_message {
         packet.extract(hdr.sequence_reset_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_contract_definition_message {
         packet.extract(hdr.contract_definition_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_outright_definition_message {
         packet.extract(hdr.outright_definition_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_strategy_definition_message {
@@ -206,7 +206,7 @@ parser LmeselectReferencedataParser(packet_in packet, out headers_t hdr, inout m
         meta.dispatched = 1;
         meta.strategy_definition_message_strategy_legs_remaining = hdr.strategy_definition_message.last.strategy_leg_count;
         transition select(meta.strategy_definition_message_strategy_legs_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_strategy_definition_message_strategy_legs;
         }
     }
@@ -215,7 +215,7 @@ parser LmeselectReferencedataParser(packet_in packet, out headers_t hdr, inout m
         packet.extract(hdr.strategy_definition_message_strategy_legs.next);
         meta.strategy_definition_message_strategy_legs_remaining = meta.strategy_definition_message_strategy_legs_remaining - 1;
         transition select(meta.strategy_definition_message_strategy_legs_remaining) {
-            32w0: parse_packet_header_messages;
+            32w0: parse_packet_header_message;
             default: parse_strategy_definition_message_strategy_legs;
         }
     }
@@ -223,16 +223,16 @@ parser LmeselectReferencedataParser(packet_in packet, out headers_t hdr, inout m
     state parse_price_limits_message {
         packet.extract(hdr.price_limits_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
     state parse_trade_statistics_end_of_day_message {
         packet.extract(hdr.trade_statistics_end_of_day_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_messages;
+        transition parse_packet_header_message;
     }
 
-    state parse_packet_header_messages_empty {
+    state parse_packet_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -268,7 +268,7 @@ control LmeselectReferencedataComputeChecksum(inout headers_t hdr, inout metadat
 control LmeselectReferencedataDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
-        packet.emit(hdr.packet_header_messages);
+        packet.emit(hdr.packet_header_message);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.contract_definition_message);
         packet.emit(hdr.outright_definition_message);
