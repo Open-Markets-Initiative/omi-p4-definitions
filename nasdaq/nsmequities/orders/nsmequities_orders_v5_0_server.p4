@@ -110,6 +110,7 @@ header aiq_canceled_message_t {
     bit<32> quantity_prevented_from_trading;
     bit<64> execution_price;
     bit<8> liquidity_flag;
+    bit<8> aiq_strategy;
 }
 
 header order_executed_message_t {
@@ -129,17 +130,6 @@ header broken_trade_message_t {
     bit<32> user_ref_num;
     bit<64> match_number;
     bit<8> broken_trade_reason;
-    bit<112> clordid;
-}
-
-header trade_correction_message_t {
-    bit<64> timestamp;
-    bit<32> user_ref_num;
-    bit<32> quantity;
-    bit<64> price;
-    bit<8> liquidity_flag;
-    bit<64> match_number;
-    bit<8> trade_correction_reason;
     bit<112> clordid;
 }
 
@@ -237,7 +227,6 @@ struct headers_t {
     aiq_canceled_message_t aiq_canceled_message;
     order_executed_message_t order_executed_message;
     broken_trade_message_t broken_trade_message;
-    trade_correction_message_t trade_correction_message;
     rejected_order_message_t rejected_order_message;
     cancel_pending_message_t cancel_pending_message;
     cancel_reject_message_t cancel_reject_message;
@@ -294,7 +283,6 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
             8w0x44: parse_aiq_canceled_message;
             8w0x45: parse_order_executed_message;
             8w0x42: parse_broken_trade_message;
-            8w0x46: parse_trade_correction_message;
             8w0x4a: parse_rejected_order_message;
             8w0x50: parse_cancel_pending_message;
             8w0x49: parse_cancel_reject_message;
@@ -326,7 +314,7 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
             8w6: parse_price_type;
             8w7: parse_peg_offset;
             8w9: parse_discretion_price;
-            8w10: parse_discretion_peg_type;
+            8w10: parse_discretion_price_type;
             8w11: parse_discretion_peg_offset;
             8w12: parse_post_only;
             8w13: parse_random_reserves;
@@ -335,6 +323,11 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
             8w16: parse_trade_now;
             8w17: parse_handle_inst;
             8w18: parse_bbo_weight_indicator;
+            8w24: parse_group_id;
+            8w25: parse_shares_located;
+            8w28: parse_user_ref_idx;
+            8w29: parse_aiq_strategy;
+            8w30: parse_aiq_group_id;
             default: accept;
         }
     }
@@ -374,7 +367,7 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
-    state parse_discretion_peg_type {
+    state parse_discretion_price_type {
         meta.dispatched = 1;
         transition accept;
     }
@@ -419,6 +412,31 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
+    state parse_group_id {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_shares_located {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_user_ref_idx {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_aiq_strategy {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_aiq_group_id {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_replaced_message {
         packet.extract(hdr.replaced_message);
         meta.dispatched = 1;
@@ -432,6 +450,9 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
             8w16: parse_trade_now;
             8w17: parse_handle_inst;
             8w18: parse_bbo_weight_indicator;
+            8w28: parse_user_ref_idx;
+            8w29: parse_aiq_strategy;
+            8w30: parse_aiq_group_id;
             default: accept;
         }
     }
@@ -439,73 +460,87 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
     state parse_canceled_message {
         packet.extract(hdr.canceled_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_aiq_canceled_message {
         packet.extract(hdr.aiq_canceled_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message);
         meta.dispatched = 1;
         transition select(hdr.order_executed_message.order_executed_optional_field) {
-            8w19: parse_reference_price;
-            8w20: parse_reference_price_type;
+            8w28: parse_user_ref_idx;
             default: accept;
         }
-    }
-
-    state parse_reference_price {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_reference_price_type {
-        meta.dispatched = 1;
-        transition accept;
     }
 
     state parse_broken_trade_message {
         packet.extract(hdr.broken_trade_message);
         meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_trade_correction_message {
-        packet.extract(hdr.trade_correction_message);
-        meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_rejected_order_message {
         packet.extract(hdr.rejected_order_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_cancel_pending_message {
         packet.extract(hdr.cancel_pending_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_cancel_reject_message {
         packet.extract(hdr.cancel_reject_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_order_priority_update_message {
         packet.extract(hdr.order_priority_update_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_order_modified_message {
         packet.extract(hdr.order_modified_message);
+        meta.dispatched = 1;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            8w25: parse_shares_located;
+            8w26: parse_locate_broker;
+            default: accept;
+        }
+    }
+
+    state parse_locate_broker {
         meta.dispatched = 1;
         transition accept;
     }
@@ -517,6 +552,7 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
             8w22: parse_display_quantity;
             8w23: parse_display_price;
             8w1: parse_secondary_ord_ref_num;
+            8w28: parse_user_ref_idx;
             default: accept;
         }
     }
@@ -539,7 +575,10 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
     state parse_account_query_response_message {
         packet.extract(hdr.account_query_response_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_mass_cancel_response_message {
@@ -554,16 +593,6 @@ parser NsmequitiesOrdersServerParser(packet_in packet, out headers_t hdr, inout 
     }
 
     state parse_side {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_group_id {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_user_ref_idx {
         meta.dispatched = 1;
         transition accept;
     }
@@ -638,7 +667,6 @@ control NsmequitiesOrdersServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.aiq_canceled_message);
         packet.emit(hdr.order_executed_message);
         packet.emit(hdr.broken_trade_message);
-        packet.emit(hdr.trade_correction_message);
         packet.emit(hdr.rejected_order_message);
         packet.emit(hdr.cancel_pending_message);
         packet.emit(hdr.cancel_reject_message);

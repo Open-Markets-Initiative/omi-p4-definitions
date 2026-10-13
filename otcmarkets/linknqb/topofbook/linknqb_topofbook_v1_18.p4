@@ -6,7 +6,7 @@
 //   Encoding: Otc Link
 //   Version: 1.18
 //   Date: 5/1/2026
-//   Specification: OTC-Link-NQB-MD-Specification.pdf
+//   Specification: OTC Link NQB Multicast Data Feeds Technical Specification v1.17.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

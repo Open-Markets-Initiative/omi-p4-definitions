@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 5.16
 //   Date: 6/1/2022
-//   Specification: Unknown
+//   Specification: Euronext Cash and Derivatives Markets - Optiq MDG Messages - Interface Specification - External - v5.16.0 +TC.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

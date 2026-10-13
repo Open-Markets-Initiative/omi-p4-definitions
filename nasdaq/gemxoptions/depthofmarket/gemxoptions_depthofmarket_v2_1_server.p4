@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 2.1
 //   Date: 02/13/2026
-//   Specification: Options_Depth_of_Market_Feed_2.1.pdf
+//   Specification: ISE_GEMX_MRX_Depth_of_Market_Feed_2.1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

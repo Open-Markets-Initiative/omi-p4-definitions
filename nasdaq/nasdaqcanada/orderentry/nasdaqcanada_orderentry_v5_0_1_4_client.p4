@@ -82,6 +82,12 @@ header cancel_order_request_message_t {
     bit<8> cancel_order_request_optional_field;
 }
 
+header account_query_request_message_t {
+    bit<16> appendage_length;
+    bit<8> optional_field_length;
+    bit<8> account_query_request_optional_field;
+}
+
 header debug_packet_debug_text_t {
     varbit<2048> debug_text;
 }
@@ -97,6 +103,7 @@ struct headers_t {
     enter_order_message_t enter_order_message;
     replace_order_request_message_t replace_order_request_message;
     cancel_order_request_message_t cancel_order_request_message;
+    account_query_request_message_t account_query_request_message;
     debug_packet_debug_text_t debug_packet_debug_text;
 }
 
@@ -408,8 +415,9 @@ parser NasdaqcanadaOrderentryClientParser(packet_in packet, out headers_t hdr, i
     }
 
     state parse_account_query_request_message {
+        packet.extract(hdr.account_query_request_message);
         meta.dispatched = 1;
-        transition select(packet.lookahead<bit<8>>()) {
+        transition select(hdr.account_query_request_message.account_query_request_optional_field) {
             8w37: parse_user_ref_idx;
             default: accept;
         }
@@ -462,6 +470,7 @@ control NasdaqcanadaOrderentryClientDeparser(packet_out packet, in headers_t hdr
         packet.emit(hdr.enter_order_message);
         packet.emit(hdr.replace_order_request_message);
         packet.emit(hdr.cancel_order_request_message);
+        packet.emit(hdr.account_query_request_message);
     }
 }
 

@@ -6,7 +6,7 @@
 //   Encoding: Flat Binary Encoding
 //   Version: 13.0
 //   Date: 10/10/2024
-//   Specification: T7_R.13.0_Enhanced_Trading_Interface_-_Cash_Message_Reference_Version 3.pdf
+//   Specification: T7_R.13.0_Enhanced_Trading_Interface_-_Derivatives_Message_Reference_Version_3.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

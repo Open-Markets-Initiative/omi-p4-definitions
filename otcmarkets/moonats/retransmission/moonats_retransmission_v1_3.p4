@@ -6,7 +6,7 @@
 //   Encoding: Otc Link
 //   Version: 1.3
 //   Date: 5/1/2026
-//   Specification: MOON-ATS-MD-Specification.pdf
+//   Specification: MOON ATS Multicast Data Feeds Specification v1.3.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

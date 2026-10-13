@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.13
 //   Date: 1/1/2024
-//   Specification: MEMO SBE (v1.13) BOATS.pdf
+//   Specification: MEMO SBE v1.13 BOATS.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Binary
 //   Version: 6.9
 //   Date: 4/1/2026
-//   Specification: MTBT_CUR_NNF_PROTOCOL_6_9_20260717161109.pdf
+//   Specification: MTBT_CM_NNF_PROTOCOL_6_9_20260717161001.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -241,6 +241,9 @@ header consolidated_stock_summary_message_t {
     bit<16> market_id_of_low_price;
     bit<16> market_id_of_open_price;
     bit<8> number_of_close_prices;
+}
+
+header consolidated_stock_summary_message_close_price_t {
     bit<16> market_id_of_the_close;
     bit<32> close;
 }
@@ -255,6 +258,7 @@ header consolidated_volume_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<8> consolidated_stock_summary_message_close_price_remaining;
 }
 
 struct headers_t {
@@ -279,6 +283,7 @@ struct headers_t {
     consolidated_trade_cancel_message_t consolidated_trade_cancel_message[MAX_MESSAGES];
     consolidated_trade_correction_message_t consolidated_trade_correction_message[MAX_MESSAGES];
     consolidated_stock_summary_message_t consolidated_stock_summary_message[MAX_MESSAGES];
+    consolidated_stock_summary_message_close_price_t consolidated_stock_summary_message_close_price[MAX_MESSAGES];
     consolidated_volume_message_t consolidated_volume_message[MAX_MESSAGES];
 }
 
@@ -435,7 +440,20 @@ parser NyseequitiesBqtParser(packet_in packet, out headers_t hdr, inout metadata
     state parse_consolidated_stock_summary_message {
         packet.extract(hdr.consolidated_stock_summary_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        meta.consolidated_stock_summary_message_close_price_remaining = hdr.consolidated_stock_summary_message.last.number_of_close_prices;
+        transition select(meta.consolidated_stock_summary_message_close_price_remaining) {
+            8w0: parse_packet_header_message;
+            default: parse_consolidated_stock_summary_message_close_price;
+        }
+    }
+
+    state parse_consolidated_stock_summary_message_close_price {
+        packet.extract(hdr.consolidated_stock_summary_message_close_price.next);
+        meta.consolidated_stock_summary_message_close_price_remaining = meta.consolidated_stock_summary_message_close_price_remaining - 1;
+        transition select(meta.consolidated_stock_summary_message_close_price_remaining) {
+            8w0: parse_packet_header_message;
+            default: parse_consolidated_stock_summary_message_close_price;
+        }
     }
 
     state parse_consolidated_volume_message {
@@ -500,6 +518,7 @@ control NyseequitiesBqtDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.consolidated_trade_cancel_message);
         packet.emit(hdr.consolidated_trade_correction_message);
         packet.emit(hdr.consolidated_stock_summary_message);
+        packet.emit(hdr.consolidated_stock_summary_message_close_price);
         packet.emit(hdr.consolidated_volume_message);
     }
 }

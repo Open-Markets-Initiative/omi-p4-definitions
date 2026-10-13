@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 3.0.2024
 //   Date: 5/28/2024
-//   Specification: NLSTRFFilterview3.0.pdf
+//   Specification: NLSSpecification2.1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

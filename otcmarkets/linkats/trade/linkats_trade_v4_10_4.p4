@@ -6,7 +6,7 @@
 //   Encoding: Otc Link
 //   Version: 4.10.4
 //   Date: 6/16/2026
-//   Specification: OTC Markets Multicast Data Feeds.pdf
+//   Specification: OTC Markets Multicast Data Feeds v4.10.4.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

@@ -185,6 +185,22 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
             8w3: parse_min_qty;
             8w4: parse_customer_type;
             8w5: parse_max_floor;
+            8w6: parse_price_type;
+            8w7: parse_peg_offset;
+            8w9: parse_discretion_price;
+            8w10: parse_discretion_price_type;
+            8w11: parse_discretion_peg_offset;
+            8w12: parse_post_only;
+            8w13: parse_random_reserves;
+            8w15: parse_expire_time;
+            8w16: parse_trade_now;
+            8w17: parse_handle_inst;
+            8w24: parse_group_id;
+            8w25: parse_shares_located;
+            8w26: parse_locate_broker;
+            8w28: parse_user_ref_idx;
+            8w29: parse_aiq_strategy;
+            8w30: parse_aiq_group_id;
             default: accept;
         }
     }
@@ -209,27 +225,37 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
-    state parse_replace_order_message {
-        packet.extract(hdr.replace_order_message);
-        meta.dispatched = 1;
-        transition select(hdr.replace_order_message.replace_order_optional_field) {
-            8w3: parse_min_qty;
-            8w5: parse_max_floor;
-            8w6: parse_price_type;
-            8w12: parse_post_only;
-            8w15: parse_expire_time;
-            8w16: parse_trade_now;
-            8w17: parse_handle_inst;
-            default: accept;
-        }
-    }
-
     state parse_price_type {
         meta.dispatched = 1;
         transition accept;
     }
 
+    state parse_peg_offset {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_discretion_price {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_discretion_price_type {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_discretion_peg_offset {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_post_only {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_random_reserves {
         meta.dispatched = 1;
         transition accept;
     }
@@ -249,16 +275,85 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
+    state parse_group_id {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_shares_located {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_locate_broker {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_user_ref_idx {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_aiq_strategy {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_aiq_group_id {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_replace_order_message {
+        packet.extract(hdr.replace_order_message);
+        meta.dispatched = 1;
+        transition select(hdr.replace_order_message.replace_order_optional_field) {
+            8w3: parse_min_qty;
+            8w5: parse_max_floor;
+            8w6: parse_price_type;
+            8w12: parse_post_only;
+            8w15: parse_expire_time;
+            8w16: parse_trade_now;
+            8w17: parse_handle_inst;
+            8w13: parse_random_reserves;
+            8w7: parse_peg_offset;
+            8w9: parse_discretion_price;
+            8w10: parse_discretion_price_type;
+            8w11: parse_discretion_peg_offset;
+            8w25: parse_shares_located;
+            8w26: parse_locate_broker;
+            8w28: parse_user_ref_idx;
+            8w27: parse_side;
+            8w29: parse_aiq_strategy;
+            8w30: parse_aiq_group_id;
+            default: accept;
+        }
+    }
+
+    state parse_side {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
     state parse_cancel_order_message {
         packet.extract(hdr.cancel_order_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_modify_order_message {
         packet.extract(hdr.modify_order_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w28: parse_user_ref_idx;
+            8w25: parse_shares_located;
+            8w26: parse_locate_broker;
+            default: accept;
+        }
     }
 
     state parse_account_query_message {
@@ -267,11 +362,6 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
             8w28: parse_user_ref_idx;
             default: accept;
         }
-    }
-
-    state parse_user_ref_idx {
-        meta.dispatched = 1;
-        transition accept;
     }
 
     state parse_mass_cancel_request_message {
@@ -283,16 +373,6 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
             8w28: parse_user_ref_idx;
             default: accept;
         }
-    }
-
-    state parse_side {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_group_id {
-        meta.dispatched = 1;
-        transition accept;
     }
 
     state parse_disable_order_entry_request_message {

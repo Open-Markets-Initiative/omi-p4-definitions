@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 4.3
 //   Date: 09/25/2020
-//   Specification: Unknown
+//   Specification: Euronext Markets - Optiq MDG Client Specifications - v4.3.0 +TC.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

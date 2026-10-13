@@ -6,7 +6,7 @@
 //   Encoding: Ascii Itch
 //   Version: 1.1
 //   Date: 08/10/2011
-//   Specification: NQMatchView-V1_1.pdf
+//   Specification: NQOUCH-V1_1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

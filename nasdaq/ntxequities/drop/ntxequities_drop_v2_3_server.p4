@@ -35,13 +35,9 @@ header server_packet_header_t {
     bit<8> server_packet_type;
 }
 
-header debug_packet_t {
-    bit<8> text;
-}
-
 header login_accepted_packet_t {
-    bit<80> session;
-    bit<160> sequence_number;
+    bit<80> accepted_session;
+    bit<160> accepted_sequence_number;
 }
 
 header login_rejected_packet_t {
@@ -294,7 +290,6 @@ struct metadata_t {
 
 struct headers_t {
     server_packet_header_t server_packet_header;
-    debug_packet_t debug_packet;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
     sequenced_data_packet_t sequenced_data_packet;
@@ -319,7 +314,6 @@ parser NtxequitiesDropServerParser(packet_in packet, out headers_t hdr, inout me
     }
 
     state parse_debug_packet {
-        packet.extract(hdr.debug_packet);
         meta.dispatched = 1;
         transition accept;
     }
@@ -417,7 +411,6 @@ control NtxequitiesDropServerComputeChecksum(inout headers_t hdr, inout metadata
 control NtxequitiesDropServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.server_packet_header);
-        packet.emit(hdr.debug_packet);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
         packet.emit(hdr.sequenced_data_packet);
