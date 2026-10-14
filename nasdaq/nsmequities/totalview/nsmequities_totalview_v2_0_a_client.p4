@@ -8,7 +8,7 @@
 //   Date: 02/15/2007
 //   Specification: Nasdaq TotalView ITCH (2.0a).pdf
 // 
-// Byte order: big (P4 extracts in network/big-endian order)
+// Byte order: little (P4 extracts in network/big-endian order)
 // 
 // Script:
 //   Generator: 1.0.0.0

@@ -8,7 +8,7 @@
 //   Date: 08/02/2013
 //   Specification: NLSSpecification.pdf
 // 
-// Byte order: big (P4 extracts in network/big-endian order)
+// Byte order: little (P4 extracts in network/big-endian order)
 // 
 // Script:
 //   Generator: 1.0.0.0
@@ -39,6 +39,9 @@ header packet_header_t {
 
 header message_t {
     bit<16> message_length;
+}
+
+header message_data_t {
     bit<64> timestamp;
     bit<8> message_type;
 }
@@ -152,6 +155,7 @@ struct metadata_t {
 struct headers_t {
     packet_header_t packet_header;
     message_t message[MAX_MESSAGES];
+    message_data_t message_data[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     trade_report_message_t trade_report_message[MAX_MESSAGES];
     trade_cancel_error_message_t trade_cancel_error_message[MAX_MESSAGES];
@@ -170,7 +174,6 @@ parser NsmequitiesLastsaletradesfilterviewParser(packet_in packet, out headers_t
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
             16w0x0: parse_heartbeat;
-            16w0xffff: parse_end_of_session;
             default: parse_message;
         }
     }
@@ -180,14 +183,22 @@ parser NsmequitiesLastsaletradesfilterviewParser(packet_in packet, out headers_t
         transition accept;
     }
 
-    state parse_end_of_session {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
     state parse_message {
         packet.extract(hdr.message.next);
-        transition select(hdr.message.last.message_type) {
+        transition select(hdr.message.last.message_length) {
+            16w0x0: parse_end_of_session;
+            default: parse_message_data;
+        }
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_message_data {
+        packet.extract(hdr.message_data.next);
+        transition select(hdr.message_data.last.message_type) {
             8w0x53: parse_system_event_message;
             8w0x54: parse_trade_report_message;
             8w0x58: parse_trade_cancel_error_message;
@@ -301,6 +312,7 @@ control NsmequitiesLastsaletradesfilterviewDeparser(packet_out packet, in header
     apply {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
+        packet.emit(hdr.message_data);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.trade_report_message);
         packet.emit(hdr.trade_cancel_error_message);

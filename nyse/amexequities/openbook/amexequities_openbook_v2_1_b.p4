@@ -42,6 +42,12 @@ header packet_header_t {
     bit<8> link_flag;
 }
 
+header symbol_index_mapping_response_messages_symbol_index_mapping_response_message_t {
+    bit<88> symbol_11;
+    bit<8> filler_1;
+    bit<32> symbol_index;
+}
+
 header sequence_number_reset_message_t {
     bit<32> next_sequence_number;
 }
@@ -85,13 +91,7 @@ header symbol_index_mapping_request_message_t {
     bit<32> symbol_index;
 }
 
-header symbol_index_mapping_response_message_t {
-    bit<88> symbol_11;
-    bit<8> filler_1;
-    bit<32> symbol_index;
-}
-
-header full_update_messages_t {
+header full_update_messages_full_update_message_t {
     bit<16> update_size;
     bit<32> symbol_index;
     bit<32> source_time;
@@ -111,7 +111,7 @@ header full_update_messages_t {
     bit<8> reserved_1_2;
 }
 
-header delta_update_messages_t {
+header delta_update_messages_delta_update_message_t {
     bit<16> delta_size;
     bit<32> symbol_index;
     bit<32> source_time;
@@ -134,10 +134,14 @@ header delta_update_messages_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<8> symbol_index_mapping_response_messages_symbol_index_mapping_response_message_remaining;
+    bit<8> full_update_messages_full_update_message_remaining;
+    bit<8> delta_update_messages_delta_update_message_remaining;
 }
 
 struct headers_t {
     packet_header_t packet_header;
+    symbol_index_mapping_response_messages_symbol_index_mapping_response_message_t symbol_index_mapping_response_messages_symbol_index_mapping_response_message[MAX_MESSAGES];
     sequence_number_reset_message_t sequence_number_reset_message;
     unavailable_message_t unavailable_message;
     request_response_message_t request_response_message;
@@ -146,15 +150,15 @@ struct headers_t {
     heartbeat_response_message_t heartbeat_response_message;
     extended_book_refresh_request_message_t extended_book_refresh_request_message;
     symbol_index_mapping_request_message_t symbol_index_mapping_request_message;
-    symbol_index_mapping_response_message_t symbol_index_mapping_response_message;
-    full_update_messages_t full_update_messages;
-    delta_update_messages_t delta_update_messages;
+    full_update_messages_full_update_message_t full_update_messages_full_update_message[MAX_MESSAGES];
+    delta_update_messages_delta_update_message_t delta_update_messages_delta_update_message[MAX_MESSAGES];
 }
 
 parser AmexequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_type) {
+            16w35: parse_symbol_index_mapping_response_messages;
             16w1: parse_sequence_number_reset_message;
             16w2: parse_heartbeat_message;
             16w5: parse_unavailable_message;
@@ -165,10 +169,27 @@ parser AmexequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
             16w24: parse_heartbeat_response_message;
             16w27: parse_extended_book_refresh_request_message;
             16w34: parse_symbol_index_mapping_request_message;
-            16w35: parse_symbol_index_mapping_response_message;
             16w230: parse_full_update_messages;
             16w231: parse_delta_update_messages;
             default: accept;
+        }
+    }
+
+    state parse_symbol_index_mapping_response_messages {
+        meta.dispatched = 1;
+        meta.symbol_index_mapping_response_messages_symbol_index_mapping_response_message_remaining = hdr.packet_header.message_count;
+        transition select(meta.symbol_index_mapping_response_messages_symbol_index_mapping_response_message_remaining) {
+            8w0: accept;
+            default: parse_symbol_index_mapping_response_messages_symbol_index_mapping_response_message;
+        }
+    }
+
+    state parse_symbol_index_mapping_response_messages_symbol_index_mapping_response_message {
+        packet.extract(hdr.symbol_index_mapping_response_messages_symbol_index_mapping_response_message.next);
+        meta.symbol_index_mapping_response_messages_symbol_index_mapping_response_message_remaining = meta.symbol_index_mapping_response_messages_symbol_index_mapping_response_message_remaining - 1;
+        transition select(meta.symbol_index_mapping_response_messages_symbol_index_mapping_response_message_remaining) {
+            8w0: accept;
+            default: parse_symbol_index_mapping_response_messages_symbol_index_mapping_response_message;
         }
     }
 
@@ -230,22 +251,40 @@ parser AmexequitiesOpenbookParser(packet_in packet, out headers_t hdr, inout met
         transition accept;
     }
 
-    state parse_symbol_index_mapping_response_message {
-        packet.extract(hdr.symbol_index_mapping_response_message);
+    state parse_full_update_messages {
         meta.dispatched = 1;
-        transition accept;
+        meta.full_update_messages_full_update_message_remaining = hdr.packet_header.message_count;
+        transition select(meta.full_update_messages_full_update_message_remaining) {
+            8w0: accept;
+            default: parse_full_update_messages_full_update_message;
+        }
     }
 
-    state parse_full_update_messages {
-        packet.extract(hdr.full_update_messages);
-        meta.dispatched = 1;
-        transition accept;
+    state parse_full_update_messages_full_update_message {
+        packet.extract(hdr.full_update_messages_full_update_message.next);
+        meta.full_update_messages_full_update_message_remaining = meta.full_update_messages_full_update_message_remaining - 1;
+        transition select(meta.full_update_messages_full_update_message_remaining) {
+            8w0: accept;
+            default: parse_full_update_messages_full_update_message;
+        }
     }
 
     state parse_delta_update_messages {
-        packet.extract(hdr.delta_update_messages);
         meta.dispatched = 1;
-        transition accept;
+        meta.delta_update_messages_delta_update_message_remaining = hdr.packet_header.message_count;
+        transition select(meta.delta_update_messages_delta_update_message_remaining) {
+            8w0: accept;
+            default: parse_delta_update_messages_delta_update_message;
+        }
+    }
+
+    state parse_delta_update_messages_delta_update_message {
+        packet.extract(hdr.delta_update_messages_delta_update_message.next);
+        meta.delta_update_messages_delta_update_message_remaining = meta.delta_update_messages_delta_update_message_remaining - 1;
+        transition select(meta.delta_update_messages_delta_update_message_remaining) {
+            8w0: accept;
+            default: parse_delta_update_messages_delta_update_message;
+        }
     }
 
 }
@@ -279,6 +318,7 @@ control AmexequitiesOpenbookComputeChecksum(inout headers_t hdr, inout metadata_
 control AmexequitiesOpenbookDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
+        packet.emit(hdr.symbol_index_mapping_response_messages_symbol_index_mapping_response_message);
         packet.emit(hdr.sequence_number_reset_message);
         packet.emit(hdr.unavailable_message);
         packet.emit(hdr.request_response_message);
@@ -287,9 +327,8 @@ control AmexequitiesOpenbookDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.heartbeat_response_message);
         packet.emit(hdr.extended_book_refresh_request_message);
         packet.emit(hdr.symbol_index_mapping_request_message);
-        packet.emit(hdr.symbol_index_mapping_response_message);
-        packet.emit(hdr.full_update_messages);
-        packet.emit(hdr.delta_update_messages);
+        packet.emit(hdr.full_update_messages_full_update_message);
+        packet.emit(hdr.delta_update_messages_delta_update_message);
     }
 }
 

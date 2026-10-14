@@ -39,7 +39,7 @@ header packet_header_t {
     bit<4> reserved_4;
     bit<1> seq_num_reset;
     bit<1> heartbeat;
-    bit<8> messages;
+    bit<8> message_count;
     bit<32> packet_milli;
 }
 

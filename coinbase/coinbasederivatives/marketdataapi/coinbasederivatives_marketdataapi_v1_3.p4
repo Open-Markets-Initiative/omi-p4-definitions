@@ -41,6 +41,9 @@ header packet_header_t {
     bit<1> incremental_update;
     bit<8> message_count;
     bit<32> snapshot_instrument_id;
+}
+
+header packet_header_sbe_message_t {
     bit<16> frame_length;
     bit<16> block_length;
     bit<16> template_id;
@@ -411,34 +414,43 @@ struct metadata_t {
 
 struct headers_t {
     packet_header_t packet_header;
-    outright_instrument_definition_message_t outright_instrument_definition_message;
-    spread_instrument_definition_message_t spread_instrument_definition_message;
-    option_instrument_definition_message_t option_instrument_definition_message;
-    trading_status_update_message_t trading_status_update_message;
-    order_put_message_t order_put_message;
-    order_delete_message_t order_delete_message;
-    implied_order_update_message_t implied_order_update_message;
-    trade_summary_message_t trade_summary_message;
-    trade_message_t trade_message;
-    trade_amend_message_t trade_amend_message;
-    spread_trade_amend_message_t spread_trade_amend_message;
-    trade_bust_message_t trade_bust_message;
-    market_stat_message_t market_stat_message;
-    trade_session_volume_message_t trade_session_volume_message;
-    open_interest_message_t open_interest_message;
-    start_of_outright_instrument_snapshot_message_t start_of_outright_instrument_snapshot_message;
-    start_of_spread_instrument_snapshot_message_t start_of_spread_instrument_snapshot_message;
-    start_of_option_instrument_snapshot_message_t start_of_option_instrument_snapshot_message;
-    order_snapshot_message_t order_snapshot_message;
-    end_of_snapshot_message_t end_of_snapshot_message;
-    retransmit_request_message_t retransmit_request_message;
-    retransmit_reject_message_t retransmit_reject_message;
+    packet_header_sbe_message_t packet_header_sbe_message[MAX_MESSAGES];
+    outright_instrument_definition_message_t outright_instrument_definition_message[MAX_MESSAGES];
+    spread_instrument_definition_message_t spread_instrument_definition_message[MAX_MESSAGES];
+    option_instrument_definition_message_t option_instrument_definition_message[MAX_MESSAGES];
+    trading_status_update_message_t trading_status_update_message[MAX_MESSAGES];
+    order_put_message_t order_put_message[MAX_MESSAGES];
+    order_delete_message_t order_delete_message[MAX_MESSAGES];
+    implied_order_update_message_t implied_order_update_message[MAX_MESSAGES];
+    trade_summary_message_t trade_summary_message[MAX_MESSAGES];
+    trade_message_t trade_message[MAX_MESSAGES];
+    trade_amend_message_t trade_amend_message[MAX_MESSAGES];
+    spread_trade_amend_message_t spread_trade_amend_message[MAX_MESSAGES];
+    trade_bust_message_t trade_bust_message[MAX_MESSAGES];
+    market_stat_message_t market_stat_message[MAX_MESSAGES];
+    trade_session_volume_message_t trade_session_volume_message[MAX_MESSAGES];
+    open_interest_message_t open_interest_message[MAX_MESSAGES];
+    start_of_outright_instrument_snapshot_message_t start_of_outright_instrument_snapshot_message[MAX_MESSAGES];
+    start_of_spread_instrument_snapshot_message_t start_of_spread_instrument_snapshot_message[MAX_MESSAGES];
+    start_of_option_instrument_snapshot_message_t start_of_option_instrument_snapshot_message[MAX_MESSAGES];
+    order_snapshot_message_t order_snapshot_message[MAX_MESSAGES];
+    end_of_snapshot_message_t end_of_snapshot_message[MAX_MESSAGES];
+    retransmit_request_message_t retransmit_request_message[MAX_MESSAGES];
+    retransmit_reject_message_t retransmit_reject_message[MAX_MESSAGES];
 }
 
 parser CoinbasederivativesMarketdataapiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
         packet.extract(hdr.packet_header);
-        transition select(hdr.packet_header.template_id) {
+        transition select(hdr.packet_header.message_count) {
+            8w0: parse_packet_header_sbe_message_empty;
+            default: parse_packet_header_sbe_message;
+        }
+    }
+
+    state parse_packet_header_sbe_message {
+        packet.extract(hdr.packet_header_sbe_message.next);
+        transition select(hdr.packet_header_sbe_message.last.template_id) {
             16w0xa00: parse_outright_instrument_definition_message;
             16w0xb00: parse_spread_instrument_definition_message;
             16w0xc00: parse_option_instrument_definition_message;
@@ -466,133 +478,138 @@ parser CoinbasederivativesMarketdataapiParser(packet_in packet, out headers_t hd
     }
 
     state parse_outright_instrument_definition_message {
-        packet.extract(hdr.outright_instrument_definition_message);
+        packet.extract(hdr.outright_instrument_definition_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_spread_instrument_definition_message {
-        packet.extract(hdr.spread_instrument_definition_message);
+        packet.extract(hdr.spread_instrument_definition_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_option_instrument_definition_message {
-        packet.extract(hdr.option_instrument_definition_message);
+        packet.extract(hdr.option_instrument_definition_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_trading_status_update_message {
-        packet.extract(hdr.trading_status_update_message);
+        packet.extract(hdr.trading_status_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_order_put_message {
-        packet.extract(hdr.order_put_message);
+        packet.extract(hdr.order_put_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_order_delete_message {
-        packet.extract(hdr.order_delete_message);
+        packet.extract(hdr.order_delete_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_implied_order_update_message {
-        packet.extract(hdr.implied_order_update_message);
+        packet.extract(hdr.implied_order_update_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_trade_summary_message {
-        packet.extract(hdr.trade_summary_message);
+        packet.extract(hdr.trade_summary_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_trade_message {
-        packet.extract(hdr.trade_message);
+        packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_trade_amend_message {
-        packet.extract(hdr.trade_amend_message);
+        packet.extract(hdr.trade_amend_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_spread_trade_amend_message {
-        packet.extract(hdr.spread_trade_amend_message);
+        packet.extract(hdr.spread_trade_amend_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_trade_bust_message {
-        packet.extract(hdr.trade_bust_message);
+        packet.extract(hdr.trade_bust_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_market_stat_message {
-        packet.extract(hdr.market_stat_message);
+        packet.extract(hdr.market_stat_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_trade_session_volume_message {
-        packet.extract(hdr.trade_session_volume_message);
+        packet.extract(hdr.trade_session_volume_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_open_interest_message {
-        packet.extract(hdr.open_interest_message);
+        packet.extract(hdr.open_interest_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_start_of_outright_instrument_snapshot_message {
-        packet.extract(hdr.start_of_outright_instrument_snapshot_message);
+        packet.extract(hdr.start_of_outright_instrument_snapshot_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_start_of_spread_instrument_snapshot_message {
-        packet.extract(hdr.start_of_spread_instrument_snapshot_message);
+        packet.extract(hdr.start_of_spread_instrument_snapshot_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_start_of_option_instrument_snapshot_message {
-        packet.extract(hdr.start_of_option_instrument_snapshot_message);
+        packet.extract(hdr.start_of_option_instrument_snapshot_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_order_snapshot_message {
-        packet.extract(hdr.order_snapshot_message);
+        packet.extract(hdr.order_snapshot_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_end_of_snapshot_message {
-        packet.extract(hdr.end_of_snapshot_message);
+        packet.extract(hdr.end_of_snapshot_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_retransmit_request_message {
-        packet.extract(hdr.retransmit_request_message);
+        packet.extract(hdr.retransmit_request_message.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_packet_header_sbe_message;
     }
 
     state parse_retransmit_reject_message {
-        packet.extract(hdr.retransmit_reject_message);
+        packet.extract(hdr.retransmit_reject_message.next);
+        meta.dispatched = 1;
+        transition parse_packet_header_sbe_message;
+    }
+
+    state parse_packet_header_sbe_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
@@ -628,6 +645,7 @@ control CoinbasederivativesMarketdataapiComputeChecksum(inout headers_t hdr, ino
 control CoinbasederivativesMarketdataapiDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
+        packet.emit(hdr.packet_header_sbe_message);
         packet.emit(hdr.outright_instrument_definition_message);
         packet.emit(hdr.spread_instrument_definition_message);
         packet.emit(hdr.option_instrument_definition_message);

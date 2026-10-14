@@ -8,7 +8,7 @@
 //   Date: 08/09/2006
 //   Specification: Nasdaq TotalView ITCH (2.0).pdf
 // 
-// Byte order: big (P4 extracts in network/big-endian order)
+// Byte order: little (P4 extracts in network/big-endian order)
 // 
 // Script:
 //   Generator: 1.0.0.0
@@ -39,6 +39,9 @@ header packet_header_t {
 
 header message_t {
     bit<16> message_length;
+}
+
+header message_data_t {
     bit<64> timestamp;
     bit<8> message_type;
 }
@@ -87,6 +90,7 @@ struct metadata_t {
 struct headers_t {
     packet_header_t packet_header;
     message_t message[MAX_MESSAGES];
+    message_data_t message_data[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     add_order_message_t add_order_message[MAX_MESSAGES];
     order_executed_message_t order_executed_message[MAX_MESSAGES];
@@ -100,7 +104,6 @@ parser NsmequitiesTotalviewUdpParser(packet_in packet, out headers_t hdr, inout 
         packet.extract(hdr.packet_header);
         transition select(hdr.packet_header.message_count) {
             16w0x0: parse_heartbeat;
-            16w0xffff: parse_end_of_session;
             default: parse_message;
         }
     }
@@ -110,14 +113,22 @@ parser NsmequitiesTotalviewUdpParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
-    state parse_end_of_session {
-        meta.dispatched = 1;
-        transition accept;
-    }
-
     state parse_message {
         packet.extract(hdr.message.next);
-        transition select(hdr.message.last.message_type) {
+        transition select(hdr.message.last.message_length) {
+            16w0x0: parse_end_of_session;
+            default: parse_message_data;
+        }
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_message_data {
+        packet.extract(hdr.message_data.next);
+        transition select(hdr.message_data.last.message_type) {
             8w0x53: parse_system_event_message;
             8w0x41: parse_add_order_message;
             8w0x45: parse_order_executed_message;
@@ -196,6 +207,7 @@ control NsmequitiesTotalviewUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
+        packet.emit(hdr.message_data);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.add_order_message);
         packet.emit(hdr.order_executed_message);
