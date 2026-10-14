@@ -65,7 +65,7 @@ header admin_login_t {
 }
 
 header admin_logout_t {
-    bit<800> text;
+    bit<1440> logout_text;
 }
 
 header security_status_t {

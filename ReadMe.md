@@ -3,7 +3,7 @@
 Omi [P4](https://p4.org/ "Programming Protocol-independent Packet Processors") definitions describe common binary exchange protocols as target independent P4₁₆ programs, so the wire format parses on P4 software and hardware data planes.
 
 
-[![P4](https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/About/Images/P4.png)](https://p4.org/)
+[![P4](https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/raw/main/About/Images/P4.png)](https://p4.org/)
 
 These definitions are built and tested with the P4 reference toolchain: [p4c](https://github.com/p4lang/p4c "The P4 reference compiler")
 ## Usage
@@ -34,7 +34,7 @@ Production packet captures are required for protocol verification.  If your orga
 
 ## Open Markets Initiative
 
-[![Omi](https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/About/Images/Logo.png)](https://github.com/Open-Markets-Initiative/Directory)  The Open Markets Initiative (Omi) is a group of technologists dedicated to enhancing the stability of electronic financial markets using modern development methods.
+[![Omi](https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/raw/main/About/Images/Logo.png)](https://github.com/Open-Markets-Initiative/Directory)  The Open Markets Initiative (Omi) is a group of technologists dedicated to enhancing the stability of electronic financial markets using modern development methods.
 
 Other generated code can be found at [Omi Repositories](https://github.com/Open-Markets-Initiative/Directory/tree/main/Repositories "Open Markets Initiative Repositories"); for Omi rules and regulations, see [Omi Directory](https://github.com/Open-Markets-Initiative/Directory "Open Markets Initiative Directory").
 ## Organizations
