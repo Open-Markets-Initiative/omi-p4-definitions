@@ -31,6 +31,10 @@ class MemxequitiesMemoirdepthfeedV13Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Memx/MemxEquities.MemoirDepthFeed.Sbe.v1.3/Heartbeat.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
+    def test_instrumentdirectorymessage(self):
+        for payload in payloads.of("omi-data-packets/Memx/MemxEquities.MemoirDepthFeed.Sbe.v1.3/InstrumentDirectoryMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
     def test_orderaddedmessage(self):
         for payload in payloads.of("omi-data-packets/Memx/MemxEquities.MemoirDepthFeed.Sbe.v1.3/OrderAddedMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
@@ -53,6 +57,14 @@ class MemxequitiesMemoirdepthfeedV13Tests(unittest.TestCase):
 
     def test_securitytradingstatusmessage(self):
         for payload in payloads.of("omi-data-packets/Memx/MemxEquities.MemoirDepthFeed.Sbe.v1.3/SecurityTradingStatusMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_sessionshutdown(self):
+        for payload in payloads.of("omi-data-packets/Memx/MemxEquities.MemoirDepthFeed.Sbe.v1.3/SessionShutdown.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_trademessage(self):
+        for payload in payloads.of("omi-data-packets/Memx/MemxEquities.MemoirDepthFeed.Sbe.v1.3/TradeMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
     def test_tradingsessionstatusmessage(self):

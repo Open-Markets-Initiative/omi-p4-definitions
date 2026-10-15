@@ -61,6 +61,7 @@ header unsequenced_message_t {
     bit<8> template_id;
     bit<8> schema_id;
     bit<16> version;
+    bit<8> num_groups;
 }
 
 header new_order_single_message_t {

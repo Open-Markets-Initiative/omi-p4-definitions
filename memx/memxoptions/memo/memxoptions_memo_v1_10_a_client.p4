@@ -1,0 +1,754 @@
+// P4_16 (v1model) definition for: Memx MemxOptions Memo Sbe v1.10.a
+// 
+// Protocol:
+//   Organization: The Members Exchange
+//   Protocol: Members Orders
+//   Encoding: Simple Binary Encoding
+//   Version: 1.10.a
+//   Date: 2/25/2026
+//   Specification: MEMO for US Options - SBE-v1_10a.pdf
+// 
+// Byte order: big (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: Public/GPLv3
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header common_header_t {
+    bit<8> message_type;
+    bit<16> message_length;
+}
+
+header login_request_message_t {
+    bit<8> token_type;
+    bit<8> token;
+}
+
+header replay_request_message_t {
+    bit<64> session_id;
+    bit<64> next_sequence_number;
+    bit<32> count;
+}
+
+header replay_all_request_message_t {
+    bit<64> session_id;
+}
+
+header stream_request_message_t {
+    bit<64> session_id;
+    bit<64> next_sequence_number;
+}
+
+header unsequenced_message_t {
+    bit<16> block_length;
+    bit<8> template_id;
+    bit<8> schema_id;
+    bit<16> version;
+    bit<8> num_groups;
+}
+
+header new_order_single_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<64> security_id;
+    bit<8> side;
+    bit<32> order_qty;
+    bit<8> ord_type;
+    bit<64> price_optional;
+    bit<8> time_in_force;
+    bit<8> position_effect_optional;
+    bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
+    bit<8> trading_capacity;
+    bit<8> reprice_frequency;
+    bit<8> reprice_behavior;
+    bit<16> mtp_group_id;
+    bit<8> match_trade_prevention;
+    bit<16> cancel_group_id;
+    bit<16> risk_group_id;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header new_order_single_message_parties_group_t {
+    bit<128> party_id;
+    bit<8> party_id_source;
+    bit<8> party_role;
+}
+
+header short_two_sided_bulk_quote_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<8> time_in_force;
+    bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
+    bit<8> trading_capacity;
+    bit<16> mtp_group_id;
+    bit<8> match_trade_prevention;
+    bit<16> cancel_group_id;
+    bit<16> risk_group_id;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header short_two_sided_bulk_quote_message_parties_group_t {
+    bit<128> party_id;
+    bit<8> party_id_source;
+    bit<8> party_role;
+}
+
+header short_two_sided_bulk_quote_message_two_sided_quotes_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header short_two_sided_bulk_quote_message_two_sided_quotes_group_t {
+    bit<8> list_seq_no;
+    bit<64> security_id;
+    bit<16> bid_size;
+    bit<16> bid_px;
+    bit<16> offer_size;
+    bit<16> offer_px;
+}
+
+header long_two_sided_bulk_quote_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<8> time_in_force;
+    bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
+    bit<8> trading_capacity;
+    bit<16> mtp_group_id;
+    bit<8> match_trade_prevention;
+    bit<16> cancel_group_id;
+    bit<16> risk_group_id;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header long_two_sided_bulk_quote_message_parties_group_t {
+    bit<128> party_id;
+    bit<8> party_id_source;
+    bit<8> party_role;
+}
+
+header long_two_sided_bulk_quote_message_two_sided_quotes_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header long_two_sided_bulk_quote_message_two_sided_quotes_group_t {
+    bit<8> list_seq_no;
+    bit<64> security_id;
+    bit<16> bid_size;
+    bit<16> bid_px;
+    bit<16> offer_size;
+    bit<16> offer_px;
+}
+
+header short_one_sided_bulk_quote_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<8> time_in_force;
+    bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
+    bit<8> trading_capacity;
+    bit<16> mtp_group_id;
+    bit<8> match_trade_prevention;
+    bit<16> cancel_group_id;
+    bit<16> risk_group_id;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header short_one_sided_bulk_quote_message_parties_group_t {
+    bit<128> party_id;
+    bit<8> party_id_source;
+    bit<8> party_role;
+}
+
+header short_one_sided_bulk_quote_message_one_sided_quotes_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header short_one_sided_bulk_quote_message_one_sided_quotes_group_t {
+    bit<8> list_seq_no;
+    bit<64> security_id;
+    bit<8> side;
+    bit<16> quantity;
+    bit<16> price_short;
+}
+
+header long_one_sided_bulk_quote_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<8> time_in_force;
+    bit<13> reserved_13;
+    bit<1> external_routing_not_allowed;
+    bit<1> intermarket_sweep;
+    bit<1> participate_do_not_initiate;
+    bit<8> trading_capacity;
+    bit<16> mtp_group_id;
+    bit<8> match_trade_prevention;
+    bit<16> cancel_group_id;
+    bit<16> risk_group_id;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header long_one_sided_bulk_quote_message_parties_group_t {
+    bit<128> party_id;
+    bit<8> party_id_source;
+    bit<8> party_role;
+}
+
+header long_one_sided_bulk_quote_message_one_sided_quotes_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header long_one_sided_bulk_quote_message_one_sided_quotes_group_t {
+    bit<8> list_seq_no;
+    bit<64> security_id;
+    bit<8> side;
+    bit<16> quantity;
+    bit<16> price_short;
+}
+
+header order_cancel_replace_request_message_t {
+    bit<64> sending_time;
+    bit<64> order_id_optional;
+    bit<160> clordid;
+    bit<8> list_seq_no;
+    bit<160> origclordid;
+    bit<64> security_id;
+    bit<8> side;
+    bit<32> order_qty;
+    bit<8> ord_type;
+    bit<64> price_optional;
+}
+
+header order_cancel_request_message_t {
+    bit<64> sending_time;
+    bit<64> order_id_optional;
+    bit<160> clordid;
+    bit<8> list_seq_no;
+    bit<160> origclordid_optional;
+    bit<64> security_id;
+    bit<8> side_optional;
+}
+
+header mass_cancel_request_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<32> efid_optional;
+    bit<8> underlying_or_series;
+    bit<48> underlier;
+    bit<64> options_security_id_optional;
+    bit<16> cancel_group_id;
+    bit<5> reserved_5;
+    bit<1> cancel_orders_from_this_port_only;
+    bit<1> send_cancels;
+    bit<1> lockout;
+}
+
+header mass_cancel_clear_lockout_request_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<48> underlier;
+    bit<64> lockout_id;
+}
+
+header mass_cancel_bulk_clear_all_lockouts_request_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+}
+
+header mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message_t {
+    bit<64> sending_time;
+    bit<160> clordid;
+    bit<32> efid_optional;
+    bit<48> underlier_optional;
+}
+
+header allocation_instruction_message_t {
+    bit<64> sending_time;
+    bit<160> alloc_id;
+    bit<8> alloc_type;
+    bit<8> alloc_trans_type;
+    bit<160> ref_alloc_id_optional;
+    bit<64> security_id;
+    bit<8> side;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header allocation_instruction_message_execution_allocations_group_t {
+    bit<64> trade_id;
+    bit<32> last_qty;
+    bit<64> last_px;
+}
+
+header allocation_instruction_message_requested_allocations_group_header_t {
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header allocation_instruction_message_requested_allocations_group_t {
+    bit<32> alloc_qty;
+    bit<8> alloc_position_effect;
+    bit<8> trading_capacity_optional;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+    bit<8> new_order_single_message_parties_group_remaining;
+    bit<8> short_two_sided_bulk_quote_message_parties_group_remaining;
+    bit<8> short_two_sided_bulk_quote_message_two_sided_quotes_group_remaining;
+    bit<8> long_two_sided_bulk_quote_message_parties_group_remaining;
+    bit<8> long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining;
+    bit<8> short_one_sided_bulk_quote_message_parties_group_remaining;
+    bit<8> short_one_sided_bulk_quote_message_one_sided_quotes_group_remaining;
+    bit<8> long_one_sided_bulk_quote_message_parties_group_remaining;
+    bit<8> long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining;
+    bit<8> allocation_instruction_message_execution_allocations_group_remaining;
+    bit<8> allocation_instruction_message_requested_allocations_group_remaining;
+}
+
+struct headers_t {
+    common_header_t common_header;
+    login_request_message_t login_request_message;
+    replay_request_message_t replay_request_message;
+    replay_all_request_message_t replay_all_request_message;
+    stream_request_message_t stream_request_message;
+    unsequenced_message_t unsequenced_message;
+    new_order_single_message_t new_order_single_message;
+    new_order_single_message_parties_group_t new_order_single_message_parties_group[MAX_MESSAGES];
+    short_two_sided_bulk_quote_message_t short_two_sided_bulk_quote_message;
+    short_two_sided_bulk_quote_message_parties_group_t short_two_sided_bulk_quote_message_parties_group[MAX_MESSAGES];
+    short_two_sided_bulk_quote_message_two_sided_quotes_group_header_t short_two_sided_bulk_quote_message_two_sided_quotes_group_header;
+    short_two_sided_bulk_quote_message_two_sided_quotes_group_t short_two_sided_bulk_quote_message_two_sided_quotes_group[MAX_MESSAGES];
+    long_two_sided_bulk_quote_message_t long_two_sided_bulk_quote_message;
+    long_two_sided_bulk_quote_message_parties_group_t long_two_sided_bulk_quote_message_parties_group[MAX_MESSAGES];
+    long_two_sided_bulk_quote_message_two_sided_quotes_group_header_t long_two_sided_bulk_quote_message_two_sided_quotes_group_header;
+    long_two_sided_bulk_quote_message_two_sided_quotes_group_t long_two_sided_bulk_quote_message_two_sided_quotes_group[MAX_MESSAGES];
+    short_one_sided_bulk_quote_message_t short_one_sided_bulk_quote_message;
+    short_one_sided_bulk_quote_message_parties_group_t short_one_sided_bulk_quote_message_parties_group[MAX_MESSAGES];
+    short_one_sided_bulk_quote_message_one_sided_quotes_group_header_t short_one_sided_bulk_quote_message_one_sided_quotes_group_header;
+    short_one_sided_bulk_quote_message_one_sided_quotes_group_t short_one_sided_bulk_quote_message_one_sided_quotes_group[MAX_MESSAGES];
+    long_one_sided_bulk_quote_message_t long_one_sided_bulk_quote_message;
+    long_one_sided_bulk_quote_message_parties_group_t long_one_sided_bulk_quote_message_parties_group[MAX_MESSAGES];
+    long_one_sided_bulk_quote_message_one_sided_quotes_group_header_t long_one_sided_bulk_quote_message_one_sided_quotes_group_header;
+    long_one_sided_bulk_quote_message_one_sided_quotes_group_t long_one_sided_bulk_quote_message_one_sided_quotes_group[MAX_MESSAGES];
+    order_cancel_replace_request_message_t order_cancel_replace_request_message;
+    order_cancel_request_message_t order_cancel_request_message;
+    mass_cancel_request_message_t mass_cancel_request_message;
+    mass_cancel_clear_lockout_request_message_t mass_cancel_clear_lockout_request_message;
+    mass_cancel_bulk_clear_all_lockouts_request_message_t mass_cancel_bulk_clear_all_lockouts_request_message;
+    mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message_t mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message;
+    allocation_instruction_message_t allocation_instruction_message;
+    allocation_instruction_message_execution_allocations_group_t allocation_instruction_message_execution_allocations_group[MAX_MESSAGES];
+    allocation_instruction_message_requested_allocations_group_header_t allocation_instruction_message_requested_allocations_group_header;
+    allocation_instruction_message_requested_allocations_group_t allocation_instruction_message_requested_allocations_group[MAX_MESSAGES];
+}
+
+parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.common_header);
+        transition select(hdr.common_header.message_type) {
+            8w100: parse_login_request_message;
+            8w101: parse_replay_request_message;
+            8w102: parse_replay_all_request_message;
+            8w103: parse_stream_request_message;
+            8w104: parse_unsequenced_message;
+            default: accept;
+        }
+    }
+
+    state parse_login_request_message {
+        packet.extract(hdr.login_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_replay_request_message {
+        packet.extract(hdr.replay_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_replay_all_request_message {
+        packet.extract(hdr.replay_all_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_stream_request_message {
+        packet.extract(hdr.stream_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_unsequenced_message {
+        packet.extract(hdr.unsequenced_message);
+        meta.dispatched = 1;
+        transition select(hdr.unsequenced_message.template_id) {
+            8w1: parse_new_order_single_message;
+            8w2: parse_short_two_sided_bulk_quote_message;
+            8w3: parse_long_two_sided_bulk_quote_message;
+            8w4: parse_short_one_sided_bulk_quote_message;
+            8w5: parse_long_one_sided_bulk_quote_message;
+            8w6: parse_order_cancel_replace_request_message;
+            8w7: parse_order_cancel_request_message;
+            8w8: parse_mass_cancel_request_message;
+            8w9: parse_mass_cancel_clear_lockout_request_message;
+            8w32: parse_mass_cancel_bulk_clear_all_lockouts_request_message;
+            8w33: parse_mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message;
+            8w10: parse_allocation_instruction_message;
+            default: accept;
+        }
+    }
+
+    state parse_new_order_single_message {
+        packet.extract(hdr.new_order_single_message);
+        meta.dispatched = 1;
+        meta.new_order_single_message_parties_group_remaining = hdr.new_order_single_message.num_in_group;
+        transition select(meta.new_order_single_message_parties_group_remaining) {
+            8w0: accept;
+            default: parse_new_order_single_message_parties_group;
+        }
+    }
+
+    state parse_new_order_single_message_parties_group {
+        packet.extract(hdr.new_order_single_message_parties_group.next);
+        meta.new_order_single_message_parties_group_remaining = meta.new_order_single_message_parties_group_remaining - 1;
+        transition select(meta.new_order_single_message_parties_group_remaining) {
+            8w0: accept;
+            default: parse_new_order_single_message_parties_group;
+        }
+    }
+
+    state parse_short_two_sided_bulk_quote_message {
+        packet.extract(hdr.short_two_sided_bulk_quote_message);
+        meta.dispatched = 1;
+        meta.short_two_sided_bulk_quote_message_parties_group_remaining = hdr.short_two_sided_bulk_quote_message.num_in_group;
+        transition select(meta.short_two_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_short_two_sided_bulk_quote_message_two_sided_quotes_group;
+            default: parse_short_two_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state parse_short_two_sided_bulk_quote_message_parties_group {
+        packet.extract(hdr.short_two_sided_bulk_quote_message_parties_group.next);
+        meta.short_two_sided_bulk_quote_message_parties_group_remaining = meta.short_two_sided_bulk_quote_message_parties_group_remaining - 1;
+        transition select(meta.short_two_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_short_two_sided_bulk_quote_message_two_sided_quotes_group;
+            default: parse_short_two_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state read_short_two_sided_bulk_quote_message_two_sided_quotes_group {
+        packet.extract(hdr.short_two_sided_bulk_quote_message_two_sided_quotes_group_header);
+        meta.short_two_sided_bulk_quote_message_two_sided_quotes_group_remaining = hdr.short_two_sided_bulk_quote_message_two_sided_quotes_group_header.num_in_group;
+        transition select(meta.short_two_sided_bulk_quote_message_two_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_short_two_sided_bulk_quote_message_two_sided_quotes_group;
+        }
+    }
+
+    state parse_short_two_sided_bulk_quote_message_two_sided_quotes_group {
+        packet.extract(hdr.short_two_sided_bulk_quote_message_two_sided_quotes_group.next);
+        meta.short_two_sided_bulk_quote_message_two_sided_quotes_group_remaining = meta.short_two_sided_bulk_quote_message_two_sided_quotes_group_remaining - 1;
+        transition select(meta.short_two_sided_bulk_quote_message_two_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_short_two_sided_bulk_quote_message_two_sided_quotes_group;
+        }
+    }
+
+    state parse_long_two_sided_bulk_quote_message {
+        packet.extract(hdr.long_two_sided_bulk_quote_message);
+        meta.dispatched = 1;
+        meta.long_two_sided_bulk_quote_message_parties_group_remaining = hdr.long_two_sided_bulk_quote_message.num_in_group;
+        transition select(meta.long_two_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+            default: parse_long_two_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state parse_long_two_sided_bulk_quote_message_parties_group {
+        packet.extract(hdr.long_two_sided_bulk_quote_message_parties_group.next);
+        meta.long_two_sided_bulk_quote_message_parties_group_remaining = meta.long_two_sided_bulk_quote_message_parties_group_remaining - 1;
+        transition select(meta.long_two_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+            default: parse_long_two_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state read_long_two_sided_bulk_quote_message_two_sided_quotes_group {
+        packet.extract(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group_header);
+        meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining = hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group_header.num_in_group;
+        transition select(meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+        }
+    }
+
+    state parse_long_two_sided_bulk_quote_message_two_sided_quotes_group {
+        packet.extract(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group.next);
+        meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining = meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining - 1;
+        transition select(meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+        }
+    }
+
+    state parse_short_one_sided_bulk_quote_message {
+        packet.extract(hdr.short_one_sided_bulk_quote_message);
+        meta.dispatched = 1;
+        meta.short_one_sided_bulk_quote_message_parties_group_remaining = hdr.short_one_sided_bulk_quote_message.num_in_group;
+        transition select(meta.short_one_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_short_one_sided_bulk_quote_message_one_sided_quotes_group;
+            default: parse_short_one_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state parse_short_one_sided_bulk_quote_message_parties_group {
+        packet.extract(hdr.short_one_sided_bulk_quote_message_parties_group.next);
+        meta.short_one_sided_bulk_quote_message_parties_group_remaining = meta.short_one_sided_bulk_quote_message_parties_group_remaining - 1;
+        transition select(meta.short_one_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_short_one_sided_bulk_quote_message_one_sided_quotes_group;
+            default: parse_short_one_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state read_short_one_sided_bulk_quote_message_one_sided_quotes_group {
+        packet.extract(hdr.short_one_sided_bulk_quote_message_one_sided_quotes_group_header);
+        meta.short_one_sided_bulk_quote_message_one_sided_quotes_group_remaining = hdr.short_one_sided_bulk_quote_message_one_sided_quotes_group_header.num_in_group;
+        transition select(meta.short_one_sided_bulk_quote_message_one_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_short_one_sided_bulk_quote_message_one_sided_quotes_group;
+        }
+    }
+
+    state parse_short_one_sided_bulk_quote_message_one_sided_quotes_group {
+        packet.extract(hdr.short_one_sided_bulk_quote_message_one_sided_quotes_group.next);
+        meta.short_one_sided_bulk_quote_message_one_sided_quotes_group_remaining = meta.short_one_sided_bulk_quote_message_one_sided_quotes_group_remaining - 1;
+        transition select(meta.short_one_sided_bulk_quote_message_one_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_short_one_sided_bulk_quote_message_one_sided_quotes_group;
+        }
+    }
+
+    state parse_long_one_sided_bulk_quote_message {
+        packet.extract(hdr.long_one_sided_bulk_quote_message);
+        meta.dispatched = 1;
+        meta.long_one_sided_bulk_quote_message_parties_group_remaining = hdr.long_one_sided_bulk_quote_message.num_in_group;
+        transition select(meta.long_one_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+            default: parse_long_one_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state parse_long_one_sided_bulk_quote_message_parties_group {
+        packet.extract(hdr.long_one_sided_bulk_quote_message_parties_group.next);
+        meta.long_one_sided_bulk_quote_message_parties_group_remaining = meta.long_one_sided_bulk_quote_message_parties_group_remaining - 1;
+        transition select(meta.long_one_sided_bulk_quote_message_parties_group_remaining) {
+            8w0: read_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+            default: parse_long_one_sided_bulk_quote_message_parties_group;
+        }
+    }
+
+    state read_long_one_sided_bulk_quote_message_one_sided_quotes_group {
+        packet.extract(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group_header);
+        meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining = hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group_header.num_in_group;
+        transition select(meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+        }
+    }
+
+    state parse_long_one_sided_bulk_quote_message_one_sided_quotes_group {
+        packet.extract(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group.next);
+        meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining = meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining - 1;
+        transition select(meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining) {
+            8w0: accept;
+            default: parse_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+        }
+    }
+
+    state parse_order_cancel_replace_request_message {
+        packet.extract(hdr.order_cancel_replace_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_order_cancel_request_message {
+        packet.extract(hdr.order_cancel_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_mass_cancel_request_message {
+        packet.extract(hdr.mass_cancel_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_mass_cancel_clear_lockout_request_message {
+        packet.extract(hdr.mass_cancel_clear_lockout_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_mass_cancel_bulk_clear_all_lockouts_request_message {
+        packet.extract(hdr.mass_cancel_bulk_clear_all_lockouts_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message {
+        packet.extract(hdr.mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_allocation_instruction_message {
+        packet.extract(hdr.allocation_instruction_message);
+        meta.dispatched = 1;
+        meta.allocation_instruction_message_execution_allocations_group_remaining = hdr.allocation_instruction_message.num_in_group;
+        transition select(meta.allocation_instruction_message_execution_allocations_group_remaining) {
+            8w0: read_allocation_instruction_message_requested_allocations_group;
+            default: parse_allocation_instruction_message_execution_allocations_group;
+        }
+    }
+
+    state parse_allocation_instruction_message_execution_allocations_group {
+        packet.extract(hdr.allocation_instruction_message_execution_allocations_group.next);
+        meta.allocation_instruction_message_execution_allocations_group_remaining = meta.allocation_instruction_message_execution_allocations_group_remaining - 1;
+        transition select(meta.allocation_instruction_message_execution_allocations_group_remaining) {
+            8w0: read_allocation_instruction_message_requested_allocations_group;
+            default: parse_allocation_instruction_message_execution_allocations_group;
+        }
+    }
+
+    state read_allocation_instruction_message_requested_allocations_group {
+        packet.extract(hdr.allocation_instruction_message_requested_allocations_group_header);
+        meta.allocation_instruction_message_requested_allocations_group_remaining = hdr.allocation_instruction_message_requested_allocations_group_header.num_in_group;
+        transition select(meta.allocation_instruction_message_requested_allocations_group_remaining) {
+            8w0: accept;
+            default: parse_allocation_instruction_message_requested_allocations_group;
+        }
+    }
+
+    state parse_allocation_instruction_message_requested_allocations_group {
+        packet.extract(hdr.allocation_instruction_message_requested_allocations_group.next);
+        meta.allocation_instruction_message_requested_allocations_group_remaining = meta.allocation_instruction_message_requested_allocations_group_remaining - 1;
+        transition select(meta.allocation_instruction_message_requested_allocations_group_remaining) {
+            8w0: accept;
+            default: parse_allocation_instruction_message_requested_allocations_group;
+        }
+    }
+
+}
+
+control MemxoptionsMemoClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control MemxoptionsMemoClientIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control MemxoptionsMemoClientEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control MemxoptionsMemoClientComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control MemxoptionsMemoClientDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.common_header);
+        packet.emit(hdr.login_request_message);
+        packet.emit(hdr.replay_request_message);
+        packet.emit(hdr.replay_all_request_message);
+        packet.emit(hdr.stream_request_message);
+        packet.emit(hdr.unsequenced_message);
+        packet.emit(hdr.new_order_single_message);
+        packet.emit(hdr.new_order_single_message_parties_group);
+        packet.emit(hdr.short_two_sided_bulk_quote_message);
+        packet.emit(hdr.short_two_sided_bulk_quote_message_parties_group);
+        packet.emit(hdr.short_two_sided_bulk_quote_message_two_sided_quotes_group_header);
+        packet.emit(hdr.short_two_sided_bulk_quote_message_two_sided_quotes_group);
+        packet.emit(hdr.long_two_sided_bulk_quote_message);
+        packet.emit(hdr.long_two_sided_bulk_quote_message_parties_group);
+        packet.emit(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group_header);
+        packet.emit(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group);
+        packet.emit(hdr.short_one_sided_bulk_quote_message);
+        packet.emit(hdr.short_one_sided_bulk_quote_message_parties_group);
+        packet.emit(hdr.short_one_sided_bulk_quote_message_one_sided_quotes_group_header);
+        packet.emit(hdr.short_one_sided_bulk_quote_message_one_sided_quotes_group);
+        packet.emit(hdr.long_one_sided_bulk_quote_message);
+        packet.emit(hdr.long_one_sided_bulk_quote_message_parties_group);
+        packet.emit(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group_header);
+        packet.emit(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group);
+        packet.emit(hdr.order_cancel_replace_request_message);
+        packet.emit(hdr.order_cancel_request_message);
+        packet.emit(hdr.mass_cancel_request_message);
+        packet.emit(hdr.mass_cancel_clear_lockout_request_message);
+        packet.emit(hdr.mass_cancel_bulk_clear_all_lockouts_request_message);
+        packet.emit(hdr.mass_cancel_bulk_clear_lockouts_by_efid_or_underlier_request_message);
+        packet.emit(hdr.allocation_instruction_message);
+        packet.emit(hdr.allocation_instruction_message_execution_allocations_group);
+        packet.emit(hdr.allocation_instruction_message_requested_allocations_group_header);
+        packet.emit(hdr.allocation_instruction_message_requested_allocations_group);
+    }
+}
+
+V1Switch(
+    MemxoptionsMemoClientParser(),
+    MemxoptionsMemoClientVerifyChecksum(),
+    MemxoptionsMemoClientIngress(),
+    MemxoptionsMemoClientEgress(),
+    MemxoptionsMemoClientComputeChecksum(),
+    MemxoptionsMemoClientDeparser()
+) main;

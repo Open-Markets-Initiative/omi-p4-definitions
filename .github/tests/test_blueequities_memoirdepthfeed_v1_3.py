@@ -27,6 +27,14 @@ class BlueequitiesMemoirdepthfeedV13Tests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
+    def test_heartbeat(self):
+        for payload in payloads.of("omi-data-packets/BlueOceanAts/BlueEquities.MemoirDepthFeed.Sbe.v1.3/Heartbeat.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_instrumentdirectorymessage(self):
+        for payload in payloads.of("omi-data-packets/BlueOceanAts/BlueEquities.MemoirDepthFeed.Sbe.v1.3/InstrumentDirectoryMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
     def test_orderaddedmessage(self):
         for payload in payloads.of("omi-data-packets/BlueOceanAts/BlueEquities.MemoirDepthFeed.Sbe.v1.3/OrderAddedMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
@@ -41,6 +49,14 @@ class BlueequitiesMemoirdepthfeedV13Tests(unittest.TestCase):
 
     def test_orderreducedmessage(self):
         for payload in payloads.of("omi-data-packets/BlueOceanAts/BlueEquities.MemoirDepthFeed.Sbe.v1.3/OrderReducedMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_securitytradingstatusmessage(self):
+        for payload in payloads.of("omi-data-packets/BlueOceanAts/BlueEquities.MemoirDepthFeed.Sbe.v1.3/SecurityTradingStatusMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
+    def test_tradingsessionstatusmessage(self):
+        for payload in payloads.of("omi-data-packets/BlueOceanAts/BlueEquities.MemoirDepthFeed.Sbe.v1.3/TradingSessionStatusMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

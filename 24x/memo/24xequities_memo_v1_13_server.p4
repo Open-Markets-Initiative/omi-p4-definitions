@@ -79,6 +79,7 @@ header sequenced_message_t {
     bit<8> template_id;
     bit<8> schema_id;
     bit<16> version;
+    bit<8> num_groups;
 }
 
 header execution_report_pending_new_message_t {
