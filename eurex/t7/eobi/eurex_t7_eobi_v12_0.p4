@@ -6,7 +6,7 @@
 //   Encoding: Flat Binary Encoding
 //   Version: 12.0
 //   Date: 8/03/2023
-//   Specification: T7_R.12.0_ EOBI_Manual_Version_1.pdf
+//   Specification: T7_R.12.0_ EOBI_Manual_Version_3.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
