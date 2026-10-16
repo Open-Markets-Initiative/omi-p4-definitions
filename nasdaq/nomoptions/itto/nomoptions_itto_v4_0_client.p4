@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 4.0
 //   Date: 01/09/2023
-//   Specification: itto_spec40.pdf
+//   Specification: NOM_ITTO_Specification.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

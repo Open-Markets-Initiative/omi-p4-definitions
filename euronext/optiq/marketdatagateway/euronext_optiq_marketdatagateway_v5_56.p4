@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 5.56
 //   Date: 6/4/2025
-//   Specification: optiq-mdg-messages-interface-specification-euronext-cash-and-derivatives-markets-external-v53561-tc
+//   Specification: optiq-mdg-messages-interface-specification-euronext-cash-and-derivatives-markets-external-v53561-tc.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

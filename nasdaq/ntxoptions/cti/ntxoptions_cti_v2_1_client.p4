@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 2.1
 //   Date: 01/23/2024
-//   Specification: soupbintcp.pdf
+//   Specification: 0299-Q24_BX-Options-Clearing-Trade-Interface-V2.1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Ouch
 //   Version: 4.2
 //   Date: 7/8/2019
-//   Specification: NQBXOUCH42.pdf
+//   Specification: NTXOUCH42.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

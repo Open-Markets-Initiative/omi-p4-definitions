@@ -6,7 +6,7 @@
 //   Encoding: Exchange Data Publisher
 //   Version: 1.3.a
 //   Date: 02/28/2018
-//   Specification: XDP_Options_Client_Specification_v1.3a.pdf
+//   Specification: XDP_Options_Client_Specification (1.3a).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

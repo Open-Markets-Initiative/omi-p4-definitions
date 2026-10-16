@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 2.01
 //   Date: 01/13/2026
-//   Specification: TMI-Level-2-ITCH-5.0-Specification-v2.01.pdf
+//   Specification: Tradelogiq-Level-2-ITCH-5.0-Specification-v2.01.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

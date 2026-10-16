@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 1.1
 //   Date: 08/23/2017
-//   Specification: ISE-GEMX-MRX-Order-Feed-Specification_tcm5044-42717.pdf
+//   Specification: ISE-GEMX-MRX-Order-Feed-Specification.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

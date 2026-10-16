@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 1.0.d
 //   Date: 03/21/2022
-//   Specification: Pillar_Complex_Client_Specification.pdf
+//   Specification: PILLAR_COMPLEX_Client_Specification.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

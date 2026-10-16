@@ -6,7 +6,7 @@
 //   Encoding: Flat Binary Encoding
 //   Version: 8.1
 //   Date: 03/25/2020
-//   Specification: T7_R.8.1_Enhanced_Trading_Interface_-_Manual_v.1.0
+//   Specification: T7_R.8.1_Enhanced_Trading_Interface_-_Manual_v.1.0.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

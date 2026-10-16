@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 5.0.2023
 //   Date: 04/28/2023
-//   Specification: NQTVITCHSpecification.pdf
+//   Specification: NQTVITCHSpecification__1_.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.03
 //   Date: 9/8/2026
-//   Specification: IEX Binary Options Protocol Specification
+//   Specification: IEX Binary Options Protocol Specification.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

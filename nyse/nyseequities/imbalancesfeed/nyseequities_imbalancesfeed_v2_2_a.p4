@@ -6,7 +6,7 @@
 //   Encoding: Exchange Data Publisher
 //   Version: 2.2.a
 //   Date: 03/08/2019
-//   Specification: XDP_Imbalances_Feed_Client_Specification_v2.2a.pdf
+//   Specification: XDP_Imbalances_Feed_Client_Specification (2.2a).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

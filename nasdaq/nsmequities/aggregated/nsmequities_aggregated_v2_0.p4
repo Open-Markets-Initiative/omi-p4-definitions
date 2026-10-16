@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 2.0
 //   Date: 2/19/2026
-//   Specification: TVAggSpecification.pdf
+//   Specification: 6-11-26_TVAggSpecification_1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
