@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.03
 //   Date: 6/1/2026
-//   Specification: IEX Options Market Data Transport Protocol Specification
+//   Specification: IEX Options Market Data Transport Protocol Specification (v1.03).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

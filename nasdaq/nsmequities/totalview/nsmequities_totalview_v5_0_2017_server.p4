@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 5.0.2017
 //   Date: 9/12/2017
-//   Specification: NQTVITCHSpecification.pdf
+//   Specification: Nasdaq TotalView ITCH (5.0 - 2017).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

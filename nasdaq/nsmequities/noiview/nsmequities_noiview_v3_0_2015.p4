@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 3.0.2015
 //   Date: 03/06/2015
-//   Specification: NOIViewSpecification.pdf
+//   Specification: NOIViewSpecification (2016-04-30).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

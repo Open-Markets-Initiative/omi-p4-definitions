@@ -6,7 +6,7 @@
 //   Encoding: Ascii Itch
 //   Version: 2.0.2013.1
 //   Date: 08/02/2013
-//   Specification: PSXbboSpecification.pdf
+//   Specification: PSXbboSpecification (2013-09-10).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

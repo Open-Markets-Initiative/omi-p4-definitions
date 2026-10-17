@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.3
 //   Date: 1/1/24
-//   Specification: MEMOIR Last Sale Feed (v1.3).pdf
+//   Specification: Blue Ocean ATS MEMOIR Last Sale Multicast.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

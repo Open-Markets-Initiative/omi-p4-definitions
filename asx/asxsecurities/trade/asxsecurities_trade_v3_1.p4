@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 3.1
 //   Date: 3/1/2023
-//   Specification: asx-trade-itch-message-specification.pdf
+//   Specification: asx-trade-itch-message-specification (2024-08-07).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

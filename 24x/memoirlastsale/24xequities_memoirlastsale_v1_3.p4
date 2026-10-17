@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.3
 //   Date: 9/1/25
-//   Specification: memoir-last-sale-feed-v1_3.pdf
+//   Specification: MEMOIR Last Sale Feed v1.3.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

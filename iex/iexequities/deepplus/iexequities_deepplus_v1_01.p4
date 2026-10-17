@@ -6,7 +6,7 @@
 //   Encoding: Investors Exchange Transport Protocol
 //   Version: 1.01
 //   Date: 9/30/2024
-//   Specification: IEX_DEEP+ Specification.pdf
+//   Specification: IEX DEEP+ Specification (archived).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

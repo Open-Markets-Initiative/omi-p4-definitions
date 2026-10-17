@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.14
 //   Date: 12/8/2025
-//   Specification: Blue Ocean Order Entry - MEMO SBE Specification v1.14.pdf
+//   Specification: Blue Ocean ATS MEMO SBE.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

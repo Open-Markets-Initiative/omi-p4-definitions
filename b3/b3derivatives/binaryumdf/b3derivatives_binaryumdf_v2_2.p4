@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 2.2
 //   Date: 7/18/2025
-//   Specification: BinaryUMDF-MessageReference-v.2.2.0-enUS.pdf
+//   Specification: BinaryUMDF-MessageReference-v.2.1.0-enUS.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

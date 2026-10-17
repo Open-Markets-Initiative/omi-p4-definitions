@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.5
 //   Date: 4/14/2022
-//   Specification: Coinbase Derivatives-SBE-API V1.5
+//   Specification: Coinbase Derivatives SBE API V1.5.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

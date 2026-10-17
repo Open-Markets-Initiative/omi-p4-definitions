@@ -6,7 +6,7 @@
 //   Encoding: Ouch
 //   Version: 3.6
 //   Date: 2/1/2023
-//   Specification: asx-trade-ouch-message-specification.pdf
+//   Specification: asx-trade-ouch-message-specification (2024-08-07).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

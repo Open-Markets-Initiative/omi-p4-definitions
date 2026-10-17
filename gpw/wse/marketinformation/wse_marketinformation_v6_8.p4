@@ -140,68 +140,10 @@ header referential_message_t {
     bit<32> icb;
     bit<32> mic;
     bit<96> underlying_isin_code;
-    bit<200> depositary_list;
-    bit<40> main_depositary;
-    bit<16> type_of_corporate_event;
-    bit<40> time_lag_euronext_utc;
-    bit<40> time_lag_mi_fid_reg_utc;
-    bit<48> cfi;
-    bit<32> second_reserved_4;
-    bit<16> index_set_of_var_price_tick;
-    bit<16> market_feed_code;
-    bit<192> mic_list;
-    bit<32> industry_code;
-    bit<800> industry_text;
-    bit<24> financial_market_code;
-    bit<56> us_indicators;
-    bit<16> reserved_2;
-    bit<64> prev_day_capital_traded;
-    bit<64> lot_size;
-    bit<64> number_instrument_circ;
-    bit<64> shares_out;
-    bit<64> auth_shares;
-    bit<32> price_notation;
-    bit<8> repo_indicator;
-    bit<160> notional_amount;
-    bit<24> notional_currency;
-    bit<8> last_adj_price_scale_code;
-    bit<8> market_indicator;
-    bit<8> prev_day_capital_traded_scale_code;
-    bit<8> tax_code;
-    bit<8> reserved_1;
-    bit<8> lot_size_scale_code;
-    bit<8> second_reserved_1;
-    bit<40> mnemo;
-    bit<96> trading_code;
-    bit<32> third_reserved_4;
-    bit<32> strike_price;
-    bit<24> strike_currency;
-    bit<8> strike_scale_code;
-    bit<32> currency_coef;
-    bit<8> currency_coef_scale_code;
-    bit<8> trading_currency_indicator;
-    bit<8> strike_currency_indicator;
-    bit<16> market_segment;
-    bit<8> algo;
-    bit<240> local_name;
-    bit<32> block_size;
-    bit<8> ss_market_maker;
-    bit<8> ss_non_market_maker;
-    bit<16> settlement_delay;
-    bit<8> option_type;
-    bit<8> delivery_type;
-    bit<8> exercise_type;
-    bit<8> multiplier_scale_code;
-    bit<8> warrant_threshold_min_scale_code;
-    bit<8> warrant_threshold_max_scale_code;
-    bit<16> second_reserved_2;
-    bit<32> warrant_threshold_min;
-    bit<32> warrant_threshold_max;
-    bit<32> min_quantity;
-    bit<32> max_quantity;
-    bit<32> multiplier;
-    bit<32> fourth_reserved_4;
-    bit<64> max_value;
+}
+
+header referential_message_depositary_list_t {
+    bit<40> depositary;
 }
 
 header session_summary_message_t {
@@ -425,6 +367,7 @@ header open_position_message_t {
 struct metadata_t {
     bit<1> dispatched;
     bit<16> session_timetable_message_class_phase_remaining;
+    bit<16> referential_message_depositary_list_remaining;
 }
 
 struct headers_t {
@@ -438,6 +381,7 @@ struct headers_t {
     start_referential_message_t start_referential_message[MAX_MESSAGES];
     end_referential_message_t end_referential_message[MAX_MESSAGES];
     referential_message_t referential_message[MAX_MESSAGES];
+    referential_message_depositary_list_t referential_message_depositary_list[MAX_MESSAGES];
     session_summary_message_t session_summary_message[MAX_MESSAGES];
     instrument_state_change_message_t instrument_state_change_message[MAX_MESSAGES];
     indicative_matching_price_message_t indicative_matching_price_message[MAX_MESSAGES];
@@ -527,7 +471,17 @@ parser WseMarketinformationParser(packet_in packet, out headers_t hdr, inout met
     state parse_referential_message {
         packet.extract(hdr.referential_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        meta.referential_message_depositary_list_remaining = 16w5;
+        transition parse_referential_message_depositary_list;
+    }
+
+    state parse_referential_message_depositary_list {
+        packet.extract(hdr.referential_message_depositary_list.next);
+        meta.referential_message_depositary_list_remaining = meta.referential_message_depositary_list_remaining - 1;
+        transition select(meta.referential_message_depositary_list_remaining) {
+            16w0: parse_packet_header_message;
+            default: parse_referential_message_depositary_list;
+        }
     }
 
     state parse_session_summary_message {
@@ -635,6 +589,7 @@ control WseMarketinformationDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.start_referential_message);
         packet.emit(hdr.end_referential_message);
         packet.emit(hdr.referential_message);
+        packet.emit(hdr.referential_message_depositary_list);
         packet.emit(hdr.session_summary_message);
         packet.emit(hdr.instrument_state_change_message);
         packet.emit(hdr.indicative_matching_price_message);

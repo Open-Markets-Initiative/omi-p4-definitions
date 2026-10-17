@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 1.6
 //   Date: 03/08/2018
-//   Specification: phlxdepth.pdf
+//   Specification: phlxdepth (2018-03-08).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

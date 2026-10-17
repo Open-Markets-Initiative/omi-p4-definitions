@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 3.2
 //   Date: 11/02/2017
-//   Specification: http://www.nasdaqtrader.com/content/productsservices/trading/optionsmarket/BONO_spec.pdf
+//   Specification: BONO_spec.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

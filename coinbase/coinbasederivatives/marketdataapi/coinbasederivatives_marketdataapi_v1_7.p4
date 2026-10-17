@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.7
 //   Date: 4/14/2022
-//   Specification: Coinbase Derivatives-Multicast-UDP-Market-Data-API V1.7
+//   Specification: Coinbase Derivatives Multicast UDP Market Data API (1.7 alt).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Investors Exchange Transport Protocol
 //   Version: 1.66
 //   Date: 10/19/2021
-//   Specification: IEX TOPS Specification v1.66.pdf
+//   Specification: IEX TOPS Specification (v1.66).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

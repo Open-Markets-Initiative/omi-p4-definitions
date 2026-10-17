@@ -6,7 +6,7 @@
 //   Encoding: A2X Market Data
 //   Version: 1.3.2
 //   Date: 9/15/2022
-//   Specification: A2X712-Market-Data-Techincal-Specification-v1.3.2.pdf
+//   Specification: A2X712 Market Data Technical Specification v1.3.2.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

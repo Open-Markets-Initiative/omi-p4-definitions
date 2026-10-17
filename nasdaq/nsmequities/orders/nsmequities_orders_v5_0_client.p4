@@ -6,7 +6,7 @@
 //   Encoding: Ouch
 //   Version: 5.0
 //   Date: 4/1/2023
-//   Specification: OUCH5.0.pdf
+//   Specification: OUCH5.0 (2026-09-21).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

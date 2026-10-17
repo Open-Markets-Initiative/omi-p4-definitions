@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.3
 //   Date: 4/05/21
-//   Specification: MEMOIR Top of Book Feed-v1_3.pdf
+//   Specification: 24X.Equities.MemoirLastSale.Sbe.v1.3.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

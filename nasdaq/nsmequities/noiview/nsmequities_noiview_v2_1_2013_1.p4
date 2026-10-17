@@ -6,7 +6,7 @@
 //   Encoding: Ascii Itch
 //   Version: 2.1.2013.1
 //   Date: 01/09/2013
-//   Specification: NQNoiview-v2_1.pdf
+//   Specification: NQNoiview-v2_1 (2013-02-12).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Ascii Itch
 //   Version: 2.0.2010.2
 //   Date: 11/11/2010
-//   Specification: Noiview-v2spec.pdf
+//   Specification: Noiview-v2spec (2011-10-17).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

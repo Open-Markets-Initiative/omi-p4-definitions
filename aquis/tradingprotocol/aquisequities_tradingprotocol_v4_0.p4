@@ -6,7 +6,7 @@
 //   Encoding: Aquis Trading Protocol
 //   Version: 4.0
 //   Date: 8/1/2025
-//   Specification: Production_Aquis_ATP_Technical_Specification_v4_0_f0cd559010.pdf
+//   Specification: Aquis ATP Technical Specification v4.0.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

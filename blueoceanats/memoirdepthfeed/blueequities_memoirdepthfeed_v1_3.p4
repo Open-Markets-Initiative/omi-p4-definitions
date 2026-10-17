@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.3
 //   Date: 9/1/25
-//   Specification: MEMOIR Depth Feed (v1.3).pdf
+//   Specification: Blue Ocean ATS MEMOIR Depth Multicast.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

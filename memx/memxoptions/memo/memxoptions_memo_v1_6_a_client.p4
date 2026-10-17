@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.6.a
 //   Date: 11/13/2023
-//   Specification: MEMO for US Options - SBE-v1_6b
+//   Specification: MEMO for US Options - SBE-v1_6b (2024-08-07).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
