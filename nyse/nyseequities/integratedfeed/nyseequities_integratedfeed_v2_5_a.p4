@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 2.5.a
 //   Date: 11/30/2022
-//   Specification: NYSE_Pillar_Integrated_Feed_Client_Specification.pdf
+//   Specification: Unknown
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
