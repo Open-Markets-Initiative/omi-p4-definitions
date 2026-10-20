@@ -36,7 +36,7 @@ header tcp_packet_header_t {
     bit<8> packet_type;
 }
 
-header login_request_message_t {
+header login_request_retransmission_message_t {
     bit<48> user_id;
     bit<8> multicast_group_number;
     bit<8> number_of_system_reboots;
@@ -44,7 +44,20 @@ header login_request_message_t {
     bit<24> requested_message_count;
 }
 
-header login_result_message_t {
+header login_request_snapshot_message_t {
+    bit<48> user_id;
+    bit<8> multicast_group_number;
+    bit<8> number_of_system_reboots;
+    bit<32> sequence_number;
+    bit<24> requested_message_count;
+}
+
+header login_result_accepted_message_t {
+    bit<8> multicast_group_number;
+    bit<8> result_code;
+}
+
+header login_result_rejected_message_t {
     bit<8> multicast_group_number;
     bit<8> result_code;
 }
@@ -61,8 +74,10 @@ struct metadata_t {
 
 struct headers_t {
     tcp_packet_header_t tcp_packet_header;
-    login_request_message_t login_request_message;
-    login_result_message_t login_result_message;
+    login_request_retransmission_message_t login_request_retransmission_message;
+    login_request_snapshot_message_t login_request_snapshot_message;
+    login_result_accepted_message_t login_result_accepted_message;
+    login_result_rejected_message_t login_result_rejected_message;
     end_of_message_message_t end_of_message_message;
 }
 
@@ -70,22 +85,36 @@ parser FseequitiesMarketbyorderTcpParser(packet_in packet, out headers_t hdr, in
     state start {
         packet.extract(hdr.tcp_packet_header);
         transition select(hdr.tcp_packet_header.packet_type) {
-            8w0x52: parse_login_request_message;
-            8w0x41: parse_login_result_message;
+            8w0x52: parse_login_request_retransmission_message;
+            8w0x4c: parse_login_request_snapshot_message;
+            8w0x41: parse_login_result_accepted_message;
+            8w0x4a: parse_login_result_rejected_message;
             8w0x53: parse_message_response_message;
             8w0x47: parse_end_of_message_message;
             default: accept;
         }
     }
 
-    state parse_login_request_message {
-        packet.extract(hdr.login_request_message);
+    state parse_login_request_retransmission_message {
+        packet.extract(hdr.login_request_retransmission_message);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_login_result_message {
-        packet.extract(hdr.login_result_message);
+    state parse_login_request_snapshot_message {
+        packet.extract(hdr.login_request_snapshot_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_result_accepted_message {
+        packet.extract(hdr.login_result_accepted_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_result_rejected_message {
+        packet.extract(hdr.login_result_rejected_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -132,8 +161,10 @@ control FseequitiesMarketbyorderTcpComputeChecksum(inout headers_t hdr, inout me
 control FseequitiesMarketbyorderTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
         packet.emit(hdr.tcp_packet_header);
-        packet.emit(hdr.login_request_message);
-        packet.emit(hdr.login_result_message);
+        packet.emit(hdr.login_request_retransmission_message);
+        packet.emit(hdr.login_request_snapshot_message);
+        packet.emit(hdr.login_result_accepted_message);
+        packet.emit(hdr.login_result_rejected_message);
         packet.emit(hdr.end_of_message_message);
     }
 }

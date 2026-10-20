@@ -1207,74 +1207,6 @@ header quote_cancel_ack_quote_cancel_ack_sets_group_t {
     bit<16> quote_error_code;
 }
 
-header execution_report_pending_cancel_t {
-    bit<32> seq_num;
-    bit<64> uuid;
-    bit<320> exec_id;
-    bit<160> sender_id;
-    bit<160> clordid;
-    bit<64> party_details_list_req_id;
-    bit<64> order_id;
-    bit<64> price;
-    bit<64> transact_time;
-    bit<64> sending_time_epoch;
-    bit<64> order_request_id;
-    bit<40> location;
-    bit<32> security_id;
-    bit<32> order_qty;
-    bit<32> cum_qty;
-    bit<32> leaves_qty_optional;
-    bit<32> min_qty;
-    bit<32> display_qty;
-    bit<16> expire_date;
-    bit<8> ord_type_optional;
-    bit<8> side;
-    bit<8> time_in_force;
-    bit<8> manual_order_indicator;
-    bit<8> poss_retrans_flag;
-    bit<8> split_msg;
-    bit<8> liquidity_flag;
-    bit<64> delay_to_time;
-    bit<64> discretion_price;
-    bit<64> reservation_price;
-    bit<8> priority_indicator;
-    bit<64> orig_order_user;
-    bit<64> cancel_text;
-}
-
-header execution_report_pending_replace_t {
-    bit<32> seq_num;
-    bit<64> uuid;
-    bit<320> exec_id;
-    bit<160> sender_id;
-    bit<160> clordid;
-    bit<64> party_details_list_req_id;
-    bit<64> order_id;
-    bit<64> price;
-    bit<64> transact_time;
-    bit<64> sending_time_epoch;
-    bit<64> order_request_id;
-    bit<40> location;
-    bit<32> security_id;
-    bit<32> order_qty;
-    bit<32> cum_qty;
-    bit<32> leaves;
-    bit<32> min_qty;
-    bit<32> display_qty;
-    bit<16> expire_date;
-    bit<8> ord_type_optional;
-    bit<8> side;
-    bit<8> time_in_force;
-    bit<8> manual_order_indicator;
-    bit<8> poss_retrans_flag;
-    bit<8> split_msg;
-    bit<8> liquidity_flag;
-    bit<8> short_sale_type;
-    bit<64> delay_to_time;
-    bit<64> discretion_price;
-    bit<8> priority_indicator;
-}
-
 struct metadata_t {
     bit<1> dispatched;
     bit<8> party_details_definition_request_ack_party_details_group_remaining;
@@ -1372,8 +1304,6 @@ struct headers_t {
     quote_cancel_ack_quote_cancel_ack_entries_group_t quote_cancel_ack_quote_cancel_ack_entries_group[MAX_MESSAGES];
     quote_cancel_ack_quote_cancel_ack_sets_group_header_t quote_cancel_ack_quote_cancel_ack_sets_group_header;
     quote_cancel_ack_quote_cancel_ack_sets_group_t quote_cancel_ack_quote_cancel_ack_sets_group[MAX_MESSAGES];
-    execution_report_pending_cancel_t execution_report_pending_cancel;
-    execution_report_pending_replace_t execution_report_pending_replace;
 }
 
 parser CmeGlobexIlink3ServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -1411,8 +1341,6 @@ parser CmeGlobexIlink3ServerParser(packet_in packet, out headers_t hdr, inout me
             16w0x3102: parse_security_definition_response;
             16w0x3202: parse_order_mass_action_report;
             16w0x3302: parse_quote_cancel_ack;
-            16w0x3402: parse_execution_report_pending_cancel;
-            16w0x3502: parse_execution_report_pending_replace;
             default: accept;
         }
     }
@@ -1975,18 +1903,6 @@ parser CmeGlobexIlink3ServerParser(packet_in packet, out headers_t hdr, inout me
         }
     }
 
-    state parse_execution_report_pending_cancel {
-        packet.extract(hdr.execution_report_pending_cancel);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_execution_report_pending_replace {
-        packet.extract(hdr.execution_report_pending_replace);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
 }
 
 control CmeGlobexIlink3ServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -2085,8 +2001,6 @@ control CmeGlobexIlink3ServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.quote_cancel_ack_quote_cancel_ack_entries_group);
         packet.emit(hdr.quote_cancel_ack_quote_cancel_ack_sets_group_header);
         packet.emit(hdr.quote_cancel_ack_quote_cancel_ack_sets_group);
-        packet.emit(hdr.execution_report_pending_cancel);
-        packet.emit(hdr.execution_report_pending_replace);
     }
 }
 

@@ -1,8 +1,8 @@
-// P4_16 (v1model) definition for: Cme Globex EbsSpectrum Sbe v12.0
+// P4_16 (v1model) definition for: Cme Ebs Spectrum Sbe v12.0
 // 
 // Protocol:
 //   Organization: CME Group
-//   Protocol: Ebs Spectrum Market Data
+//   Protocol: Spectrum Market Data
 //   Encoding: Simple Binary Encoding
 //   Version: 12.0
 //   Date: 4/8/2022
@@ -31,10 +31,11 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header binary_packet_header_t {
-    bit<32> packet_sequence_number;
-    bit<64> sending_time;
-    bit<16> message_size;
+header message_header_t {
+    bit<16> encoding_type;
+    bit<32> message_sequence_number;
+    bit<64> tcp_sending_time;
+    bit<16> tcp_message_size;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;
@@ -161,7 +162,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    binary_packet_header_t binary_packet_header;
+    message_header_t message_header;
     md_incremental_refresh_spectrum_t md_incremental_refresh_spectrum;
     md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_t md_incremental_refresh_spectrum_incremental_refresh_spectrum_group[MAX_MESSAGES];
     md_incremental_refresh_ticker_t md_incremental_refresh_ticker;
@@ -173,10 +174,10 @@ struct headers_t {
     global_day_roll_t global_day_roll;
 }
 
-parser CmeGlobexEbsspectrumUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser EbsSpectrumTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.binary_packet_header);
-        transition select(hdr.binary_packet_header.template_id) {
+        packet.extract(hdr.message_header);
+        transition select(hdr.message_header.template_id) {
             16w0x2e01: parse_admin_heartbeat;
             16w0x2f01: parse_md_incremental_refresh_spectrum;
             16w0x3001: parse_md_incremental_refresh_ticker;
@@ -276,12 +277,12 @@ parser CmeGlobexEbsspectrumUdpParser(packet_in packet, out headers_t hdr, inout 
 
 }
 
-control CmeGlobexEbsspectrumUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control EbsSpectrumTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CmeGlobexEbsspectrumUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control EbsSpectrumTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -292,19 +293,19 @@ control CmeGlobexEbsspectrumUdpIngress(inout headers_t hdr, inout metadata_t met
     }
 }
 
-control CmeGlobexEbsspectrumUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control EbsSpectrumTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control CmeGlobexEbsspectrumUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control EbsSpectrumTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CmeGlobexEbsspectrumUdpDeparser(packet_out packet, in headers_t hdr) {
+control EbsSpectrumTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.binary_packet_header);
+        packet.emit(hdr.message_header);
         packet.emit(hdr.md_incremental_refresh_spectrum);
         packet.emit(hdr.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group);
         packet.emit(hdr.md_incremental_refresh_ticker);
@@ -318,10 +319,10 @@ control CmeGlobexEbsspectrumUdpDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    CmeGlobexEbsspectrumUdpParser(),
-    CmeGlobexEbsspectrumUdpVerifyChecksum(),
-    CmeGlobexEbsspectrumUdpIngress(),
-    CmeGlobexEbsspectrumUdpEgress(),
-    CmeGlobexEbsspectrumUdpComputeChecksum(),
-    CmeGlobexEbsspectrumUdpDeparser()
+    EbsSpectrumTcpParser(),
+    EbsSpectrumTcpVerifyChecksum(),
+    EbsSpectrumTcpIngress(),
+    EbsSpectrumTcpEgress(),
+    EbsSpectrumTcpComputeChecksum(),
+    EbsSpectrumTcpDeparser()
 ) main;

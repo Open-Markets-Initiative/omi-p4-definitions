@@ -88,7 +88,11 @@ header statistics_message_t {
     bit<32> security_code;
     bit<64> transaction_date_and_time;
     bit<8> data_count;
+}
+
+header statistics_message_statistics_repeating_group_t {
     bit<8> data_code;
+    bit<64> data_value;
 }
 
 header security_list_message_t {
@@ -413,6 +417,7 @@ header topofbook_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<8> statistics_message_statistics_repeating_group_remaining;
 }
 
 struct headers_t {
@@ -425,6 +430,7 @@ struct headers_t {
     news_message_t news_message;
     security_list_cancellation_report_message_t security_list_cancellation_report_message;
     statistics_message_t statistics_message;
+    statistics_message_statistics_repeating_group_t statistics_message_statistics_repeating_group[MAX_MESSAGES];
     security_list_message_t security_list_message;
     security_list_update_report_message_t security_list_update_report_message;
     security_status_message_t security_status_message;
@@ -506,7 +512,20 @@ parser MeffTopofbookParser(packet_in packet, out headers_t hdr, inout metadata_t
     state parse_statistics_message {
         packet.extract(hdr.statistics_message);
         meta.dispatched = 1;
-        transition accept;
+        meta.statistics_message_statistics_repeating_group_remaining = hdr.statistics_message.data_count;
+        transition select(meta.statistics_message_statistics_repeating_group_remaining) {
+            8w0: accept;
+            default: parse_statistics_message_statistics_repeating_group;
+        }
+    }
+
+    state parse_statistics_message_statistics_repeating_group {
+        packet.extract(hdr.statistics_message_statistics_repeating_group.next);
+        meta.statistics_message_statistics_repeating_group_remaining = meta.statistics_message_statistics_repeating_group_remaining - 1;
+        transition select(meta.statistics_message_statistics_repeating_group_remaining) {
+            8w0: accept;
+            default: parse_statistics_message_statistics_repeating_group;
+        }
     }
 
     state parse_security_list_message {
@@ -602,6 +621,7 @@ control MeffTopofbookDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.news_message);
         packet.emit(hdr.security_list_cancellation_report_message);
         packet.emit(hdr.statistics_message);
+        packet.emit(hdr.statistics_message_statistics_repeating_group);
         packet.emit(hdr.security_list_message);
         packet.emit(hdr.security_list_update_report_message);
         packet.emit(hdr.security_status_message);

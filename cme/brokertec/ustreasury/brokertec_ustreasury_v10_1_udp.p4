@@ -1,8 +1,8 @@
-// P4_16 (v1model) definition for: Cme Globex BrokerTecUst Sbe v10.1
+// P4_16 (v1model) definition for: Cme BrokerTec UsTreasury Sbe v10.1
 // 
 // Protocol:
 //   Organization: CME Group
-//   Protocol: BrokerTec Us Treasuries
+//   Protocol: Us Treasuries
 //   Encoding: Simple Binary Encoding
 //   Version: 10.1
 //   Date: 4/13/2023
@@ -31,11 +31,10 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
-    bit<16> encoding_type;
-    bit<32> message_sequence_number;
-    bit<64> tcp_sending_time;
-    bit<16> tcp_message_size;
+header binary_packet_header_t {
+    bit<32> packet_sequence_number;
+    bit<64> sending_time;
+    bit<16> message_size;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;
@@ -73,15 +72,15 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    binary_packet_header_t binary_packet_header;
     md_incremental_refresh_btec_t md_incremental_refresh_btec;
     md_incremental_refresh_btec_incremental_refresh_btec_group_t md_incremental_refresh_btec_incremental_refresh_btec_group[MAX_MESSAGES];
 }
 
-parser CmeGlobexBrokertecustTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser BrokertecUstreasuryUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.binary_packet_header);
+        transition select(hdr.binary_packet_header.template_id) {
             16w0x9501: parse_md_incremental_refresh_btec;
             16w0x9b01: parse_admin_heartbeat;
             default: accept;
@@ -114,12 +113,12 @@ parser CmeGlobexBrokertecustTcpParser(packet_in packet, out headers_t hdr, inout
 
 }
 
-control CmeGlobexBrokertecustTcpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control BrokertecUstreasuryUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CmeGlobexBrokertecustTcpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control BrokertecUstreasuryUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -130,29 +129,29 @@ control CmeGlobexBrokertecustTcpIngress(inout headers_t hdr, inout metadata_t me
     }
 }
 
-control CmeGlobexBrokertecustTcpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control BrokertecUstreasuryUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control CmeGlobexBrokertecustTcpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control BrokertecUstreasuryUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control CmeGlobexBrokertecustTcpDeparser(packet_out packet, in headers_t hdr) {
+control BrokertecUstreasuryUdpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.binary_packet_header);
         packet.emit(hdr.md_incremental_refresh_btec);
         packet.emit(hdr.md_incremental_refresh_btec_incremental_refresh_btec_group);
     }
 }
 
 V1Switch(
-    CmeGlobexBrokertecustTcpParser(),
-    CmeGlobexBrokertecustTcpVerifyChecksum(),
-    CmeGlobexBrokertecustTcpIngress(),
-    CmeGlobexBrokertecustTcpEgress(),
-    CmeGlobexBrokertecustTcpComputeChecksum(),
-    CmeGlobexBrokertecustTcpDeparser()
+    BrokertecUstreasuryUdpParser(),
+    BrokertecUstreasuryUdpVerifyChecksum(),
+    BrokertecUstreasuryUdpIngress(),
+    BrokertecUstreasuryUdpEgress(),
+    BrokertecUstreasuryUdpComputeChecksum(),
+    BrokertecUstreasuryUdpDeparser()
 ) main;
