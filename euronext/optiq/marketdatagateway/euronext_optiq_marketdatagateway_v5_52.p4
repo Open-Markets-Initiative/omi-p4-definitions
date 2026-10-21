@@ -186,6 +186,12 @@ header full_trade_information_message_t {
     bit<16> settlement_date;
     bit<16> repo_settlement_date;
     bit<128> trade_unique_identifier;
+    bit<32> missing_price;
+    bit<32> mmt_pre_trade_transparency_waiver_relatedto_sizeand_scale;
+    bit<32> mmt_portfolio_transaction_indicator;
+    bit<32> mmt_contingent_transaction_indicator;
+    bit<32> mmt_publication_mode_illiquid;
+    bit<32> mmt_publication_mode_size_specific;
     bit<8> block_length_short;
     bit<8> num_in_group;
 }

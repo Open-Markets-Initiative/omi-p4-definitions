@@ -45,10 +45,6 @@ header login_rejected_packet_t {
     bit<8> reject_reason_code;
 }
 
-header sequenced_data_packet_t {
-    bit<8> message_type;
-}
-
 header quote_message_t {
     bit<8> reserved_1;
     bit<80> stock_symbol;
@@ -137,7 +133,6 @@ struct headers_t {
     server_packet_header_t server_packet_header;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
-    sequenced_data_packet_t sequenced_data_packet;
     quote_message_t quote_message;
     trade_report_message_t trade_report_message;
     trade_bust_message_t trade_bust_message;
@@ -178,9 +173,8 @@ parser LynxatsTcplevel1ServerParser(packet_in packet, out headers_t hdr, inout m
     }
 
     state parse_sequenced_data_packet {
-        packet.extract(hdr.sequenced_data_packet);
         meta.dispatched = 1;
-        transition select(hdr.sequenced_data_packet.message_type) {
+        transition select(packet.lookahead<bit<8>>()) {
             8w0x57: parse_quote_message;
             8w0x54: parse_trade_report_message;
             8w0x4e: parse_trade_bust_message;
@@ -274,7 +268,6 @@ control LynxatsTcplevel1ServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.server_packet_header);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
-        packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.quote_message);
         packet.emit(hdr.trade_report_message);
         packet.emit(hdr.trade_bust_message);

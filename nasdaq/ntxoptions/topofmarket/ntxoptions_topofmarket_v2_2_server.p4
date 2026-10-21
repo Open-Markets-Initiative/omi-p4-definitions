@@ -240,6 +240,8 @@ parser NtxoptionsTopofmarketServerParser(packet_in packet, out headers_t hdr, in
             8w0x54: parse_trade_report_message;
             8w0x58: parse_broken_trade_report_message;
             8w0x4d: parse_end_of_replay_sequence_message;
+            8w0x61: parse_best_bid_or_ask_update_short_form_message;
+            8w0x41: parse_best_bid_or_ask_update_long_form_message;
             default: accept;
         }
     }

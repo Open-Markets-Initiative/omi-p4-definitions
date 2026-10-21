@@ -1,11 +1,11 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities Orders Ouch v4.2
+// P4_16 (v1model) definition for: Nasdaq NsmEquities Orders Ouch v4.2.2018
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: Orders
 //   Encoding: Ouch
-//   Version: 4.2
-//   Date: 7/8/2019
+//   Version: 4.2.2018
+//   Date: 12/7/2018
 //   Specification: OUCH4.2.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
@@ -75,7 +75,7 @@ header accepted_message_t {
 
 header replaced_message_t {
     bit<64> timestamp;
-    bit<112> replacement_order_token_alphanumeric_14;
+    bit<112> replacement_order_token;
     bit<8> buy_sell_indicator;
     bit<32> shares;
     bit<64> stock;

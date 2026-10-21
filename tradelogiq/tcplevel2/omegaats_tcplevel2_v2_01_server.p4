@@ -45,10 +45,6 @@ header login_rejected_packet_t {
     bit<8> reject_reason_code;
 }
 
-header sequenced_data_packet_t {
-    bit<8> message_type;
-}
-
 header system_event_message_t {
     bit<8> event_code;
     bit<16> reserved_2;
@@ -201,7 +197,6 @@ struct headers_t {
     server_packet_header_t server_packet_header;
     login_accepted_packet_t login_accepted_packet;
     login_rejected_packet_t login_rejected_packet;
-    sequenced_data_packet_t sequenced_data_packet;
     system_event_message_t system_event_message;
     stock_directory_message_t stock_directory_message;
     extended_stock_directory_message_t extended_stock_directory_message;
@@ -248,9 +243,8 @@ parser OmegaatsTcplevel2ServerParser(packet_in packet, out headers_t hdr, inout 
     }
 
     state parse_sequenced_data_packet {
-        packet.extract(hdr.sequenced_data_packet);
         meta.dispatched = 1;
-        transition select(hdr.sequenced_data_packet.message_type) {
+        transition select(packet.lookahead<bit<8>>()) {
             8w0x53: parse_system_event_message;
             8w0x52: parse_stock_directory_message;
             8w0x72: parse_extended_stock_directory_message;
@@ -386,7 +380,6 @@ control OmegaatsTcplevel2ServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.server_packet_header);
         packet.emit(hdr.login_accepted_packet);
         packet.emit(hdr.login_rejected_packet);
-        packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.stock_directory_message);
         packet.emit(hdr.extended_stock_directory_message);

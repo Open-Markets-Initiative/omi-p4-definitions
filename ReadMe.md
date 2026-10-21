@@ -22,7 +22,7 @@ Updates are greatly appreciated; however, this entire repository is source gener
 
 | Protocol Count | Generated Lines |
 | --- | --- |
-| 872 | 937,002 |
+| 879 | 943,538 |
 
 ## Testing
 
@@ -53,17 +53,21 @@ Other generated code can be found at [Omi Repositories](https://github.com/Open-
 
 > [NyseConsolidated][NyseConsolidated.Consolidator] · [Uqdf][Uqdf.Consolidator] · [Utdf][Utdf.Consolidator] · [Utp][Utp.Consolidator]
 
+## Redistributors
+
+> [IceDataServices][IceDataServices.Redistributor]
+
 ## Related Definitions
 
 The Open Markets Initiative provides protocol definitions in several formats:
 
-- [Kaitai Struct Definitions][Kaitai.Definitions.Repository] — cross language binary parsers with the kaitai struct compiler
-- [DFDL Definitions][Dfdl.Definitions.Repository] — declarative DFDL schemas for cross language parsing
-- [Spicy Definitions][Spicy.Definitions.Repository] — declarative Spicy grammars for the spicy toolchain and the zeek network security monitor
+- [Kaitai Struct Definitions][Kaitai.Definitions.Repository] — Cross language binary parsers with the kaitai struct compiler
+- [DFDL Definitions][Dfdl.Definitions.Repository] — Declarative DFDL schemas for cross language parsing
+- [Spicy Definitions][Spicy.Definitions.Repository] — Declarative Spicy grammars for the spicy toolchain and the zeek network security monitor
 - [Lean Definitions][Lean.Definitions.Repository] — Lean 4 definitions with machine checked encode and decode proofs
 - [TLA+ Definitions][Tla.Definitions.Repository] — TLA+ modules whose encode and decode are model checked with TLC
 - [FIX Dictionaries][Fix.Dictionaries.Repository] — QuickFIX format xml data dictionaries, one per FIX version
-- [Xml Specifications][Xml.Specifications.Repository] — the exchange protocol specification xmls, matching the original files
+- [Xml Specifications][Xml.Specifications.Repository] — Formatted exchange specification xmls
 ## Disclaimer
 
 Any similarities between existing people, places and/or protocols is purely incidental.
@@ -95,6 +99,7 @@ Enjoy.
 [Omi.Encoding.Tcp]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Tcp.md "Tcp Encoding"
 [Omi.Encoding.Xdp]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Xdp.md "Xdp Encoding"
 [Omi.Encoding.Wats]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Wats.md "Wats Encoding"
+[Omi.Encoding.Ctf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Ctf.md "Ctf Encoding"
 [Omi.Encoding.iMpact]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/iMpact.md "iMpact Encoding"
 [Omi.Encoding.IexTp]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/IexTp.md "IexTp Encoding"
 [Omi.Encoding.Snap]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Snap.md "Snap Encoding"
@@ -226,6 +231,7 @@ Enjoy.
 [Gpw.Wse.SnapshotFullDepth]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Gpw/Protocols/Wse/SnapshotFullDepth.md "Warsaw Stock Exchange Full Depth Snapshot"
 [Gpw.Wse.StreamBbo]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Gpw/Protocols/Wse/StreamBbo.md "Warsaw Stock Exchange BBO Stream"
 [Gpw.Wse.StreamFullDepth]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Gpw/Protocols/Wse/StreamFullDepth.md "Warsaw Stock Exchange Full Depth Stream"
+[Ice.IceDataServices.ConsolidatedFeed]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Ice/Protocols/IceDataServices/ConsolidatedFeed.md "ConsolidatedFeed"
 [Ice.IceFutures.Bgw]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Ice/Protocols/IceFutures/Bgw.md "Binary Order Gateway"
 [Ice.IceFutures.Mdf]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Ice/Protocols/IceFutures/Mdf.md "Multicast Data Feed"
 [Iex.IexEquities.Deep]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Iex/Protocols/IexEquities/Deep.md "Depth Of Book"
@@ -246,8 +252,10 @@ Enjoy.
 [Jpx.SseEquities.MarketByOrder]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Jpx/Protocols/SseEquities/MarketByOrder.md "Market By Order"
 [Jpx.SseEquities.Standard]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Jpx/Protocols/SseEquities/Standard.md "Standard"
 [Jpx.TseEquities.IndexStatistics]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Jpx/Protocols/TseEquities/IndexStatistics.md "IndexStatistics"
+[Jpx.TseEquities.IssueBasicInformation]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Jpx/Protocols/TseEquities/IssueBasicInformation.md "IssueBasicInformation"
 [Jpx.TseEquities.MarketByOrder]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Jpx/Protocols/TseEquities/MarketByOrder.md "Market By Order"
 [Jpx.TseEquities.Standard]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Jpx/Protocols/TseEquities/Standard.md "Standard"
+[Jpx.TseEquities.ToSTNeT]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Jpx/Protocols/TseEquities/ToSTNeT.md "ToSTNeT"
 [Lme.LmeSelect.DailySummaries]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Lme/Protocols/LmeSelect/DailySummaries.md "LMEsource DailySummaries"
 [Lme.LmeSelect.DailySummariesSnapshot]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Lme/Protocols/LmeSelect/DailySummariesSnapshot.md "LMEsource DailySummaries Refresh"
 [Lme.LmeSelect.DrSignal]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Lme/Protocols/LmeSelect/DrSignal.md "LMEsource DrSignal"
@@ -392,6 +400,7 @@ Enjoy.
 [Nse.NseCd.Snapshot]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nse/Protocols/NseCd/Snapshot.md "Mtbt Order Book Snapshot Recovery"
 [Nse.NseCm.Mtbt]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nse/Protocols/NseCm/Mtbt.md "Multicast Tick By Tick"
 [Nse.NseCm.MtbtNdal]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nse/Protocols/NseCm/MtbtNdal.md "Multicast Tick By Tick Data Feed"
+[Nse.NseCm.OrderEntry]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nse/Protocols/NseCm/OrderEntry.md "Order Entry"
 [Nse.NseCm.Recovery]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nse/Protocols/NseCm/Recovery.md "Mtbt Tick Data Recovery"
 [Nse.NseCm.Snapshot]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nse/Protocols/NseCm/Snapshot.md "Mtbt Order Book Snapshot Recovery"
 [Nse.NseCom.Mtbt]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Nse/Protocols/NseCom/Mtbt.md "Multicast Tick By Tick"
@@ -561,6 +570,7 @@ Enjoy.
 [FseEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/jpx/fseequities "Fukuoka Stock Exchange Equities"
 [GemxOptions.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/nasdaq/gemxoptions "Nasdaq GEMX"
 [Globex.Platform]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/cme/globex "CME Globex"
+[IceDataServices.Redistributor]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/ice "ICE Data Services"
 [IceFutures.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/ice/icefutures "Intercontinental Exchange Futures"
 [IexEquities.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/iex/iexequities "IEX Equities"
 [IexOptions.Exchange]: https://github.com/Open-Markets-Initiative/omi-p4-definitions/tree/main/iex/iexoptions "IEX Options"

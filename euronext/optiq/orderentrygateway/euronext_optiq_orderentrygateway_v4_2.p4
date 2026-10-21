@@ -111,7 +111,8 @@ header new_order_message_order_optional_fields_group_t {
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
     bit<8> peg_offset;
-    bit<4> reserved_4;
+    bit<3> reserved_3;
+    bit<1> session_4;
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
@@ -270,6 +271,8 @@ header fill_message_fill_derivatives_field_group_header_t {
 header fill_message_fill_derivatives_field_group_t {
     bit<64> evaluated_price;
     bit<8> message_price_notation;
+    bit<32> final_symbol_index;
+    bit<32> final_execution_id;
 }
 
 header kill_message_t {
@@ -372,7 +375,8 @@ header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<64> disclosed_qty;
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
-    bit<4> reserved_4;
+    bit<3> reserved_3;
+    bit<1> session_4;
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
@@ -580,6 +584,7 @@ header quote_request_message_t {
     bit<1> deferred_trade_indicator;
     bit<1> dark_indicator;
     bit<64> min_order_qty;
+    bit<8> account_type_optional;
 }
 
 header cancel_request_message_t {
@@ -809,6 +814,7 @@ header rfq_notification_message_t {
     bit<1> deferred_trade_indicator;
     bit<1> dark_indicator;
     bit<64> min_order_qty;
+    bit<8> account_type_optional;
 }
 
 header rfq_matching_status_message_t {
@@ -1217,6 +1223,33 @@ header cross_order_message_cross_strategy_fields_group_t {
     bit<32> leg_instrument_id;
 }
 
+header rfq_audit_message_t {
+    bit<32> msg_seq_num;
+    bit<64> firm_id;
+    bit<64> book_in;
+    bit<64> book_out_time;
+    bit<64> oeg_in_from_me;
+    bit<64> oeg_out_to_member;
+    bit<64> quote_req_id;
+    bit<32> symbol_index;
+    bit<8> emm;
+    bit<8> block_length_short;
+    bit<8> num_in_group;
+}
+
+header rfq_audit_message_rfq_counterparts_group_t {
+    bit<8> order_origin;
+    bit<64> order_price;
+    bit<64> last_traded_quantity;
+    bit<3> reserved_3;
+    bit<1> minimum_quantity_type;
+    bit<1> sweep_order_indicator;
+    bit<1> displayed_order_interaction;
+    bit<1> deferred_trade_indicator;
+    bit<1> dark_indicator;
+    bit<64> minimum_order_quantity;
+}
+
 header logon_message_t {
     bit<32> logical_access_id;
     bit<16> oe_partition_id;
@@ -1453,6 +1486,7 @@ struct metadata_t {
     bit<8> cross_order_message_mifid_short_codes_group_remaining;
     bit<8> cross_order_message_cross_clearing_fields_group_remaining;
     bit<8> cross_order_message_cross_strategy_fields_group_remaining;
+    bit<8> rfq_audit_message_rfq_counterparts_group_remaining;
 }
 
 struct headers_t {
@@ -1546,6 +1580,8 @@ struct headers_t {
     cross_order_message_cross_clearing_fields_group_t cross_order_message_cross_clearing_fields_group[MAX_MESSAGES];
     cross_order_message_cross_strategy_fields_group_header_t cross_order_message_cross_strategy_fields_group_header;
     cross_order_message_cross_strategy_fields_group_t cross_order_message_cross_strategy_fields_group[MAX_MESSAGES];
+    rfq_audit_message_t rfq_audit_message;
+    rfq_audit_message_rfq_counterparts_group_t rfq_audit_message_rfq_counterparts_group[MAX_MESSAGES];
     logon_message_t logon_message;
     logon_ack_message_t logon_ack_message;
     logon_reject_message_t logon_reject_message;
@@ -1601,6 +1637,7 @@ parser EuronextOptiqOrderentrygatewayParser(packet_in packet, out headers_t hdr,
             16w0x4100: parse_wholesale_order_ack_message;
             16w0x4200: parse_request_for_implied_execution_message;
             16w0x4300: parse_cross_order_message;
+            16w0x4800: parse_rfq_audit_message;
             16w0x6400: parse_logon_message;
             16w0x6500: parse_logon_ack_message;
             16w0x6600: parse_logon_reject_message;
@@ -2373,6 +2410,25 @@ parser EuronextOptiqOrderentrygatewayParser(packet_in packet, out headers_t hdr,
         }
     }
 
+    state parse_rfq_audit_message {
+        packet.extract(hdr.rfq_audit_message);
+        meta.dispatched = 1;
+        meta.rfq_audit_message_rfq_counterparts_group_remaining = hdr.rfq_audit_message.num_in_group;
+        transition select(meta.rfq_audit_message_rfq_counterparts_group_remaining) {
+            8w0: accept;
+            default: parse_rfq_audit_message_rfq_counterparts_group;
+        }
+    }
+
+    state parse_rfq_audit_message_rfq_counterparts_group {
+        packet.extract(hdr.rfq_audit_message_rfq_counterparts_group.next);
+        meta.rfq_audit_message_rfq_counterparts_group_remaining = meta.rfq_audit_message_rfq_counterparts_group_remaining - 1;
+        transition select(meta.rfq_audit_message_rfq_counterparts_group_remaining) {
+            8w0: accept;
+            default: parse_rfq_audit_message_rfq_counterparts_group;
+        }
+    }
+
     state parse_logon_message {
         packet.extract(hdr.logon_message);
         meta.dispatched = 1;
@@ -2575,6 +2631,8 @@ control EuronextOptiqOrderentrygatewayDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.cross_order_message_cross_clearing_fields_group);
         packet.emit(hdr.cross_order_message_cross_strategy_fields_group_header);
         packet.emit(hdr.cross_order_message_cross_strategy_fields_group);
+        packet.emit(hdr.rfq_audit_message);
+        packet.emit(hdr.rfq_audit_message_rfq_counterparts_group);
         packet.emit(hdr.logon_message);
         packet.emit(hdr.logon_ack_message);
         packet.emit(hdr.logon_reject_message);

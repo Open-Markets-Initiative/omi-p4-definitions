@@ -138,8 +138,6 @@ header refresh_header_message_t {
 }
 
 header request_response_message_t {
-    bit<16> msg_size;
-    bit<16> msg_type;
     bit<32> request_seq_num;
     bit<80> source_id;
     bit<8> product_id;
@@ -152,8 +150,6 @@ header heartbeat_response_message_t {
 }
 
 header orderbook_snapshot_message_t {
-    bit<16> msg_size;
-    bit<16> msg_type;
     bit<32> source_time;
     bit<32> source_time_ns;
     bit<32> symbol_index;
@@ -164,6 +160,9 @@ header orderbook_snapshot_message_t {
     bit<16> remaining_count;
     bit<16> mpv;
     bit<8> update_count;
+}
+
+header orderbook_snapshot_message_snapshot_price_point_t {
     bit<32> price;
     bit<32> volume;
     bit<8> side;
@@ -171,8 +170,6 @@ header orderbook_snapshot_message_t {
 }
 
 header orderbook_delta_update_message_t {
-    bit<16> msg_size;
-    bit<16> msg_type;
     bit<32> source_time;
     bit<32> source_time_ns;
     bit<32> symbol_index;
@@ -180,6 +177,9 @@ header orderbook_delta_update_message_t {
     bit<8> trading_status;
     bit<16> remaining_count;
     bit<8> update_count;
+}
+
+header orderbook_delta_update_message_delta_price_point_t {
     bit<32> price;
     bit<32> volume;
     bit<8> side;
@@ -188,6 +188,8 @@ header orderbook_delta_update_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
+    bit<8> orderbook_snapshot_message_snapshot_price_point_remaining;
+    bit<8> orderbook_delta_update_message_delta_price_point_remaining;
 }
 
 struct headers_t {
@@ -206,7 +208,9 @@ struct headers_t {
     request_response_message_t request_response_message[MAX_MESSAGES];
     heartbeat_response_message_t heartbeat_response_message[MAX_MESSAGES];
     orderbook_snapshot_message_t orderbook_snapshot_message[MAX_MESSAGES];
+    orderbook_snapshot_message_snapshot_price_point_t orderbook_snapshot_message_snapshot_price_point[MAX_MESSAGES];
     orderbook_delta_update_message_t orderbook_delta_update_message[MAX_MESSAGES];
+    orderbook_delta_update_message_delta_price_point_t orderbook_delta_update_message_delta_price_point[MAX_MESSAGES];
 }
 
 parser NyseequitiesOpenbookaggregatedParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -314,13 +318,39 @@ parser NyseequitiesOpenbookaggregatedParser(packet_in packet, out headers_t hdr,
     state parse_orderbook_snapshot_message {
         packet.extract(hdr.orderbook_snapshot_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        meta.orderbook_snapshot_message_snapshot_price_point_remaining = hdr.orderbook_snapshot_message.last.update_count;
+        transition select(meta.orderbook_snapshot_message_snapshot_price_point_remaining) {
+            8w0: parse_packet_header_message;
+            default: parse_orderbook_snapshot_message_snapshot_price_point;
+        }
+    }
+
+    state parse_orderbook_snapshot_message_snapshot_price_point {
+        packet.extract(hdr.orderbook_snapshot_message_snapshot_price_point.next);
+        meta.orderbook_snapshot_message_snapshot_price_point_remaining = meta.orderbook_snapshot_message_snapshot_price_point_remaining - 1;
+        transition select(meta.orderbook_snapshot_message_snapshot_price_point_remaining) {
+            8w0: parse_packet_header_message;
+            default: parse_orderbook_snapshot_message_snapshot_price_point;
+        }
     }
 
     state parse_orderbook_delta_update_message {
         packet.extract(hdr.orderbook_delta_update_message.next);
         meta.dispatched = 1;
-        transition parse_packet_header_message;
+        meta.orderbook_delta_update_message_delta_price_point_remaining = hdr.orderbook_delta_update_message.last.update_count;
+        transition select(meta.orderbook_delta_update_message_delta_price_point_remaining) {
+            8w0: parse_packet_header_message;
+            default: parse_orderbook_delta_update_message_delta_price_point;
+        }
+    }
+
+    state parse_orderbook_delta_update_message_delta_price_point {
+        packet.extract(hdr.orderbook_delta_update_message_delta_price_point.next);
+        meta.orderbook_delta_update_message_delta_price_point_remaining = meta.orderbook_delta_update_message_delta_price_point_remaining - 1;
+        transition select(meta.orderbook_delta_update_message_delta_price_point_remaining) {
+            8w0: parse_packet_header_message;
+            default: parse_orderbook_delta_update_message_delta_price_point;
+        }
     }
 
     state parse_packet_header_message_empty {
@@ -373,7 +403,9 @@ control NyseequitiesOpenbookaggregatedDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.request_response_message);
         packet.emit(hdr.heartbeat_response_message);
         packet.emit(hdr.orderbook_snapshot_message);
+        packet.emit(hdr.orderbook_snapshot_message_snapshot_price_point);
         packet.emit(hdr.orderbook_delta_update_message);
+        packet.emit(hdr.orderbook_delta_update_message_delta_price_point);
     }
 }
 

@@ -1,11 +1,11 @@
-// P4_16 (v1model) definition for: Nasdaq NsmEquities Orders Ouch v4.2
+// P4_16 (v1model) definition for: Nasdaq NsmEquities Orders Ouch v4.2.2025
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: Orders
 //   Encoding: Ouch
-//   Version: 4.2
-//   Date: 7/8/2019
+//   Version: 4.2.2025
+//   Date: 10/7/2025
 //   Specification: OUCH4.2.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
@@ -65,7 +65,7 @@ header enter_order_message_t {
 
 header replace_order_message_t {
     bit<112> existing_order_token;
-    bit<112> replacement_order_token_token_14;
+    bit<112> replacement_order_token;
     bit<32> shares;
     bit<32> price;
     bit<32> time_in_force;
@@ -85,10 +85,6 @@ header modify_order_message_t {
     bit<32> shares;
 }
 
-header trade_now_message_t {
-    bit<112> order_token;
-}
-
 header debug_packet_debug_text_t {
     varbit<2048> debug_text;
 }
@@ -105,7 +101,6 @@ struct headers_t {
     replace_order_message_t replace_order_message;
     cancel_order_message_t cancel_order_message;
     modify_order_message_t modify_order_message;
-    trade_now_message_t trade_now_message;
     debug_packet_debug_text_t debug_packet_debug_text;
 }
 
@@ -142,7 +137,6 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
             8w0x55: parse_replace_order_message;
             8w0x58: parse_cancel_order_message;
             8w0x4d: parse_modify_order_message;
-            8w0x4e: parse_trade_now_message;
             default: accept;
         }
     }
@@ -167,12 +161,6 @@ parser NsmequitiesOrdersClientParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_modify_order_message {
         packet.extract(hdr.modify_order_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_trade_now_message {
-        packet.extract(hdr.trade_now_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -225,7 +213,6 @@ control NsmequitiesOrdersClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.replace_order_message);
         packet.emit(hdr.cancel_order_message);
         packet.emit(hdr.modify_order_message);
-        packet.emit(hdr.trade_now_message);
     }
 }
 

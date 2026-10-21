@@ -327,7 +327,7 @@ header extended_trade_message_t {
     bit<1> irregular;
     bit<24> venue;
     bit<40> deprecated_utf_85;
-    bit<64> trade_price;
+    bit<64> extended_trade_price;
     bit<64> trade_size_unsigned_integer_8;
     bit<64> trade_time_milli;
 }
