@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 2.2.o
 //   Date: 07/30/2026
-//   Specification: NYSE_Pillar_Order_Imbalances_Client_Specification.pdf
+//   Specification: NYSE_Pillar_Order_Imbalances_Client_Specification (2.2o).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

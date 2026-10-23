@@ -6,7 +6,7 @@
 //   Encoding: Pillar Stream Protocol
 //   Version: 3.27
 //   Date: 7/21/2026
-//   Specification: NYSE_Pillar_Options_Gateway_Binary_Protocol_Specification.pdf
+//   Specification: NYSE_Pillar_Options_Gateway_Binary_Protocol_Specification (3.27).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -49,7 +49,7 @@ header open_t {
     bit<16> msg_type;
     bit<16> msg_length;
     bit<32> sess;
-    bit<32> user;
+    bit<32> value;
     bit<64> start_seq;
     bit<64> end_seq;
     bit<8> access;
@@ -60,14 +60,14 @@ header close_t {
     bit<16> msg_type;
     bit<16> msg_length;
     bit<32> sess;
-    bit<32> user;
+    bit<32> value;
 }
 
 header client_seq_msg_t {
     bit<16> msg_type;
     bit<16> msg_length;
     bit<32> sess;
-    bit<32> user;
+    bit<32> value;
     bit<64> seq;
     bit<32> reserved_4;
     bit<64> timestamp;

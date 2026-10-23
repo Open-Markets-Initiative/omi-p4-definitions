@@ -1,12 +1,12 @@
-// P4_16 (v1model) definition for: Nyse Options StreamProtocol PillarStream v1.6
+// P4_16 (v1model) definition for: Nyse Options StreamProtocol PillarStream v1.1.6
 // 
 // Protocol:
 //   Organization: New York Stock Exchange
 //   Protocol: Stream Protocol
 //   Encoding: Pillar Stream Protocol
-//   Version: 1.6
-//   Date: 9/26/2019
-//   Specification: NYSE_Pillar_Stream_Protocol_Specification (1.1.7).pdf
+//   Version: 1.1.6
+//   Date: 8/26/2019
+//   Specification: 20200716141036_KXKMVSRC.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

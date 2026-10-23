@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 2.6
 //   Date: 08/20/2025
-//   Specification: NYSE_Pillar_Trades_Client_Specification.pdf
+//   Specification: NYSE_Pillar_Trades_Client_Specification (2.6).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

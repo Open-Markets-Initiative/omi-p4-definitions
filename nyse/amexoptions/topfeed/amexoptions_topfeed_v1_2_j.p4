@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 1.2.j
 //   Date: 11/18/2025
-//   Specification: PILLAR_TOP_Client_Specification.pdf
+//   Specification: PILLAR_TOP_Client_Specification (1.2j).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

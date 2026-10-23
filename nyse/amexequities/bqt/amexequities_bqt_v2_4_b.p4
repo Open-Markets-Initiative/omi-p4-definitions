@@ -6,7 +6,7 @@
 //   Encoding: Exchange Data Publisher
 //   Version: 2.4.b
 //   Date: 07/30/2026
-//   Specification: NYSE_BQT_Client_Specification.pdf
+//   Specification: NYSE_BQT_Client_Specification (2.4b).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

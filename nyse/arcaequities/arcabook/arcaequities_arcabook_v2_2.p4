@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 2.2
 //   Date: 07/30/2026
-//   Specification: ArcaBook_Client_Specification.pdf
+//   Specification: ArcaBook_Client_Specification (2.2).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

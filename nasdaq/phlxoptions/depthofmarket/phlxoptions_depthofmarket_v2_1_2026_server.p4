@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 2.1.2026
 //   Date: 07/08/2026
-//   Specification: Options_Depth_of_Market_Feed_2.1.pdf
+//   Specification: Options_Depth_of_Market_Feed_2.1 (2026-08-03).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

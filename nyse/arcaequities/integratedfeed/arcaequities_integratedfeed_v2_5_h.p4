@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 2.5.h
 //   Date: 07/30/2026
-//   Specification: NYSE_Pillar_Integrated_Feed_Client_Specification.pdf
+//   Specification: NYSE_Pillar_Integrated_Feed_Client_Specification (2.5h).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
