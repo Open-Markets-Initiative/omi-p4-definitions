@@ -6,7 +6,7 @@
 //   Encoding: Otc Link
 //   Version: 1.0
 //   Date: 4/1/2026
-//   Specification: OTC Link Overnight OTC Multicast Data Feeds Technical Specification.pdf
+//   Specification: OTC Link Overnight OTC Multicast Data Feeds Technical Specification v1.0.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 8.0
 //   Date: 9/18/2023
-//   Specification: BinaryEntryPoint-MessageReference-8.0.0-enUS.pdf
+//   Specification: BinaryEntryPoint-MessageReference-8.0.0.1-enUS.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

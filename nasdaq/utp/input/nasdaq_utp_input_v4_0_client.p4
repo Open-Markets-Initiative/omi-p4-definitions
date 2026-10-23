@@ -6,7 +6,7 @@
 //   Encoding: Utp
 //   Version: 4.0
 //   Date: 06/01/2026
-//   Specification: UtpBinaryInputSpec.pdf
+//   Specification: UtpBinaryInputSpec-v4.0.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

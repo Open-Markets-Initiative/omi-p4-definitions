@@ -6,7 +6,7 @@
 //   Encoding: Flat Binary Encoding
 //   Version: 6.1
 //   Date: 3/20/2018
-//   Specification: T7-Enhanced-Order-Book-Interface---Manual.6.1pdf.pdf
+//   Specification: T7-Enhanced-Order-Book-Interface---Manual.6.1.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
