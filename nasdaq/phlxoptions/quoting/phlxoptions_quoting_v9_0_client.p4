@@ -6,7 +6,7 @@
 //   Encoding: Specialized Quote Interface
 //   Version: 9.0
 //   Date: 09/22/2026
-//   Specification: Options_ETH_SQF.pdf
+//   Specification: Options_SQF.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 2.0.2026
 //   Date: 6/11/2026
-//   Specification: 6-11-26_Level_2_Specification_1.pdf
+//   Specification: Level 2 Specification.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

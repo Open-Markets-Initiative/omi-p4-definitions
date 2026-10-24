@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 5.2
 //   Date: 02/01/2026
-//   Specification: 0059-26_Updated Totalview ITCH 24H Specs-V2.pdf
+//   Specification: 0059-26_Updated_Totalview_ITCH_24H_Specs-V2.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

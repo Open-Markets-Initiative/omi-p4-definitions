@@ -6,7 +6,7 @@
 //   Encoding: Pillar Stream Protocol
 //   Version: 1.1.6
 //   Date: 8/26/2019
-//   Specification: 20200716141036_KXKMVSRC.pdf
+//   Specification: NYSE_Pillar_Stream_Protocol_Specification.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

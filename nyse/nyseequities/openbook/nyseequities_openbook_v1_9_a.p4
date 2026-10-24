@@ -6,7 +6,7 @@
 //   Encoding: Exchange Data Publisher
 //   Version: 1.9.a
 //   Date: 03/24/2014
-//   Specification: XDP_Depth_of_Book_Client_Spec (1.9a).pdf
+//   Specification: XDP_Depth_of_Book_Client_Spec.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

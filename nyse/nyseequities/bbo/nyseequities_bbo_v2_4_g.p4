@@ -6,7 +6,7 @@
 //   Encoding: Exchange Data Publisher
 //   Version: 2.4.g
 //   Date: 01/29/2018
-//   Specification: XDP BBO Client Specification (2.4g).pdf
+//   Specification: XDP_BBO_Client_Specification.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

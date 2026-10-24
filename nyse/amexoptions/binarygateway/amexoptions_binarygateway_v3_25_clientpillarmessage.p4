@@ -6,7 +6,7 @@
 //   Encoding: Pillar Stream Protocol
 //   Version: 3.25
 //   Date: 10/17/2025
-//   Specification: NYSE_Pillar_Options_Gateway_Binary_Protocol_Specification (3.25).pdf
+//   Specification: NYSE_Pillar_Options_Gateway_Binary_Protocol_Specification.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

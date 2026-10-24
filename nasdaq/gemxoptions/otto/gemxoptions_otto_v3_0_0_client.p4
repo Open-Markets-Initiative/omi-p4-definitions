@@ -6,7 +6,7 @@
 //   Encoding: Ouch
 //   Version: 3.0.0
 //   Date: 08/17/2026
-//   Specification: Options_ETH_OTTO.pdf
+//   Specification: Options_OTTO.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

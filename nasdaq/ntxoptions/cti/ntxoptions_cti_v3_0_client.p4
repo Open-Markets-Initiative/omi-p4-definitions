@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 3.0
 //   Date: 08/03/2026
-//   Specification: Options_ETH_CTI.pdf
+//   Specification: Options_CTI.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

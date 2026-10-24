@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 2.2.2026
 //   Date: 6/16/2026
-//   Specification: 6-11-26 NOIS_v2.2 1.pdf
+//   Specification: 6-11-26_NOIS_v2.2_1.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

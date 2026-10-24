@@ -6,7 +6,7 @@
 //   Encoding: LMEsource
 //   Version: 4.18
 //   Date: 08/18/2026
-//   Specification: LMEsource Client Interface Specification v4 18.pdf
+//   Specification: lmesource-client-interface-specification-v4-18.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Investors Exchange Snapshot Protocol
 //   Version: 1.6
 //   Date: 6/2/2026
-//   Specification: IEX TOPS SNAP Specification.pdf
+//   Specification: IEX TOPS SNAP Specification v1.6.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 4.0.2025
 //   Date: 04/22/2025
-//   Specification: itto_spec40 - TCP Updated.pdf
+//   Specification: itto_spec40_-_TCP_Updated.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

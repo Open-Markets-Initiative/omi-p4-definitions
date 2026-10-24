@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 1.0
 //   Date: 05/18/2026
-//   Specification: Nasdaq TotalView Plus1.0_vF.pdf
+//   Specification: Nasdaq_TotalView_Plus1.0_vF.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
