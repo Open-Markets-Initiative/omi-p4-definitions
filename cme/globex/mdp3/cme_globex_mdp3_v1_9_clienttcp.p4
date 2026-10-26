@@ -31,11 +31,11 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header simple_binary_header_t {
     bit<16> encoding_type;
     bit<32> message_sequence_number;
     bit<64> tcp_sending_time;
-    bit<16> tcp_message_size;
+    bit<16> message_size;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;
@@ -130,7 +130,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    simple_binary_header_t simple_binary_header;
     negotiate_t negotiate;
     terminate_t terminate;
     market_data_request_t market_data_request;
@@ -149,8 +149,8 @@ struct headers_t {
 
 parser CmeGlobexMdp3ClienttcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.simple_binary_header);
+        transition select(hdr.simple_binary_header.template_id) {
             16w0xc800: parse_negotiate;
             16w0xcb00: parse_terminate;
             16w0xcd00: parse_market_data_request;
@@ -319,7 +319,7 @@ control CmeGlobexMdp3ClienttcpComputeChecksum(inout headers_t hdr, inout metadat
 
 control CmeGlobexMdp3ClienttcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.simple_binary_header);
         packet.emit(hdr.negotiate);
         packet.emit(hdr.terminate);
         packet.emit(hdr.market_data_request);

@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.10.a
 //   Date: 2/25/2026
-//   Specification: MXOP-Specifications-20260225.zip
+//   Specification: Unknown
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

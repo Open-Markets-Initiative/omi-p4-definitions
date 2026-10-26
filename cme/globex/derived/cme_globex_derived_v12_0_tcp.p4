@@ -31,11 +31,11 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header simple_binary_header_t {
     bit<16> encoding_type;
     bit<32> message_sequence_number;
     bit<64> tcp_sending_time;
-    bit<16> tcp_message_size;
+    bit<16> message_size;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;
@@ -162,7 +162,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    simple_binary_header_t simple_binary_header;
     md_incremental_refresh_spectrum_t md_incremental_refresh_spectrum;
     md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_t md_incremental_refresh_spectrum_incremental_refresh_spectrum_group[MAX_MESSAGES];
     md_incremental_refresh_ticker_t md_incremental_refresh_ticker;
@@ -176,8 +176,8 @@ struct headers_t {
 
 parser CmeGlobexDerivedTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.simple_binary_header);
+        transition select(hdr.simple_binary_header.template_id) {
             16w0x2e01: parse_admin_heartbeat;
             16w0x2f01: parse_md_incremental_refresh_spectrum;
             16w0x3001: parse_md_incremental_refresh_ticker;
@@ -305,7 +305,7 @@ control CmeGlobexDerivedTcpComputeChecksum(inout headers_t hdr, inout metadata_t
 
 control CmeGlobexDerivedTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.simple_binary_header);
         packet.emit(hdr.md_incremental_refresh_spectrum);
         packet.emit(hdr.md_incremental_refresh_spectrum_incremental_refresh_spectrum_group);
         packet.emit(hdr.md_incremental_refresh_ticker);

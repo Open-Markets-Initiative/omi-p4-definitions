@@ -31,11 +31,11 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header simple_binary_header_t {
     bit<16> encoding_type;
     bit<32> message_sequence_number;
     bit<64> tcp_sending_time;
-    bit<16> tcp_message_size;
+    bit<16> message_size;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;
@@ -73,15 +73,15 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    simple_binary_header_t simple_binary_header;
     md_incremental_refresh_btec_t md_incremental_refresh_btec;
     md_incremental_refresh_btec_incremental_refresh_btec_group_t md_incremental_refresh_btec_incremental_refresh_btec_group[MAX_MESSAGES];
 }
 
 parser BrokertecUstreasuryTcpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.template_id) {
+        packet.extract(hdr.simple_binary_header);
+        transition select(hdr.simple_binary_header.template_id) {
             16w0x9501: parse_md_incremental_refresh_btec;
             16w0x9b01: parse_admin_heartbeat;
             default: accept;
@@ -142,7 +142,7 @@ control BrokertecUstreasuryTcpComputeChecksum(inout headers_t hdr, inout metadat
 
 control BrokertecUstreasuryTcpDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.simple_binary_header);
         packet.emit(hdr.md_incremental_refresh_btec);
         packet.emit(hdr.md_incremental_refresh_btec_incremental_refresh_btec_group);
     }

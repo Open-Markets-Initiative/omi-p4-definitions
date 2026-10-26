@@ -6,7 +6,7 @@
 //   Encoding: Szse Binary Market Data Feed
 //   Version: 1.17
 //   Date: 04/01/2025
-//   Specification: SZSE Interface Specification of BINARY Market Data Feed (Ver1.17).pdf
+//   Specification: SZSE Multicast Market Data Distribution Protocol (1.0).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
