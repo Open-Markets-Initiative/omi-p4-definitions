@@ -279,8 +279,8 @@ header equities_snapshot_mm_lp_quotes_included_10_level_message_t {
     bit<96> estimated_trading_volume;
     bit<8> closing_price_type_code;
     bit<8> trading_halt;
-    bit<8> knockout_elw_type_code;
-    bit<72> knockout_elw_triggering_time;
+    bit<8> knock_out_elw_type_code;
+    bit<72> knock_out_elw_triggering_time;
     bit<88> mid_price;
     bit<96> total_mid_price_ask_volume_total_ask_volume_on_mid_price;
     bit<96> total_mid_price_bid_volume_total_bid_volume_on_mid_price;
@@ -423,7 +423,7 @@ header equities_batch_data_message_t {
     bit<8> korea_corporate_governance_stock_price_index_kogi;
     bit<8> issue_for_administration;
     bit<8> unfaithful_disclosure;
-    bit<8> backdoor_listing;
+    bit<8> back_door_listing;
     bit<8> trading_halt;
     bit<80> industry_id;
     bit<8> small_medium_sized_business;
@@ -463,16 +463,16 @@ header equities_batch_data_message_t {
     bit<88> lowest_order_price;
     bit<88> highest_order_price;
     bit<88> unit_of_volume_in_main_board;
-    bit<88> lot_size_afterhours_trading;
+    bit<88> lot_size_after_hours_trading;
     bit<8> rei_ts_type_code;
     bit<96> target_stock_isin_code;
     bit<24> currency_iso_code;
     bit<24> country_code;
     bit<8> market_making_possibility;
     bit<8> closing_price_trading_possibility_in_the_after_hours;
-    bit<8> closing_price_trading_in_the_preopening_market;
-    bit<8> block_trading_in_the_preopening_market;
-    bit<8> basket_trading_in_the_preopening_market;
+    bit<8> closing_price_trading_in_the_pre_opening_market;
+    bit<8> block_trading_in_the_pre_opening_market;
+    bit<8> basket_trading_in_the_pre_opening_market;
     bit<8> announcement_of_estimated_trading_price;
     bit<8> short_selling;
     bit<104> etf_tracking_difference;
@@ -482,7 +482,7 @@ header equities_batch_data_message_t {
     bit<104> appraisal_ratio_of_substitute_price;
     bit<8> investment_caution_issue;
     bit<64> delisting_date;
-    bit<8> shortterm_overheat_issue_type_code;
+    bit<8> short_term_overheat_issue_type_code;
     bit<8> etf_replication_methods_type_code;
     bit<64> expiration_date;
     bit<16> distribution_type_code;
@@ -582,12 +582,12 @@ header brokers_acitity_information_message_t {
 header trading_activity_by_session_per_an_issue_message_t {
     bit<96> isin_code;
     bit<40> total_number_of_tradable_issues_on_competitive_trading;
-    bit<96> premarket_accumulated_trading_volume;
-    bit<176> premarket_accumulated_trading_value;
-    bit<96> mainmarket_accumulated_trading_volume;
-    bit<176> mainmarket_accumulated_trading_value;
-    bit<96> aftermarket_accumulated_trading_volume;
-    bit<176> aftermarket_accumulated_trading_value;
+    bit<96> pre_market_accumulated_trading_volume;
+    bit<176> pre_market_accumulated_trading_value;
+    bit<96> main_market_accumulated_trading_volume;
+    bit<176> main_market_accumulated_trading_value;
+    bit<96> after_market_accumulated_trading_volume;
+    bit<176> after_market_accumulated_trading_value;
     bit<8> end_keyword;
 }
 

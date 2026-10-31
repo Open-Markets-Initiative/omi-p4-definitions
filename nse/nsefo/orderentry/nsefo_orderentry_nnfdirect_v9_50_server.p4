@@ -396,7 +396,7 @@ header spread_report_header_body_t {
     bit<8> org_scope;
     bit<32> report_date;
     bit<16> user_type;
-    bit<40> brokernumber;
+    bit<40> broker_number;
     bit<200> broker_name;
     bit<32> trader_number;
     bit<208> trader_name;

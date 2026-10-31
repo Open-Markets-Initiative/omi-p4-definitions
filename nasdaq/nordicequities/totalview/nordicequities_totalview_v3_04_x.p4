@@ -91,7 +91,7 @@ header order_book_directory_message_t {
     bit<1> ob_observation_status;
     bit<1> fn_first_north_company;
     bit<1> ss_excluding_comb_split_redemption_share;
-    bit<1> ew_marketwide_exceptional_circumstance;
+    bit<1> ew_market_wide_exceptional_circumstance;
     bit<1> sm_stressed_market;
     bit<1> pd_price_discrepancy_historical_average_share_classes;
     bit<1> reserved_5;
@@ -99,7 +99,7 @@ header order_book_directory_message_t {
     bit<2> reserved_23;
     bit<1> bb_buy_back;
     bit<4> reserved_58;
-    bit<1> kn_knockout_buy_back_into_next_trading_day;
+    bit<1> kn_knock_out_buy_back_into_next_trading_day;
     bit<1> da_digital_asset;
     bit<1> un_underlying_not_quoted;
     bit<1> em_exceptional_circumstances_related_to_market_maker;

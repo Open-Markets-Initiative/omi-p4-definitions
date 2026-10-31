@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nse NseCom Snapshot Binary v6.8
+// P4_16 (v1model) definition for: Nse NseCom Snapshot Tbt v6.8
 // 
 // Protocol:
 //   Organization: National Stock Exchange of India Ltd
 //   Protocol: Mtbt Order Book Snapshot Recovery
-//   Encoding: Binary
+//   Encoding: Tbt
 //   Version: 6.8
 //   Date: 12/1/2025
 //   Specification: MTBT_FO_NNF_PROTOCOL_6_8_20260401172252.pdf

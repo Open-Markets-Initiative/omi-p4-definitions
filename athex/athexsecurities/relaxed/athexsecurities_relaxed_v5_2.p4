@@ -75,7 +75,7 @@ header apa_post_trade_message_t {
     bit<64> expiry_date;
     bit<32> delivery_type;
     bit<32> type_emission_allowance;
-    bit<32> otc_posttrade_indicator;
+    bit<32> otc_post_trade_indicator;
     bit<8> deferral_indicator;
     bit<8> lmtf;
     bit<8> fulf;

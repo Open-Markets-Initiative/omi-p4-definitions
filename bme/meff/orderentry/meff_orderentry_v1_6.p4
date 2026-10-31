@@ -654,7 +654,7 @@ header trade_trade_amendment_or_cancellation_1_leg_buy_private_information_messa
     bit<8> transaction_category;
     bit<32> strategy_trd_match_id;
     bit<8> last_change_flag;
-    bit<8> bencrfpt_flag;
+    bit<8> benc_rfpt_flag;
     bit<8> trade_price_condition;
     bit<8> pre_trade_transparency_waiver;
     bit<8> deferral_waiver;
@@ -723,7 +723,7 @@ header trade_trade_amendment_or_cancellation_1_leg_sell_private_information_mess
     bit<8> transaction_category;
     bit<32> strategy_trd_match_id;
     bit<8> last_change_flag;
-    bit<8> bencrfpt_flag;
+    bit<8> benc_rfpt_flag;
     bit<8> trade_price_condition;
     bit<8> pre_trade_transparency_waiver;
     bit<8> deferral_waiver;
@@ -792,7 +792,7 @@ header trade_trade_amendment_or_cancellation_2_legs_private_information_message_
     bit<8> transaction_category;
     bit<32> strategy_trd_match_id;
     bit<8> last_change_flag;
-    bit<8> bencrfpt_flag;
+    bit<8> benc_rfpt_flag;
     bit<8> trade_price_condition;
     bit<8> pre_trade_transparency_waiver;
     bit<8> deferral_waiver;

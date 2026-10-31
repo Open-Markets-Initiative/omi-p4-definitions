@@ -45,7 +45,7 @@ header inbound_quote_messages_message_t {
     bit<8> inbound_quote_messages_message_type;
 }
 
-header protected_exchange_quote_message_shortform_message_t {
+header protected_exchange_quote_message_short_form_message_t {
     bit<16> orig;
     bit<64> timestamp_1;
     bit<64> feed_sequence;
@@ -59,7 +59,7 @@ header protected_exchange_quote_message_shortform_message_t {
     bit<8> rii;
 }
 
-header protected_exchange_quote_message_longform_message_t {
+header protected_exchange_quote_message_long_form_message_t {
     bit<16> orig;
     bit<64> timestamp_1;
     bit<64> feed_sequence;
@@ -653,8 +653,8 @@ struct headers_t {
     client_tcp_packet_header_t client_tcp_packet_header;
     unsequenced_data_packet_t unsequenced_data_packet;
     inbound_quote_messages_message_t inbound_quote_messages_message;
-    protected_exchange_quote_message_shortform_message_t protected_exchange_quote_message_shortform_message;
-    protected_exchange_quote_message_longform_message_t protected_exchange_quote_message_longform_message;
+    protected_exchange_quote_message_short_form_message_t protected_exchange_quote_message_short_form_message;
+    protected_exchange_quote_message_long_form_message_t protected_exchange_quote_message_long_form_message;
     exchange_odd_lot_quote_message_short_form_message_t exchange_odd_lot_quote_message_short_form_message;
     exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment_t exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment[MAX_MESSAGES];
     exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment_t exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment[MAX_MESSAGES];
@@ -747,8 +747,8 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
         packet.extract(hdr.inbound_quote_messages_message);
         meta.dispatched = 1;
         transition select(hdr.inbound_quote_messages_message.inbound_quote_messages_message_type) {
-            8w0x51: parse_protected_exchange_quote_message_shortform_message;
-            8w0x4c: parse_protected_exchange_quote_message_longform_message;
+            8w0x51: parse_protected_exchange_quote_message_short_form_message;
+            8w0x4c: parse_protected_exchange_quote_message_long_form_message;
             8w0x4f: parse_exchange_odd_lot_quote_message_short_form_message;
             8w0x4a: parse_exchange_odd_lot_quote_message_long_form_message;
             8w0x50: parse_exchange_combined_quote_message_short_form_message;
@@ -761,14 +761,14 @@ parser NasdaqUtpInputClientParser(packet_in packet, out headers_t hdr, inout met
         }
     }
 
-    state parse_protected_exchange_quote_message_shortform_message {
-        packet.extract(hdr.protected_exchange_quote_message_shortform_message);
+    state parse_protected_exchange_quote_message_short_form_message {
+        packet.extract(hdr.protected_exchange_quote_message_short_form_message);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_protected_exchange_quote_message_longform_message {
-        packet.extract(hdr.protected_exchange_quote_message_longform_message);
+    state parse_protected_exchange_quote_message_long_form_message {
+        packet.extract(hdr.protected_exchange_quote_message_long_form_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -1320,8 +1320,8 @@ control NasdaqUtpInputClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.client_tcp_packet_header);
         packet.emit(hdr.unsequenced_data_packet);
         packet.emit(hdr.inbound_quote_messages_message);
-        packet.emit(hdr.protected_exchange_quote_message_shortform_message);
-        packet.emit(hdr.protected_exchange_quote_message_longform_message);
+        packet.emit(hdr.protected_exchange_quote_message_short_form_message);
+        packet.emit(hdr.protected_exchange_quote_message_long_form_message);
         packet.emit(hdr.exchange_odd_lot_quote_message_short_form_message);
         packet.emit(hdr.exchange_odd_lot_quote_message_short_form_message_odd_lot_bid_short_form_attachment);
         packet.emit(hdr.exchange_odd_lot_quote_message_short_form_message_odd_lot_ask_short_form_attachment);

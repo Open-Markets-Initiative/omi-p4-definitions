@@ -5,10 +5,10 @@
 //   Protocol: Real Time Market Data Feed
 //   Encoding: A2X Market Data
 //   Version: 1.3.2
-//   Date: 9/15/2022
+//   Date: 8/15/2022
 //   Specification: A2X712-Market-Data-Techincal-Specification-v1.3.2.pdf
 // 
-// Byte order: big (P4 extracts in network/big-endian order)
+// Byte order: little (P4 extracts in network/big-endian order)
 // 
 // Script:
 //   Generator: 1.0.0.0
@@ -96,31 +96,31 @@ header security_definition_message_t {
     bit<24> currency;
     bit<32> mic;
     bit<8> tick_table_id;
-    bit<16> security_flags;
+    bit<16> flags;
 }
 
 header security_status_message_t {
     bit<16> security_id;
     bit<8> trading_status;
-    bit<1> trading;
-    bit<1> mac_open;
-    bit<1> mac_run;
     bit<5> unused_5;
+    bit<1> mac_run;
+    bit<1> mac_open;
+    bit<1> trading;
     bit<64> timestamp;
 }
 
-header auction_on_demand_message_t {
-    bit<16> security_id;
-    bit<64> indicative_price;
-    bit<32> match_vol;
-    bit<64> timestamp;
-}
-
-header market_at_close_t {
+header mac_update_message_t {
     bit<16> security_id;
     bit<64> indicative_price;
     bit<32> closing_buy_qty;
     bit<32> closing_sell_qty;
+    bit<64> timestamp;
+}
+
+header aod_update_message_t {
+    bit<16> security_id;
+    bit<64> indicative_price;
+    bit<32> match_vol;
     bit<64> timestamp;
 }
 
@@ -139,8 +139,8 @@ struct headers_t {
     tick_table_data_message_t tick_table_data_message[MAX_MESSAGES];
     security_definition_message_t security_definition_message[MAX_MESSAGES];
     security_status_message_t security_status_message[MAX_MESSAGES];
-    auction_on_demand_message_t auction_on_demand_message[MAX_MESSAGES];
-    market_at_close_t market_at_close[MAX_MESSAGES];
+    mac_update_message_t mac_update_message[MAX_MESSAGES];
+    aod_update_message_t aod_update_message[MAX_MESSAGES];
 }
 
 parser A2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -164,8 +164,8 @@ parser A2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadat
             8w7: parse_tick_table_data_message;
             8w8: parse_security_definition_message;
             8w9: parse_security_status_message;
-            8w17: parse_auction_on_demand_message;
-            8w16: parse_market_at_close;
+            8w16: parse_mac_update_message;
+            8w17: parse_aod_update_message;
             default: accept;
         }
     }
@@ -223,14 +223,14 @@ parser A2xequitiesRtmdfParser(packet_in packet, out headers_t hdr, inout metadat
         transition parse_message_header_message;
     }
 
-    state parse_auction_on_demand_message {
-        packet.extract(hdr.auction_on_demand_message.next);
+    state parse_mac_update_message {
+        packet.extract(hdr.mac_update_message.next);
         meta.dispatched = 1;
         transition parse_message_header_message;
     }
 
-    state parse_market_at_close {
-        packet.extract(hdr.market_at_close.next);
+    state parse_aod_update_message {
+        packet.extract(hdr.aod_update_message.next);
         meta.dispatched = 1;
         transition parse_message_header_message;
     }
@@ -280,8 +280,8 @@ control A2xequitiesRtmdfDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.tick_table_data_message);
         packet.emit(hdr.security_definition_message);
         packet.emit(hdr.security_status_message);
-        packet.emit(hdr.auction_on_demand_message);
-        packet.emit(hdr.market_at_close);
+        packet.emit(hdr.mac_update_message);
+        packet.emit(hdr.aod_update_message);
     }
 }
 

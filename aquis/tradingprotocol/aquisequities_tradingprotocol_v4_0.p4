@@ -208,7 +208,9 @@ header order_modify_response_message_t {
     bit<5> reason_code;
     bit<64> timestamp;
     bit<64> user_tag;
-    bit<8> order_modify_response_flags_u_81;
+    bit<1> dark_flag;
+    bit<1> lis;
+    bit<6> reserved_6;
 }
 
 header iceberg_order_refresh_message_t {

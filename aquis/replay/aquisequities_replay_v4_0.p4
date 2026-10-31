@@ -5,10 +5,10 @@
 //   Protocol: Market Data Replay
 //   Encoding: Aquis Market Data Protocol
 //   Version: 4.0
-//   Date: 8/1/2025
-//   Specification: Unknown
+//   Date: 8/15/2025
+//   Specification: Aquis Market Data Technical Specification v4.0.pdf
 // 
-// Byte order: big (P4 extracts in network/big-endian order)
+// Byte order: little (P4 extracts in network/big-endian order)
 // 
 // Script:
 //   Generator: 1.0.0.0

@@ -6,9 +6,9 @@
 //   Encoding: Aquis Market Data Protocol
 //   Version: 4.1
 //   Date: 1/1/2026
-//   Specification: Unknown
+//   Specification: Aquis Market Data Technical Specification v4.1.pdf
 // 
-// Byte order: big (P4 extracts in network/big-endian order)
+// Byte order: little (P4 extracts in network/big-endian order)
 // 
 // Script:
 //   Generator: 1.0.0.0

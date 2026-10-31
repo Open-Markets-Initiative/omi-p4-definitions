@@ -147,7 +147,7 @@ header order_executed_message_t {
     bit<1> extended_hours;
     bit<1> odd_lot;
     bit<1> trade_through_exempt;
-    bit<1> singleprice_cross_trade;
+    bit<1> single_price_cross_trade;
     bit<3> unused_3;
     bit<64> timestamp;
     bit<64> symbol;
@@ -162,7 +162,7 @@ header trade_message_t {
     bit<1> extended_hours;
     bit<1> odd_lot;
     bit<1> trade_through_exempt;
-    bit<1> singleprice_cross_trade;
+    bit<1> single_price_cross_trade;
     bit<3> unused_3;
     bit<64> timestamp;
     bit<64> symbol;
@@ -176,7 +176,7 @@ header trade_break_message_t {
     bit<1> extended_hours;
     bit<1> odd_lot;
     bit<1> trade_through_exempt;
-    bit<1> singleprice_cross_trade;
+    bit<1> single_price_cross_trade;
     bit<3> unused_3;
     bit<64> timestamp;
     bit<64> symbol;

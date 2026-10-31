@@ -96,7 +96,7 @@ header enter_order_message_with_cross_functionality_t {
     bit<48> random_reserve;
     bit<32> route_dest_exec_broker;
     bit<256> cust_terminal_id_sender_sub_id;
-    bit<8> intermarket_sweep_eligibility;
+    bit<8> inter_market_sweep_eligibility;
     bit<8> cross_type;
     bit<8> customer_type;
     bit<8> reactive_trade_now;

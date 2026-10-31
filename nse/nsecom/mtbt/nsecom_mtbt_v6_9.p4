@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nse NseCom Mtbt Binary v6.9
+// P4_16 (v1model) definition for: Nse NseCom Mtbt Tbt v6.9
 // 
 // Protocol:
 //   Organization: National Stock Exchange of India Ltd
 //   Protocol: Multicast Tick By Tick
-//   Encoding: Binary
+//   Encoding: Tbt
 //   Version: 6.9
 //   Date: 4/1/2026
 //   Specification: MTBT_FO_NNF_PROTOCOL_6_9_20260717161139.pdf

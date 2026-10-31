@@ -302,7 +302,7 @@ header quote_cancellation_market_member_message_t {
     bit<32> secondary_order_id_2;
 }
 
-header trade_market_post_transparency_information_topofbook_message_t {
+header trade_market_post_transparency_information_top_of_book_message_t {
     bit<32> sequence_number;
     bit<32> security_code;
     bit<64> transaction_date_and_time;
@@ -343,7 +343,7 @@ header trade_trade_amendment_or_cancellation_message_t {
     bit<32> settl_date;
     bit<8> transaction_category;
     bit<8> last_change_flag;
-    bit<8> bencrfpt_flag;
+    bit<8> benc_rfpt_flag;
     bit<8> trade_price_condition;
     bit<8> pre_trade_transparency_waiver;
     bit<8> deferral_waiver;
@@ -447,7 +447,7 @@ header rfq_market_pre_transparency_information_message_t {
     bit<64> ask_px_5;
 }
 
-header topofbook_message_t {
+header top_of_book_message_t {
     bit<32> sequence_number;
     bit<32> security_code;
     bit<64> transaction_date_and_time;
@@ -762,7 +762,7 @@ header trade_trade_amendment_or_cancellation_1_leg_buy_private_information_messa
     bit<32> settl_date;
     bit<8> transaction_category;
     bit<8> last_change_flag;
-    bit<8> bencrfpt_flag;
+    bit<8> benc_rfpt_flag;
     bit<8> trade_price_condition;
     bit<8> pre_trade_transparency_waiver;
     bit<8> deferral_waiver;
@@ -830,7 +830,7 @@ header trade_trade_amendment_or_cancellation_1_leg_sell_private_information_mess
     bit<32> settl_date;
     bit<8> transaction_category;
     bit<8> last_change_flag;
-    bit<8> bencrfpt_flag;
+    bit<8> benc_rfpt_flag;
     bit<8> trade_price_condition;
     bit<8> pre_trade_transparency_waiver;
     bit<8> deferral_waiver;
@@ -898,7 +898,7 @@ header trade_trade_amendment_or_cancellation_2_legs_private_information_message_
     bit<32> settl_date;
     bit<8> transaction_category;
     bit<8> last_change_flag;
-    bit<8> bencrfpt_flag;
+    bit<8> benc_rfpt_flag;
     bit<8> trade_price_condition;
     bit<8> pre_trade_transparency_waiver;
     bit<8> deferral_waiver;
@@ -1085,12 +1085,12 @@ struct headers_t {
     quote_market_pre_transparency_information_message_t quote_market_pre_transparency_information_message;
     order_cancellation_market_member_message_t order_cancellation_market_member_message;
     quote_cancellation_market_member_message_t quote_cancellation_market_member_message;
-    trade_market_post_transparency_information_topofbook_message_t trade_market_post_transparency_information_topofbook_message;
+    trade_market_post_transparency_information_top_of_book_message_t trade_market_post_transparency_information_top_of_book_message;
     trade_trade_amendment_or_cancellation_message_t trade_trade_amendment_or_cancellation_message;
     trade_market_post_transparency_information_full_depth_message_t trade_market_post_transparency_information_full_depth_message;
     indication_of_interest_message_t indication_of_interest_message;
     rfq_market_pre_transparency_information_message_t rfq_market_pre_transparency_information_message;
-    topofbook_message_t topofbook_message;
+    top_of_book_message_t top_of_book_message;
     order_and_quote_client_data_message_t order_and_quote_client_data_message;
     simple_new_order_message_t simple_new_order_message;
     simple_new_order_with_client_data_message_t simple_new_order_with_client_data_message;
@@ -1139,12 +1139,12 @@ parser BmefixedincomeMarketandorderParser(packet_in packet, out headers_t hdr, i
             8w0x07: parse_quote_market_pre_transparency_information_message;
             8w0x01: parse_order_cancellation_market_member_message;
             8w0x05: parse_quote_cancellation_market_member_message;
-            8w0x10: parse_trade_market_post_transparency_information_topofbook_message;
+            8w0x10: parse_trade_market_post_transparency_information_top_of_book_message;
             8w0x18: parse_trade_trade_amendment_or_cancellation_message;
             8w0x11: parse_trade_market_post_transparency_information_full_depth_message;
             8w0x36: parse_indication_of_interest_message;
             8w0x85: parse_rfq_market_pre_transparency_information_message;
-            8w0x82: parse_topofbook_message;
+            8w0x82: parse_top_of_book_message;
             8w0x6F: parse_order_and_quote_client_data_message;
             8w0x44: parse_simple_new_order_message;
             8w0x45: parse_simple_new_order_with_client_data_message;
@@ -1298,8 +1298,8 @@ parser BmefixedincomeMarketandorderParser(packet_in packet, out headers_t hdr, i
         transition accept;
     }
 
-    state parse_trade_market_post_transparency_information_topofbook_message {
-        packet.extract(hdr.trade_market_post_transparency_information_topofbook_message);
+    state parse_trade_market_post_transparency_information_top_of_book_message {
+        packet.extract(hdr.trade_market_post_transparency_information_top_of_book_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -1328,8 +1328,8 @@ parser BmefixedincomeMarketandorderParser(packet_in packet, out headers_t hdr, i
         transition accept;
     }
 
-    state parse_topofbook_message {
-        packet.extract(hdr.topofbook_message);
+    state parse_top_of_book_message {
+        packet.extract(hdr.top_of_book_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -1522,12 +1522,12 @@ control BmefixedincomeMarketandorderDeparser(packet_out packet, in headers_t hdr
         packet.emit(hdr.quote_market_pre_transparency_information_message);
         packet.emit(hdr.order_cancellation_market_member_message);
         packet.emit(hdr.quote_cancellation_market_member_message);
-        packet.emit(hdr.trade_market_post_transparency_information_topofbook_message);
+        packet.emit(hdr.trade_market_post_transparency_information_top_of_book_message);
         packet.emit(hdr.trade_trade_amendment_or_cancellation_message);
         packet.emit(hdr.trade_market_post_transparency_information_full_depth_message);
         packet.emit(hdr.indication_of_interest_message);
         packet.emit(hdr.rfq_market_pre_transparency_information_message);
-        packet.emit(hdr.topofbook_message);
+        packet.emit(hdr.top_of_book_message);
         packet.emit(hdr.order_and_quote_client_data_message);
         packet.emit(hdr.simple_new_order_message);
         packet.emit(hdr.simple_new_order_with_client_data_message);

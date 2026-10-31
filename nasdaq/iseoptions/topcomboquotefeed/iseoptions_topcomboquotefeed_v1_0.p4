@@ -49,7 +49,7 @@ header system_event_message_t {
     bit<8> current_month;
     bit<8> current_day;
     bit<8> version;
-    bit<8> subversion;
+    bit<8> sub_version;
 }
 
 header complex_strategy_directory_message_t {

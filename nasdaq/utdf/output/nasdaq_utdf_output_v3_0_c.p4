@@ -47,7 +47,7 @@ header trade_message_t {
     bit<8> trade_message_type;
 }
 
-header trade_report_message_shortform_message_t {
+header trade_report_message_short_form_message_t {
     bit<8> market_center_originator;
     bit<8> sub_market_center_id;
     bit<64> sip_timestamp;
@@ -64,7 +64,7 @@ header trade_report_message_shortform_message_t {
     bit<8> participant_price_change_indicator;
 }
 
-header trade_report_message_longform_message_t {
+header trade_report_message_long_form_message_t {
     bit<8> market_center_originator;
     bit<8> sub_market_center_id;
     bit<64> sip_timestamp;
@@ -159,7 +159,7 @@ header prior_day_as_of_trade_message_t {
     bit<64> timestamp_of_trade;
 }
 
-header fractional_trade_report_message_shortform_message_t {
+header fractional_trade_report_message_short_form_message_t {
     bit<8> market_center_originator;
     bit<8> sub_market_center_id;
     bit<64> sip_timestamp;
@@ -176,7 +176,7 @@ header fractional_trade_report_message_shortform_message_t {
     bit<8> participant_price_change_indicator;
 }
 
-header fractional_trade_report_message_longform_message_t {
+header fractional_trade_report_message_long_form_message_t {
     bit<8> market_center_originator;
     bit<8> sub_market_center_id;
     bit<64> sip_timestamp;
@@ -502,13 +502,13 @@ struct headers_t {
     packet_header_t packet_header;
     message_t message[MAX_MESSAGES];
     trade_message_t trade_message[MAX_MESSAGES];
-    trade_report_message_shortform_message_t trade_report_message_shortform_message[MAX_MESSAGES];
-    trade_report_message_longform_message_t trade_report_message_longform_message[MAX_MESSAGES];
+    trade_report_message_short_form_message_t trade_report_message_short_form_message[MAX_MESSAGES];
+    trade_report_message_long_form_message_t trade_report_message_long_form_message[MAX_MESSAGES];
     trade_cancel_error_message_t trade_cancel_error_message[MAX_MESSAGES];
     trade_correction_message_t trade_correction_message[MAX_MESSAGES];
     prior_day_as_of_trade_message_t prior_day_as_of_trade_message[MAX_MESSAGES];
-    fractional_trade_report_message_shortform_message_t fractional_trade_report_message_shortform_message[MAX_MESSAGES];
-    fractional_trade_report_message_longform_message_t fractional_trade_report_message_longform_message[MAX_MESSAGES];
+    fractional_trade_report_message_short_form_message_t fractional_trade_report_message_short_form_message[MAX_MESSAGES];
+    fractional_trade_report_message_long_form_message_t fractional_trade_report_message_long_form_message[MAX_MESSAGES];
     fractional_trade_cancel_error_message_t fractional_trade_cancel_error_message[MAX_MESSAGES];
     fractional_trade_correction_message_t fractional_trade_correction_message[MAX_MESSAGES];
     fractional_as_of_trade_message_t fractional_as_of_trade_message[MAX_MESSAGES];
@@ -573,13 +573,13 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
         transition select(hdr.trade_message.last.trade_message_type) {
-            8w0x41: parse_trade_report_message_shortform_message;
-            8w0x57: parse_trade_report_message_longform_message;
+            8w0x41: parse_trade_report_message_short_form_message;
+            8w0x57: parse_trade_report_message_long_form_message;
             8w0x5a: parse_trade_cancel_error_message;
             8w0x59: parse_trade_correction_message;
             8w0x48: parse_prior_day_as_of_trade_message;
-            8w0x4d: parse_fractional_trade_report_message_shortform_message;
-            8w0x4e: parse_fractional_trade_report_message_longform_message;
+            8w0x4d: parse_fractional_trade_report_message_short_form_message;
+            8w0x4e: parse_fractional_trade_report_message_long_form_message;
             8w0x4f: parse_fractional_trade_cancel_error_message;
             8w0x50: parse_fractional_trade_correction_message;
             8w0x51: parse_fractional_as_of_trade_message;
@@ -587,14 +587,14 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         }
     }
 
-    state parse_trade_report_message_shortform_message {
-        packet.extract(hdr.trade_report_message_shortform_message.next);
+    state parse_trade_report_message_short_form_message {
+        packet.extract(hdr.trade_report_message_short_form_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
 
-    state parse_trade_report_message_longform_message {
-        packet.extract(hdr.trade_report_message_longform_message.next);
+    state parse_trade_report_message_long_form_message {
+        packet.extract(hdr.trade_report_message_long_form_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -617,14 +617,14 @@ parser NasdaqUtdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         transition parse_message;
     }
 
-    state parse_fractional_trade_report_message_shortform_message {
-        packet.extract(hdr.fractional_trade_report_message_shortform_message.next);
+    state parse_fractional_trade_report_message_short_form_message {
+        packet.extract(hdr.fractional_trade_report_message_short_form_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
 
-    state parse_fractional_trade_report_message_longform_message {
-        packet.extract(hdr.fractional_trade_report_message_longform_message.next);
+    state parse_fractional_trade_report_message_long_form_message {
+        packet.extract(hdr.fractional_trade_report_message_long_form_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -857,13 +857,13 @@ control NasdaqUtdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
         packet.emit(hdr.trade_message);
-        packet.emit(hdr.trade_report_message_shortform_message);
-        packet.emit(hdr.trade_report_message_longform_message);
+        packet.emit(hdr.trade_report_message_short_form_message);
+        packet.emit(hdr.trade_report_message_long_form_message);
         packet.emit(hdr.trade_cancel_error_message);
         packet.emit(hdr.trade_correction_message);
         packet.emit(hdr.prior_day_as_of_trade_message);
-        packet.emit(hdr.fractional_trade_report_message_shortform_message);
-        packet.emit(hdr.fractional_trade_report_message_longform_message);
+        packet.emit(hdr.fractional_trade_report_message_short_form_message);
+        packet.emit(hdr.fractional_trade_report_message_long_form_message);
         packet.emit(hdr.fractional_trade_cancel_error_message);
         packet.emit(hdr.fractional_trade_correction_message);
         packet.emit(hdr.fractional_as_of_trade_message);

@@ -57,7 +57,7 @@ header stock_directory_message_t {
     bit<32> round_lot_size;
     bit<8> round_lots_only;
     bit<8> issue_classification;
-    bit<16> issue_subtype;
+    bit<16> issue_sub_type;
     bit<8> authenticity;
     bit<8> short_sale_threshold_indicator;
     bit<8> ipo_flag;

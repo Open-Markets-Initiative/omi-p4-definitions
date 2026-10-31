@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nse NseCm MtbtNdal Binary v6.5
+// P4_16 (v1model) definition for: Nse NseCm MtbtNdal Tbt v6.5
 // 
 // Protocol:
 //   Organization: National Stock Exchange of India Ltd
 //   Protocol: Multicast Tick By Tick Data Feed
-//   Encoding: Binary
+//   Encoding: Tbt
 //   Version: 6.5
 //   Date: 8/3/2026
 //   Specification: Realtime_CM_CD_TBT_ver_6.5.pdf

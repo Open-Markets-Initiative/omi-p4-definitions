@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nse NseFo Recovery Binary v7.1
+// P4_16 (v1model) definition for: Nse NseFo Recovery Tbt v7.1
 // 
 // Protocol:
 //   Organization: National Stock Exchange of India Ltd
 //   Protocol: Mtbt Tick Data Recovery
-//   Encoding: Binary
+//   Encoding: Tbt
 //   Version: 7.1
 //   Date: 9/1/2026
 //   Specification: MTBT_FO_NNF_PROTOCOL_7.1_20260902170959.pdf

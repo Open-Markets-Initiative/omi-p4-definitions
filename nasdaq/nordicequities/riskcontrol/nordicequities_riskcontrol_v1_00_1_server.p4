@@ -1,9 +1,9 @@
-// P4_16 (v1model) definition for: Nasdaq NordicEquities RiskControl Binary v1.00.1
+// P4_16 (v1model) definition for: Nasdaq NordicEquities RiskControl Prm v1.00.1
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
 //   Protocol: Nordic Pre-Trade Risk Management
-//   Encoding: Binary
+//   Encoding: Prm
 //   Version: 1.00.1
 //   Date: 02/10/2026
 //   Specification: Nasdaq-Nordic---PRM-v.1.00.1.pdf

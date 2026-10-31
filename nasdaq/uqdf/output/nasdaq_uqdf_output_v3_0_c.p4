@@ -47,7 +47,7 @@ header quote_message_t {
     bit<8> quote_message_type;
 }
 
-header utp_quote_shortform_message_t {
+header utp_quote_short_form_message_t {
     bit<8> market_center_originator;
     bit<8> sub_market_center_id;
     bit<64> sip_timestamp;
@@ -66,7 +66,7 @@ header utp_quote_shortform_message_t {
     bit<8> luld_national_bbo_indicator;
 }
 
-header utp_quote_longform_message_t {
+header utp_quote_long_form_message_t {
     bit<8> market_center_originator;
     bit<8> sub_market_center_id;
     bit<64> sip_timestamp;
@@ -379,8 +379,8 @@ struct headers_t {
     packet_header_t packet_header;
     message_t message[MAX_MESSAGES];
     quote_message_t quote_message[MAX_MESSAGES];
-    utp_quote_shortform_message_t utp_quote_shortform_message[MAX_MESSAGES];
-    utp_quote_longform_message_t utp_quote_longform_message[MAX_MESSAGES];
+    utp_quote_short_form_message_t utp_quote_short_form_message[MAX_MESSAGES];
+    utp_quote_long_form_message_t utp_quote_long_form_message[MAX_MESSAGES];
     finra_adf_market_participant_quotation_message_t finra_adf_market_participant_quotation_message[MAX_MESSAGES];
     combined_quote_message_short_form_message_t combined_quote_message_short_form_message[MAX_MESSAGES];
     combined_quote_message_long_form_message_t combined_quote_message_long_form_message[MAX_MESSAGES];
@@ -442,8 +442,8 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         packet.extract(hdr.quote_message.next);
         meta.dispatched = 1;
         transition select(hdr.quote_message.last.quote_message_type) {
-            8w0x45: parse_utp_quote_shortform_message;
-            8w0x46: parse_utp_quote_longform_message;
+            8w0x45: parse_utp_quote_short_form_message;
+            8w0x46: parse_utp_quote_long_form_message;
             8w0x4d: parse_finra_adf_market_participant_quotation_message;
             8w0x43: parse_combined_quote_message_short_form_message;
             8w0x44: parse_combined_quote_message_long_form_message;
@@ -453,14 +453,14 @@ parser NasdaqUqdfOutputParser(packet_in packet, out headers_t hdr, inout metadat
         }
     }
 
-    state parse_utp_quote_shortform_message {
-        packet.extract(hdr.utp_quote_shortform_message.next);
+    state parse_utp_quote_short_form_message {
+        packet.extract(hdr.utp_quote_short_form_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
 
-    state parse_utp_quote_longform_message {
-        packet.extract(hdr.utp_quote_longform_message.next);
+    state parse_utp_quote_long_form_message {
+        packet.extract(hdr.utp_quote_long_form_message.next);
         meta.dispatched = 1;
         transition parse_message;
     }
@@ -670,8 +670,8 @@ control NasdaqUqdfOutputDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.packet_header);
         packet.emit(hdr.message);
         packet.emit(hdr.quote_message);
-        packet.emit(hdr.utp_quote_shortform_message);
-        packet.emit(hdr.utp_quote_longform_message);
+        packet.emit(hdr.utp_quote_short_form_message);
+        packet.emit(hdr.utp_quote_long_form_message);
         packet.emit(hdr.finra_adf_market_participant_quotation_message);
         packet.emit(hdr.combined_quote_message_short_form_message);
         packet.emit(hdr.combined_quote_message_long_form_message);

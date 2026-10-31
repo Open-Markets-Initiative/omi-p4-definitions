@@ -5,10 +5,10 @@
 //   Protocol: Snapshot Feed
 //   Encoding: A2X Market Data
 //   Version: 1.3.2
-//   Date: 9/15/2022
+//   Date: 8/15/2022
 //   Specification: A2X712-Market-Data-Techincal-Specification-v1.3.2.pdf
 // 
-// Byte order: big (P4 extracts in network/big-endian order)
+// Byte order: little (P4 extracts in network/big-endian order)
 // 
 // Script:
 //   Generator: 1.0.0.0
@@ -50,10 +50,10 @@ header snapshot_start_message_t {
 header book_status_message_t {
     bit<16> security_id;
     bit<8> trading_status;
-    bit<1> trading;
-    bit<1> mac_open;
-    bit<1> mac_run;
     bit<5> unused_5;
+    bit<1> mac_run;
+    bit<1> mac_open;
+    bit<1> trading;
     bit<16> entries;
     bit<32> closing_buy_qty;
     bit<32> closing_sell_qty;
@@ -62,13 +62,15 @@ header book_status_message_t {
 
 header book_entry_message_t {
     bit<16> security_id;
+    bit<8> side;
     bit<32> quantity;
     bit<64> price;
     bit<32> order_ref;
 }
 
-header market_at_close_book_entry_message_t {
+header mac_book_entry_message_t {
     bit<16> security_id;
+    bit<8> side;
     bit<32> quantity;
     bit<64> price;
     bit<32> order_ref;
@@ -84,7 +86,7 @@ struct headers_t {
     snapshot_start_message_t snapshot_start_message[MAX_MESSAGES];
     book_status_message_t book_status_message[MAX_MESSAGES];
     book_entry_message_t book_entry_message[MAX_MESSAGES];
-    market_at_close_book_entry_message_t market_at_close_book_entry_message[MAX_MESSAGES];
+    mac_book_entry_message_t mac_book_entry_message[MAX_MESSAGES];
 }
 
 parser A2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -103,7 +105,7 @@ parser A2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout meta
             8w10: parse_snapshot_start_message;
             8w11: parse_book_status_message;
             8w12: parse_book_entry_message;
-            8w18: parse_market_at_close_book_entry_message;
+            8w18: parse_mac_book_entry_message;
             default: accept;
         }
     }
@@ -131,8 +133,8 @@ parser A2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout meta
         transition parse_message_header_message;
     }
 
-    state parse_market_at_close_book_entry_message {
-        packet.extract(hdr.market_at_close_book_entry_message.next);
+    state parse_mac_book_entry_message {
+        packet.extract(hdr.mac_book_entry_message.next);
         meta.dispatched = 1;
         transition parse_message_header_message;
     }
@@ -177,7 +179,7 @@ control A2xequitiesSnapshotDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.snapshot_start_message);
         packet.emit(hdr.book_status_message);
         packet.emit(hdr.book_entry_message);
-        packet.emit(hdr.market_at_close_book_entry_message);
+        packet.emit(hdr.mac_book_entry_message);
     }
 }
 

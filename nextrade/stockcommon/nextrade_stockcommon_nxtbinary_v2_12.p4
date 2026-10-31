@@ -275,28 +275,28 @@ header current_movement_message_t {
 header program_trading_activity_per_investor_message_t {
     bit<48> calculation_time;
     bit<32> investor_code;
-    bit<64> sellside_arbitrage_volume;
-    bit<128> sellside_arbitrage_value;
-    bit<64> sellside_nonarbitrage_volume;
-    bit<128> sellside_nonarbitrage_value;
-    bit<64> buyside_arbitrage_volume;
-    bit<128> buyside_arbitrage_value;
-    bit<64> buyside_nonarbitrage_volume;
-    bit<128> buyside_nonarbitrage_value;
+    bit<64> sell_side_arbitrage_volume;
+    bit<128> sell_side_arbitrage_value;
+    bit<64> sell_side_non_arbitrage_volume;
+    bit<128> sell_side_non_arbitrage_value;
+    bit<64> buy_side_arbitrage_volume;
+    bit<128> buy_side_arbitrage_value;
+    bit<64> buy_side_non_arbitrage_volume;
+    bit<128> buy_side_non_arbitrage_value;
     bit<32> end_keyword;
 }
 
 header program_trading_information_per_issue_aggregated_information_message_t {
     bit<96> isin_code;
     bit<32> a_designated_number_for_an_issue_from_krx;
-    bit<64> sellside_arbitrage_trading_remaining_quantity;
-    bit<64> buyside_arbitrage_trading_remaining_quantity;
-    bit<64> sellside_nonarbitrage_remaining_quantity;
-    bit<64> buyside_nonarbitrage_remaining_quantity;
-    bit<64> sellside_arbitrage_quantity;
-    bit<64> buyside_arbitrage_quantity;
-    bit<64> sellside_nonarbitrage_quantity;
-    bit<64> buyside_nonarbitrage_quantity;
+    bit<64> sell_side_arbitrage_trading_remaining_quantity;
+    bit<64> buy_side_arbitrage_trading_remaining_quantity;
+    bit<64> sell_side_non_arbitrage_remaining_quantity;
+    bit<64> buy_side_non_arbitrage_remaining_quantity;
+    bit<64> sell_side_arbitrage_quantity;
+    bit<64> buy_side_arbitrage_quantity;
+    bit<64> sell_side_non_arbitrage_quantity;
+    bit<64> buy_side_non_arbitrage_quantity;
     bit<64> arbitrage_ask_trust_trading_volume;
     bit<64> arbitrage_ask_principal_trading_volume;
     bit<64> arbitrage_bid_trust_trading_volume;
@@ -317,14 +317,14 @@ header program_trading_information_per_issue_aggregated_information_message_t {
 }
 
 header program_trading_information_of_total_aggregated_information_message_t {
-    bit<64> sellside_arbitrage_trading_remaining_quantity;
-    bit<64> buyside_arbitrage_trading_remaining_quantity;
-    bit<64> sellside_nonarbitrage_remaining_quantity;
-    bit<64> buyside_nonarbitrage_remaining_quantity;
-    bit<64> sellside_arbitrage_quantity;
-    bit<64> buyside_arbitrage_quantity;
-    bit<64> sellside_nonarbitrage_quantity;
-    bit<64> buyside_nonarbitrage_quantity;
+    bit<64> sell_side_arbitrage_trading_remaining_quantity;
+    bit<64> buy_side_arbitrage_trading_remaining_quantity;
+    bit<64> sell_side_non_arbitrage_remaining_quantity;
+    bit<64> buy_side_non_arbitrage_remaining_quantity;
+    bit<64> sell_side_arbitrage_quantity;
+    bit<64> buy_side_arbitrage_quantity;
+    bit<64> sell_side_non_arbitrage_quantity;
+    bit<64> buy_side_non_arbitrage_quantity;
     bit<64> arbitrage_ask_trust_trading_volume;
     bit<64> arbitrage_ask_principal_trading_volume;
     bit<64> arbitrage_bid_trust_trading_volume;
@@ -433,7 +433,7 @@ header equities_batch_data_message_t {
     bit<8> korea_corporate_governance_stock_price_index_kogi;
     bit<8> issue_for_administration;
     bit<8> unfaithful_disclosure;
-    bit<8> backdoor_listing;
+    bit<8> back_door_listing;
     bit<8> trading_halt;
     bit<80> industry_id;
     bit<8> small_medium_sized_business;
@@ -473,16 +473,16 @@ header equities_batch_data_message_t {
     bit<64> lowest_order_price;
     bit<64> highest_order_price;
     bit<64> unit_of_volume_in_main_board;
-    bit<64> lot_size_afterhours_trading;
+    bit<64> lot_size_after_hours_trading;
     bit<8> rei_ts_type_code;
     bit<96> target_stock_isin_code;
     bit<24> currency_iso_code;
     bit<24> country_code;
     bit<8> market_making_possibility;
     bit<8> closing_price_trading_possibility_in_the_after_hours;
-    bit<8> closing_price_trading_in_the_preopening_market;
-    bit<8> block_trading_in_the_preopening_market;
-    bit<8> basket_trading_in_the_preopening_market;
+    bit<8> closing_price_trading_in_the_pre_opening_market;
+    bit<8> block_trading_in_the_pre_opening_market;
+    bit<8> basket_trading_in_the_pre_opening_market;
     bit<8> announcement_of_estimated_trading_price;
     bit<8> short_selling;
     bit<64> etf_tracking_difference;
@@ -492,7 +492,7 @@ header equities_batch_data_message_t {
     bit<64> appraisal_ratio_of_substitute_price;
     bit<8> investment_caution_issue;
     bit<64> delisting_date;
-    bit<8> shortterm_overheat_issue_type_code;
+    bit<8> short_term_overheat_issue_type_code;
     bit<8> etf_replication_methods_type_code;
     bit<64> expiration_date;
     bit<16> distribution_type_code;
@@ -592,12 +592,12 @@ header brokers_acitity_information_message_t {
 header trading_activity_by_session_per_an_issue_message_t {
     bit<96> isin_code;
     bit<32> total_number_of_tradable_issues_on_competitive_trading;
-    bit<64> premarket_accumulated_trading_volume;
-    bit<128> premarket_accumulated_trading_value;
-    bit<64> mainmarket_accumulated_trading_volume;
-    bit<128> mainmarket_accumulated_trading_value;
-    bit<64> aftermarket_accumulated_trading_volume;
-    bit<128> aftermarket_accumulated_trading_value;
+    bit<64> pre_market_accumulated_trading_volume;
+    bit<128> pre_market_accumulated_trading_value;
+    bit<64> main_market_accumulated_trading_volume;
+    bit<128> main_market_accumulated_trading_value;
+    bit<64> after_market_accumulated_trading_volume;
+    bit<128> after_market_accumulated_trading_value;
     bit<32> end_keyword;
 }
 

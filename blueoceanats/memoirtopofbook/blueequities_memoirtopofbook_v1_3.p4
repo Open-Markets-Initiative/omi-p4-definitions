@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.3
 //   Date: 1/1/24
-//   Specification: Blue Ocean ATS MEMOIR Top of Book.pdf
+//   Specification: MEMOIR Top of Book Feed (v1.3).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

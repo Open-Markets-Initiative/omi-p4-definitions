@@ -53,7 +53,7 @@ header system_event_message_t {
     bit<64> timestamp;
     bit<8> event_code;
     bit<8> version;
-    bit<8> subversion;
+    bit<8> sub_version;
 }
 
 header simple_instrument_directory_message_t {

@@ -37,13 +37,13 @@ header hdr_t {
     bit<32> header_epoch_s;
     bit<16> header_ms;
     bit<8> message_type;
-    bit<16> fcmid;
-    bit<16> sessionid;
+    bit<16> fcm_id;
+    bit<16> session_id;
 }
 
 header wake_up_call_message_t {
-    bit<8> statuscode_uint_81;
-    bit<32> startinboundnum;
+    bit<8> status_code_uint_81;
+    bit<32> start_in_bound_num;
 }
 
 header wake_up_call_confirmed_message_t {
@@ -51,383 +51,383 @@ header wake_up_call_confirmed_message_t {
 }
 
 header logon_notice_message_t {
-    bit<8> statuscode_uint_81;
-    bit<16> appendno;
-    bit<32> endoutboundnum;
-    bit<8> systemtype;
+    bit<8> status_code_uint_81;
+    bit<16> append_no;
+    bit<32> end_out_bound_num;
+    bit<8> system_type;
     bit<8> encrypt_method;
 }
 
 header final_sequential_number_notification_for_group_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<16> statuscode_uint_162;
-    bit<8> partid;
-    bit<32> endoutboundnum;
+    bit<32> msg_time_ns;
+    bit<16> status_code_uint_162;
+    bit<8> part_id;
+    bit<32> end_out_bound_num;
     bit<64> reserved_8;
 }
 
 header request_logon_message_t {
-    bit<8> statuscode_uint_81;
-    bit<16> appendno;
-    bit<16> fcmid;
-    bit<16> sessionid;
-    bit<8> systemtype;
-    bit<8> apcode;
-    bit<8> keyvalue;
-    bit<32> requeststartseq;
-    bit<8> cancelordersec;
+    bit<8> status_code_uint_81;
+    bit<16> append_no;
+    bit<16> fcm_id;
+    bit<16> session_id;
+    bit<8> system_type;
+    bit<8> ap_code;
+    bit<8> key_value;
+    bit<32> request_start_seq;
+    bit<8> cancel_order_sec;
 }
 
 header resend_report_message_t {
-    bit<8> statuscode_uint_81;
-    bit<8> iseof;
-    bit<32> filesize;
+    bit<8> status_code_uint_81;
+    bit<8> is_eof;
+    bit<32> file_size;
 }
 
 header resend_report_confirmed_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
 }
 
 header activate_application_system_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<8> heart_bt_int;
-    bit<16> maxflowctrlcnt;
+    bit<16> max_flow_ctrl_cnt;
 }
 
 header activate_application_system_confirmed_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
 }
 
 header logout_confirmed_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
 }
 
 header confirm_connection_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
 }
 
 header connection_confirmed_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
 }
 
 header trade_session_status_request_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<16> trade_req_id;
-    bit<8> flowgroupno;
+    bit<8> flow_group_no;
     bit<8> subscription_request_type;
 }
 
 header trade_session_status_report_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<16> trade_req_id;
-    bit<8> flowgroupno;
+    bit<8> flow_group_no;
     bit<8> trade_status;
 }
 
 header order_input_message_t {
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<8> symboltype;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<8> symbol_type;
 }
 
-header symbolnum_t {
+header symbol_num_t {
     bit<16> pseq_1;
     bit<16> pseq_2;
-    bit<8> legside_uint_822;
-    bit<8> combop;
+    bit<8> leg_side_uint_822;
+    bit<8> comb_op;
     bit<104> reserved_13;
 }
 
-header symboltext_t {
+header symbol_text_t {
     bit<160> symbol_char_2020;
 }
 
 header order_input_long_format_message_t {
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<8> symboltype;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<8> symbol_type;
 }
 
-header longsymbolnum_t {
+header long_symbol_num_t {
     bit<16> pseq_1;
     bit<16> pseq_2;
-    bit<8> legside_uint_822;
-    bit<8> combop;
+    bit<8> leg_side_uint_822;
+    bit<8> comb_op;
     bit<264> reserved_33;
 }
 
-header longsymboltext_t {
+header long_symbol_text_t {
     bit<320> symbol_char_4040;
 }
 
 header order_status_report_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<8> symboltype;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<8> symbol_type;
 }
 
 header order_status_report_long_format_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<8> symboltype;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<8> symbol_type;
 }
 
 header error_report_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<8> exec_type;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<32> rptseq;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<32> rpt_seq;
     bit<8> side;
 }
 
 header price_inquiry_input_message_t {
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<16> fcmid;
-    bit<8> symboltype;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<16> fcm_id;
+    bit<8> symbol_type;
 }
 
 header price_inquiry_input_long_format_message_t {
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<16> fcmid;
-    bit<8> symboltype;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<16> fcm_id;
+    bit<8> symbol_type;
 }
 
 header price_inquiry_reply_message_t {
-    bit<8> statuscode_uint_81;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<16> fcmid;
-    bit<8> symboltype;
+    bit<8> status_code_uint_81;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<16> fcm_id;
+    bit<8> symbol_type;
 }
 
 header price_inquiry_reply_long_format_message_t {
-    bit<8> statuscode_uint_81;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<16> fcmid;
-    bit<8> symboltype;
+    bit<8> status_code_uint_81;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<16> fcm_id;
+    bit<8> symbol_type;
 }
 
 header quote_input_message_t {
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<8> symboltype;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<8> symbol_type;
 }
 
 header quote_input_long_format_message_t {
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<8> symboltype;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<8> symbol_type;
 }
 
 header condensed_version_order_status_report_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<8> exec_type;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
     bit<8> side;
     bit<8> position_effect;
     bit<16> leaves_qty;
-    bit<16> beforeqty;
-    bit<32> legpx;
-    bit<16> legqty_uint_1624;
-    bit<32> epochs_int_324;
+    bit<16> before_qty;
+    bit<32> leg_px;
+    bit<16> leg_qty_uint_1624;
+    bit<32> epoch_s_int_324;
     bit<16> ms;
-    bit<32> uniqid;
-    bit<32> rptseq;
-    bit<8> protocoltype;
+    bit<32> uniq_id;
+    bit<32> rpt_seq;
+    bit<8> protocol_type;
     bit<32> price;
 }
 
 header execution_report_including_head_office_and_branch_offices_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<8> symboltype;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<8> symbol_type;
 }
 
 header bulletin_request_message_t {
-    bit<32> fcmreqid;
-    bit<32> bulletinreqid;
-    bit<8> systemtype;
+    bit<32> fcm_req_id;
+    bit<32> bulletin_req_id;
+    bit<8> system_type;
 }
 
 header bulletin_report_message_t {
-    bit<8> statuscode_uint_81;
-    bit<32> fcmreqid;
-    bit<32> bulletinseq;
-    bit<32> epochs_int_324;
+    bit<8> status_code_uint_81;
+    bit<32> fcm_req_id;
+    bit<32> bulletin_seq;
+    bit<32> epoch_s_int_324;
     bit<16> ms;
-    bit<8> systemtype;
+    bit<8> system_type;
 }
 
 header system_notification_message_t {
-    bit<8> statuscode_uint_81;
+    bit<8> status_code_uint_81;
 }
 
 header flex_order_input_single_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
+    bit<32> msg_time_ns;
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
 }
 
-header symbolnumx_t {
+header symbol_num_x_t {
     bit<32> pseq;
 }
 
-header symboltxtx_t {
-    bit<160> prodid;
+header symbol_txt_x_t {
+    bit<160> prod_id;
 }
 
-header multilegnum_t {
+header multi_leg_num_t {
     bit<8> no_leg;
-    bit<8> combop;
+    bit<8> comb_op;
 }
 
-header multilegnum_legentrynum_t {
+header multi_leg_num_leg_entry_num_t {
     bit<32> pseq;
-    bit<8> legside_uint_81;
-    bit<16> legqty_uint_162;
+    bit<8> leg_side_uint_81;
+    bit<16> leg_qty_uint_162;
 }
 
-header multilegtxt_t {
+header multi_leg_txt_t {
     bit<8> no_leg;
-    bit<8> combop;
+    bit<8> comb_op;
 }
 
-header multilegtxt_legentrytxt_t {
-    bit<160> prodid;
-    bit<8> legside_uint_81;
-    bit<16> legqty_uint_162;
+header multi_leg_txt_leg_entry_txt_t {
+    bit<160> prod_id;
+    bit<8> leg_side_uint_81;
+    bit<16> leg_qty_uint_162;
 }
 
 header flex_price_inquiry_input_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<16> fcmid;
+    bit<32> msg_time_ns;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<16> fcm_id;
 }
 
 header flex_quote_input_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
+    bit<32> msg_time_ns;
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
 }
 
 header request_for_supplementary_flex_group_report_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<8> partid;
-    bit<32> requeststartseq;
+    bit<32> msg_time_ns;
+    bit<8> part_id;
+    bit<32> request_start_seq;
 }
 
 header temporary_suspension_of_supplementary_flex_group_report_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<8> partid;
+    bit<32> msg_time_ns;
+    bit<8> part_id;
 }
 
 header flex_product_definition_request_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
+    bit<32> msg_time_ns;
     bit<8> security_request_type;
     bit<32> security_req_id;
     bit<8> type_;
-    bit<16> fcmid;
-    bit<32> investoracno;
-    bit<8> applicationtype;
-    bit<24> rootsymbol;
-    bit<8> expirytype;
-    bit<64> contractdate;
-    bit<32> strikeprice;
-    bit<8> callputcode;
+    bit<16> fcm_id;
+    bit<32> investor_acno;
+    bit<8> application_type;
+    bit<24> root_symbol;
+    bit<8> expiry_type;
+    bit<64> contract_date;
+    bit<32> strike_price;
+    bit<8> call_put_code;
     bit<160> reserved_20;
 }
 
 header flex_order_status_report_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<8> partid;
+    bit<32> msg_time_ns;
+    bit<8> part_id;
     bit<8> no_leg;
-    bit<16> statuscode_uint_162;
+    bit<16> status_code_uint_162;
     bit<8> exec_type;
-    bit<16> cmid;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
+    bit<16> cm_id;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
 }
 
 header flex_error_report_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<8> partid;
+    bit<32> msg_time_ns;
+    bit<8> part_id;
     bit<8> ori_message_type;
-    bit<16> statuscode_uint_162;
+    bit<16> status_code_uint_162;
     bit<8> exec_type;
-    bit<16> fcmid;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<64> userdefine;
-    bit<32> rptseq;
+    bit<16> fcm_id;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<64> user_define;
+    bit<32> rpt_seq;
     bit<8> side;
     bit<96> reserved_12;
 }
@@ -435,90 +435,90 @@ header flex_error_report_message_t {
 header flex_price_inquiry_reply_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<8> partid;
-    bit<16> statuscode_uint_162;
-    bit<40> orderno;
-    bit<32> ordid;
-    bit<16> fcmid;
+    bit<32> msg_time_ns;
+    bit<8> part_id;
+    bit<16> status_code_uint_162;
+    bit<40> order_no;
+    bit<32> ord_id;
+    bit<16> fcm_id;
 }
 
 header send_flex_group_report_resend_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<16> statuscode_uint_162;
-    bit<8> partid;
-    bit<8> iseof;
-    bit<32> filesize;
+    bit<32> msg_time_ns;
+    bit<16> status_code_uint_162;
+    bit<8> part_id;
+    bit<8> is_eof;
+    bit<32> file_size;
 }
 
 header flex_product_definition_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
+    bit<32> msg_time_ns;
     bit<8> security_request_type;
     bit<32> security_req_id;
-    bit<16> statuscode_uint_162;
+    bit<16> status_code_uint_162;
 }
 
 header flex_bulletin_request_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<32> fcmreqid;
-    bit<32> bulletinreqid;
-    bit<8> systemtype;
+    bit<32> msg_time_ns;
+    bit<32> fcm_req_id;
+    bit<32> bulletin_req_id;
+    bit<8> system_type;
 }
 
 header flex_bulletin_report_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
-    bit<32> msgtimens;
-    bit<16> statuscode_uint_162;
-    bit<32> fcmreqid;
-    bit<32> bulletinseq;
-    bit<32> epochs_uint_324;
+    bit<32> msg_time_ns;
+    bit<16> status_code_uint_162;
+    bit<32> fcm_req_id;
+    bit<32> bulletin_seq;
+    bit<32> epoch_s_uint_324;
     bit<32> nanosecond;
-    bit<8> systemtype;
+    bit<8> system_type;
 }
 
-header resend_report_message_data_uint_8_hdrmsglength_156_t {
-    varbit<2048> data_uint_8_hdrmsglength_156;
+header resend_report_message_data_uint_8_hdr_msg_length_156_t {
+    varbit<2048> data_uint_8_hdr_msg_length_156;
 }
 
-header bulletin_request_message_data_char_hdrmsglength_159_t {
-    varbit<2048> data_char_hdrmsglength_159;
+header bulletin_request_message_data_char_hdr_msg_length_159_t {
+    varbit<2048> data_char_hdr_msg_length_159;
 }
 
-header bulletin_report_message_data_char_hdrmsglength_1516_t {
-    varbit<2048> data_char_hdrmsglength_1516;
+header bulletin_report_message_data_char_hdr_msg_length_1516_t {
+    varbit<2048> data_char_hdr_msg_length_1516;
 }
 
-header system_setting_message_data_char_hdrmsglength_15_t {
-    varbit<2048> data_char_hdrmsglength_15;
+header system_setting_message_data_char_hdr_msg_length_15_t {
+    varbit<2048> data_char_hdr_msg_length_15;
 }
 
-header system_notification_message_data_char_hdrmsglength_151_t {
-    varbit<2048> data_char_hdrmsglength_151;
+header system_notification_message_data_char_hdr_msg_length_151_t {
+    varbit<2048> data_char_hdr_msg_length_151;
 }
 
-header send_flex_group_report_resend_message_data_uint_8_hdrmsglength_1514_t {
-    varbit<2048> data_uint_8_hdrmsglength_1514;
+header send_flex_group_report_resend_message_data_uint_8_hdr_msg_length_1514_t {
+    varbit<2048> data_uint_8_hdr_msg_length_1514;
 }
 
-header flex_bulletin_request_message_data_char_hdrmsglength_1515_t {
-    varbit<2048> data_char_hdrmsglength_1515;
+header flex_bulletin_request_message_data_char_hdr_msg_length_1515_t {
+    varbit<2048> data_char_hdr_msg_length_1515;
 }
 
-header flex_bulletin_report_message_data_char_hdrmsglength_1525_t {
-    varbit<2048> data_char_hdrmsglength_1525;
+header flex_bulletin_report_message_data_char_hdr_msg_length_1525_t {
+    varbit<2048> data_char_hdr_msg_length_1525;
 }
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> multilegnum_legentrynum_remaining;
-    bit<8> multilegtxt_legentrytxt_remaining;
+    bit<8> multi_leg_num_leg_entry_num_remaining;
+    bit<8> multi_leg_txt_leg_entry_txt_remaining;
 }
 
 struct headers_t {
@@ -538,11 +538,11 @@ struct headers_t {
     trade_session_status_request_message_t trade_session_status_request_message;
     trade_session_status_report_message_t trade_session_status_report_message;
     order_input_message_t order_input_message;
-    symbolnum_t symbolnum;
-    symboltext_t symboltext;
+    symbol_num_t symbol_num;
+    symbol_text_t symbol_text;
     order_input_long_format_message_t order_input_long_format_message;
-    longsymbolnum_t longsymbolnum;
-    longsymboltext_t longsymboltext;
+    long_symbol_num_t long_symbol_num;
+    long_symbol_text_t long_symbol_text;
     order_status_report_message_t order_status_report_message;
     order_status_report_long_format_message_t order_status_report_long_format_message;
     error_report_message_t error_report_message;
@@ -558,12 +558,12 @@ struct headers_t {
     bulletin_report_message_t bulletin_report_message;
     system_notification_message_t system_notification_message;
     flex_order_input_single_message_t flex_order_input_single_message;
-    symbolnumx_t symbolnumx;
-    symboltxtx_t symboltxtx;
-    multilegnum_t multilegnum;
-    multilegnum_legentrynum_t multilegnum_legentrynum[MAX_MESSAGES];
-    multilegtxt_t multilegtxt;
-    multilegtxt_legentrytxt_t multilegtxt_legentrytxt[MAX_MESSAGES];
+    symbol_num_x_t symbol_num_x;
+    symbol_txt_x_t symbol_txt_x;
+    multi_leg_num_t multi_leg_num;
+    multi_leg_num_leg_entry_num_t multi_leg_num_leg_entry_num[MAX_MESSAGES];
+    multi_leg_txt_t multi_leg_txt;
+    multi_leg_txt_leg_entry_txt_t multi_leg_txt_leg_entry_txt[MAX_MESSAGES];
     flex_price_inquiry_input_message_t flex_price_inquiry_input_message;
     flex_quote_input_message_t flex_quote_input_message;
     request_for_supplementary_flex_group_report_message_t request_for_supplementary_flex_group_report_message;
@@ -576,14 +576,14 @@ struct headers_t {
     flex_product_definition_message_t flex_product_definition_message;
     flex_bulletin_request_message_t flex_bulletin_request_message;
     flex_bulletin_report_message_t flex_bulletin_report_message;
-    resend_report_message_data_uint_8_hdrmsglength_156_t resend_report_message_data_uint_8_hdrmsglength_156;
-    bulletin_request_message_data_char_hdrmsglength_159_t bulletin_request_message_data_char_hdrmsglength_159;
-    bulletin_report_message_data_char_hdrmsglength_1516_t bulletin_report_message_data_char_hdrmsglength_1516;
-    system_setting_message_data_char_hdrmsglength_15_t system_setting_message_data_char_hdrmsglength_15;
-    system_notification_message_data_char_hdrmsglength_151_t system_notification_message_data_char_hdrmsglength_151;
-    send_flex_group_report_resend_message_data_uint_8_hdrmsglength_1514_t send_flex_group_report_resend_message_data_uint_8_hdrmsglength_1514;
-    flex_bulletin_request_message_data_char_hdrmsglength_1515_t flex_bulletin_request_message_data_char_hdrmsglength_1515;
-    flex_bulletin_report_message_data_char_hdrmsglength_1525_t flex_bulletin_report_message_data_char_hdrmsglength_1525;
+    resend_report_message_data_uint_8_hdr_msg_length_156_t resend_report_message_data_uint_8_hdr_msg_length_156;
+    bulletin_request_message_data_char_hdr_msg_length_159_t bulletin_request_message_data_char_hdr_msg_length_159;
+    bulletin_report_message_data_char_hdr_msg_length_1516_t bulletin_report_message_data_char_hdr_msg_length_1516;
+    system_setting_message_data_char_hdr_msg_length_15_t system_setting_message_data_char_hdr_msg_length_15;
+    system_notification_message_data_char_hdr_msg_length_151_t system_notification_message_data_char_hdr_msg_length_151;
+    send_flex_group_report_resend_message_data_uint_8_hdr_msg_length_1514_t send_flex_group_report_resend_message_data_uint_8_hdr_msg_length_1514;
+    flex_bulletin_request_message_data_char_hdr_msg_length_1515_t flex_bulletin_request_message_data_char_hdr_msg_length_1515;
+    flex_bulletin_report_message_data_char_hdr_msg_length_1525_t flex_bulletin_report_message_data_char_hdr_msg_length_1525;
 }
 
 parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -672,7 +672,7 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_resend_report_message {
         packet.extract(hdr.resend_report_message);
         meta.dispatched = 1;
-        packet.extract(hdr.resend_report_message_data_uint_8_hdrmsglength_156, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.resend_report_message_data_uint_8_hdr_msg_length_156, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
@@ -732,21 +732,21 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_order_input_message {
         packet.extract(hdr.order_input_message);
         meta.dispatched = 1;
-        transition select(hdr.order_input_message.symboltype) {
-            8w1: parse_symbolnum;
-            8w2: parse_symboltext;
+        transition select(hdr.order_input_message.symbol_type) {
+            8w1: parse_symbol_num;
+            8w2: parse_symbol_text;
             default: accept;
         }
     }
 
-    state parse_symbolnum {
-        packet.extract(hdr.symbolnum);
+    state parse_symbol_num {
+        packet.extract(hdr.symbol_num);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_symboltext {
-        packet.extract(hdr.symboltext);
+    state parse_symbol_text {
+        packet.extract(hdr.symbol_text);
         meta.dispatched = 1;
         transition accept;
     }
@@ -754,21 +754,21 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_order_input_long_format_message {
         packet.extract(hdr.order_input_long_format_message);
         meta.dispatched = 1;
-        transition select(hdr.order_input_long_format_message.symboltype) {
-            8w3: parse_longsymbolnum;
-            8w4: parse_longsymboltext;
+        transition select(hdr.order_input_long_format_message.symbol_type) {
+            8w3: parse_long_symbol_num;
+            8w4: parse_long_symbol_text;
             default: accept;
         }
     }
 
-    state parse_longsymbolnum {
-        packet.extract(hdr.longsymbolnum);
+    state parse_long_symbol_num {
+        packet.extract(hdr.long_symbol_num);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_longsymboltext {
-        packet.extract(hdr.longsymboltext);
+    state parse_long_symbol_text {
+        packet.extract(hdr.long_symbol_text);
         meta.dispatched = 1;
         transition accept;
     }
@@ -776,9 +776,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_order_status_report_message {
         packet.extract(hdr.order_status_report_message);
         meta.dispatched = 1;
-        transition select(hdr.order_status_report_message.symboltype) {
-            8w1: parse_symbolnum;
-            8w2: parse_symboltext;
+        transition select(hdr.order_status_report_message.symbol_type) {
+            8w1: parse_symbol_num;
+            8w2: parse_symbol_text;
             default: accept;
         }
     }
@@ -786,9 +786,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_order_status_report_long_format_message {
         packet.extract(hdr.order_status_report_long_format_message);
         meta.dispatched = 1;
-        transition select(hdr.order_status_report_long_format_message.symboltype) {
-            8w3: parse_longsymbolnum;
-            8w4: parse_longsymboltext;
+        transition select(hdr.order_status_report_long_format_message.symbol_type) {
+            8w3: parse_long_symbol_num;
+            8w4: parse_long_symbol_text;
             default: accept;
         }
     }
@@ -802,9 +802,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_price_inquiry_input_message {
         packet.extract(hdr.price_inquiry_input_message);
         meta.dispatched = 1;
-        transition select(hdr.price_inquiry_input_message.symboltype) {
-            8w1: parse_symbolnum;
-            8w2: parse_symboltext;
+        transition select(hdr.price_inquiry_input_message.symbol_type) {
+            8w1: parse_symbol_num;
+            8w2: parse_symbol_text;
             default: accept;
         }
     }
@@ -812,9 +812,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_price_inquiry_input_long_format_message {
         packet.extract(hdr.price_inquiry_input_long_format_message);
         meta.dispatched = 1;
-        transition select(hdr.price_inquiry_input_long_format_message.symboltype) {
-            8w3: parse_longsymbolnum;
-            8w4: parse_longsymboltext;
+        transition select(hdr.price_inquiry_input_long_format_message.symbol_type) {
+            8w3: parse_long_symbol_num;
+            8w4: parse_long_symbol_text;
             default: accept;
         }
     }
@@ -822,9 +822,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_price_inquiry_reply_message {
         packet.extract(hdr.price_inquiry_reply_message);
         meta.dispatched = 1;
-        transition select(hdr.price_inquiry_reply_message.symboltype) {
-            8w1: parse_symbolnum;
-            8w2: parse_symboltext;
+        transition select(hdr.price_inquiry_reply_message.symbol_type) {
+            8w1: parse_symbol_num;
+            8w2: parse_symbol_text;
             default: accept;
         }
     }
@@ -832,9 +832,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_price_inquiry_reply_long_format_message {
         packet.extract(hdr.price_inquiry_reply_long_format_message);
         meta.dispatched = 1;
-        transition select(hdr.price_inquiry_reply_long_format_message.symboltype) {
-            8w3: parse_longsymbolnum;
-            8w4: parse_longsymboltext;
+        transition select(hdr.price_inquiry_reply_long_format_message.symbol_type) {
+            8w3: parse_long_symbol_num;
+            8w4: parse_long_symbol_text;
             default: accept;
         }
     }
@@ -842,9 +842,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_quote_input_message {
         packet.extract(hdr.quote_input_message);
         meta.dispatched = 1;
-        transition select(hdr.quote_input_message.symboltype) {
-            8w1: parse_symbolnum;
-            8w2: parse_symboltext;
+        transition select(hdr.quote_input_message.symbol_type) {
+            8w1: parse_symbol_num;
+            8w2: parse_symbol_text;
             default: accept;
         }
     }
@@ -852,9 +852,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_quote_input_long_format_message {
         packet.extract(hdr.quote_input_long_format_message);
         meta.dispatched = 1;
-        transition select(hdr.quote_input_long_format_message.symboltype) {
-            8w3: parse_longsymbolnum;
-            8w4: parse_longsymboltext;
+        transition select(hdr.quote_input_long_format_message.symbol_type) {
+            8w3: parse_long_symbol_num;
+            8w4: parse_long_symbol_text;
             default: accept;
         }
     }
@@ -868,9 +868,9 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_execution_report_including_head_office_and_branch_offices_message {
         packet.extract(hdr.execution_report_including_head_office_and_branch_offices_message);
         meta.dispatched = 1;
-        transition select(hdr.execution_report_including_head_office_and_branch_offices_message.symboltype) {
-            8w1: parse_symbolnum;
-            8w2: parse_symboltext;
+        transition select(hdr.execution_report_including_head_office_and_branch_offices_message.symbol_type) {
+            8w1: parse_symbol_num;
+            8w2: parse_symbol_text;
             default: accept;
         }
     }
@@ -878,27 +878,27 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_bulletin_request_message {
         packet.extract(hdr.bulletin_request_message);
         meta.dispatched = 1;
-        packet.extract(hdr.bulletin_request_message_data_char_hdrmsglength_159, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.bulletin_request_message_data_char_hdr_msg_length_159, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
     state parse_bulletin_report_message {
         packet.extract(hdr.bulletin_report_message);
         meta.dispatched = 1;
-        packet.extract(hdr.bulletin_report_message_data_char_hdrmsglength_1516, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.bulletin_report_message_data_char_hdr_msg_length_1516, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
     state parse_system_setting_message {
         meta.dispatched = 1;
-        packet.extract(hdr.system_setting_message_data_char_hdrmsglength_15, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.system_setting_message_data_char_hdr_msg_length_15, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
     state parse_system_notification_message {
         packet.extract(hdr.system_notification_message);
         meta.dispatched = 1;
-        packet.extract(hdr.system_notification_message_data_char_hdrmsglength_151, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.system_notification_message_data_char_hdr_msg_length_151, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
@@ -906,61 +906,61 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
         packet.extract(hdr.flex_order_input_single_message);
         meta.dispatched = 1;
         transition select(hdr.flex_order_input_single_message.msg_type_ext) {
-            8w1: parse_symbolnumx;
-            8w2: parse_symboltxtx;
-            8w3: parse_multilegnum;
-            8w4: parse_multilegtxt;
+            8w1: parse_symbol_num_x;
+            8w2: parse_symbol_txt_x;
+            8w3: parse_multi_leg_num;
+            8w4: parse_multi_leg_txt;
             default: accept;
         }
     }
 
-    state parse_symbolnumx {
-        packet.extract(hdr.symbolnumx);
+    state parse_symbol_num_x {
+        packet.extract(hdr.symbol_num_x);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_symboltxtx {
-        packet.extract(hdr.symboltxtx);
+    state parse_symbol_txt_x {
+        packet.extract(hdr.symbol_txt_x);
         meta.dispatched = 1;
         transition accept;
     }
 
-    state parse_multilegnum {
-        packet.extract(hdr.multilegnum);
+    state parse_multi_leg_num {
+        packet.extract(hdr.multi_leg_num);
         meta.dispatched = 1;
-        meta.multilegnum_legentrynum_remaining = hdr.multilegnum.no_leg;
-        transition select(meta.multilegnum_legentrynum_remaining) {
+        meta.multi_leg_num_leg_entry_num_remaining = hdr.multi_leg_num.no_leg;
+        transition select(meta.multi_leg_num_leg_entry_num_remaining) {
             8w0: accept;
-            default: parse_multilegnum_legentrynum;
+            default: parse_multi_leg_num_leg_entry_num;
         }
     }
 
-    state parse_multilegnum_legentrynum {
-        packet.extract(hdr.multilegnum_legentrynum.next);
-        meta.multilegnum_legentrynum_remaining = meta.multilegnum_legentrynum_remaining - 1;
-        transition select(meta.multilegnum_legentrynum_remaining) {
+    state parse_multi_leg_num_leg_entry_num {
+        packet.extract(hdr.multi_leg_num_leg_entry_num.next);
+        meta.multi_leg_num_leg_entry_num_remaining = meta.multi_leg_num_leg_entry_num_remaining - 1;
+        transition select(meta.multi_leg_num_leg_entry_num_remaining) {
             8w0: accept;
-            default: parse_multilegnum_legentrynum;
+            default: parse_multi_leg_num_leg_entry_num;
         }
     }
 
-    state parse_multilegtxt {
-        packet.extract(hdr.multilegtxt);
+    state parse_multi_leg_txt {
+        packet.extract(hdr.multi_leg_txt);
         meta.dispatched = 1;
-        meta.multilegtxt_legentrytxt_remaining = hdr.multilegtxt.no_leg;
-        transition select(meta.multilegtxt_legentrytxt_remaining) {
+        meta.multi_leg_txt_leg_entry_txt_remaining = hdr.multi_leg_txt.no_leg;
+        transition select(meta.multi_leg_txt_leg_entry_txt_remaining) {
             8w0: accept;
-            default: parse_multilegtxt_legentrytxt;
+            default: parse_multi_leg_txt_leg_entry_txt;
         }
     }
 
-    state parse_multilegtxt_legentrytxt {
-        packet.extract(hdr.multilegtxt_legentrytxt.next);
-        meta.multilegtxt_legentrytxt_remaining = meta.multilegtxt_legentrytxt_remaining - 1;
-        transition select(meta.multilegtxt_legentrytxt_remaining) {
+    state parse_multi_leg_txt_leg_entry_txt {
+        packet.extract(hdr.multi_leg_txt_leg_entry_txt.next);
+        meta.multi_leg_txt_leg_entry_txt_remaining = meta.multi_leg_txt_leg_entry_txt_remaining - 1;
+        transition select(meta.multi_leg_txt_leg_entry_txt_remaining) {
             8w0: accept;
-            default: parse_multilegtxt_legentrytxt;
+            default: parse_multi_leg_txt_leg_entry_txt;
         }
     }
 
@@ -968,10 +968,10 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
         packet.extract(hdr.flex_price_inquiry_input_message);
         meta.dispatched = 1;
         transition select(hdr.flex_price_inquiry_input_message.msg_type_ext) {
-            8w1: parse_symbolnumx;
-            8w2: parse_symboltxtx;
-            8w3: parse_multilegnum;
-            8w4: parse_multilegtxt;
+            8w1: parse_symbol_num_x;
+            8w2: parse_symbol_txt_x;
+            8w3: parse_multi_leg_num;
+            8w4: parse_multi_leg_txt;
             default: accept;
         }
     }
@@ -980,10 +980,10 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
         packet.extract(hdr.flex_quote_input_message);
         meta.dispatched = 1;
         transition select(hdr.flex_quote_input_message.msg_type_ext) {
-            8w1: parse_symbolnumx;
-            8w2: parse_symboltxtx;
-            8w3: parse_multilegnum;
-            8w4: parse_multilegtxt;
+            8w1: parse_symbol_num_x;
+            8w2: parse_symbol_txt_x;
+            8w3: parse_multi_leg_num;
+            8w4: parse_multi_leg_txt;
             default: accept;
         }
     }
@@ -1010,10 +1010,10 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
         packet.extract(hdr.flex_order_status_report_message);
         meta.dispatched = 1;
         transition select(hdr.flex_order_status_report_message.msg_type_ext) {
-            8w1: parse_symbolnumx;
-            8w2: parse_symboltxtx;
-            8w3: parse_multilegnum;
-            8w4: parse_multilegtxt;
+            8w1: parse_symbol_num_x;
+            8w2: parse_symbol_txt_x;
+            8w3: parse_multi_leg_num;
+            8w4: parse_multi_leg_txt;
             default: accept;
         }
     }
@@ -1028,10 +1028,10 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
         packet.extract(hdr.flex_price_inquiry_reply_message);
         meta.dispatched = 1;
         transition select(hdr.flex_price_inquiry_reply_message.msg_type_ext) {
-            8w1: parse_symbolnumx;
-            8w2: parse_symboltxtx;
-            8w3: parse_multilegnum;
-            8w4: parse_multilegtxt;
+            8w1: parse_symbol_num_x;
+            8w2: parse_symbol_txt_x;
+            8w3: parse_multi_leg_num;
+            8w4: parse_multi_leg_txt;
             default: accept;
         }
     }
@@ -1039,7 +1039,7 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_send_flex_group_report_resend_message {
         packet.extract(hdr.send_flex_group_report_resend_message);
         meta.dispatched = 1;
-        packet.extract(hdr.send_flex_group_report_resend_message_data_uint_8_hdrmsglength_1514, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.send_flex_group_report_resend_message_data_uint_8_hdr_msg_length_1514, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
@@ -1052,14 +1052,14 @@ parser TaifexderivativesOrderentryParser(packet_in packet, out headers_t hdr, in
     state parse_flex_bulletin_request_message {
         packet.extract(hdr.flex_bulletin_request_message);
         meta.dispatched = 1;
-        packet.extract(hdr.flex_bulletin_request_message_data_char_hdrmsglength_1515, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.flex_bulletin_request_message_data_char_hdr_msg_length_1515, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
     state parse_flex_bulletin_report_message {
         packet.extract(hdr.flex_bulletin_report_message);
         meta.dispatched = 1;
-        packet.extract(hdr.flex_bulletin_report_message_data_char_hdrmsglength_1525, (bit<32>)hdr.hdr.msg_length * 8);
+        packet.extract(hdr.flex_bulletin_report_message_data_char_hdr_msg_length_1525, (bit<32>)hdr.hdr.msg_length * 8);
         transition accept;
     }
 
@@ -1100,7 +1100,7 @@ control TaifexderivativesOrderentryDeparser(packet_out packet, in headers_t hdr)
         packet.emit(hdr.final_sequential_number_notification_for_group_message);
         packet.emit(hdr.request_logon_message);
         packet.emit(hdr.resend_report_message);
-        packet.emit(hdr.resend_report_message_data_uint_8_hdrmsglength_156);
+        packet.emit(hdr.resend_report_message_data_uint_8_hdr_msg_length_156);
         packet.emit(hdr.resend_report_confirmed_message);
         packet.emit(hdr.activate_application_system_message);
         packet.emit(hdr.activate_application_system_confirmed_message);
@@ -1110,11 +1110,11 @@ control TaifexderivativesOrderentryDeparser(packet_out packet, in headers_t hdr)
         packet.emit(hdr.trade_session_status_request_message);
         packet.emit(hdr.trade_session_status_report_message);
         packet.emit(hdr.order_input_message);
-        packet.emit(hdr.symbolnum);
-        packet.emit(hdr.symboltext);
+        packet.emit(hdr.symbol_num);
+        packet.emit(hdr.symbol_text);
         packet.emit(hdr.order_input_long_format_message);
-        packet.emit(hdr.longsymbolnum);
-        packet.emit(hdr.longsymboltext);
+        packet.emit(hdr.long_symbol_num);
+        packet.emit(hdr.long_symbol_text);
         packet.emit(hdr.order_status_report_message);
         packet.emit(hdr.order_status_report_long_format_message);
         packet.emit(hdr.error_report_message);
@@ -1127,19 +1127,19 @@ control TaifexderivativesOrderentryDeparser(packet_out packet, in headers_t hdr)
         packet.emit(hdr.condensed_version_order_status_report_message);
         packet.emit(hdr.execution_report_including_head_office_and_branch_offices_message);
         packet.emit(hdr.bulletin_request_message);
-        packet.emit(hdr.bulletin_request_message_data_char_hdrmsglength_159);
+        packet.emit(hdr.bulletin_request_message_data_char_hdr_msg_length_159);
         packet.emit(hdr.bulletin_report_message);
-        packet.emit(hdr.bulletin_report_message_data_char_hdrmsglength_1516);
-        packet.emit(hdr.system_setting_message_data_char_hdrmsglength_15);
+        packet.emit(hdr.bulletin_report_message_data_char_hdr_msg_length_1516);
+        packet.emit(hdr.system_setting_message_data_char_hdr_msg_length_15);
         packet.emit(hdr.system_notification_message);
-        packet.emit(hdr.system_notification_message_data_char_hdrmsglength_151);
+        packet.emit(hdr.system_notification_message_data_char_hdr_msg_length_151);
         packet.emit(hdr.flex_order_input_single_message);
-        packet.emit(hdr.symbolnumx);
-        packet.emit(hdr.symboltxtx);
-        packet.emit(hdr.multilegnum);
-        packet.emit(hdr.multilegnum_legentrynum);
-        packet.emit(hdr.multilegtxt);
-        packet.emit(hdr.multilegtxt_legentrytxt);
+        packet.emit(hdr.symbol_num_x);
+        packet.emit(hdr.symbol_txt_x);
+        packet.emit(hdr.multi_leg_num);
+        packet.emit(hdr.multi_leg_num_leg_entry_num);
+        packet.emit(hdr.multi_leg_txt);
+        packet.emit(hdr.multi_leg_txt_leg_entry_txt);
         packet.emit(hdr.flex_price_inquiry_input_message);
         packet.emit(hdr.flex_quote_input_message);
         packet.emit(hdr.request_for_supplementary_flex_group_report_message);
@@ -1149,12 +1149,12 @@ control TaifexderivativesOrderentryDeparser(packet_out packet, in headers_t hdr)
         packet.emit(hdr.flex_error_report_message);
         packet.emit(hdr.flex_price_inquiry_reply_message);
         packet.emit(hdr.send_flex_group_report_resend_message);
-        packet.emit(hdr.send_flex_group_report_resend_message_data_uint_8_hdrmsglength_1514);
+        packet.emit(hdr.send_flex_group_report_resend_message_data_uint_8_hdr_msg_length_1514);
         packet.emit(hdr.flex_product_definition_message);
         packet.emit(hdr.flex_bulletin_request_message);
-        packet.emit(hdr.flex_bulletin_request_message_data_char_hdrmsglength_1515);
+        packet.emit(hdr.flex_bulletin_request_message_data_char_hdr_msg_length_1515);
         packet.emit(hdr.flex_bulletin_report_message);
-        packet.emit(hdr.flex_bulletin_report_message_data_char_hdrmsglength_1525);
+        packet.emit(hdr.flex_bulletin_report_message_data_char_hdr_msg_length_1525);
     }
 }
 

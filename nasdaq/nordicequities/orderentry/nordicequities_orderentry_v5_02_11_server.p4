@@ -73,6 +73,9 @@ header order_accepted_message_t {
     bit<8> capacity;
     bit<8> algo_indicator;
     bit<16> appendage_length;
+}
+
+header order_accepted_message_tagvalue_t {
     bit<8> length;
     bit<8> tag;
 }
@@ -224,6 +227,9 @@ header order_replaced_message_t {
     bit<32> quantity;
     bit<48> user;
     bit<16> appendage_length;
+}
+
+header order_replaced_message_tagvalue_t {
     bit<8> length;
     bit<8> tag;
 }
@@ -295,6 +301,9 @@ header order_restated_message_t {
     bit<32> user_ref_num;
     bit<8> restate_reason;
     bit<16> appendage_length;
+}
+
+header order_restated_message_tagvalue_t {
     bit<8> length;
     bit<8> tag;
 }
@@ -357,41 +366,43 @@ struct headers_t {
     sequenced_data_packet_t sequenced_data_packet;
     system_event_message_t system_event_message;
     order_accepted_message_t order_accepted_message;
-    clearing_account_t clearing_account;
-    clearing_account_type_t clearing_account_type;
-    clearing_firm_t clearing_firm;
-    client_reference_t client_reference;
-    cross_type_t cross_type;
-    dea_indicator_t dea_indicator;
-    display_t display;
-    display_price_t display_price;
-    display_quantity_t display_quantity;
-    expire_time_t expire_time;
-    firm_t firm;
-    liquidity_provision_indicator_t liquidity_provision_indicator;
-    max_floor_t max_floor;
-    minimum_quantity_t minimum_quantity;
-    order_reference_t order_reference;
-    original_order_entry_date_t original_order_entry_date;
-    original_order_reference_number_t original_order_reference_number;
-    peg_difference_t peg_difference;
-    peg_type_t peg_type;
-    random_reserve_t random_reserve;
-    secondary_order_reference_number_t secondary_order_reference_number;
-    stp_action_t stp_action;
-    stp_level_t stp_level;
-    stp_trader_group_t stp_trader_group;
-    time_in_force_t time_in_force;
-    trading_at_closing_price_t trading_at_closing_price;
-    order_condition_t order_condition;
-    cumulative_quantity_t cumulative_quantity;
-    customer_order_capacity_t customer_order_capacity;
-    target_strategy_t target_strategy;
-    min_rate_t min_rate;
-    max_rate_t max_rate;
-    conditional_type_t conditional_type;
-    firm_up_id_t firm_up_id;
+    order_accepted_message_tagvalue_t order_accepted_message_tagvalue[MAX_MESSAGES];
+    clearing_account_t clearing_account[MAX_MESSAGES];
+    clearing_account_type_t clearing_account_type[MAX_MESSAGES];
+    clearing_firm_t clearing_firm[MAX_MESSAGES];
+    client_reference_t client_reference[MAX_MESSAGES];
+    cross_type_t cross_type[MAX_MESSAGES];
+    dea_indicator_t dea_indicator[MAX_MESSAGES];
+    display_t display[MAX_MESSAGES];
+    display_price_t display_price[MAX_MESSAGES];
+    display_quantity_t display_quantity[MAX_MESSAGES];
+    expire_time_t expire_time[MAX_MESSAGES];
+    firm_t firm[MAX_MESSAGES];
+    liquidity_provision_indicator_t liquidity_provision_indicator[MAX_MESSAGES];
+    max_floor_t max_floor[MAX_MESSAGES];
+    minimum_quantity_t minimum_quantity[MAX_MESSAGES];
+    order_reference_t order_reference[MAX_MESSAGES];
+    original_order_entry_date_t original_order_entry_date[MAX_MESSAGES];
+    original_order_reference_number_t original_order_reference_number[MAX_MESSAGES];
+    peg_difference_t peg_difference[MAX_MESSAGES];
+    peg_type_t peg_type[MAX_MESSAGES];
+    random_reserve_t random_reserve[MAX_MESSAGES];
+    secondary_order_reference_number_t secondary_order_reference_number[MAX_MESSAGES];
+    stp_action_t stp_action[MAX_MESSAGES];
+    stp_level_t stp_level[MAX_MESSAGES];
+    stp_trader_group_t stp_trader_group[MAX_MESSAGES];
+    time_in_force_t time_in_force[MAX_MESSAGES];
+    trading_at_closing_price_t trading_at_closing_price[MAX_MESSAGES];
+    order_condition_t order_condition[MAX_MESSAGES];
+    cumulative_quantity_t cumulative_quantity[MAX_MESSAGES];
+    customer_order_capacity_t customer_order_capacity[MAX_MESSAGES];
+    target_strategy_t target_strategy[MAX_MESSAGES];
+    min_rate_t min_rate[MAX_MESSAGES];
+    max_rate_t max_rate[MAX_MESSAGES];
+    conditional_type_t conditional_type[MAX_MESSAGES];
+    firm_up_id_t firm_up_id[MAX_MESSAGES];
     order_replaced_message_t order_replaced_message;
+    order_replaced_message_tagvalue_t order_replaced_message_tagvalue[MAX_MESSAGES];
     cancelled_order_message_t cancelled_order_message;
     cancel_pending_message_t cancel_pending_message;
     replace_pending_message_t replace_pending_message;
@@ -400,6 +411,7 @@ struct headers_t {
     rejected_order_message_t rejected_order_message;
     cancel_rejected_message_t cancel_rejected_message;
     order_restated_message_t order_restated_message;
+    order_restated_message_tagvalue_t order_restated_message_tagvalue[MAX_MESSAGES];
     mmo_refresh_request_message_t mmo_refresh_request_message;
     account_query_response_message_t account_query_response_message;
     gtc_cancelled_message_t gtc_cancelled_message;
@@ -475,7 +487,15 @@ parser NordicequitiesOrderentryServerParser(packet_in packet, out headers_t hdr,
     state parse_order_accepted_message {
         packet.extract(hdr.order_accepted_message);
         meta.dispatched = 1;
-        transition select(hdr.order_accepted_message.tag) {
+        transition select(hdr.order_accepted_message.appendage_length) {
+            16w0: accept;
+            default: parse_order_accepted_message_tagvalue;
+        }
+    }
+
+    state parse_order_accepted_message_tagvalue {
+        packet.extract(hdr.order_accepted_message_tagvalue.next);
+        transition select(hdr.order_accepted_message_tagvalue.last.tag) {
             8w1: parse_clearing_account;
             8w2: parse_clearing_account_type;
             8w3: parse_clearing_firm;
@@ -515,213 +535,221 @@ parser NordicequitiesOrderentryServerParser(packet_in packet, out headers_t hdr,
     }
 
     state parse_clearing_account {
-        packet.extract(hdr.clearing_account);
+        packet.extract(hdr.clearing_account.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_clearing_account_type {
-        packet.extract(hdr.clearing_account_type);
+        packet.extract(hdr.clearing_account_type.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_clearing_firm {
-        packet.extract(hdr.clearing_firm);
+        packet.extract(hdr.clearing_firm.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_client_reference {
-        packet.extract(hdr.client_reference);
+        packet.extract(hdr.client_reference.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_cross_type {
-        packet.extract(hdr.cross_type);
+        packet.extract(hdr.cross_type.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_dea_indicator {
-        packet.extract(hdr.dea_indicator);
+        packet.extract(hdr.dea_indicator.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_display {
-        packet.extract(hdr.display);
+        packet.extract(hdr.display.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_display_price {
-        packet.extract(hdr.display_price);
+        packet.extract(hdr.display_price.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_display_quantity {
-        packet.extract(hdr.display_quantity);
+        packet.extract(hdr.display_quantity.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_expire_time {
-        packet.extract(hdr.expire_time);
+        packet.extract(hdr.expire_time.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_firm {
-        packet.extract(hdr.firm);
+        packet.extract(hdr.firm.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_liquidity_provision_indicator {
-        packet.extract(hdr.liquidity_provision_indicator);
+        packet.extract(hdr.liquidity_provision_indicator.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_max_floor {
-        packet.extract(hdr.max_floor);
+        packet.extract(hdr.max_floor.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_minimum_quantity {
-        packet.extract(hdr.minimum_quantity);
+        packet.extract(hdr.minimum_quantity.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_order_reference {
-        packet.extract(hdr.order_reference);
+        packet.extract(hdr.order_reference.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_original_order_entry_date {
-        packet.extract(hdr.original_order_entry_date);
+        packet.extract(hdr.original_order_entry_date.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_original_order_reference_number {
-        packet.extract(hdr.original_order_reference_number);
+        packet.extract(hdr.original_order_reference_number.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_peg_difference {
-        packet.extract(hdr.peg_difference);
+        packet.extract(hdr.peg_difference.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_peg_type {
-        packet.extract(hdr.peg_type);
+        packet.extract(hdr.peg_type.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_random_reserve {
-        packet.extract(hdr.random_reserve);
+        packet.extract(hdr.random_reserve.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_secondary_order_reference_number {
-        packet.extract(hdr.secondary_order_reference_number);
+        packet.extract(hdr.secondary_order_reference_number.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_stp_action {
-        packet.extract(hdr.stp_action);
+        packet.extract(hdr.stp_action.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_stp_level {
-        packet.extract(hdr.stp_level);
+        packet.extract(hdr.stp_level.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_stp_trader_group {
-        packet.extract(hdr.stp_trader_group);
+        packet.extract(hdr.stp_trader_group.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_time_in_force {
-        packet.extract(hdr.time_in_force);
+        packet.extract(hdr.time_in_force.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_trading_at_closing_price {
-        packet.extract(hdr.trading_at_closing_price);
+        packet.extract(hdr.trading_at_closing_price.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_order_condition {
-        packet.extract(hdr.order_condition);
+        packet.extract(hdr.order_condition.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_cumulative_quantity {
-        packet.extract(hdr.cumulative_quantity);
+        packet.extract(hdr.cumulative_quantity.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_customer_order_capacity {
-        packet.extract(hdr.customer_order_capacity);
+        packet.extract(hdr.customer_order_capacity.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_target_strategy {
-        packet.extract(hdr.target_strategy);
+        packet.extract(hdr.target_strategy.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_min_rate {
-        packet.extract(hdr.min_rate);
+        packet.extract(hdr.min_rate.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_max_rate {
-        packet.extract(hdr.max_rate);
+        packet.extract(hdr.max_rate.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_conditional_type {
-        packet.extract(hdr.conditional_type);
+        packet.extract(hdr.conditional_type.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_firm_up_id {
-        packet.extract(hdr.firm_up_id);
+        packet.extract(hdr.firm_up_id.next);
         meta.dispatched = 1;
-        transition accept;
+        transition parse_order_accepted_message_tagvalue;
     }
 
     state parse_order_replaced_message {
         packet.extract(hdr.order_replaced_message);
         meta.dispatched = 1;
-        transition select(hdr.order_replaced_message.tag) {
+        transition select(hdr.order_replaced_message.appendage_length) {
+            16w0: accept;
+            default: parse_order_replaced_message_tagvalue;
+        }
+    }
+
+    state parse_order_replaced_message_tagvalue {
+        packet.extract(hdr.order_replaced_message_tagvalue.next);
+        transition select(hdr.order_replaced_message_tagvalue.last.tag) {
             8w1: parse_clearing_account;
             8w2: parse_clearing_account_type;
             8w3: parse_clearing_firm;
@@ -805,7 +833,15 @@ parser NordicequitiesOrderentryServerParser(packet_in packet, out headers_t hdr,
     state parse_order_restated_message {
         packet.extract(hdr.order_restated_message);
         meta.dispatched = 1;
-        transition select(hdr.order_restated_message.tag) {
+        transition select(hdr.order_restated_message.appendage_length) {
+            16w0: accept;
+            default: parse_order_restated_message_tagvalue;
+        }
+    }
+
+    state parse_order_restated_message_tagvalue {
+        packet.extract(hdr.order_restated_message_tagvalue.next);
+        transition select(hdr.order_restated_message_tagvalue.last.tag) {
             8w1: parse_clearing_account;
             8w2: parse_clearing_account_type;
             8w3: parse_clearing_firm;
@@ -927,6 +963,7 @@ control NordicequitiesOrderentryServerDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.order_accepted_message);
+        packet.emit(hdr.order_accepted_message_tagvalue);
         packet.emit(hdr.clearing_account);
         packet.emit(hdr.clearing_account_type);
         packet.emit(hdr.clearing_firm);
@@ -962,6 +999,7 @@ control NordicequitiesOrderentryServerDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.conditional_type);
         packet.emit(hdr.firm_up_id);
         packet.emit(hdr.order_replaced_message);
+        packet.emit(hdr.order_replaced_message_tagvalue);
         packet.emit(hdr.cancelled_order_message);
         packet.emit(hdr.cancel_pending_message);
         packet.emit(hdr.replace_pending_message);
@@ -970,6 +1008,7 @@ control NordicequitiesOrderentryServerDeparser(packet_out packet, in headers_t h
         packet.emit(hdr.rejected_order_message);
         packet.emit(hdr.cancel_rejected_message);
         packet.emit(hdr.order_restated_message);
+        packet.emit(hdr.order_restated_message_tagvalue);
         packet.emit(hdr.mmo_refresh_request_message);
         packet.emit(hdr.account_query_response_message);
         packet.emit(hdr.gtc_cancelled_message);

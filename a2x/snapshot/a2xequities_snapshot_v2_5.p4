@@ -1,0 +1,193 @@
+// P4_16 (v1model) definition for: A2X Snapshot Amd v2.5
+// 
+// Protocol:
+//   Organization: A2X Markets
+//   Protocol: Snapshot Feed
+//   Encoding: A2X Market Data
+//   Version: 2.5
+//   Date: 8/1/2026
+//   Specification: A2X Market Data Technical Specification v2.5.pdf
+// 
+// Byte order: little (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: Public/GPLv3
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header message_header_t {
+    bit<8> message_count;
+}
+
+header message_header_message_t {
+    bit<8> msg_type;
+    bit<8> msg_length;
+    bit<32> seq_no;
+}
+
+header snapshot_start_message_t {
+    bit<32> stream_seq_no;
+    bit<16> security_count;
+    bit<64> timestamp;
+}
+
+header book_status_message_t {
+    bit<16> security_id;
+    bit<8> trading_status;
+    bit<5> unused_5;
+    bit<1> mac_run;
+    bit<1> mac_open;
+    bit<1> trading;
+    bit<16> entries;
+    bit<32> closing_buy_qty;
+    bit<32> closing_sell_qty;
+    bit<64> indicative_price;
+}
+
+header book_entry_message_t {
+    bit<16> security_id;
+    bit<8> side;
+    bit<32> quantity;
+    bit<64> price;
+    bit<32> order_ref;
+}
+
+header mac_book_entry_message_t {
+    bit<16> security_id;
+    bit<8> side;
+    bit<32> quantity;
+    bit<64> price;
+    bit<32> order_ref;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+}
+
+struct headers_t {
+    message_header_t message_header;
+    message_header_message_t message_header_message[MAX_MESSAGES];
+    snapshot_start_message_t snapshot_start_message[MAX_MESSAGES];
+    book_status_message_t book_status_message[MAX_MESSAGES];
+    book_entry_message_t book_entry_message[MAX_MESSAGES];
+    mac_book_entry_message_t mac_book_entry_message[MAX_MESSAGES];
+}
+
+parser A2xequitiesSnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.message_header);
+        transition select(hdr.message_header.message_count) {
+            8w0: parse_message_header_message_empty;
+            default: parse_message_header_message;
+        }
+    }
+
+    state parse_message_header_message {
+        packet.extract(hdr.message_header_message.next);
+        transition select(hdr.message_header_message.last.msg_type) {
+            8w1: parse_heartbeat_message;
+            8w10: parse_snapshot_start_message;
+            8w11: parse_book_status_message;
+            8w12: parse_book_entry_message;
+            8w18: parse_mac_book_entry_message;
+            default: accept;
+        }
+    }
+
+    state parse_heartbeat_message {
+        meta.dispatched = 1;
+        transition parse_message_header_message;
+    }
+
+    state parse_snapshot_start_message {
+        packet.extract(hdr.snapshot_start_message.next);
+        meta.dispatched = 1;
+        transition parse_message_header_message;
+    }
+
+    state parse_book_status_message {
+        packet.extract(hdr.book_status_message.next);
+        meta.dispatched = 1;
+        transition parse_message_header_message;
+    }
+
+    state parse_book_entry_message {
+        packet.extract(hdr.book_entry_message.next);
+        meta.dispatched = 1;
+        transition parse_message_header_message;
+    }
+
+    state parse_mac_book_entry_message {
+        packet.extract(hdr.mac_book_entry_message.next);
+        meta.dispatched = 1;
+        transition parse_message_header_message;
+    }
+
+    state parse_message_header_message_empty {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+}
+
+control A2xequitiesSnapshotVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control A2xequitiesSnapshotIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control A2xequitiesSnapshotEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control A2xequitiesSnapshotComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control A2xequitiesSnapshotDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.message_header);
+        packet.emit(hdr.message_header_message);
+        packet.emit(hdr.snapshot_start_message);
+        packet.emit(hdr.book_status_message);
+        packet.emit(hdr.book_entry_message);
+        packet.emit(hdr.mac_book_entry_message);
+    }
+}
+
+V1Switch(
+    A2xequitiesSnapshotParser(),
+    A2xequitiesSnapshotVerifyChecksum(),
+    A2xequitiesSnapshotIngress(),
+    A2xequitiesSnapshotEgress(),
+    A2xequitiesSnapshotComputeChecksum(),
+    A2xequitiesSnapshotDeparser()
+) main;
