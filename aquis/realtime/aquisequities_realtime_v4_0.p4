@@ -62,7 +62,7 @@ header order_cancel_message_t {
 
 header order_modify_message_t {
     bit<16> security_id;
-    bit<32> quantity;
+    bit<32> remaining_quantity;
     bit<64> price;
     bit<32> order_ref;
     bit<64> timestamp;
@@ -73,8 +73,8 @@ header order_modify_message_t {
 header trade_message_t {
     bit<16> security_id;
     bit<8> trade_type;
-    bit<32> quantity;
-    bit<64> price;
+    bit<32> traded_quantity;
+    bit<64> execution_price;
     bit<32> order_ref;
     bit<32> trade_ref;
     bit<64> timestamp;
@@ -85,8 +85,8 @@ header trade_message_t {
 
 header trade_bust_message_t {
     bit<16> security_id;
-    bit<32> quantity;
-    bit<64> price;
+    bit<32> traded_quantity;
+    bit<64> execution_price;
     bit<32> trade_ref;
     bit<64> timestamp;
     bit<32> binary_mmt;

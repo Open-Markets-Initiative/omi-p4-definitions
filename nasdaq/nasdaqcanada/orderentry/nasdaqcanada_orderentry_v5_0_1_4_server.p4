@@ -68,9 +68,6 @@ header order_accepted_message_t {
     bit<64> order_reference_number;
     bit<8> order_state;
     bit<16> appendage_length;
-}
-
-header order_accepted_message_order_accepted_appendage_t {
     bit<8> optional_field_length;
     bit<8> order_accepted_optional_field;
 }
@@ -86,9 +83,6 @@ header order_replaced_message_t {
     bit<64> order_reference_number;
     bit<8> order_state;
     bit<16> appendage_length;
-}
-
-header order_replaced_message_order_replaced_appendage_t {
     bit<8> optional_field_length;
     bit<8> order_replaced_optional_field;
 }
@@ -99,9 +93,6 @@ header order_canceled_message_t {
     bit<32> order_qty;
     bit<32> cancel_reason;
     bit<16> appendage_length;
-}
-
-header order_canceled_message_order_canceled_appendage_t {
     bit<8> optional_field_length;
     bit<8> order_canceled_optional_field;
 }
@@ -115,9 +106,6 @@ header stp_canceled_message_t {
     bit<64> price;
     bit<8> liquidity_flag;
     bit<16> appendage_length;
-}
-
-header stp_canceled_message_stp_canceled_appendage_t {
     bit<8> optional_field_length;
     bit<8> stp_canceled_optional_field;
 }
@@ -132,9 +120,6 @@ header order_executed_message_t {
     bit<8> exec_broker;
     bit<32> contra_broker;
     bit<16> appendage_length;
-}
-
-header order_executed_message_order_executed_appendage_t {
     bit<8> optional_field_length;
     bit<8> order_executed_optional_field;
 }
@@ -146,9 +131,6 @@ header corrected_trade_message_t {
     bit<32> quantity;
     bit<64> price;
     bit<16> appendage_length;
-}
-
-header corrected_trade_message_corrected_trade_appendage_t {
     bit<8> optional_field_length;
     bit<8> corrected_trade_optional_field;
 }
@@ -158,9 +140,6 @@ header rejected_order_message_t {
     bit<32> user_ref_num;
     bit<32> reject_reason;
     bit<16> appendage_length;
-}
-
-header rejected_order_message_rejected_order_appendage_t {
     bit<8> optional_field_length;
     bit<8> rejected_order_optional_field;
 }
@@ -170,9 +149,6 @@ header cancel_reject_message_t {
     bit<32> user_ref_num;
     bit<32> reject_reason;
     bit<16> appendage_length;
-}
-
-header cancel_reject_message_cancel_reject_appendage_t {
     bit<8> optional_field_length;
     bit<8> cancel_reject_optional_field;
 }
@@ -182,9 +158,6 @@ header order_restated_message_t {
     bit<32> user_ref_num;
     bit<8> restate_reason;
     bit<16> appendage_length;
-}
-
-header order_restated_message_order_restated_appendage_t {
     bit<8> optional_field_length;
     bit<8> order_restated_optional_field;
 }
@@ -209,23 +182,14 @@ struct headers_t {
     sequenced_data_packet_t sequenced_data_packet;
     system_event_message_t system_event_message;
     order_accepted_message_t order_accepted_message;
-    order_accepted_message_order_accepted_appendage_t order_accepted_message_order_accepted_appendage[MAX_MESSAGES];
     order_replaced_message_t order_replaced_message;
-    order_replaced_message_order_replaced_appendage_t order_replaced_message_order_replaced_appendage[MAX_MESSAGES];
     order_canceled_message_t order_canceled_message;
-    order_canceled_message_order_canceled_appendage_t order_canceled_message_order_canceled_appendage[MAX_MESSAGES];
     stp_canceled_message_t stp_canceled_message;
-    stp_canceled_message_stp_canceled_appendage_t stp_canceled_message_stp_canceled_appendage[MAX_MESSAGES];
     order_executed_message_t order_executed_message;
-    order_executed_message_order_executed_appendage_t order_executed_message_order_executed_appendage[MAX_MESSAGES];
     corrected_trade_message_t corrected_trade_message;
-    corrected_trade_message_corrected_trade_appendage_t corrected_trade_message_corrected_trade_appendage[MAX_MESSAGES];
     rejected_order_message_t rejected_order_message;
-    rejected_order_message_rejected_order_appendage_t rejected_order_message_rejected_order_appendage[MAX_MESSAGES];
     cancel_reject_message_t cancel_reject_message;
-    cancel_reject_message_cancel_reject_appendage_t cancel_reject_message_cancel_reject_appendage[MAX_MESSAGES];
     order_restated_message_t order_restated_message;
-    order_restated_message_order_restated_appendage_t order_restated_message_order_restated_appendage[MAX_MESSAGES];
     account_query_response_message_t account_query_response_message;
     debug_packet_debug_text_t debug_packet_debug_text;
 }
@@ -290,15 +254,7 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_order_accepted_message {
         packet.extract(hdr.order_accepted_message);
         meta.dispatched = 1;
-        transition select(hdr.order_accepted_message.appendage_length) {
-            16w0: accept;
-            default: parse_order_accepted_message_order_accepted_appendage;
-        }
-    }
-
-    state parse_order_accepted_message_order_accepted_appendage {
-        packet.extract(hdr.order_accepted_message_order_accepted_appendage.next);
-        transition select(hdr.order_accepted_message_order_accepted_appendage.last.order_accepted_optional_field) {
+        transition select(hdr.order_accepted_message.order_accepted_optional_field) {
             8w37: parse_user_ref_idx;
             8w1: parse_account;
             8w2: parse_peg_type;
@@ -344,211 +300,203 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
 
     state parse_user_ref_idx {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_account {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_peg_type {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_min_qty_type {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_min_qty {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_max_floor {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_expire_time {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_peg_offset {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_target_strategy {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_order_origination {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_routing_arrangement_indicator {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_basket_trade {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_program_trade {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_jitney {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_gef_eligible {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_anonymous {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_umir_regulation_id {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_bypass {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_tsxncib {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_no_trade_feat {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_no_trade_key {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_short_marking_exempt {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_po_comment {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_display_range {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_customer_account {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_algorithm_id {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_customer_lei {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_broker_lei {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_conditional_order {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_allow_conditional {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_firm_up_id {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_cxd_connect {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_pure_stream_connect {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_min_rate {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_max_rate {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_routing_strategy {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_handl_inst {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_reprice_reason {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_nbbo_setter {
         meta.dispatched = 1;
-        transition parse_order_accepted_message_order_accepted_appendage;
+        transition accept;
     }
 
     state parse_order_replaced_message {
         packet.extract(hdr.order_replaced_message);
         meta.dispatched = 1;
-        transition select(hdr.order_replaced_message.appendage_length) {
-            16w0: accept;
-            default: parse_order_replaced_message_order_replaced_appendage;
-        }
-    }
-
-    state parse_order_replaced_message_order_replaced_appendage {
-        packet.extract(hdr.order_replaced_message_order_replaced_appendage.next);
-        transition select(hdr.order_replaced_message_order_replaced_appendage.last.order_replaced_optional_field) {
+        transition select(hdr.order_replaced_message.order_replaced_optional_field) {
             8w37: parse_user_ref_idx;
             8w3: parse_min_qty_type;
             8w2: parse_peg_type;
@@ -581,15 +529,7 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_order_canceled_message {
         packet.extract(hdr.order_canceled_message);
         meta.dispatched = 1;
-        transition select(hdr.order_canceled_message.appendage_length) {
-            16w0: accept;
-            default: parse_order_canceled_message_order_canceled_appendage;
-        }
-    }
-
-    state parse_order_canceled_message_order_canceled_appendage {
-        packet.extract(hdr.order_canceled_message_order_canceled_appendage.next);
-        transition select(hdr.order_canceled_message_order_canceled_appendage.last.order_canceled_optional_field) {
+        transition select(hdr.order_canceled_message.order_canceled_optional_field) {
             8w37: parse_user_ref_idx;
             default: accept;
         }
@@ -598,15 +538,7 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_stp_canceled_message {
         packet.extract(hdr.stp_canceled_message);
         meta.dispatched = 1;
-        transition select(hdr.stp_canceled_message.appendage_length) {
-            16w0: accept;
-            default: parse_stp_canceled_message_stp_canceled_appendage;
-        }
-    }
-
-    state parse_stp_canceled_message_stp_canceled_appendage {
-        packet.extract(hdr.stp_canceled_message_stp_canceled_appendage.next);
-        transition select(hdr.stp_canceled_message_stp_canceled_appendage.last.stp_canceled_optional_field) {
+        transition select(hdr.stp_canceled_message.stp_canceled_optional_field) {
             8w37: parse_user_ref_idx;
             default: accept;
         }
@@ -615,15 +547,7 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message);
         meta.dispatched = 1;
-        transition select(hdr.order_executed_message.appendage_length) {
-            16w0: accept;
-            default: parse_order_executed_message_order_executed_appendage;
-        }
-    }
-
-    state parse_order_executed_message_order_executed_appendage {
-        packet.extract(hdr.order_executed_message_order_executed_appendage.next);
-        transition select(hdr.order_executed_message_order_executed_appendage.last.order_executed_optional_field) {
+        transition select(hdr.order_executed_message.order_executed_optional_field) {
             8w37: parse_user_ref_idx;
             8w38: parse_execute_match;
             8w40: parse_secondary_order_id;
@@ -637,46 +561,38 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
 
     state parse_execute_match {
         meta.dispatched = 1;
-        transition parse_order_executed_message_order_executed_appendage;
+        transition accept;
     }
 
     state parse_secondary_order_id {
         meta.dispatched = 1;
-        transition parse_order_executed_message_order_executed_appendage;
+        transition accept;
     }
 
     state parse_broker_pref {
         meta.dispatched = 1;
-        transition parse_order_executed_message_order_executed_appendage;
+        transition accept;
     }
 
     state parse_principal_trade {
         meta.dispatched = 1;
-        transition parse_order_executed_message_order_executed_appendage;
+        transition accept;
     }
 
     state parse_wash_trade {
         meta.dispatched = 1;
-        transition parse_order_executed_message_order_executed_appendage;
+        transition accept;
     }
 
     state parse_cum_rate {
         meta.dispatched = 1;
-        transition parse_order_executed_message_order_executed_appendage;
+        transition accept;
     }
 
     state parse_corrected_trade_message {
         packet.extract(hdr.corrected_trade_message);
         meta.dispatched = 1;
-        transition select(hdr.corrected_trade_message.appendage_length) {
-            16w0: accept;
-            default: parse_corrected_trade_message_corrected_trade_appendage;
-        }
-    }
-
-    state parse_corrected_trade_message_corrected_trade_appendage {
-        packet.extract(hdr.corrected_trade_message_corrected_trade_appendage.next);
-        transition select(hdr.corrected_trade_message_corrected_trade_appendage.last.corrected_trade_optional_field) {
+        transition select(hdr.corrected_trade_message.corrected_trade_optional_field) {
             8w37: parse_user_ref_idx;
             default: accept;
         }
@@ -685,15 +601,7 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_rejected_order_message {
         packet.extract(hdr.rejected_order_message);
         meta.dispatched = 1;
-        transition select(hdr.rejected_order_message.appendage_length) {
-            16w0: accept;
-            default: parse_rejected_order_message_rejected_order_appendage;
-        }
-    }
-
-    state parse_rejected_order_message_rejected_order_appendage {
-        packet.extract(hdr.rejected_order_message_rejected_order_appendage.next);
-        transition select(hdr.rejected_order_message_rejected_order_appendage.last.rejected_order_optional_field) {
+        transition select(hdr.rejected_order_message.rejected_order_optional_field) {
             8w37: parse_user_ref_idx;
             default: accept;
         }
@@ -702,15 +610,7 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_cancel_reject_message {
         packet.extract(hdr.cancel_reject_message);
         meta.dispatched = 1;
-        transition select(hdr.cancel_reject_message.appendage_length) {
-            16w0: accept;
-            default: parse_cancel_reject_message_cancel_reject_appendage;
-        }
-    }
-
-    state parse_cancel_reject_message_cancel_reject_appendage {
-        packet.extract(hdr.cancel_reject_message_cancel_reject_appendage.next);
-        transition select(hdr.cancel_reject_message_cancel_reject_appendage.last.cancel_reject_optional_field) {
+        transition select(hdr.cancel_reject_message.cancel_reject_optional_field) {
             8w37: parse_user_ref_idx;
             default: accept;
         }
@@ -719,15 +619,7 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_order_restated_message {
         packet.extract(hdr.order_restated_message);
         meta.dispatched = 1;
-        transition select(hdr.order_restated_message.appendage_length) {
-            16w0: accept;
-            default: parse_order_restated_message_order_restated_appendage;
-        }
-    }
-
-    state parse_order_restated_message_order_restated_appendage {
-        packet.extract(hdr.order_restated_message_order_restated_appendage.next);
-        transition select(hdr.order_restated_message_order_restated_appendage.last.order_restated_optional_field) {
+        transition select(hdr.order_restated_message.order_restated_optional_field) {
             8w37: parse_user_ref_idx;
             8w31: parse_firm_up_id;
             default: accept;
@@ -737,7 +629,10 @@ parser NasdaqcanadaOrderentryServerParser(packet_in packet, out headers_t hdr, i
     state parse_account_query_response_message {
         packet.extract(hdr.account_query_response_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()) {
+            8w37: parse_user_ref_idx;
+            default: accept;
+        }
     }
 
     state parse_server_heartbeat {
@@ -787,23 +682,14 @@ control NasdaqcanadaOrderentryServerDeparser(packet_out packet, in headers_t hdr
         packet.emit(hdr.sequenced_data_packet);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.order_accepted_message);
-        packet.emit(hdr.order_accepted_message_order_accepted_appendage);
         packet.emit(hdr.order_replaced_message);
-        packet.emit(hdr.order_replaced_message_order_replaced_appendage);
         packet.emit(hdr.order_canceled_message);
-        packet.emit(hdr.order_canceled_message_order_canceled_appendage);
         packet.emit(hdr.stp_canceled_message);
-        packet.emit(hdr.stp_canceled_message_stp_canceled_appendage);
         packet.emit(hdr.order_executed_message);
-        packet.emit(hdr.order_executed_message_order_executed_appendage);
         packet.emit(hdr.corrected_trade_message);
-        packet.emit(hdr.corrected_trade_message_corrected_trade_appendage);
         packet.emit(hdr.rejected_order_message);
-        packet.emit(hdr.rejected_order_message_rejected_order_appendage);
         packet.emit(hdr.cancel_reject_message);
-        packet.emit(hdr.cancel_reject_message_cancel_reject_appendage);
         packet.emit(hdr.order_restated_message);
-        packet.emit(hdr.order_restated_message_order_restated_appendage);
         packet.emit(hdr.account_query_response_message);
     }
 }

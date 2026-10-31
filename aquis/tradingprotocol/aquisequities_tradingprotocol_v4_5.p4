@@ -201,7 +201,7 @@ header order_cancel_response_message_t {
     bit<32> request_ref;
     bit<3> order_status;
     bit<5> reason_code;
-    bit<64> timestamp;
+    bit<64> cancellation_timestamp;
     bit<64> user_tag;
     bit<16> reserved_short;
 }
@@ -211,7 +211,7 @@ header order_modify_response_message_t {
     bit<32> request_ref;
     bit<3> order_status;
     bit<5> reason_code;
-    bit<64> timestamp;
+    bit<64> modification_timestamp;
     bit<64> user_tag;
     bit<1> dark_flag;
     bit<1> lis;
@@ -256,7 +256,7 @@ header trade_message_t {
     bit<8> ccp_code;
     bit<8> liq_indicator;
     bit<16> security_id_short;
-    bit<64> timestamp;
+    bit<64> trade_timestamp;
     bit<64> user_tag;
     bit<1> dark_flag;
     bit<1> lis;
@@ -269,7 +269,7 @@ header trade_bust_message_t {
     bit<64> price;
     bit<8> side;
     bit<32> trade_ref;
-    bit<64> timestamp;
+    bit<64> bust_timestamp;
 }
 
 header ioi_add_message_t {
@@ -308,7 +308,7 @@ header ioi_invite_message_t {
     bit<64> price;
     bit<32> quantity;
     bit<32> min_qty;
-    bit<64> timestamp;
+    bit<64> invite_timestamp;
     bit<64> user_tag;
 }
 
