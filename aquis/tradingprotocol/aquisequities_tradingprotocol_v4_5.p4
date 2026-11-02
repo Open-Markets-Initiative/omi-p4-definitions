@@ -65,7 +65,7 @@ header order_add_message_t {
     bit<8> order_capacity;
     bit<8> account;
     bit<64> user_tag;
-    bit<5> reserved_5;
+    bit<5> unused_5;
     bit<1> dea_flag;
     bit<1> algo_trade_flag;
     bit<1> liq_prov;
@@ -90,7 +90,7 @@ header order_add_extended_message_t {
     bit<8> order_capacity;
     bit<8> account;
     bit<64> user_tag;
-    bit<5> reserved_5;
+    bit<5> unused_5;
     bit<1> dea_flag;
     bit<1> algo_trade_flag;
     bit<1> liq_prov;
@@ -105,14 +105,14 @@ header order_add_extended_message_t {
     bit<32> short_code_3;
     bit<32> display_quantity;
     bit<32> min_qty;
-    bit<2> reserved_2;
+    bit<2> unused_2;
     bit<3> routing;
     bit<1> routetolit;
     bit<1> lis_only;
     bit<1> stp_enable;
-    bit<64> reserved_long;
+    bit<64> reserved_8;
     bit<64> designated_order_id;
-    bit<16> reserved_short;
+    bit<16> reserved_2;
     bit<64> peg_difference;
     bit<32> display_low_qty;
     bit<32> display_high_qty;
@@ -122,7 +122,7 @@ header order_add_extended_message_t {
 header order_cancel_message_t {
     bit<32> order_ref;
     bit<64> user_tag;
-    bit<5> reserved_5;
+    bit<5> unused_5;
     bit<1> dea_flag;
     bit<1> algo_trade_flag;
     bit<1> liq_prov;
@@ -142,7 +142,7 @@ header order_modify_message_t {
     bit<64> price;
     bit<32> quantity;
     bit<64> user_tag;
-    bit<5> reserved_5;
+    bit<5> unused_5;
     bit<1> dea_flag;
     bit<1> algo_trade_flag;
     bit<1> liq_prov;
@@ -163,7 +163,7 @@ header order_modify_extended_message_t {
     bit<64> price;
     bit<32> quantity;
     bit<64> user_tag;
-    bit<5> reserved_5;
+    bit<5> unused_5;
     bit<1> dea_flag;
     bit<1> algo_trade_flag;
     bit<1> liq_prov;
@@ -179,7 +179,7 @@ header order_modify_extended_message_t {
     bit<8> order_capacity;
     bit<32> display_quantity;
     bit<32> min_qty;
-    bit<64> reserved_long;
+    bit<64> reserved_8;
 }
 
 header order_add_response_message_t {
@@ -192,8 +192,8 @@ header order_add_response_message_t {
     bit<64> user_tag;
     bit<1> dark_flag;
     bit<1> lis;
-    bit<6> reserved_6;
-    bit<16> reserved_short;
+    bit<6> unused_6;
+    bit<16> reserved_2;
 }
 
 header order_cancel_response_message_t {
@@ -203,7 +203,7 @@ header order_cancel_response_message_t {
     bit<5> reason_code;
     bit<64> cancellation_timestamp;
     bit<64> user_tag;
-    bit<16> reserved_short;
+    bit<16> reserved_2;
 }
 
 header order_modify_response_message_t {
@@ -215,8 +215,8 @@ header order_modify_response_message_t {
     bit<64> user_tag;
     bit<1> dark_flag;
     bit<1> lis;
-    bit<6> reserved_6;
-    bit<16> reserved_short;
+    bit<6> unused_6;
+    bit<16> reserved_2;
 }
 
 header iceberg_order_refresh_message_t {
@@ -231,9 +231,9 @@ header trade_capture_message_t {
     bit<64> price;
     bit<32> security_id_long;
     bit<8> trade_capture_type;
-    bit<6> reserved_6;
+    bit<6> unused_6;
     bit<1> algo_trade_flag;
-    bit<1> reserved_1;
+    bit<1> unused_1;
     bit<8> account;
     bit<64> user_tag;
 }
@@ -244,7 +244,7 @@ header trade_capture_response_message_t {
     bit<32> trade_ref;
     bit<32> request_ref;
     bit<64> user_tag;
-    bit<16> reserved_short;
+    bit<16> reserved_2;
 }
 
 header trade_message_t {
@@ -260,7 +260,7 @@ header trade_message_t {
     bit<64> user_tag;
     bit<1> dark_flag;
     bit<1> lis;
-    bit<6> reserved_6;
+    bit<6> unused_6;
 }
 
 header trade_bust_message_t {
@@ -282,7 +282,7 @@ header ioi_add_message_t {
     bit<8> order_capacity;
     bit<8> account;
     bit<64> user_tag;
-    bit<5> reserved_5;
+    bit<5> unused_5;
     bit<1> dea_flag;
     bit<1> algo_trade_flag;
     bit<1> liq_prov;
@@ -296,7 +296,7 @@ header ioi_add_message_t {
     bit<4> party_role_3;
     bit<32> short_code_3;
     bit<32> min_qty;
-    bit<6> reserved_6;
+    bit<6> unused_6;
     bit<1> lis_only;
     bit<1> stp_enable;
     bit<8> optim_x_universe;

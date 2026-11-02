@@ -108,7 +108,7 @@ header security_definition_message_t {
     bit<32> mic;
     bit<8> tick_table_id;
     bit<16> flags;
-    bit<160> reserved;
+    bit<160> reserved_20;
     bit<64> lot_size;
     bit<8> lot_size_decimal;
 }
