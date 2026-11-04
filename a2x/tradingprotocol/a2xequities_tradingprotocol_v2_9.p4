@@ -12,7 +12,7 @@
 // 
 // Script:
 //   Generator: 1.0.0.0
-//   License: Public/GPLv3
+//   License: MIT No Attribution
 //   Authors: Omi Developers
 // 
 // Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
@@ -128,31 +128,36 @@ header order_modify_extended_message_t {
 header order_add_response_message_t {
     bit<32> order_ref;
     bit<32> market_data_id;
+}
+
+header status_cancel_reason_t {
+    bit<5> cancel_reason;
     bit<3> order_status;
+}
+
+header status_reject_reason_t {
+    bit<5> reject_reason;
+    bit<3> order_status;
+}
+
+header status_t {
     bit<5> reason_code;
-    bit<32> traded_quantity;
-    bit<64> timestamp;
-    bit<64> user_tag;
-    bit<8> reserved_1;
+    bit<3> order_status;
 }
 
 header order_cancel_response_message_t {
     bit<32> order_ref;
     bit<32> request_ref;
-    bit<3> order_status;
-    bit<5> reason_code;
-    bit<64> cancellation_timestamp;
-    bit<64> user_tag;
 }
 
 header order_modify_response_message_t {
     bit<32> order_ref;
     bit<32> request_ref;
+}
+
+header status_modification_reason_t {
+    bit<5> modification_reason;
     bit<3> order_status;
-    bit<5> reason_code;
-    bit<64> modification_timestamp;
-    bit<64> user_tag;
-    bit<8> reserved_1;
 }
 
 header iceberg_order_refresh_message_t {
@@ -223,8 +228,12 @@ struct headers_t {
     order_modify_message_t order_modify_message;
     order_modify_extended_message_t order_modify_extended_message;
     order_add_response_message_t order_add_response_message;
+    status_cancel_reason_t status_cancel_reason;
+    status_reject_reason_t status_reject_reason;
+    status_t status;
     order_cancel_response_message_t order_cancel_response_message;
     order_modify_response_message_t order_modify_response_message;
+    status_modification_reason_t status_modification_reason;
     iceberg_order_refresh_message_t iceberg_order_refresh_message;
     trade_capture_message_t trade_capture_message;
     trade_capture_response_message_t trade_capture_response_message;
@@ -319,18 +328,51 @@ parser A2xequitiesTradingprotocolParser(packet_in packet, out headers_t hdr, ino
     state parse_order_add_response_message {
         packet.extract(hdr.order_add_response_message);
         meta.dispatched = 1;
+        transition select(packet.lookahead<bit<8>>()[2:0]) {
+            3w3: parse_status_cancel_reason;
+            3w4: parse_status_reject_reason;
+            default: parse_status;
+        }
+    }
+
+    state parse_status_cancel_reason {
+        packet.extract(hdr.status_cancel_reason);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_status_reject_reason {
+        packet.extract(hdr.status_reject_reason);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_status {
+        packet.extract(hdr.status);
         transition accept;
     }
 
     state parse_order_cancel_response_message {
         packet.extract(hdr.order_cancel_response_message);
         meta.dispatched = 1;
-        transition accept;
+        transition select(packet.lookahead<bit<8>>()[2:0]) {
+            3w3: parse_status_cancel_reason;
+            3w4: parse_status_reject_reason;
+            default: parse_status;
+        }
     }
 
     state parse_order_modify_response_message {
         packet.extract(hdr.order_modify_response_message);
         meta.dispatched = 1;
+        transition select(packet.lookahead<bit<8>>()[2:0]) {
+            3w4: parse_status_reject_reason;
+            default: parse_status_modification_reason;
+        }
+    }
+
+    state parse_status_modification_reason {
+        packet.extract(hdr.status_modification_reason);
         transition accept;
     }
 
@@ -404,8 +446,12 @@ control A2xequitiesTradingprotocolDeparser(packet_out packet, in headers_t hdr) 
         packet.emit(hdr.order_modify_message);
         packet.emit(hdr.order_modify_extended_message);
         packet.emit(hdr.order_add_response_message);
+        packet.emit(hdr.status_cancel_reason);
+        packet.emit(hdr.status_reject_reason);
+        packet.emit(hdr.status);
         packet.emit(hdr.order_cancel_response_message);
         packet.emit(hdr.order_modify_response_message);
+        packet.emit(hdr.status_modification_reason);
         packet.emit(hdr.iceberg_order_refresh_message);
         packet.emit(hdr.trade_capture_message);
         packet.emit(hdr.trade_capture_response_message);
