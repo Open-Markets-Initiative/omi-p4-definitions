@@ -377,8 +377,8 @@ header volume_and_open_interest_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<16> combination_symbol_directory_message_combination_leg_remaining;
-    bit<16> bundles_symbol_directory_bundle_leg_remaining;
+    bit<8> combination_symbol_directory_message_combination_leg_remaining;
+    bit<8> bundles_symbol_directory_bundle_leg_remaining;
 }
 
 struct headers_t {
@@ -494,7 +494,7 @@ parser AsxderivativesNtpParser(packet_in packet, out headers_t hdr, inout metada
     state parse_combination_symbol_directory_message {
         packet.extract(hdr.combination_symbol_directory_message.next);
         meta.dispatched = 1;
-        meta.combination_symbol_directory_message_combination_leg_remaining = 16w6;
+        meta.combination_symbol_directory_message_combination_leg_remaining = 8w6;
         transition parse_combination_symbol_directory_message_combination_leg;
     }
 
@@ -502,7 +502,7 @@ parser AsxderivativesNtpParser(packet_in packet, out headers_t hdr, inout metada
         packet.extract(hdr.combination_symbol_directory_message_combination_leg.next);
         meta.combination_symbol_directory_message_combination_leg_remaining = meta.combination_symbol_directory_message_combination_leg_remaining - 1;
         transition select(meta.combination_symbol_directory_message_combination_leg_remaining) {
-            16w0: parse_message;
+            8w0: parse_message;
             default: parse_combination_symbol_directory_message_combination_leg;
         }
     }
@@ -510,7 +510,7 @@ parser AsxderivativesNtpParser(packet_in packet, out headers_t hdr, inout metada
     state parse_bundles_symbol_directory {
         packet.extract(hdr.bundles_symbol_directory.next);
         meta.dispatched = 1;
-        meta.bundles_symbol_directory_bundle_leg_remaining = 16w20;
+        meta.bundles_symbol_directory_bundle_leg_remaining = 8w20;
         transition parse_bundles_symbol_directory_bundle_leg;
     }
 
@@ -518,7 +518,7 @@ parser AsxderivativesNtpParser(packet_in packet, out headers_t hdr, inout metada
         packet.extract(hdr.bundles_symbol_directory_bundle_leg.next);
         meta.bundles_symbol_directory_bundle_leg_remaining = meta.bundles_symbol_directory_bundle_leg_remaining - 1;
         transition select(meta.bundles_symbol_directory_bundle_leg_remaining) {
-            16w0: parse_message;
+            8w0: parse_message;
             default: parse_bundles_symbol_directory_bundle_leg;
         }
     }

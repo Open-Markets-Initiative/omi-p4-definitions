@@ -85,6 +85,10 @@ parser SseequitiesStandardParser(packet_in packet, out headers_t hdr, inout meta
         transition accept;
     }
 
+    state parse_other_medium_classification {
+        transition accept;
+    }
+
 }
 
 control SseequitiesStandardVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {

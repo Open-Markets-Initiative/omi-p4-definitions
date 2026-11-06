@@ -85,6 +85,10 @@ parser TseequitiesTostnetParser(packet_in packet, out headers_t hdr, inout metad
         transition accept;
     }
 
+    state parse_other_medium_classification {
+        transition accept;
+    }
+
 }
 
 control TseequitiesTostnetVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {

@@ -566,7 +566,7 @@ header quote_request_message_t {
     bit<64> sending_time;
     bit<8> poss_resend;
     bit<8> market_segment_id_optional;
-    bit<8> padding;
+    bit<16> padding_char_2;
     bit<64> security_id;
     bit<64> quote_id_optional;
     bit<32> trade_id_optional;
@@ -596,7 +596,7 @@ header quote_status_report_message_t {
     bit<64> sending_time;
     bit<8> poss_resend;
     bit<8> market_segment_id_optional;
-    bit<8> padding;
+    bit<16> padding_char_2;
     bit<32> quote_reject_reason;
     bit<64> security_id;
     bit<64> quote_id;
@@ -628,7 +628,7 @@ header quote_message_t {
     bit<64> sending_time;
     bit<8> poss_resend;
     bit<8> market_segment_id_optional;
-    bit<8> padding;
+    bit<16> padding_char_2;
     bit<64> security_id;
     bit<64> quote_id;
     bit<64> transact_time;
@@ -654,7 +654,7 @@ header quote_cancel_message_t {
     bit<64> sending_time;
     bit<8> poss_resend;
     bit<8> market_segment_id_optional;
-    bit<8> padding;
+    bit<16> padding_char_2;
     bit<64> security_id;
     bit<64> quote_id_optional;
     bit<32> account;
@@ -672,7 +672,7 @@ header quote_request_reject_message_t {
     bit<64> sending_time;
     bit<8> poss_resend;
     bit<8> market_segment_id_optional;
-    bit<8> padding;
+    bit<16> padding_char_2;
     bit<32> quote_request_reject_reason;
     bit<64> security_id;
     bit<64> quote_id_optional;
