@@ -6,7 +6,7 @@
 //   Encoding: Non-Neat Front End Trimmed
 //   Version: 9.50
 //   Date: 7/27/2026
-//   Specification: TP_FO_Trimmed_NNF_PROTOCOL_9.50_20260820170606.pdf
+//   Specification: TP_FO_Trimmed_NNF_PROTOCOL_9_50.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 
