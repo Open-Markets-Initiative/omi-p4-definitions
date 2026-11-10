@@ -6,7 +6,7 @@
 //   Encoding: Information Dissemination System
 //   Version: 5.2
 //   Date: 11/01/2019
-//   Specification: ATHEX OASIS IDS Market Data Feed Specification (5.2).pdf
+//   Specification: ATHEX OASIS IDS Market Data Feed Specification (2019-11-01).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

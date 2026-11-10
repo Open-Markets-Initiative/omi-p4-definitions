@@ -47,7 +47,7 @@ header message_header_t {
 
 header week_plan_t {
     bit<32> calendar_id;
-    bit<56> weekdays;
+    bit<8> weekdays;
 }
 
 header calendar_exception_t {

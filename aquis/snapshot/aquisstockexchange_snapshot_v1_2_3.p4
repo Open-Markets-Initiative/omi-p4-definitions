@@ -6,7 +6,7 @@
 //   Encoding: Aquis Market Data Protocol
 //   Version: 1.2.3
 //   Date: 4/23/2024
-//   Specification: Aquis Stock Exchange Multicast Market Data Specification v1.2.3 (2024).pdf
+//   Specification: Aquis Stock Exchange Multicast Market Data Specification v1.2.3 (2024-04-23).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

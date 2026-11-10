@@ -6,7 +6,7 @@
 //   Encoding: Utp
 //   Version: 3.0.c
 //   Date: 02/01/2026
-//   Specification: UTP Data Feed Services (3.0c).pdf
+//   Specification: UTP Data Feed Services (2026-02-01).pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

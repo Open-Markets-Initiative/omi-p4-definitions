@@ -6,7 +6,7 @@
 //   Encoding: SIMBA
 //   Version: 9.9.0
 //   Date: 07/16/2026
-//   Specification: MOEX Spectra SIMBA Market Data (SBE) (9.9.0).pdf
+//   Specification: MOEX Spectra SIMBA Market Data (SBE) (2026-07-16).pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

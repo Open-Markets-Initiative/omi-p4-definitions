@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 5.51
 //   Date: 10/18/2024
-//   Specification: Optiq OEG SBE Messages - Interface Specification - Euronext Cash and Derivatives Markets - External - v5.351.0 +TC
+//   Specification: Optiq OEG SBE Messages - Interface Specification - Euronext Cash and Derivatives Markets - External - v5.351.0 +TC.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
