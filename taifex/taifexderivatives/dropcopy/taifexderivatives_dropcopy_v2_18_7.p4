@@ -42,7 +42,7 @@ header hdr_t {
 }
 
 header wake_up_call_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<32> start_in_bound_num;
 }
 
@@ -51,7 +51,7 @@ header wake_up_call_confirmed_message_t {
 }
 
 header logon_notice_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<16> append_no;
     bit<32> end_out_bound_num;
     bit<8> system_type;
@@ -62,14 +62,14 @@ header final_sequential_number_notification_for_group_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
     bit<32> msg_time_ns;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<8> part_id;
     bit<32> end_out_bound_num;
     bit<64> reserved_8;
 }
 
 header request_logon_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<16> append_no;
     bit<16> fcm_id;
     bit<16> session_id;
@@ -81,29 +81,29 @@ header request_logon_message_t {
 }
 
 header activate_application_system_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> heart_bt_int;
     bit<16> max_flow_ctrl_cnt;
 }
 
 header activate_application_system_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header logout_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header confirm_connection_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header connection_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header order_status_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> cm_id;
     bit<16> fcm_id;
@@ -116,17 +116,17 @@ header order_status_report_message_t {
 header symbol_num_t {
     bit<16> pseq_1;
     bit<16> pseq_2;
-    bit<8> leg_side_uint_822;
+    bit<8> both_leg_sides;
     bit<8> comb_op;
     bit<104> reserved_13;
 }
 
 header symbol_text_t {
-    bit<160> symbol_char_2020;
+    bit<160> symbol;
 }
 
 header order_status_report_long_format_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> cm_id;
     bit<16> fcm_id;
@@ -139,17 +139,17 @@ header order_status_report_long_format_message_t {
 header long_symbol_num_t {
     bit<16> pseq_1;
     bit<16> pseq_2;
-    bit<8> leg_side_uint_822;
+    bit<8> both_leg_sides;
     bit<8> comb_op;
     bit<264> reserved_33;
 }
 
 header long_symbol_text_t {
-    bit<320> symbol_char_4040;
+    bit<320> long_symbol;
 }
 
 header error_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> fcm_id;
     bit<40> order_no;
@@ -165,7 +165,7 @@ header flex_order_status_report_message_t {
     bit<32> msg_time_ns;
     bit<8> part_id;
     bit<8> no_leg;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<8> exec_type;
     bit<16> cm_id;
     bit<16> fcm_id;
@@ -189,8 +189,8 @@ header multi_leg_num_t {
 
 header multi_leg_num_leg_entry_num_t {
     bit<32> pseq;
-    bit<8> leg_side_uint_81;
-    bit<16> leg_qty_uint_162;
+    bit<8> leg_side;
+    bit<16> leg_qty;
 }
 
 header multi_leg_txt_t {
@@ -200,8 +200,8 @@ header multi_leg_txt_t {
 
 header multi_leg_txt_leg_entry_txt_t {
     bit<160> prod_id;
-    bit<8> leg_side_uint_81;
-    bit<16> leg_qty_uint_162;
+    bit<8> leg_side;
+    bit<16> leg_qty;
 }
 
 header flex_error_report_message_t {
@@ -210,7 +210,7 @@ header flex_error_report_message_t {
     bit<32> msg_time_ns;
     bit<8> part_id;
     bit<8> ori_message_type;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<8> exec_type;
     bit<16> fcm_id;
     bit<40> order_no;
@@ -228,7 +228,7 @@ header drop_copy_initiate_operation_message_t {
 }
 
 header drop_copy_initiate_operation_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<16> fcm_id;
     bit<8> target_id;
     bit<32> req_cm_seq;
@@ -249,7 +249,7 @@ header flex_drop_copy_initiate_operation_confirmed_message_t {
     bit<8> preserve;
     bit<32> msg_time_ns;
     bit<8> part_id;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<16> fcm_id;
     bit<8> target_id;
     bit<32> req_cm_seq;

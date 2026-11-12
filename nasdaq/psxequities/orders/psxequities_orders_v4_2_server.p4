@@ -108,6 +108,7 @@ header aiq_canceled_message_t {
     bit<32> quantity_prevented_from_trading;
     bit<32> execution_price;
     bit<8> liquidity_flag;
+    bit<8> aiq_strategy;
 }
 
 header executed_message_t {

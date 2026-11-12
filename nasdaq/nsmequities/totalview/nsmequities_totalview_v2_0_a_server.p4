@@ -6,7 +6,7 @@
 //   Encoding: Ascii Itch
 //   Version: 2.0.a
 //   Date: 02/15/2007
-//   Specification: Nasdaq TotalView ITCH (2007-02-15).pdf
+//   Specification: Nasdaq TotalView ITCH.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

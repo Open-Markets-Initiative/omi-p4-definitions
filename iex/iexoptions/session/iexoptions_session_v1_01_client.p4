@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.01
 //   Date: 7/17/2026
-//   Specification: IEX Options Binary Session Protocol Specification (2026-07-17).pdf
+//   Specification: IEX Options Binary Session Protocol Specification.pdf
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

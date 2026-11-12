@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 1.0
 //   Date: 08/23/2017
-//   Specification: ISE GEMX MRX Top Combo Quote Feed (1.0).pdf
+//   Specification: ISE GEMX MRX Top Combo Quote Feed.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

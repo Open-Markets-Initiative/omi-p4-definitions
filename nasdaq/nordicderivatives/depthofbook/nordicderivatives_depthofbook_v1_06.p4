@@ -6,7 +6,7 @@
 //   Encoding: Itch
 //   Version: 1.06
 //   Date: 2/14/2012
-//   Specification: Nasdaq Nordic Genium INET ITCH Protocol Specification (2012-02-14).pdf
+//   Specification: Nasdaq Nordic Genium INET ITCH Protocol Specification.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Ice iMpact Binary Encoding
 //   Version: 1.1.33
 //   Date: 8/6/2018
-//   Specification: ICE_iMpact_Multicast_Feed_Message_Spec_1.1.33.pdf
+//   Specification: ICE_iMpact_Multicast_Feed_Message_Spec_1.1.33.1.pdf
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

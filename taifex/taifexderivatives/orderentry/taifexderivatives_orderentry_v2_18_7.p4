@@ -42,7 +42,7 @@ header hdr_t {
 }
 
 header wake_up_call_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<32> start_in_bound_num;
 }
 
@@ -51,7 +51,7 @@ header wake_up_call_confirmed_message_t {
 }
 
 header logon_notice_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<16> append_no;
     bit<32> end_out_bound_num;
     bit<8> system_type;
@@ -62,14 +62,14 @@ header final_sequential_number_notification_for_group_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
     bit<32> msg_time_ns;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<8> part_id;
     bit<32> end_out_bound_num;
     bit<64> reserved_8;
 }
 
 header request_logon_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<16> append_no;
     bit<16> fcm_id;
     bit<16> session_id;
@@ -81,46 +81,46 @@ header request_logon_message_t {
 }
 
 header resend_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> is_eof;
     bit<32> file_size;
 }
 
 header resend_report_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header activate_application_system_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> heart_bt_int;
     bit<16> max_flow_ctrl_cnt;
 }
 
 header activate_application_system_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header logout_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header confirm_connection_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header connection_confirmed_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header trade_session_status_request_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<16> trade_req_id;
     bit<8> flow_group_no;
     bit<8> subscription_request_type;
 }
 
 header trade_session_status_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<16> trade_req_id;
     bit<8> flow_group_no;
     bit<8> trade_status;
@@ -139,13 +139,13 @@ header order_input_message_t {
 header symbol_num_t {
     bit<16> pseq_1;
     bit<16> pseq_2;
-    bit<8> leg_side_uint_822;
+    bit<8> both_leg_sides;
     bit<8> comb_op;
     bit<104> reserved_13;
 }
 
 header symbol_text_t {
-    bit<160> symbol_char_2020;
+    bit<160> symbol;
 }
 
 header order_input_long_format_message_t {
@@ -161,17 +161,17 @@ header order_input_long_format_message_t {
 header long_symbol_num_t {
     bit<16> pseq_1;
     bit<16> pseq_2;
-    bit<8> leg_side_uint_822;
+    bit<8> both_leg_sides;
     bit<8> comb_op;
     bit<264> reserved_33;
 }
 
 header long_symbol_text_t {
-    bit<320> symbol_char_4040;
+    bit<320> long_symbol;
 }
 
 header order_status_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> cm_id;
     bit<16> fcm_id;
@@ -182,7 +182,7 @@ header order_status_report_message_t {
 }
 
 header order_status_report_long_format_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> cm_id;
     bit<16> fcm_id;
@@ -193,7 +193,7 @@ header order_status_report_long_format_message_t {
 }
 
 header error_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> fcm_id;
     bit<40> order_no;
@@ -218,7 +218,7 @@ header price_inquiry_input_long_format_message_t {
 }
 
 header price_inquiry_reply_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<40> order_no;
     bit<32> ord_id;
     bit<16> fcm_id;
@@ -226,7 +226,7 @@ header price_inquiry_reply_message_t {
 }
 
 header price_inquiry_reply_long_format_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<40> order_no;
     bit<32> ord_id;
     bit<16> fcm_id;
@@ -254,7 +254,7 @@ header quote_input_long_format_message_t {
 }
 
 header condensed_version_order_status_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> fcm_id;
     bit<40> order_no;
@@ -265,8 +265,8 @@ header condensed_version_order_status_report_message_t {
     bit<16> leaves_qty;
     bit<16> before_qty;
     bit<32> leg_px;
-    bit<16> leg_qty_uint_1624;
-    bit<32> epoch_s_int_324;
+    bit<16> both_leg_qtys;
+    bit<32> msg_time_epoch_s;
     bit<16> ms;
     bit<32> uniq_id;
     bit<32> rpt_seq;
@@ -275,7 +275,7 @@ header condensed_version_order_status_report_message_t {
 }
 
 header execution_report_including_head_office_and_branch_offices_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<8> exec_type;
     bit<16> cm_id;
     bit<16> fcm_id;
@@ -292,16 +292,16 @@ header bulletin_request_message_t {
 }
 
 header bulletin_report_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
     bit<32> fcm_req_id;
     bit<32> bulletin_seq;
-    bit<32> epoch_s_int_324;
+    bit<32> msg_time_epoch_s;
     bit<16> ms;
     bit<8> system_type;
 }
 
 header system_notification_message_t {
-    bit<8> status_code_uint_81;
+    bit<8> status_code;
 }
 
 header flex_order_input_single_message_t {
@@ -331,8 +331,8 @@ header multi_leg_num_t {
 
 header multi_leg_num_leg_entry_num_t {
     bit<32> pseq;
-    bit<8> leg_side_uint_81;
-    bit<16> leg_qty_uint_162;
+    bit<8> leg_side;
+    bit<16> leg_qty;
 }
 
 header multi_leg_txt_t {
@@ -342,8 +342,8 @@ header multi_leg_txt_t {
 
 header multi_leg_txt_leg_entry_txt_t {
     bit<160> prod_id;
-    bit<8> leg_side_uint_81;
-    bit<16> leg_qty_uint_162;
+    bit<8> leg_side;
+    bit<16> leg_qty;
 }
 
 header flex_price_inquiry_input_message_t {
@@ -406,7 +406,7 @@ header flex_order_status_report_message_t {
     bit<32> msg_time_ns;
     bit<8> part_id;
     bit<8> no_leg;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<8> exec_type;
     bit<16> cm_id;
     bit<16> fcm_id;
@@ -421,7 +421,7 @@ header flex_error_report_message_t {
     bit<32> msg_time_ns;
     bit<8> part_id;
     bit<8> ori_message_type;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<8> exec_type;
     bit<16> fcm_id;
     bit<40> order_no;
@@ -437,7 +437,7 @@ header flex_price_inquiry_reply_message_t {
     bit<8> preserve;
     bit<32> msg_time_ns;
     bit<8> part_id;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<40> order_no;
     bit<32> ord_id;
     bit<16> fcm_id;
@@ -447,7 +447,7 @@ header send_flex_group_report_resend_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
     bit<32> msg_time_ns;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<8> part_id;
     bit<8> is_eof;
     bit<32> file_size;
@@ -459,7 +459,7 @@ header flex_product_definition_message_t {
     bit<32> msg_time_ns;
     bit<8> security_request_type;
     bit<32> security_req_id;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
 }
 
 header flex_bulletin_request_message_t {
@@ -475,10 +475,10 @@ header flex_bulletin_report_message_t {
     bit<8> msg_type_ext;
     bit<8> preserve;
     bit<32> msg_time_ns;
-    bit<16> status_code_uint_162;
+    bit<16> wide_status_code;
     bit<32> fcm_req_id;
     bit<32> bulletin_seq;
-    bit<32> epoch_s_uint_324;
+    bit<32> msg_time_x_epoch_s;
     bit<32> nanosecond;
     bit<8> system_type;
 }

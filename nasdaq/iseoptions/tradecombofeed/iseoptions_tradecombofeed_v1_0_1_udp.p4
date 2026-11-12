@@ -1,0 +1,240 @@
+// P4_16 (v1model) definition for: Nasdaq IseOptions TradeComboFeed Itch v1.0.1
+// 
+// Protocol:
+//   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
+//   Protocol: Ise Trade Combo Feed
+//   Encoding: Itch
+//   Version: 1.0.1
+//   Date: 08/23/2017
+//   Specification: Nasdaq ISE Trade Combo Feed.pdf
+// 
+// Byte order: big (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: MIT No Attribution
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header packet_header_t {
+    bit<80> session;
+    bit<64> sequence_number;
+    bit<16> message_count;
+}
+
+header message_t {
+    bit<16> message_length;
+    bit<8> message_type;
+}
+
+header system_event_message_t {
+    bit<48> timestamp;
+    bit<8> event_code;
+    bit<16> current_year;
+    bit<8> current_month;
+    bit<8> current_day;
+    bit<8> version;
+    bit<8> sub_version;
+}
+
+header complex_strategy_directory_message_t {
+    bit<48> timestamp;
+    bit<32> strategy_id;
+    bit<8> strategy_type;
+    bit<8> source;
+    bit<104> underlying_symbol;
+    bit<8> number_of_legs;
+}
+
+header complex_strategy_directory_message_leg_information_t {
+    bit<32> option_id;
+    bit<48> security_symbol;
+    bit<8> leg_id;
+    bit<8> expiration_year;
+    bit<8> expiration_month;
+    bit<8> expiration_day;
+    bit<64> explicit_strike_price;
+    bit<8> option_type;
+    bit<8> side;
+    bit<32> leg_ratio;
+}
+
+header strategy_trading_action_message_t {
+    bit<48> timestamp;
+    bit<32> strategy_id;
+    bit<8> current_trading_state;
+}
+
+header strategy_open_closed_message_t {
+    bit<48> timestamp;
+    bit<32> strategy_id;
+    bit<8> open_state;
+}
+
+header complex_strategy_ticker_message_t {
+    bit<48> timestamp;
+    bit<32> strategy_id;
+    bit<64> last_price;
+    bit<32> size;
+    bit<32> volume;
+    bit<64> high;
+    bit<64> low;
+    bit<64> first;
+    bit<8> trade_condition;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+    bit<8> complex_strategy_directory_message_leg_information_remaining;
+}
+
+struct headers_t {
+    packet_header_t packet_header;
+    message_t message[MAX_MESSAGES];
+    system_event_message_t system_event_message[MAX_MESSAGES];
+    complex_strategy_directory_message_t complex_strategy_directory_message[MAX_MESSAGES];
+    complex_strategy_directory_message_leg_information_t complex_strategy_directory_message_leg_information[MAX_MESSAGES];
+    strategy_trading_action_message_t strategy_trading_action_message[MAX_MESSAGES];
+    strategy_open_closed_message_t strategy_open_closed_message[MAX_MESSAGES];
+    complex_strategy_ticker_message_t complex_strategy_ticker_message[MAX_MESSAGES];
+}
+
+parser IseoptionsTradecombofeedUdpParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.packet_header);
+        transition select(hdr.packet_header.message_count) {
+            16w0: parse_heartbeat;
+            16w65535: parse_end_of_session;
+            default: parse_message;
+        }
+    }
+
+    state parse_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_message {
+        packet.extract(hdr.message.next);
+        transition select(hdr.message.last.message_type) {
+            8w0x53: parse_system_event_message;
+            8w0x52: parse_complex_strategy_directory_message;
+            8w0x48: parse_strategy_trading_action_message;
+            8w0x4f: parse_strategy_open_closed_message;
+            8w0x74: parse_complex_strategy_ticker_message;
+            default: accept;
+        }
+    }
+
+    state parse_system_event_message {
+        packet.extract(hdr.system_event_message.next);
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_complex_strategy_directory_message {
+        packet.extract(hdr.complex_strategy_directory_message.next);
+        meta.dispatched = 1;
+        meta.complex_strategy_directory_message_leg_information_remaining = hdr.complex_strategy_directory_message.last.number_of_legs;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
+    }
+
+    state parse_complex_strategy_directory_message_leg_information {
+        packet.extract(hdr.complex_strategy_directory_message_leg_information.next);
+        meta.complex_strategy_directory_message_leg_information_remaining = meta.complex_strategy_directory_message_leg_information_remaining - 1;
+        transition select(meta.complex_strategy_directory_message_leg_information_remaining) {
+            8w0: parse_message;
+            default: parse_complex_strategy_directory_message_leg_information;
+        }
+    }
+
+    state parse_strategy_trading_action_message {
+        packet.extract(hdr.strategy_trading_action_message.next);
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_strategy_open_closed_message {
+        packet.extract(hdr.strategy_open_closed_message.next);
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+    state parse_complex_strategy_ticker_message {
+        packet.extract(hdr.complex_strategy_ticker_message.next);
+        meta.dispatched = 1;
+        transition parse_message;
+    }
+
+}
+
+control IseoptionsTradecombofeedUdpVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control IseoptionsTradecombofeedUdpIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control IseoptionsTradecombofeedUdpEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control IseoptionsTradecombofeedUdpComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control IseoptionsTradecombofeedUdpDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.message);
+        packet.emit(hdr.system_event_message);
+        packet.emit(hdr.complex_strategy_directory_message);
+        packet.emit(hdr.complex_strategy_directory_message_leg_information);
+        packet.emit(hdr.strategy_trading_action_message);
+        packet.emit(hdr.strategy_open_closed_message);
+        packet.emit(hdr.complex_strategy_ticker_message);
+    }
+}
+
+V1Switch(
+    IseoptionsTradecombofeedUdpParser(),
+    IseoptionsTradecombofeedUdpVerifyChecksum(),
+    IseoptionsTradecombofeedUdpIngress(),
+    IseoptionsTradecombofeedUdpEgress(),
+    IseoptionsTradecombofeedUdpComputeChecksum(),
+    IseoptionsTradecombofeedUdpDeparser()
+) main;
