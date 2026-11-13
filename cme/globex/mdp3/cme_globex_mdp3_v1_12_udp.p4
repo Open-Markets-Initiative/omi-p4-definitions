@@ -1402,7 +1402,7 @@ header request_ack_request_ack_related_symbol_group_t {
 header request_reject_t {
     bit<32> md_req_id_optional;
     bit<8> md_req_rej_reason;
-    bit<800> text;
+    bit<800> session_text;
 }
 
 header security_list_request_t {

@@ -2,7 +2,7 @@
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Nom Itto Top Order Market Data
+//   Protocol: Itch to Trade Options
 //   Encoding: Itch
 //   Version: 3.2
 //   Date: 11/02/2017

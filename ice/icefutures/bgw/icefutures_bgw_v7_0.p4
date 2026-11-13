@@ -97,16 +97,16 @@ header security_definition_report_strategy_message_t {
     bit<32> security_req_id;
     bit<8> security_response_type;
     bit<32> security_response_id;
-    bit<32> market_type_i_d_int_32;
+    bit<32> market_type_id;
     bit<32> no_rpts;
     bit<32> list_seq_no;
-    bit<32> symbol_int_32;
+    bit<32> symbol;
     bit<32> underlying_strategy_symbol;
     bit<16> maturity_date;
     bit<8> security_trading_status;
-    bit<16> security_sub_type_int_16;
+    bit<16> security_sub_type;
     bit<8> exchange_silo;
-    bit<64> transact_time_utc_timestamp;
+    bit<64> transact_time;
     bit<8> leg_deals_suppressed;
     bit<64> increment_price;
     bit<64> increment_qty;
@@ -114,23 +114,23 @@ header security_definition_report_strategy_message_t {
     bit<64> max_price;
     bit<8> num_of_decimal_price;
     bit<8> num_of_decimal_qty;
-    bit<32> product_i_d_int_32;
+    bit<32> product_id;
     bit<32> base_num_lots;
     bit<32> denominator;
     bit<8> implied_type;
-    bit<64> off_exchange_increment_price_decimal_9_null;
-    bit<64> off_exchange_increment_qty_decimal_9_null;
+    bit<64> off_exchange_increment_price_optional;
+    bit<64> off_exchange_increment_qty_optional;
     bit<8> num_of_decimal_strike_price;
-    bit<16> num_of_cycles_int_16_null;
-    bit<64> lot_size_multiplier_decimal_9_null;
+    bit<16> num_of_cycles_optional;
+    bit<64> lot_size_multiplier_optional;
     bit<8> block_only;
     bit<8> flex_allowed;
     bit<8> gt_allowed;
-    bit<8> mifid_regulated_market_boolean_enum;
+    bit<8> mifid_regulated_market;
     bit<16> strip_type;
     bit<32> hub_id;
     bit<8> override_block_min;
-    bit<8> test_market_indicator_boolean_enum;
+    bit<8> test_market_indicator;
     bit<64> screen_tick_value;
     bit<64> block_tick_value;
     bit<16> block_length;
@@ -159,14 +159,14 @@ header security_definition_report_strategy_message_security_definition_report_st
 }
 
 header security_definition_report_strategy_message_security_definition_report_strategy_message_no_legs_group_t {
-    bit<32> leg_symbol_int_32;
+    bit<32> leg_symbol;
     bit<8> leg_security_type;
     bit<16> leg_security_sub_type;
     bit<8> leg_side;
     bit<64> leg_price;
     bit<32> leg_option_delta;
-    bit<16> leg_ratio_qty_denominator_int_16;
-    bit<16> leg_ratio_qty_numerator_int_16;
+    bit<16> leg_ratio_qty_denominator;
+    bit<16> leg_ratio_qty_numerator;
     bit<16> leg_ratio_price_denominator;
     bit<16> leg_ratio_price_numerator;
 }
@@ -175,14 +175,14 @@ header security_definition_report_message_t {
     bit<32> security_req_id;
     bit<8> security_response_type;
     bit<32> security_response_id;
-    bit<32> market_type_i_d_int_32;
-    bit<32> symbol_int_32;
+    bit<32> market_type_id;
+    bit<32> symbol;
     bit<8> exchange_silo;
     bit<32> no_rpts;
     bit<32> list_seq_no;
-    bit<32> underlying_symbol_int_32;
+    bit<32> underlying_symbol;
     bit<96> cfi_code;
-    bit<16> security_sub_type_int_16_null;
+    bit<16> security_sub_type_optional;
     bit<16> maturity_date;
     bit<16> screen_last_trade_date;
     bit<32> contract_multiplier;
@@ -198,8 +198,8 @@ header security_definition_report_message_t {
     bit<64> increment_price;
     bit<64> min_price;
     bit<64> max_price;
-    bit<64> off_exchange_increment_price_decimal_9;
-    bit<64> off_exchange_increment_qty_decimal_9;
+    bit<64> off_exchange_increment_price;
+    bit<64> off_exchange_increment_qty;
     bit<64> screen_tick_value;
     bit<64> block_tick_value;
     bit<32> lot_size;
@@ -209,7 +209,7 @@ header security_definition_report_message_t {
     bit<96> granularity;
     bit<32> base_num_lots;
     bit<64> tick_value;
-    bit<32> product_i_d_int_32;
+    bit<32> product_id;
     bit<8> clearable;
     bit<32> hedge_product_id;
     bit<32> hedge_market_id;
@@ -219,19 +219,19 @@ header security_definition_report_message_t {
     bit<32> initial_margin;
     bit<8> implied_type;
     bit<8> num_of_decimal_strike_price;
-    bit<16> num_of_cycles_int_16;
-    bit<64> lot_size_multiplier_decimal_9;
+    bit<16> num_of_cycles;
+    bit<64> lot_size_multiplier;
     bit<16> strip_type;
     bit<32> strip_id;
     bit<8> block_only;
     bit<8> flex_allowed;
     bit<8> gt_allowed;
     bit<8> aon_allowed;
-    bit<8> mifid_regulated_market_boolean_enum_null;
+    bit<8> mifid_regulated_market_optional;
     bit<8> flex_strike_allowed;
     bit<32> hub_id;
     bit<8> override_block_min;
-    bit<8> test_market_indicator_boolean_enum_null;
+    bit<8> test_market_indicator_optional;
     bit<32> ref_sprd_product_id;
     bit<8> market_transparency_type;
     bit<8> non_commoditized_market;
@@ -259,8 +259,8 @@ header security_definition_reject_message_t {
     bit<32> security_req_id;
     bit<8> security_response_type;
     bit<8> security_request_type;
-    bit<32> market_type_i_d_int_32;
-    bit<8> security_type_security_type_enum_null;
+    bit<32> market_type_id;
+    bit<8> security_type_optional;
     bit<32> exchange_code;
     bit<800> text;
 }
@@ -268,20 +268,20 @@ header security_definition_reject_message_t {
 header security_definition_request_message_t {
     bit<32> security_req_id;
     bit<8> security_request_type;
-    bit<32> market_type_i_d_int_32;
+    bit<32> market_type_id;
 }
 
 header security_definition_report_product_message_t {
     bit<32> security_req_id;
     bit<8> security_response_type;
     bit<32> security_response_id;
-    bit<32> market_type_i_d_int_32;
+    bit<32> market_type_id;
     bit<32> no_rpts;
     bit<32> list_seq_no;
-    bit<32> product_i_d_int_32;
+    bit<32> product_id;
     bit<96> product_type;
-    bit<8> mifid_regulated_market_boolean_enum;
-    bit<8> test_market_indicator_boolean_enum;
+    bit<8> mifid_regulated_market;
+    bit<8> test_market_indicator;
     bit<8> stops_allowed;
     bit<8> options_allowed;
     bit<8> uds_options_allowed;
@@ -353,19 +353,19 @@ header trader_logout_report_message_t {
 }
 
 header new_order_request_message_t {
-    bit<64> price_decimal_9_null;
-    bit<64> order_qty_decimal_9;
-    bit<32> symbol_int_32;
-    bit<8> time_in_force_time_in_force_enum;
-    bit<8> side_side_enum;
+    bit<64> price_optional;
+    bit<64> order_qty;
+    bit<32> symbol;
+    bit<8> time_in_force;
+    bit<8> side;
     bit<160> originator_user_id;
-    bit<8> ord_type_order_type_enum;
+    bit<8> ord_type;
     bit<8> manual_order_indicator;
     bit<64> cl_ord_id;
     bit<64> max_show;
     bit<64> stop_px;
     bit<32> give_up_clearing_firm;
-    bit<32> clearing_firm_int_32;
+    bit<32> clearing_firm;
     bit<64> self_match_prevention_id;
     bit<16> expire_date;
     bit<8> self_match_prevention_instruction;
@@ -382,30 +382,30 @@ header new_order_request_message_t {
     bit<8> position_effect;
     bit<8> alloc_handl_inst;
     bit<8> price_type;
-    bit<112> clearing_account_string_14;
+    bit<112> clearing_account;
     bit<96> customer_account_ref_id;
     bit<240> memo;
     bit<160> allocation_account;
     bit<328> on_behalf_of_comp_id;
-    bit<328> on_behalf_of_sub_i_d_string_41;
-    bit<328> on_behalf_of_location_i_d_string_41;
+    bit<328> on_behalf_of_sub_id;
+    bit<328> on_behalf_of_location_id;
 }
 
 header cancel_replace_request_message_t {
-    bit<64> price_decimal_9_null;
-    bit<64> order_qty_decimal_9;
-    bit<32> symbol_int_32;
-    bit<8> time_in_force_time_in_force_enum;
-    bit<8> side_side_enum;
+    bit<64> price_optional;
+    bit<64> order_qty;
+    bit<32> symbol;
+    bit<8> time_in_force;
+    bit<8> side;
     bit<160> originator_user_id;
-    bit<8> ord_type_order_type_enum;
+    bit<8> ord_type;
     bit<8> manual_order_indicator;
     bit<64> cl_ord_id;
-    bit<64> orig_cl_ord_i_d_int_64;
+    bit<64> orig_cl_ord_id;
     bit<64> max_show;
     bit<64> stop_px;
     bit<32> give_up_clearing_firm;
-    bit<32> clearing_firm_int_32;
+    bit<32> clearing_firm;
     bit<64> self_match_prevention_id;
     bit<16> expire_date;
     bit<8> self_match_prevention_instruction;
@@ -420,44 +420,44 @@ header cancel_replace_request_message_t {
     bit<64> mifid_id;
     bit<8> alloc_handl_inst;
     bit<8> price_type;
-    bit<112> clearing_account_string_14;
+    bit<112> clearing_account;
     bit<96> customer_account_ref_id;
     bit<240> memo;
     bit<160> allocation_account;
     bit<328> on_behalf_of_comp_id;
-    bit<328> on_behalf_of_sub_i_d_string_41;
-    bit<328> on_behalf_of_location_i_d_string_41;
+    bit<328> on_behalf_of_sub_id;
+    bit<328> on_behalf_of_location_id;
 }
 
 header cancel_request_message_t {
-    bit<32> symbol_int_32;
+    bit<32> symbol;
     bit<160> originator_user_id;
     bit<64> cl_ord_id;
-    bit<64> orig_cl_ord_i_d_int_64;
-    bit<8> side_side_enum;
+    bit<64> orig_cl_ord_id;
+    bit<8> side;
 }
 
 header quote_request_message_t {
     bit<160> originator_user_id;
-    bit<8> side_side_enum_null;
-    bit<64> order_qty_decimal_9_null;
+    bit<8> side_optional;
+    bit<64> order_qty_optional;
     bit<64> rfq_req_id;
-    bit<32> symbol_int_32;
-    bit<32> clearing_firm_int_32_null;
-    bit<112> clearing_account_string_14_null;
+    bit<32> symbol;
+    bit<32> clearing_firm_optional;
+    bit<112> clearing_account_optional;
     bit<328> on_behalf_of_comp_id;
-    bit<328> on_behalf_of_sub_i_d_string_41;
-    bit<328> on_behalf_of_location_i_d_string_41;
+    bit<328> on_behalf_of_sub_id;
+    bit<328> on_behalf_of_location_id;
 }
 
 header new_order_cross_request_message_t {
-    bit<64> price_decimal_9;
-    bit<64> order_qty_decimal_9;
-    bit<32> symbol_int_32;
+    bit<64> price;
+    bit<64> order_qty;
+    bit<32> symbol;
     bit<160> originator_user_id;
-    bit<8> ord_type_order_type_enum;
-    bit<64> cross_i_d_int_64;
-    bit<8> cross_type_cross_type_enum;
+    bit<8> ord_type;
+    bit<64> cross_id;
+    bit<8> cross_type;
     bit<24> trade_type;
     bit<8> exec_inst;
     bit<8> price_type;
@@ -465,18 +465,18 @@ header new_order_cross_request_message_t {
     bit<8> hedge_only;
     bit<64> benchmark_price;
     bit<8> bench_mark_price_type;
-    bit<8> time_in_force_time_in_force_enum;
+    bit<8> time_in_force;
     bit<800> transact_details;
-    bit<64> transact_time_utc_timestamp;
+    bit<64> transact_time;
     bit<16> block_length;
     bit<16> num_in_group;
 }
 
 header new_order_cross_request_message_new_order_cross_request_message_no_sides_group_t {
-    bit<8> side_side_enum;
+    bit<8> side;
     bit<64> cl_ord_id;
     bit<32> give_up_clearing_firm;
-    bit<32> clearing_firm_int_32;
+    bit<32> clearing_firm;
     bit<8> direct_electronic_access;
     bit<8> trading_capacity;
     bit<8> liquidity_provision;
@@ -491,13 +491,13 @@ header new_order_cross_request_message_new_order_cross_request_message_no_sides_
     bit<8> cust_order_handling_inst;
     bit<8> position_effect;
     bit<8> alloc_handl_inst;
-    bit<112> clearing_account_string_14;
+    bit<112> clearing_account;
     bit<96> customer_account_ref_id;
     bit<240> memo;
     bit<160> allocation_account;
     bit<328> on_behalf_of_comp_id;
-    bit<328> on_behalf_of_sub_i_d_string_41;
-    bit<328> on_behalf_of_location_i_d_string_41;
+    bit<328> on_behalf_of_sub_id;
+    bit<328> on_behalf_of_location_id;
 }
 
 header new_order_cross_request_message_new_order_cross_request_message_no_legs_group_header_t {
@@ -506,7 +506,7 @@ header new_order_cross_request_message_new_order_cross_request_message_no_legs_g
 }
 
 header new_order_cross_request_message_new_order_cross_request_message_no_legs_group_t {
-    bit<32> leg_symbol_int_32_null;
+    bit<32> leg_symbol_optional;
     bit<8> leg_security_id_source;
     bit<32> leg_opt_attribute;
     bit<64> leg_qty;
@@ -518,15 +518,15 @@ header new_order_cross_request_message_new_order_cross_request_message_no_legs_g
 
 header order_mass_cancel_request_message_t {
     bit<160> originator_user_id;
-    bit<8> ord_type_order_type_enum_null;
-    bit<8> side_side_enum_null;
-    bit<32> symbol_int_32_null;
+    bit<8> ord_type_optional;
+    bit<8> side_optional;
+    bit<32> symbol_optional;
     bit<64> cl_ord_id;
-    bit<32> market_type_i_d_int_32_null;
-    bit<64> price_decimal_9_null;
+    bit<32> market_type_i_d_optional;
+    bit<64> price_optional;
     bit<8> mass_cancel_request_type;
-    bit<8> time_in_force_time_in_force_enum_null;
-    bit<328> on_behalf_of_sub_i_d_string_41_null;
+    bit<8> time_in_force_optional;
+    bit<328> on_behalf_of_sub_i_d_optional;
 }
 
 header mass_quote_request_message_t {
@@ -549,9 +549,9 @@ header mass_quote_request_message_t {
 
 header mass_quote_request_message_mass_quote_request_message_no_quote_sets_group_t {
     bit<32> quote_set_id;
-    bit<32> underlying_symbol_int_32;
+    bit<32> underlying_symbol;
     bit<32> quote_entry_id;
-    bit<32> symbol_int_32;
+    bit<32> symbol;
     bit<64> bid_px;
     bit<64> offer_px;
     bit<64> bid_sz;
@@ -567,7 +567,7 @@ header quote_cancel_request_message_t {
 }
 
 header quote_cancel_request_message_quote_cancel_request_message_no_quote_entries_group_t {
-    bit<32> underlying_symbol_int_32_null;
+    bit<32> underlying_symbol_optional;
     bit<32> underlying_security_id;
     bit<32> underlying_product;
 }
@@ -575,22 +575,22 @@ header quote_cancel_request_message_quote_cancel_request_message_no_quote_entrie
 header security_definition_request_create_strategy_message_t {
     bit<32> security_req_id;
     bit<8> security_request_type;
-    bit<32> market_type_i_d_int_32;
-    bit<16> security_sub_type_int_16_null;
-    bit<32> product_i_d_int_32_null;
+    bit<32> market_type_id;
+    bit<16> security_sub_type_optional;
+    bit<32> product_i_d_optional;
     bit<16> start_date;
     bit<16> end_date;
-    bit<8> security_type_security_type_enum;
+    bit<8> security_type;
     bit<16> block_length;
     bit<16> num_in_group;
 }
 
 header security_definition_request_create_strategy_message_security_definition_request_create_strategy_message_no_legs_group_t {
-    bit<32> leg_symbol_int_32;
+    bit<32> leg_symbol;
     bit<8> leg_security_type;
     bit<8> leg_side;
-    bit<16> leg_ratio_qty_denominator_int_16_null;
-    bit<16> leg_ratio_qty_numerator_int_16_null;
+    bit<16> leg_ratio_qty_denominator_optional;
+    bit<16> leg_ratio_qty_numerator_optional;
     bit<64> leg_price;
     bit<32> leg_option_delta;
 }
@@ -598,11 +598,11 @@ header security_definition_request_create_strategy_message_security_definition_r
 header security_definition_request_create_flex_message_t {
     bit<32> security_req_id;
     bit<8> security_request_type;
-    bit<32> market_type_i_d_int_32;
-    bit<8> security_type_security_type_enum;
+    bit<32> market_type_id;
+    bit<8> security_type;
     bit<16> maturity_date;
-    bit<32> product_i_d_int_32_null;
-    bit<32> symbol_int_32_null;
+    bit<32> product_i_d_optional;
+    bit<32> symbol_optional;
     bit<64> strike_price;
 }
 
@@ -612,14 +612,14 @@ header execution_report_new_message_t {
     bit<32> system_sequence_id;
     bit<64> transact_time_utc_timestamp;
     bit<64> cl_ord_id;
-    bit<32> symbol_int_32;
-    bit<8> ord_type_order_type_enum;
-    bit<8> side_side_enum;
+    bit<32> symbol;
+    bit<8> ord_type;
+    bit<8> side;
     bit<64> original_system_id;
     bit<64> original_creation_timestamp;
     bit<64> leaves_qty;
-    bit<64> price_decimal_9_null;
-    bit<64> me_acceptance_time_utc_timestamp;
+    bit<64> price_optional;
+    bit<64> me_acceptance_time;
     bit<64> time_priority;
     bit<8> order_status;
     bit<240> memo;
@@ -631,16 +631,16 @@ header execution_report_modify_message_t {
     bit<32> system_sequence_id;
     bit<64> transact_time_utc_timestamp;
     bit<64> cl_ord_id;
-    bit<32> symbol_int_32;
-    bit<8> ord_type_order_type_enum;
-    bit<8> side_side_enum;
+    bit<32> symbol;
+    bit<8> ord_type;
+    bit<8> side;
     bit<64> original_system_id;
     bit<64> original_creation_timestamp;
-    bit<64> orig_cl_ord_i_d_int_64_null;
+    bit<64> orig_cl_ord_i_d_optional;
     bit<64> leaves_qty;
     bit<64> cum_qty;
-    bit<64> price_decimal_9_null;
-    bit<64> me_acceptance_time_utc_timestamp;
+    bit<64> price_optional;
+    bit<64> me_acceptance_time;
     bit<64> time_priority;
     bit<8> exec_type;
     bit<8> order_status;
@@ -663,16 +663,16 @@ header execution_report_cancel_message_t {
     bit<32> system_sequence_id;
     bit<64> transact_time_utc_timestamp;
     bit<64> cl_ord_id;
-    bit<32> symbol_int_32;
-    bit<8> ord_type_order_type_enum;
-    bit<8> side_side_enum;
+    bit<32> symbol;
+    bit<8> ord_type;
+    bit<8> side;
     bit<64> original_system_id;
     bit<64> original_creation_timestamp;
-    bit<64> orig_cl_ord_i_d_int_64_null;
-    bit<64> me_acceptance_time_utc_timestamp;
+    bit<64> orig_cl_ord_i_d_optional;
+    bit<64> me_acceptance_time;
     bit<32> exchange_code;
     bit<8> cancel_reason;
-    bit<64> cross_i_d_int_64_null;
+    bit<64> cross_i_d_optional;
     bit<800> text;
 }
 
@@ -682,12 +682,12 @@ header execution_report_reject_message_t {
     bit<32> system_sequence_id;
     bit<64> transact_time_utc_timestamp;
     bit<64> cl_ord_id;
-    bit<32> symbol_int_32;
-    bit<8> ord_type_order_type_enum_null;
-    bit<8> side_side_enum;
+    bit<32> symbol;
+    bit<8> ord_type_optional;
+    bit<8> side;
     bit<64> original_system_id;
     bit<64> original_creation_timestamp;
-    bit<64> orig_cl_ord_i_d_int_64_null;
+    bit<64> orig_cl_ord_i_d_optional;
     bit<8> order_status;
     bit<8> reject_response_to;
     bit<8> reject_reason;
@@ -702,23 +702,23 @@ header execution_report_snapshot_message_t {
     bit<32> system_sequence_id;
     bit<64> transact_time_utc_timestamp;
     bit<64> cl_ord_id;
-    bit<32> symbol_int_32;
-    bit<8> ord_type_order_type_enum;
-    bit<8> side_side_enum;
+    bit<32> symbol;
+    bit<8> ord_type;
+    bit<8> side;
     bit<64> original_system_id;
     bit<64> original_creation_timestamp;
     bit<64> max_show;
     bit<64> leaves_qty;
     bit<64> cum_qty;
-    bit<64> price_decimal_9_null;
+    bit<64> price_optional;
     bit<64> stop_px;
     bit<16> expire_date;
     bit<64> time_priority;
-    bit<8> time_in_force_time_in_force_enum;
+    bit<8> time_in_force;
     bit<8> order_status;
     bit<8> order_state;
     bit<32> give_up_clearing_firm;
-    bit<32> clearing_firm_int_32_null;
+    bit<32> clearing_firm_optional;
     bit<8> direct_electronic_access;
     bit<8> trading_capacity;
     bit<8> liquidity_provision;
@@ -734,22 +734,22 @@ header execution_report_snapshot_message_t {
     bit<8> cust_order_handling_inst;
     bit<8> position_effect;
     bit<8> alloc_handl_inst;
-    bit<112> clearing_account_string_14_null;
+    bit<112> clearing_account_optional;
     bit<96> customer_account_ref_id;
     bit<240> memo;
     bit<160> allocation_account;
     bit<328> on_behalf_of_comp_id;
-    bit<328> on_behalf_of_sub_i_d_string_41_null;
-    bit<328> on_behalf_of_location_i_d_string_41_null;
+    bit<328> on_behalf_of_sub_i_d_optional;
+    bit<328> on_behalf_of_location_i_d_optional;
 }
 
 header execution_report_trade_message_t {
     bit<160> originator_user_id;
     bit<64> exec_i_d_int_64;
     bit<64> cl_ord_id;
-    bit<32> symbol_int_32;
-    bit<8> ord_type_order_type_enum;
-    bit<8> side_side_enum;
+    bit<32> symbol;
+    bit<8> ord_type;
+    bit<8> side;
     bit<64> order_id;
     bit<64> original_system_id;
     bit<64> original_creation_timestamp;
@@ -757,7 +757,7 @@ header execution_report_trade_message_t {
     bit<64> cum_qty;
     bit<64> last_px;
     bit<64> last_shares;
-    bit<64> transact_time_utc_timestamp;
+    bit<64> transact_time;
     bit<64> num_of_lots;
     bit<8> exec_type;
     bit<1> trade_flags_reserved_7;
@@ -768,8 +768,8 @@ header execution_report_trade_message_t {
     bit<1> trade_flags_reserved_2;
     bit<1> deal_adjust_indicator;
     bit<1> liquidity_indicator;
-    bit<32> clearing_firm_int_32_null;
-    bit<112> clearing_account_string_14_null;
+    bit<32> clearing_firm_optional;
+    bit<112> clearing_account_optional;
     bit<240> memo;
     bit<64> exec_ref_id;
     bit<16> no_leg_executions;
@@ -778,29 +778,29 @@ header execution_report_trade_message_t {
     bit<64> last_par_px;
     bit<64> delivery_start_date;
     bit<64> delivery_end_date;
-    bit<64> cross_i_d_int_64_null;
-    bit<8> cross_type_cross_type_enum_null;
+    bit<64> cross_i_d_optional;
+    bit<8> cross_type_optional;
     bit<8> waiver_indicator;
     bit<24> trade_type;
 }
 
 header quote_report_message_t {
     bit<160> originator_user_id;
-    bit<8> side_side_enum_null;
-    bit<32> symbol_int_32;
+    bit<8> side_optional;
+    bit<32> symbol;
     bit<64> rfq_req_id;
     bit<64> rfq_system_id;
-    bit<64> transact_time_utc_timestamp;
-    bit<64> order_qty_decimal_9_null;
+    bit<64> transact_time;
+    bit<64> order_qty_optional;
     bit<16> quote_ack_status;
     bit<8> quote_reject_reason;
 }
 
 header new_order_cross_report_message_t {
     bit<160> originator_user_id;
-    bit<32> symbol_int_32;
-    bit<64> cross_i_d_int_64;
-    bit<64> transact_time_utc_timestamp;
+    bit<32> symbol;
+    bit<64> cross_id;
+    bit<64> transact_time;
     bit<8> rfc_status;
     bit<32> exchange_code;
     bit<800> text;
@@ -808,10 +808,10 @@ header new_order_cross_report_message_t {
 
 header order_mass_cancel_report_message_t {
     bit<160> originator_user_id;
-    bit<32> symbol_int_32_null;
+    bit<32> symbol_optional;
     bit<64> cl_ord_id;
-    bit<64> transact_time_utc_timestamp;
-    bit<32> market_type_i_d_int_32_null;
+    bit<64> transact_time;
+    bit<32> market_type_i_d_optional;
     bit<8> mass_cancel_request_type;
     bit<8> mass_cancel_response;
     bit<8> mass_cancel_reject_reason;
@@ -825,8 +825,8 @@ header mass_quote_report_message_t {
     bit<8> risk_protection_reset;
     bit<16> quote_ack_status;
     bit<8> quote_reject_reason;
-    bit<64> transact_time_utc_timestamp_null;
-    bit<64> me_acceptance_time_utc_timestamp_null;
+    bit<64> transact_time_optional;
+    bit<64> me_acceptance_time_optional;
     bit<32> exchange_code;
     bit<800> text;
     bit<16> block_length;
@@ -835,9 +835,9 @@ header mass_quote_report_message_t {
 
 header mass_quote_report_message_mass_quote_report_message_no_quote_sets_group_t {
     bit<32> quote_set_id;
-    bit<32> underlying_symbol_int_32;
+    bit<32> underlying_symbol;
     bit<32> quote_entry_id;
-    bit<32> symbol_int_32;
+    bit<32> symbol;
     bit<8> quote_entry_reject_reason;
     bit<32> quote_entry_exchange_code;
     bit<800> quote_entry_reject_reason_text;

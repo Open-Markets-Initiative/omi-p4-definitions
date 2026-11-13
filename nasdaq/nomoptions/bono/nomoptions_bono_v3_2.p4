@@ -2,7 +2,7 @@
 // 
 // Protocol:
 //   Organization: National Association of Securities Dealers Automated Quotations (Nasdaq)
-//   Protocol: Nom Binary Order Entry
+//   Protocol: Best Of Nasdaq Options
 //   Encoding: Itch
 //   Version: 3.2
 //   Date: 11/02/2017
