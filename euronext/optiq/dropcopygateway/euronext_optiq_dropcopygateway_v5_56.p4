@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 5.56
 //   Date: 1/1/2024
-//   Specification: Unknown
+//   Specification: externaldropcopymessagesbinarysbeinput356.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

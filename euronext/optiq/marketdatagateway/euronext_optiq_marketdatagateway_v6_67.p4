@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 6.67
 //   Date: 2/25/2026
-//   Specification: Unknown
+//   Specification: mdgbinarysbeinput367.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

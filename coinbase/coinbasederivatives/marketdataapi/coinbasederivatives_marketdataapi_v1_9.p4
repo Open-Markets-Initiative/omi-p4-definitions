@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.9
 //   Date: 9/5/2025
-//   Specification: Unknown
+//   Specification: market-data-api.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

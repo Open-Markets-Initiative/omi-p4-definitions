@@ -6,7 +6,7 @@
 //   Encoding: Flat Binary Encoding
 //   Version: 10.0
 //   Date: 9/20/2021
-//   Specification: Unknown
+//   Specification: eti_Cash.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

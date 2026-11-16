@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.8
 //   Date: 9/5/2025
-//   Specification: Unknown
+//   Specification: sbe-order-api-1.8.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -31,10 +31,10 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header flags_t {
+header session_flags_t {
     bit<8> protocol_id;
-    bit<7> reserved_7;
-    bit<1> post_only;
+    bit<7> reserved_bits;
+    bit<1> is_resend;
     bit<16> message_length;
     bit<32> sequence_number;
     bit<32> last_processed_seq_no;
@@ -353,7 +353,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    flags_t flags;
+    session_flags_t session_flags;
     logon_message_t logon_message;
     logon_conf_message_t logon_conf_message;
     logout_message_t logout_message;
@@ -400,8 +400,8 @@ struct headers_t {
 
 parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.flags);
-        transition select(hdr.flags.schema_id) {
+        packet.extract(hdr.session_flags);
+        transition select(hdr.session_flags.schema_id) {
             16w0x4c04: parse_session_message;
             16w0x4d04: parse_order_message;
             default: accept;
@@ -410,7 +410,7 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
 
     state parse_session_message {
         meta.dispatched = 1;
-        transition select(hdr.flags.template_id) {
+        transition select(hdr.session_flags.template_id) {
             16w0x6400: parse_logon_message;
             16w0xc800: parse_logon_conf_message;
             16w0x6500: parse_logout_message;
@@ -480,7 +480,7 @@ parser CoinbasederivativesOrdersapiParser(packet_in packet, out headers_t hdr, i
 
     state parse_order_message {
         meta.dispatched = 1;
-        transition select(hdr.flags.template_id) {
+        transition select(hdr.session_flags.template_id) {
             16w0x6600: parse_ping_message;
             16w0xca00: parse_pong_message;
             16w0x6700: parse_instrument_info_request_message;
@@ -746,7 +746,7 @@ control CoinbasederivativesOrdersapiComputeChecksum(inout headers_t hdr, inout m
 
 control CoinbasederivativesOrdersapiDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.flags);
+        packet.emit(hdr.session_flags);
         packet.emit(hdr.logon_message);
         packet.emit(hdr.logon_conf_message);
         packet.emit(hdr.logout_message);

@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 8.3
 //   Date: 01/09/2020
-//   Specification: Unknown
+//   Specification: ilinkbinary.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

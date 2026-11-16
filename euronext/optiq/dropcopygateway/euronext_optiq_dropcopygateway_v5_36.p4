@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 5.36
 //   Date: 1/1/2024
-//   Specification: Unknown
+//   Specification: external_drop_copy_messages_binary_sbe_input_336.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Aquis Trading Protocol
 //   Version: 1
 //   Date: 8/1/2017
-//   Specification: Unknown
+//   Specification: https://www.a2x.co.za/?page_id=531
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

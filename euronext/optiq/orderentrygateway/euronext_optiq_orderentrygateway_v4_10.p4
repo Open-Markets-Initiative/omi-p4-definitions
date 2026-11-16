@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 4.10
 //   Date: 10/14/2021
-//   Specification: Unknown
+//   Specification: oeg_binary_sbe_input_310.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

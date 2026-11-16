@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 0.1
 //   Date: 9/5/2025
-//   Specification: Unknown
+//   Specification: deribit-sbe-market-data-api.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

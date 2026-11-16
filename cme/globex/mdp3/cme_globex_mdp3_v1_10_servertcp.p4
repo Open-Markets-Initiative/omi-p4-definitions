@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.10
 //   Date: 7/26/2019
-//   Specification: Unknown
+//   Specification: templates_FixBinary.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

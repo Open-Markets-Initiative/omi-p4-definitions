@@ -51,7 +51,7 @@ header logout_message_t {
 
 header server_replay_t {
     bit<64> transact_time;
-    bit<32> exchange_trading_session_id;
+    bit<32> exchange_trading_session_i_d_uint_32_optional;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;

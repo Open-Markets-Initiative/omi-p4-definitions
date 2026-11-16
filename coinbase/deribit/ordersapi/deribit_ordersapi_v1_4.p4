@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.4
 //   Date: 8/4/2026
-//   Specification: Unknown
+//   Specification: deribit-sbe-order-api-v1.4.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -93,7 +93,7 @@ header new_order_request_message_t {
     bit<64> price;
     bit<64> mantissa;
     bit<8> exponent;
-    bit<64> mantissa_2;
+    bit<64> mantissa_optional;
     bit<8> exponent_2;
     bit<64> self_match_prevention_id;
     bit<8> side;
@@ -109,7 +109,7 @@ header amend_order_request_message_t {
     bit<64> price;
     bit<64> mantissa;
     bit<8> exponent;
-    bit<64> mantissa_2;
+    bit<64> mantissa_optional;
     bit<8> exponent_2;
     bit<16> flags_replace_order_flags;
 }

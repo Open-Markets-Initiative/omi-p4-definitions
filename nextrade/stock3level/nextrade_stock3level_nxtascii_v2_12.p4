@@ -6,7 +6,7 @@
 //   Encoding: Nextrade Ascii Standard Message
 //   Version: 2.12
 //   Date: 08/13/2026
-//   Specification: Unknown
+//   Specification: NXT_Market_Data _Spec_v2.12_20260813.xlsm
 // 
 // Byte order: big (P4 extracts in network/big-endian order)
 // 

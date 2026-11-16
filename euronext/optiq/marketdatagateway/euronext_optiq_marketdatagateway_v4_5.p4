@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 4.5
 //   Date: 01/14/2021
-//   Specification: Unknown
+//   Specification: mdg_binary_sbe_input_305.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

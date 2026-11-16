@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.0
 //   Date: 5/6/2026
-//   Specification: Unknown
+//   Specification: deribit-sbe-market-data-api.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -89,11 +89,15 @@ header index_definition_message_t {
     bit<1024> name;
 }
 
+header index_info_message_t {
+    bit<64> index_id;
+    bit<64> index_price;
+}
+
 header instrument_info_message_t {
     bit<64> instrument_id;
     bit<64> min_sell_price;
     bit<64> max_buy_price;
-    bit<64> index_price;
     bit<64> mark_price;
 }
 
@@ -104,6 +108,7 @@ header instrument_ref_message_t {
     bit<64> estimated_delivery_price;
     bit<64> delivery_price;
     bit<64> settlement_price;
+    bit<64> open_interest;
 }
 
 header instrument_status_update_message_t {
@@ -224,6 +229,7 @@ struct headers_t {
     instrument_definition_message_instrument_definition_message_legs_group_header_t instrument_definition_message_instrument_definition_message_legs_group_header;
     instrument_definition_message_instrument_definition_message_legs_group_t instrument_definition_message_instrument_definition_message_legs_group[MAX_MESSAGES];
     index_definition_message_t index_definition_message[MAX_MESSAGES];
+    index_info_message_t index_info_message[MAX_MESSAGES];
     instrument_info_message_t instrument_info_message[MAX_MESSAGES];
     instrument_ref_message_t instrument_ref_message[MAX_MESSAGES];
     instrument_status_update_message_t instrument_status_update_message[MAX_MESSAGES];
@@ -262,6 +268,7 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
         transition select(hdr.md_message.last.template_id) {
             16w0xa00: parse_instrument_definition_message;
             16w0xb00: parse_index_definition_message;
+            16w0xc00: parse_index_info_message;
             16w0xe00: parse_instrument_info_message;
             16w0xf00: parse_instrument_ref_message;
             16w0x1000: parse_instrument_status_update_message;
@@ -322,6 +329,12 @@ parser DeribitMarketdataapiParser(packet_in packet, out headers_t hdr, inout met
 
     state parse_index_definition_message {
         packet.extract(hdr.index_definition_message.next);
+        meta.dispatched = 1;
+        transition parse_md_message;
+    }
+
+    state parse_index_info_message {
+        packet.extract(hdr.index_info_message.next);
         meta.dispatched = 1;
         transition parse_md_message;
     }
@@ -465,6 +478,7 @@ control DeribitMarketdataapiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.instrument_definition_message_instrument_definition_message_legs_group_header);
         packet.emit(hdr.instrument_definition_message_instrument_definition_message_legs_group);
         packet.emit(hdr.index_definition_message);
+        packet.emit(hdr.index_info_message);
         packet.emit(hdr.instrument_info_message);
         packet.emit(hdr.instrument_ref_message);
         packet.emit(hdr.instrument_status_update_message);

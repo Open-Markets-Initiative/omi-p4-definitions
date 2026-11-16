@@ -6,7 +6,7 @@
 //   Encoding: Tcp
 //   Version: 1.2
 //   Date: 7/27/2020
-//   Specification: Unknown
+//   Specification: cde-sbe-session-api
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -31,7 +31,7 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header flags_t {
+header session_flags_t {
     bit<8> protocol_id;
     bit<7> reserved_bits;
     bit<1> is_resend;
@@ -84,7 +84,7 @@ header gap_fill_message_t {
 
 header reject_message_t {
     bit<32> ref_sequence_number;
-    bit<32> reason_reject_reason;
+    bit<32> reject_reason;
     bit<512> details;
 }
 
@@ -93,7 +93,7 @@ struct metadata_t {
 }
 
 struct headers_t {
-    flags_t flags;
+    session_flags_t session_flags;
     logon_message_t logon_message;
     logon_conf_message_t logon_conf_message;
     logout_message_t logout_message;
@@ -107,8 +107,8 @@ struct headers_t {
 
 parser CoinbasederivativesSessionParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.flags);
-        transition select(hdr.flags.template_id) {
+        packet.extract(hdr.session_flags);
+        transition select(hdr.session_flags.template_id) {
             16w0x6400: parse_logon_message;
             16w0xc800: parse_logon_conf_message;
             16w0x6500: parse_logout_message;
@@ -206,7 +206,7 @@ control CoinbasederivativesSessionComputeChecksum(inout headers_t hdr, inout met
 
 control CoinbasederivativesSessionDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.flags);
+        packet.emit(hdr.session_flags);
         packet.emit(hdr.logon_message);
         packet.emit(hdr.logon_conf_message);
         packet.emit(hdr.logout_message);

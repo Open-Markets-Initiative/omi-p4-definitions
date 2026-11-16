@@ -6,7 +6,7 @@
 //   Encoding: Pillar
 //   Version: 2.5.a
 //   Date: 11/30/2022
-//   Specification: Unknown
+//   Specification: https://www.nyse.com/market-data/real-time/integrated-feed
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

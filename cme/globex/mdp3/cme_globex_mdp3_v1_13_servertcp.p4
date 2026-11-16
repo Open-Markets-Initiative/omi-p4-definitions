@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.13
 //   Date: 4/11/2023
-//   Specification: Unknown
+//   Specification: templates_v13.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

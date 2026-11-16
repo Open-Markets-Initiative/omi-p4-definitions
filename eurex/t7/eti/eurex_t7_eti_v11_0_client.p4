@@ -6,7 +6,7 @@
 //   Encoding: Flat Binary Encoding
 //   Version: 11.0
 //   Date: 10/31/2022
-//   Specification: Unknown
+//   Specification: eti_Derivatives.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

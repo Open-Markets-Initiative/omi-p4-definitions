@@ -109,9 +109,9 @@ header benchmark_message_t {
     bit<64> annual_performance;
     bit<64> monthly_performance;
     bit<64> last_12_months_performance;
-    bit<64> 24_hours_daily_performance;
-    bit<64> 24_hours_annual_performance;
-    bit<64> 24_hours_monthly_performance;
+    bit<64> n24_hours_daily_performance;
+    bit<64> n24_hours_annual_performance;
+    bit<64> n24_hours_monthly_performance;
     bit<64> last_12_months_24_hours_performance;
 }
 

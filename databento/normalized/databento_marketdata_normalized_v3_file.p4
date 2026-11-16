@@ -6,7 +6,7 @@
 //   Encoding: Databento Binary Encoding
 //   Version: 3
 //   Date: 10/4/2026
-//   Specification: Unknown
+//   Specification: databento-binary-encoding.html
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

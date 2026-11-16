@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 5.9
 //   Date: 4/04/2018
-//   Specification: Unknown
+//   Specification: streamlinemktdata.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.5
 //   Date: 8/7/2026
-//   Specification: Unknown
+//   Specification: deribit-sbe-order-api.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
@@ -48,7 +48,6 @@ header logon_message_t {
     bit<384> secret;
     bit<8> reset_seq_num;
     bit<16> schema_version;
-    bit<8> session_cancel_on_disconnect;
 }
 
 header logon_conf_message_t {
@@ -94,7 +93,7 @@ header new_order_request_message_t {
     bit<64> price;
     bit<64> mantissa;
     bit<8> exponent;
-    bit<64> mantissa_2;
+    bit<64> mantissa_optional;
     bit<8> exponent_2;
     bit<64> self_match_prevention_id;
     bit<8> side;
@@ -110,7 +109,7 @@ header amend_order_request_message_t {
     bit<64> price;
     bit<64> mantissa;
     bit<8> exponent;
-    bit<64> mantissa_2;
+    bit<64> mantissa_optional;
     bit<8> exponent_2;
     bit<16> flags_replace_order_flags;
 }
@@ -192,30 +191,6 @@ header new_order_response_message_t {
     bit<8> side;
     bit<8> status;
     bit<8> cancel_reason;
-    bit<16> flags_order_flags;
-    bit<16> block_length;
-    bit<16> num_in_group;
-}
-
-header new_order_response_message_new_order_response_message_fills_group_t {
-    bit<64> match_id;
-    bit<64> fill_price;
-    bit<64> mantissa;
-    bit<8> exponent;
-}
-
-header new_order_response_message_new_order_response_message_legs_group_header_t {
-    bit<16> block_length;
-    bit<16> num_in_group;
-}
-
-header new_order_response_message_new_order_response_message_legs_group_t {
-    bit<64> match_id;
-    bit<64> fill_id;
-    bit<64> fill_price;
-    bit<64> mantissa;
-    bit<8> exponent;
-    bit<8> leg_side;
 }
 
 header new_order_reject_message_t {
@@ -290,10 +265,6 @@ header cancel_order_response_message_t {
     bit<64> order_id;
     bit<64> instrument_id;
     bit<64> receive_time;
-    bit<64> mantissa;
-    bit<8> exponent;
-    bit<64> mantissa_2;
-    bit<8> exponent_2;
 }
 
 header cancel_order_reject_message_t {
@@ -448,7 +419,8 @@ header order_filled_message_order_filled_message_fills_group_t {
     bit<64> mantissa_2;
     bit<8> exponent_2;
     bit<8> side;
-    bit<6> reserved_6;
+    bit<5> reserved_5;
+    bit<1> is_liquidation;
     bit<1> is_fully_filled;
     bit<1> is_quote;
 }
@@ -616,11 +588,22 @@ header orders_mmp_unfrozen_message_t {
     bit<64> correlation_id_optional;
 }
 
+header position_moved_message_t {
+    bit<64> timestamp;
+    bit<64> exec_id;
+    bit<64> instrument_id;
+    bit<64> match_id;
+    bit<64> price;
+    bit<64> mantissa;
+    bit<8> exponent;
+    bit<8> side;
+    bit<8> role;
+    bit<8> reason_position_move_reason;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> mass_quote_request_message_mass_quote_request_message_quotes_group_remaining;
-    bit<16> new_order_response_message_new_order_response_message_fills_group_remaining;
-    bit<16> new_order_response_message_new_order_response_message_legs_group_remaining;
     bit<16> amend_order_response_message_amend_order_response_message_fills_group_remaining;
     bit<16> amend_order_response_message_amend_order_response_message_legs_group_remaining;
     bit<16> mass_quote_response_message_mass_quote_response_message_quotes_group_remaining;
@@ -659,9 +642,6 @@ struct headers_t {
     get_mass_quote_mmp_status_request_message_t get_mass_quote_mmp_status_request_message;
     get_orders_mmp_status_request_message_t get_orders_mmp_status_request_message;
     new_order_response_message_t new_order_response_message;
-    new_order_response_message_new_order_response_message_fills_group_t new_order_response_message_new_order_response_message_fills_group[MAX_MESSAGES];
-    new_order_response_message_new_order_response_message_legs_group_header_t new_order_response_message_new_order_response_message_legs_group_header;
-    new_order_response_message_new_order_response_message_legs_group_t new_order_response_message_new_order_response_message_legs_group[MAX_MESSAGES];
     new_order_reject_message_t new_order_reject_message;
     amend_order_response_message_t amend_order_response_message;
     amend_order_response_message_amend_order_response_message_fills_group_t amend_order_response_message_amend_order_response_message_fills_group[MAX_MESSAGES];
@@ -705,6 +685,7 @@ struct headers_t {
     orders_mmp_triggered_message_t orders_mmp_triggered_message;
     mass_quote_mmp_unfrozen_message_t mass_quote_mmp_unfrozen_message;
     orders_mmp_unfrozen_message_t orders_mmp_unfrozen_message;
+    position_moved_message_t position_moved_message;
 }
 
 parser DeribitOrdersapiParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -751,6 +732,7 @@ parser DeribitOrdersapiParser(packet_in packet, out headers_t hdr, inout metadat
             16w0x4201: parse_orders_mmp_triggered_message;
             16w0x4401: parse_mass_quote_mmp_unfrozen_message;
             16w0x4601: parse_orders_mmp_unfrozen_message;
+            16w0x4a01: parse_position_moved_message;
             default: accept;
         }
     }
@@ -879,38 +861,7 @@ parser DeribitOrdersapiParser(packet_in packet, out headers_t hdr, inout metadat
     state parse_new_order_response_message {
         packet.extract(hdr.new_order_response_message);
         meta.dispatched = 1;
-        meta.new_order_response_message_new_order_response_message_fills_group_remaining = hdr.new_order_response_message.num_in_group;
-        transition select(meta.new_order_response_message_new_order_response_message_fills_group_remaining) {
-            16w0: read_new_order_response_message_new_order_response_message_legs_group;
-            default: parse_new_order_response_message_new_order_response_message_fills_group;
-        }
-    }
-
-    state parse_new_order_response_message_new_order_response_message_fills_group {
-        packet.extract(hdr.new_order_response_message_new_order_response_message_fills_group.next);
-        meta.new_order_response_message_new_order_response_message_fills_group_remaining = meta.new_order_response_message_new_order_response_message_fills_group_remaining - 1;
-        transition select(meta.new_order_response_message_new_order_response_message_fills_group_remaining) {
-            16w0: read_new_order_response_message_new_order_response_message_legs_group;
-            default: parse_new_order_response_message_new_order_response_message_fills_group;
-        }
-    }
-
-    state read_new_order_response_message_new_order_response_message_legs_group {
-        packet.extract(hdr.new_order_response_message_new_order_response_message_legs_group_header);
-        meta.new_order_response_message_new_order_response_message_legs_group_remaining = hdr.new_order_response_message_new_order_response_message_legs_group_header.num_in_group;
-        transition select(meta.new_order_response_message_new_order_response_message_legs_group_remaining) {
-            16w0: accept;
-            default: parse_new_order_response_message_new_order_response_message_legs_group;
-        }
-    }
-
-    state parse_new_order_response_message_new_order_response_message_legs_group {
-        packet.extract(hdr.new_order_response_message_new_order_response_message_legs_group.next);
-        meta.new_order_response_message_new_order_response_message_legs_group_remaining = meta.new_order_response_message_new_order_response_message_legs_group_remaining - 1;
-        transition select(meta.new_order_response_message_new_order_response_message_legs_group_remaining) {
-            16w0: accept;
-            default: parse_new_order_response_message_new_order_response_message_legs_group;
-        }
+        transition accept;
     }
 
     state parse_new_order_reject_message {
@@ -1261,6 +1212,12 @@ parser DeribitOrdersapiParser(packet_in packet, out headers_t hdr, inout metadat
         transition accept;
     }
 
+    state parse_position_moved_message {
+        packet.extract(hdr.position_moved_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
 }
 
 control DeribitOrdersapiVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -1312,9 +1269,6 @@ control DeribitOrdersapiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.get_mass_quote_mmp_status_request_message);
         packet.emit(hdr.get_orders_mmp_status_request_message);
         packet.emit(hdr.new_order_response_message);
-        packet.emit(hdr.new_order_response_message_new_order_response_message_fills_group);
-        packet.emit(hdr.new_order_response_message_new_order_response_message_legs_group_header);
-        packet.emit(hdr.new_order_response_message_new_order_response_message_legs_group);
         packet.emit(hdr.new_order_reject_message);
         packet.emit(hdr.amend_order_response_message);
         packet.emit(hdr.amend_order_response_message_amend_order_response_message_fills_group);
@@ -1358,6 +1312,7 @@ control DeribitOrdersapiDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.orders_mmp_triggered_message);
         packet.emit(hdr.mass_quote_mmp_unfrozen_message);
         packet.emit(hdr.orders_mmp_unfrozen_message);
+        packet.emit(hdr.position_moved_message);
     }
 }
 

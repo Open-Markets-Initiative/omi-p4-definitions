@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.0
 //   Date: 2026-09-18
-//   Specification: Unknown
+//   Specification: sbe-market-data-streams.md
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Aquis Market Data Protocol
 //   Version: 1.0
 //   Date: 8/1/2025
-//   Specification: Unknown
+//   Specification: https://www.aquis.eu/technologies
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

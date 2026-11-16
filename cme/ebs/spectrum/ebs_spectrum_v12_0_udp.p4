@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 12.0
 //   Date: 4/8/2022
-//   Specification: Unknown
+//   Specification: derivedmktdata.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 1.3
 //   Date: 8/20/2020
-//   Specification: Unknown
+//   Specification: OptiqOEG_Production_SBETemplate_Equities_20180421_0.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

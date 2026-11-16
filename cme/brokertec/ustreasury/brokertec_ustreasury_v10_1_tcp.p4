@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 10.1
 //   Date: 4/13/2023
-//   Specification: Unknown
+//   Specification: btecstreammktdata_v1.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 

@@ -6,7 +6,7 @@
 //   Encoding: Simple Binary Encoding
 //   Version: 7.0
 //   Date: 12/03/2018
-//   Specification: Unknown
+//   Specification: svstreammkktdata.xml
 // 
 // Byte order: little (P4 extracts in network/big-endian order)
 // 
