@@ -264,7 +264,7 @@ header theoretical_opening_price_16_message_t {
     bit<8> md_update_action;
     bit<16> trade_date;
     bit<64> md_corporate_offset_price_optional;
-    bit<64> md_entry_size_quantity_optional;
+    bit<64> md_entry_size_optional;
     bit<64> md_entry_timestamp;
     bit<32> rpt_seq;
 }
@@ -300,7 +300,7 @@ header auction_imbalance_19_message_t {
     bit<1> last_trade_msg;
     bit<8> md_update_action;
     bit<16> imbalance_condition;
-    bit<64> md_entry_size_quantity_optional;
+    bit<64> md_entry_size_optional;
     bit<64> md_entry_timestamp;
     bit<32> rpt_seq;
 }
@@ -389,7 +389,7 @@ header last_trade_price_27_message_t {
     bit<8> trading_session_id;
     bit<16> trade_condition;
     bit<64> md_future_price;
-    bit<64> md_entry_size_quantity;
+    bit<64> md_entry_size;
     bit<32> trade_id;
     bit<32> md_entry_buyer;
     bit<32> md_entry_seller;
@@ -427,7 +427,7 @@ header order_mb_o_50_message_t {
     bit<8> md_entry_type;
     bit<8> offset_11_padding_1;
     bit<64> md_corporate_offset_price_optional;
-    bit<64> md_entry_size_quantity;
+    bit<64> md_entry_size;
     bit<32> md_entry_position_no;
     bit<32> entering_firm;
     bit<64> md_insert_timestamp;
@@ -450,7 +450,7 @@ header delete_order_mb_o_51_message_t {
     bit<8> md_entry_type;
     bit<8> offset_11_padding_1;
     bit<32> md_entry_position_no;
-    bit<64> md_entry_size_quantity_optional;
+    bit<64> md_entry_size_optional;
     bit<64> secondary_order_id;
     bit<64> md_entry_timestamp;
     bit<32> rpt_seq;
@@ -487,7 +487,7 @@ header trade_53_message_t {
     bit<8> trading_session_id;
     bit<16> trade_condition;
     bit<64> md_future_price;
-    bit<64> md_entry_size_quantity;
+    bit<64> md_entry_size;
     bit<32> trade_id;
     bit<32> md_entry_buyer;
     bit<32> md_entry_seller;
@@ -511,7 +511,7 @@ header forward_trade_54_message_t {
     bit<8> trading_session_id;
     bit<16> trade_condition;
     bit<64> md_future_price;
-    bit<64> md_entry_size_quantity;
+    bit<64> md_entry_size;
     bit<32> trade_id;
     bit<32> md_entry_buyer;
     bit<32> md_entry_seller;
@@ -571,7 +571,7 @@ header trade_bust_57_message_t {
     bit<8> trading_session_id;
     bit<16> offset_10_padding_2;
     bit<64> md_future_price;
-    bit<64> md_entry_size_quantity;
+    bit<64> md_entry_size;
     bit<32> trade_id;
     bit<16> trade_date;
     bit<16> offset_34_padding_2;
@@ -587,7 +587,7 @@ header snapshot_full_refresh_orders_mb_o_71_message_t {
 
 header snapshot_full_refresh_orders_mb_o_71_message_snapshot_full_refresh_orders_mb_o_71_message_no_m_d_entries_group_t {
     bit<64> md_corporate_offset_price_optional;
-    bit<64> md_entry_size_quantity;
+    bit<64> md_entry_size;
     bit<32> md_entry_position_no;
     bit<32> entering_firm;
     bit<64> md_insert_timestamp;

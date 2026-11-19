@@ -55,7 +55,7 @@ header new_order_message_t {
     bit<8> trading_capacity;
     bit<8> account_type;
     bit<8> lp_role_optional;
-    bit<1> unused_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> conditional_order;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;
@@ -117,7 +117,7 @@ header new_order_message_order_optional_fields_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> undisclosed_iceberg_type;
     bit<8> stop_triggered_time_in_force;
 }
@@ -334,7 +334,7 @@ header cancel_replace_message_t {
     bit<8> time_in_force;
     bit<8> account_type_optional;
     bit<8> lp_role_optional;
-    bit<1> unused_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> conditional_order;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;
@@ -381,7 +381,7 @@ header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }
@@ -481,7 +481,7 @@ header quotes_message_t {
     bit<1> investment_algo_indicator;
     bit<1> dea_indicator;
     bit<8> rfe_answer;
-    bit<1> unused_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> conditional_order;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;

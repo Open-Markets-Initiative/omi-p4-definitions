@@ -72,7 +72,7 @@ header weighted_average_price_settlement_prices_message_t {
 header capital_trades_message_t {
     bit<32> instrument_number;
     bit<64> trade_time;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price;
     bit<8> concertation_type;
     bit<32> trade_number;
@@ -88,7 +88,7 @@ header capital_trades_message_t {
 header probable_allocation_price_message_t {
     bit<32> instrument_number;
     bit<64> probable_allocation_price;
-    bit<32> volume_int_324;
+    bit<32> volume;
 }
 
 header continuous_auctions_beginning_message_t {
@@ -119,7 +119,7 @@ header registry_operations_message_t {
 
 header best_offer_message_t {
     bit<32> instrument_number;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price_rate;
     bit<8> offer_direction;
     bit<8> operation_type;

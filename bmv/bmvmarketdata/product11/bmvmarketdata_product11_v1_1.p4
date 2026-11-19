@@ -61,7 +61,7 @@ header trade_cancellation_message_t {
 header capital_trades_message_t {
     bit<32> instrument_number;
     bit<64> trade_time;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price;
     bit<8> concertation_type;
     bit<32> trade_number;
@@ -92,7 +92,7 @@ header registry_operations_message_t {
 header public_offerings_message_t {
     bit<32> instrument_number;
     bit<32> number;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> discount_rate_or_price;
     bit<32> rate_of_return;
     bit<16> term_days;

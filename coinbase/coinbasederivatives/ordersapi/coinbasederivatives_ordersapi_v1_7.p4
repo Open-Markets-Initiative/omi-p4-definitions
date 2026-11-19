@@ -57,11 +57,11 @@ header logon_conf_message_t {
 }
 
 header logout_message_t {
-    bit<512> reason;
+    bit<512> logout_reason;
 }
 
 header logged_out_message_t {
-    bit<512> reason;
+    bit<512> logout_reason;
 }
 
 header heartbeat_message_t {
@@ -322,7 +322,7 @@ header event_resend_complete_message_t {
 header event_resend_reject_message_t {
     bit<64> correlation_id;
     bit<8> resend_reject_reason;
-    bit<440> details_string_55;
+    bit<440> event_resend_reject_details;
 }
 
 struct metadata_t {

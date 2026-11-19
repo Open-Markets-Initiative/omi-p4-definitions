@@ -61,7 +61,7 @@ header system_event_message_t {
 }
 
 header stock_directory_message_t {
-    bit<48> stock_alpha_6;
+    bit<48> stock;
     bit<8> market_category;
     bit<8> financial_status_indicator;
     bit<48> round_lot_size;
@@ -69,7 +69,7 @@ header stock_directory_message_t {
 }
 
 header stock_trading_action_message_t {
-    bit<48> stock_alpha_6;
+    bit<48> stock;
     bit<8> trading_state;
     bit<8> reserved_1;
     bit<32> reason;
@@ -77,7 +77,7 @@ header stock_trading_action_message_t {
 
 header market_participant_position_message_t {
     bit<32> mpid;
-    bit<48> stock_alphanumeric_6;
+    bit<48> stock;
     bit<8> primary_market_maker;
     bit<8> market_maker_mode;
     bit<8> market_participant_state;
@@ -86,16 +86,16 @@ header market_participant_position_message_t {
 header add_order_message_t {
     bit<96> order_reference_number;
     bit<8> side;
-    bit<48> shares_numeric_6;
-    bit<48> stock_alpha_6;
+    bit<48> shares;
+    bit<48> stock;
     bit<80> price;
 }
 
 header add_order_with_mpid_message_t {
     bit<96> order_reference_number;
     bit<8> side;
-    bit<48> shares_numeric_6;
-    bit<48> stock_alpha_6;
+    bit<48> shares;
+    bit<48> stock;
     bit<80> price;
     bit<32> attribution;
 }
@@ -126,22 +126,22 @@ header order_delete_message_t {
 header order_replace_message_t {
     bit<96> original_order_reference_number;
     bit<96> new_order_reference_number;
-    bit<48> shares_numeric_6;
+    bit<48> shares;
     bit<80> price;
 }
 
 header trade_message_t {
     bit<96> order_reference_number;
     bit<8> side;
-    bit<48> shares_numeric_6;
-    bit<48> stock_alpha_6;
+    bit<48> shares;
+    bit<48> stock;
     bit<80> price;
     bit<96> match_number;
 }
 
 header cross_trade_message_t {
-    bit<72> shares_numeric_9;
-    bit<48> stock_alpha_6;
+    bit<72> cross_shares;
+    bit<48> stock;
     bit<80> cross_price;
     bit<96> match_number;
     bit<8> cross_type;
@@ -155,7 +155,7 @@ header net_order_imbalance_indicator_message_t {
     bit<72> paired_shares;
     bit<72> imbalance_shares;
     bit<8> imbalance_direction;
-    bit<48> stock_alpha_6;
+    bit<48> stock;
     bit<80> far_price;
     bit<80> near_price;
     bit<80> current_reference_price;

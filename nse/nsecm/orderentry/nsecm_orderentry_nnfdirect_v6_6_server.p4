@@ -356,8 +356,8 @@ header sign_on_request_out_message_t {
     bit<1> oddlot_market;
     bit<1> spot_market;
     bit<1> auction_market;
-    bit<1> call_auction_11;
-    bit<1> call_auction_21;
+    bit<1> call_auction_1_market;
+    bit<1> call_auction_2_market;
     bit<2> broker_eligibility_reserved_lower;
     bit<7> broker_eligibility_reserved_upper;
     bit<1> preopen;
@@ -390,8 +390,8 @@ header sign_on_response_message_t {
     bit<1> oddlot_market;
     bit<1> spot_market;
     bit<1> auction_market;
-    bit<1> call_auction_11;
-    bit<1> call_auction_21;
+    bit<1> call_auction_1_market;
+    bit<1> call_auction_2_market;
     bit<2> broker_eligibility_reserved_lower;
     bit<7> broker_eligibility_reserved_upper;
     bit<1> preopen;
@@ -406,8 +406,8 @@ header system_information_message_t {
     bit<16> oddlot;
     bit<16> spot;
     bit<16> auction;
-    bit<16> call_auction_1_short_2;
-    bit<16> call_auction_2_short_2;
+    bit<16> call_auction_1;
+    bit<16> call_auction_2;
     bit<32> market_index;
     bit<16> default_settlement_period;
     bit<16> second_default_settlement_period;

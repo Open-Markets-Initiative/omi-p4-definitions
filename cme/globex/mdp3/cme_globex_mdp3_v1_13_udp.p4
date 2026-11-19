@@ -264,8 +264,7 @@ header md_incremental_refresh_daily_statistics_incremental_refresh_daily_statist
     bit<32> rpt_seq;
     bit<16> trading_reference_date;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -349,8 +348,7 @@ header snapshot_full_refresh_snapshot_full_refresh_group_t {
     bit<16> trading_reference_date;
     bit<8> open_close_settl_flag;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -419,8 +417,7 @@ header md_instrument_definition_future_t {
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -476,7 +473,7 @@ header md_instrument_definition_future_lot_type_rules_group_header_t {
 
 header md_instrument_definition_future_lot_type_rules_group_t {
     bit<8> lot_type;
-    bit<32> min_lot_size_decimal_qty;
+    bit<32> min_lot_size;
 }
 
 header md_instrument_definition_option_t {
@@ -526,8 +523,7 @@ header md_instrument_definition_option_t {
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -575,7 +571,7 @@ header md_instrument_definition_option_lot_type_rules_group_header_t {
 
 header md_instrument_definition_option_lot_type_rules_group_t {
     bit<8> lot_type;
-    bit<32> min_lot_size_decimal_qty;
+    bit<32> min_lot_size;
 }
 
 header md_instrument_definition_option_option_underlyings_group_header_t {
@@ -639,8 +635,7 @@ header md_instrument_definition_spread_t {
     bit<240> unit_of_measure;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -694,7 +689,7 @@ header md_instrument_definition_spread_lot_type_rules_group_header_t {
 
 header md_instrument_definition_spread_lot_type_rules_group_t {
     bit<8> lot_type;
-    bit<32> min_lot_size_decimal_qty;
+    bit<32> min_lot_size;
 }
 
 header md_instrument_definition_spread_legs_group_header_t {
@@ -805,7 +800,7 @@ header md_instrument_definition_fixed_income_lot_type_rules_group_header_t {
 
 header md_instrument_definition_fixed_income_lot_type_rules_group_t {
     bit<8> lot_type;
-    bit<32> min_lot_size_decimal_qty;
+    bit<32> min_lot_size;
 }
 
 header md_instrument_definition_repo_t {
@@ -895,7 +890,7 @@ header md_instrument_definition_repo_lot_type_rules_group_header_t {
 
 header md_instrument_definition_repo_lot_type_rules_group_t {
     bit<8> lot_type;
-    bit<32> min_lot_size_decimal_qty;
+    bit<32> min_lot_size;
 }
 
 header md_instrument_definition_repo_repo_underlyings_group_header_t {
@@ -1019,8 +1014,7 @@ header snapshot_full_refresh_tcp_snapshot_full_refresh_tcp_group_t {
     bit<8> md_entry_type;
     bit<16> trading_reference_date;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -1146,7 +1140,7 @@ header md_instrument_definition_fx_fx_lot_type_rules_group_header_t {
 
 header md_instrument_definition_fx_fx_lot_type_rules_group_t {
     bit<8> lot_type;
-    bit<64> min_lot_size_u_int_64;
+    bit<64> fx_min_lot_size;
 }
 
 header md_instrument_definition_fx_trading_sessions_group_header_t {

@@ -72,7 +72,7 @@ header weighted_average_price_settlement_prices_message_t {
 header capital_trades_message_t {
     bit<32> instrument_number;
     bit<64> trade_time;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price;
     bit<8> concertation_type;
     bit<32> trade_number;
@@ -88,7 +88,7 @@ header capital_trades_message_t {
 header probable_allocation_price_message_t {
     bit<32> instrument_number;
     bit<64> probable_allocation_price;
-    bit<32> volume_int_324;
+    bit<32> volume;
 }
 
 header continuous_auctions_beginning_message_t {
@@ -131,7 +131,7 @@ header mutual_fund_trades_message_t {
 header tradability_message_t {
     bit<32> instrument_number;
     bit<32> number_of_operations;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> amount;
     bit<64> opening_price;
     bit<64> maximum;
@@ -145,7 +145,7 @@ header virtual_trades_message_t {
     bit<8> virtual_trades_status;
     bit<8> operation_type;
     bit<32> number;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<8> concertation;
     bit<40> buy;
     bit<40> sell;
@@ -160,12 +160,12 @@ header depth_message_t {
 header depth_message_price_level_t {
     bit<64> price;
     bit<16> number_of_orders;
-    bit<32> volume_int_324;
+    bit<32> volume;
 }
 
 header best_offer_message_t {
     bit<32> instrument_number;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price_rate;
     bit<8> offer_direction;
     bit<8> operation_type;
@@ -175,7 +175,7 @@ header general_indices_message_t {
     bit<16> component;
     bit<8> sector;
     bit<64> indices_hour;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<32> indices;
     bit<32> variation;
     bit<32> percentage;

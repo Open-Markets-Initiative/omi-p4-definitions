@@ -27,6 +27,10 @@ class CoinbasederivativesMarketdataapiV12Tests(unittest.TestCase):
     def tearDownClass(cls):
         cls.switch.stop()
 
+    def test_endofsnapshotmessage(self):
+        for payload in payloads.of("omi-data-packets/Coinbase/CoinbaseDerivatives.MarketDataApi.Sbe.v1.2/EndOfSnapshotMessage.pcap"):
+            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
+
     def test_orderdeletemessage(self):
         for payload in payloads.of("omi-data-packets/Coinbase/CoinbaseDerivatives.MarketDataApi.Sbe.v1.2/OrderDeleteMessage.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")

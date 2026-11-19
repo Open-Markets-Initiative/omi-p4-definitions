@@ -57,7 +57,7 @@ header bcast_header_packed_packet_t {
 header broadcast_journal_vct_message_t {
     bit<16> branch_number;
     bit<40> broker_number;
-    bit<24> action_code_char_3;
+    bit<24> action_code;
     bit<32> reserved_4;
     bit<1> trader_ws;
     bit<15> reserved_115;
@@ -66,7 +66,7 @@ header broadcast_journal_vct_message_t {
 }
 
 header security_master_change_message_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<80> symbol;
     bit<16> series;
     bit<16> instrument_type;
@@ -99,7 +99,7 @@ header security_status_change_message_t {
 }
 
 header security_status_change_message_token_and_eligibility_t {
-    bit<32> token_long_4;
+    bit<32> token;
 }
 
 header security_status_change_preopen_message_t {
@@ -107,7 +107,7 @@ header security_status_change_preopen_message_t {
 }
 
 header security_status_change_preopen_message_token_and_eligibility_t {
-    bit<32> token_long_4;
+    bit<32> token;
 }
 
 header turnover_exceeded_message_t {
@@ -135,9 +135,9 @@ header broker_reactivated_message_t {
 }
 
 header auction_inquiry_message_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<16> auction_number;
-    bit<16> auction_status_short_2;
+    bit<16> auction_status;
     bit<16> initiator_type;
     bit<32> total_buy_qty;
     bit<32> best_buy_price;
@@ -152,8 +152,8 @@ header auction_status_change_message_t {
     bit<80> symbol;
     bit<16> series;
     bit<16> auction_number;
-    bit<8> auction_status_char_1;
-    bit<24> action_code_char_3;
+    bit<8> auction_status_char;
+    bit<24> action_code;
     bit<1> trader_ws;
     bit<15> reserved_115;
     bit<16> broadcast_message_length;
@@ -285,7 +285,7 @@ header symbol_status_change_action_message_t {
     bit<16> series;
     bit<16> market_type;
     bit<16> reserved_2;
-    bit<16> action_code_short_2;
+    bit<16> action_code_short;
 }
 
 header ticker_and_market_index_message_t {
@@ -293,7 +293,7 @@ header ticker_and_market_index_message_t {
 }
 
 header ticker_and_market_index_message_ticker_index_information_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<16> market_type;
     bit<32> fill_price;
     bit<32> fill_volume;
@@ -301,7 +301,7 @@ header ticker_and_market_index_message_ticker_index_information_t {
 }
 
 header market_by_order_and_market_by_price_message_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<16> book_type;
     bit<16> trading_status;
     bit<64> volume_traded_today;
@@ -313,7 +313,7 @@ header market_by_order_and_market_by_price_message_t {
     bit<32> last_trade_time;
     bit<32> average_trade_price;
     bit<16> auction_number;
-    bit<16> auction_status_short_2;
+    bit<16> auction_status;
     bit<16> initiator_type;
     bit<32> initiator_price;
     bit<32> initiator_quantity;
@@ -343,7 +343,7 @@ header only_market_by_price_message_t {
 }
 
 header only_market_by_price_message_interactive_only_mbp_data_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<16> book_type;
     bit<16> trading_status;
     bit<64> volume_traded_today;
@@ -363,7 +363,7 @@ header market_watch_round_robin_message_t {
 }
 
 header market_watch_round_robin_message_marketwatchbroadcast_t {
-    bit<32> token_long_4;
+    bit<32> token;
 }
 
 header call_auction_market_by_price_message_t {
@@ -371,7 +371,7 @@ header call_auction_market_by_price_message_t {
 }
 
 header call_auction_market_by_price_message_interactive_call_auction_mbp_data_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<16> book_type;
     bit<16> trading_status;
     bit<64> volume_traded_today;
@@ -391,7 +391,7 @@ header call_auction_market_watch_message_t {
 }
 
 header call_auction_market_watch_message_ca_marketwatchbroadcast_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<16> mkt_type;
     bit<1> last_trade_more;
     bit<1> last_trade_less;
@@ -409,7 +409,7 @@ header call_auction_market_watch_message_ca_marketwatchbroadcast_t {
 header security_open_price_message_t {
     bit<80> symbol;
     bit<16> series;
-    bit<16> token_short_2;
+    bit<16> token_short;
     bit<32> opening_price;
 }
 
@@ -490,7 +490,7 @@ header buy_back_message_t {
 }
 
 header buy_back_message_buybackdata_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<80> symbol;
     bit<16> series;
     bit<64> pday_cum_vol;
@@ -510,7 +510,7 @@ header call_auction_order_cancel_update_message_t {
 }
 
 header call_auction_order_cancel_update_message_interactive_ord_cxl_details_t {
-    bit<32> token_long_4;
+    bit<32> token;
     bit<32> filler_4;
     bit<64> buy_ord_cxl_count;
     bit<64> buy_ord_cxl_vol;
@@ -526,7 +526,7 @@ header cas_reference_price_message_t {
 header cas_reference_price_message_token_and_refprice_t {
     bit<80> symbol;
     bit<16> series;
-    bit<32> token_long_4;
+    bit<32> token;
     bit<32> reference_price;
 }
 

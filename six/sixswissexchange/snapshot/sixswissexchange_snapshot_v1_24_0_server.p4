@@ -1,0 +1,317 @@
+// P4_16 (v1model) definition for: Six SixSwissExchange Snapshot Glimpse v1.24.0
+// 
+// Protocol:
+//   Organization: SIX Swiss Exchange
+//   Protocol: SIX Swiss Exchange IMI Orderbook Snapshot Recovery Service
+//   Encoding: Glimpse
+//   Version: 1.24.0
+//   Date: 1/21/2025
+//   Specification: SSX-IMI-TRD-SPEC-1.24.0E.pdf
+// 
+// Byte order: big (P4 extracts in network/big-endian order)
+// 
+// Script:
+//   Generator: 1.0.0.0
+//   License: MIT No Attribution
+//   Authors: Omi Developers
+// 
+// Copyright (c) 2026 Scaled Sources LLC.  https://www.scaledsources.com
+// 
+// The protocol compiler technologies used to produce this file are the subject of
+// patents owned by Scaled Sources LLC.  Those patent rights are retained and are
+// not transferred by this contribution:
+//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US20240419416A1/en
+// 
+// Open Markets Initiative website: https://openmarketsinitiative.com
+
+#include <core.p4>
+#include <v1model.p4>
+
+#define MAX_MESSAGES 64
+#define FORWARD_PORT 1
+
+header server_packet_header_t {
+    bit<16> packet_length;
+    bit<8> server_packet_type;
+}
+
+header login_accepted_packet_t {
+    bit<80> accepted_session;
+    bit<160> accepted_sequence_number;
+}
+
+header login_rejected_packet_t {
+    bit<8> reject_reason_code;
+}
+
+header sequenced_data_packet_t {
+    bit<8> sequenced_message_type;
+}
+
+header time_stamp_seconds_message_t {
+    bit<32> second;
+}
+
+header system_event_message_t {
+    bit<32> timestamp;
+    bit<64> group;
+    bit<8> event_code;
+    bit<32> orderbook;
+}
+
+header quantity_tick_size_message_t {
+    bit<32> timestamp;
+    bit<32> quantity_tick_table_id;
+    bit<32> quantity_tick_size;
+    bit<32> quantity_start;
+}
+
+header price_tick_size_message_t {
+    bit<32> timestamp;
+    bit<32> price_tick_table_id;
+    bit<32> price_tick_size;
+    bit<32> price_start;
+}
+
+header orderbook_directory_message_t {
+    bit<32> timestamp;
+    bit<32> orderbook;
+    bit<8> price_type;
+    bit<96> isin;
+    bit<24> currency;
+    bit<64> group;
+    bit<32> minimum_quantity;
+    bit<32> quantity_tick_table_id;
+    bit<32> price_tick_table_id;
+    bit<32> price_decimals;
+    bit<32> delisting_date;
+    bit<32> delisting_time;
+    bit<32> qod_price_decimals;
+    bit<32> security_exchange;
+    bit<32> reference_exchange;
+}
+
+header orderbook_trading_action_message_t {
+    bit<32> timestamp;
+    bit<32> orderbook;
+    bit<8> trading_state;
+    bit<8> book_condition;
+}
+
+header add_order_message_t {
+    bit<32> timestamp;
+    bit<64> order_number;
+    bit<8> order_verb;
+    bit<32> order_quantity;
+    bit<32> orderbook;
+    bit<32> order_price;
+}
+
+header indicative_price_quantity_message_t {
+    bit<32> timestamp;
+    bit<64> theoretical_opening_quantity;
+    bit<32> orderbook;
+    bit<32> best_bid;
+    bit<32> best_offer;
+    bit<32> theoretical_opening_price;
+    bit<8> cross_type;
+}
+
+header glimpse_snapshot_message_t {
+    bit<64> sequence_number;
+}
+
+header debug_packet_debug_text_t {
+    varbit<2048> debug_text;
+}
+
+struct metadata_t {
+    bit<1> dispatched;
+}
+
+struct headers_t {
+    server_packet_header_t server_packet_header;
+    login_accepted_packet_t login_accepted_packet;
+    login_rejected_packet_t login_rejected_packet;
+    sequenced_data_packet_t sequenced_data_packet;
+    time_stamp_seconds_message_t time_stamp_seconds_message;
+    system_event_message_t system_event_message;
+    quantity_tick_size_message_t quantity_tick_size_message;
+    price_tick_size_message_t price_tick_size_message;
+    orderbook_directory_message_t orderbook_directory_message;
+    orderbook_trading_action_message_t orderbook_trading_action_message;
+    add_order_message_t add_order_message;
+    indicative_price_quantity_message_t indicative_price_quantity_message;
+    glimpse_snapshot_message_t glimpse_snapshot_message;
+    debug_packet_debug_text_t debug_packet_debug_text;
+}
+
+parser SixswissexchangeSnapshotServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    state start {
+        packet.extract(hdr.server_packet_header);
+        transition select(hdr.server_packet_header.server_packet_type) {
+            8w0x2b: parse_debug_packet;
+            8w0x41: parse_login_accepted_packet;
+            8w0x4a: parse_login_rejected_packet;
+            8w0x53: parse_sequenced_data_packet;
+            8w0x48: parse_server_heartbeat;
+            8w0x5a: parse_end_of_session;
+            default: accept;
+        }
+    }
+
+    state parse_debug_packet {
+        meta.dispatched = 1;
+        packet.extract(hdr.debug_packet_debug_text, (bit<32>)hdr.server_packet_header.packet_length * 8);
+        transition accept;
+    }
+
+    state parse_login_accepted_packet {
+        packet.extract(hdr.login_accepted_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_login_rejected_packet {
+        packet.extract(hdr.login_rejected_packet);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_sequenced_data_packet {
+        packet.extract(hdr.sequenced_data_packet);
+        meta.dispatched = 1;
+        transition select(hdr.sequenced_data_packet.sequenced_message_type) {
+            8w0x54: parse_time_stamp_seconds_message;
+            8w0x53: parse_system_event_message;
+            8w0x4d: parse_quantity_tick_size_message;
+            8w0x4c: parse_price_tick_size_message;
+            8w0x52: parse_orderbook_directory_message;
+            8w0x48: parse_orderbook_trading_action_message;
+            8w0x41: parse_add_order_message;
+            8w0x49: parse_indicative_price_quantity_message;
+            8w0x47: parse_glimpse_snapshot_message;
+            default: accept;
+        }
+    }
+
+    state parse_time_stamp_seconds_message {
+        packet.extract(hdr.time_stamp_seconds_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_system_event_message {
+        packet.extract(hdr.system_event_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_quantity_tick_size_message {
+        packet.extract(hdr.quantity_tick_size_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_price_tick_size_message {
+        packet.extract(hdr.price_tick_size_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_orderbook_directory_message {
+        packet.extract(hdr.orderbook_directory_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_orderbook_trading_action_message {
+        packet.extract(hdr.orderbook_trading_action_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_add_order_message {
+        packet.extract(hdr.add_order_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_indicative_price_quantity_message {
+        packet.extract(hdr.indicative_price_quantity_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_glimpse_snapshot_message {
+        packet.extract(hdr.glimpse_snapshot_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_server_heartbeat {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_end_of_session {
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+}
+
+control SixswissexchangeSnapshotServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control SixswissexchangeSnapshotServerIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+        if (meta.dispatched == 1) {
+            standard_metadata.egress_spec = FORWARD_PORT;
+        }
+        else {
+            mark_to_drop(standard_metadata);
+        }
+    }
+}
+
+control SixswissexchangeSnapshotServerEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+    apply {
+    }
+}
+
+control SixswissexchangeSnapshotServerComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+    apply {
+    }
+}
+
+control SixswissexchangeSnapshotServerDeparser(packet_out packet, in headers_t hdr) {
+    apply {
+        packet.emit(hdr.server_packet_header);
+        packet.emit(hdr.debug_packet_debug_text);
+        packet.emit(hdr.login_accepted_packet);
+        packet.emit(hdr.login_rejected_packet);
+        packet.emit(hdr.sequenced_data_packet);
+        packet.emit(hdr.time_stamp_seconds_message);
+        packet.emit(hdr.system_event_message);
+        packet.emit(hdr.quantity_tick_size_message);
+        packet.emit(hdr.price_tick_size_message);
+        packet.emit(hdr.orderbook_directory_message);
+        packet.emit(hdr.orderbook_trading_action_message);
+        packet.emit(hdr.add_order_message);
+        packet.emit(hdr.indicative_price_quantity_message);
+        packet.emit(hdr.glimpse_snapshot_message);
+    }
+}
+
+V1Switch(
+    SixswissexchangeSnapshotServerParser(),
+    SixswissexchangeSnapshotServerVerifyChecksum(),
+    SixswissexchangeSnapshotServerIngress(),
+    SixswissexchangeSnapshotServerEgress(),
+    SixswissexchangeSnapshotServerComputeChecksum(),
+    SixswissexchangeSnapshotServerDeparser()
+) main;

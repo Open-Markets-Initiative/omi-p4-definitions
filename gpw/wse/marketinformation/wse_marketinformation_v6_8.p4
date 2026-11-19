@@ -65,10 +65,10 @@ header mail_message_t {
     bit<16> source_time_micro_secs;
     bit<8> scope;
     bit<640> title;
-    bit<2048> text_ascii_str_1000_chunk0;
-    bit<2048> text_ascii_str_1000_chunk1;
-    bit<2048> text_ascii_str_1000_chunk2;
-    bit<1856> text_ascii_str_1000_chunk3;
+    bit<2048> mail_text_chunk0;
+    bit<2048> mail_text_chunk1;
+    bit<2048> mail_text_chunk2;
+    bit<1856> mail_text_chunk3;
     bit<24> reserved_3;
 }
 
@@ -121,7 +121,7 @@ header referential_message_t {
     bit<32> reserved_4;
     bit<16> source_time_micro_secs;
     bit<16> stock_exchange_code;
-    bit<16> type_of_instrument_binary_int_2;
+    bit<16> type_of_instrument;
     bit<64> event_date;
     bit<144> instrument_name;
     bit<8> period_indicator;
@@ -150,7 +150,7 @@ header session_summary_message_t {
     bit<32> symbol_index;
     bit<32> source_time;
     bit<32> source_seq_num;
-    bit<32> date_binary_int_4;
+    bit<32> date;
     bit<32> multiplier;
     bit<32> accumulated_interest;
     bit<32> opening_price;
@@ -292,7 +292,7 @@ header short_sale_change_message_t {
     bit<32> source_time;
     bit<32> system_id;
     bit<16> source_time_micro_secs;
-    bit<800> text_ascii_ch_100;
+    bit<800> text;
     bit<8> authority;
     bit<8> ss_market_maker;
     bit<8> ss_non_market_maker;
@@ -319,7 +319,7 @@ header treasury_bond_futures_data_t {
     bit<96> isin_code;
     bit<64> date_of_first_quotation;
     bit<128> short_name;
-    bit<64> date_ascii_str_8;
+    bit<64> start_date;
     bit<96> underlying_isin_code;
     bit<96> treasury_bond_1_isin_code;
     bit<72> conversion_coefficient_factor_1;
@@ -336,7 +336,7 @@ header treasury_bond_futures_data_t {
 
 header kid_t {
     bit<96> isin_code;
-    bit<32> type_of_instrument_ascii_str_4;
+    bit<32> kid_type_of_instrument;
     bit<80> kid_version;
     bit<64> kid_issue_date;
     bit<8> value_at_risk;

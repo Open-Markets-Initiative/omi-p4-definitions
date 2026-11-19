@@ -72,7 +72,7 @@ header trade_full_information_message_t {
     bit<216> publication_date_time;
     bit<32> instrument_id_code_type;
     bit<96> instrument_id_code;
-    bit<160> price_ascii_ch_20;
+    bit<160> traded_price;
     bit<160> quantity;
     bit<160> notional_amount;
     bit<24> notional_currency;
@@ -92,7 +92,7 @@ header price_update_message_t {
     bit<32> symbol_index;
     bit<32> source_time;
     bit<32> source_seq_num;
-    bit<32> price_binary_int_4;
+    bit<32> price;
     bit<32> highest_price;
     bit<32> lowest_price;
     bit<32> variation_last_price;

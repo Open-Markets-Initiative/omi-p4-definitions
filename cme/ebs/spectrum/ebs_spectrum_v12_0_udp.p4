@@ -45,18 +45,13 @@ header md_incremental_refresh_spectrum_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<1> unused_event_indicator_5;
-    bit<1> unused_event_indicator_4;
-    bit<1> unused_event_indicator_3;
-    bit<1> unused_event_indicator_2;
-    bit<1> unused_event_indicator_1;
-    bit<1> unused_event_indicator_0;
+    bit<6> unused_bits_0_to_5;
     bit<16> block_length;
     bit<8> num_in_group;
 }
 
 header md_incremental_refresh_spectrum_incremental_refresh_spectrum_group_t {
-    bit<8> md_entry_type_spectrum_entry_type;
+    bit<8> spectrum_md_entry_type;
     bit<280> financial_instrument_full_name;
     bit<160> symbol;
     bit<64> instrument_guid;
@@ -70,18 +65,13 @@ header md_incremental_refresh_ticker_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<1> unused_event_indicator_5;
-    bit<1> unused_event_indicator_4;
-    bit<1> unused_event_indicator_3;
-    bit<1> unused_event_indicator_2;
-    bit<1> unused_event_indicator_1;
-    bit<1> unused_event_indicator_0;
+    bit<6> unused_bits_0_to_5;
     bit<16> block_length;
     bit<8> num_in_group;
 }
 
 header md_incremental_refresh_ticker_incremental_refresh_ticker_group_t {
-    bit<8> md_entry_type_ticker_entry_type;
+    bit<8> ticker_md_entry_type;
     bit<32> security_id;
     bit<160> symbol;
     bit<64> instrument_guid;
@@ -98,12 +88,7 @@ header md_snapshot_refresh_spectrum_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<1> unused_event_indicator_5;
-    bit<1> unused_event_indicator_4;
-    bit<1> unused_event_indicator_3;
-    bit<1> unused_event_indicator_2;
-    bit<1> unused_event_indicator_1;
-    bit<1> unused_event_indicator_0;
+    bit<6> unused_bits_0_to_5;
     bit<280> financial_instrument_full_name;
     bit<160> symbol;
     bit<64> instrument_guid;
@@ -113,7 +98,7 @@ header md_snapshot_refresh_spectrum_t {
 }
 
 header md_snapshot_refresh_spectrum_snapshot_refresh_spectrum_group_t {
-    bit<8> md_entry_type_spectrum_entry_type;
+    bit<8> spectrum_md_entry_type;
     bit<64> md_entry_px;
     bit<64> md_entry_size;
     bit<64> md_entry_time;
@@ -123,12 +108,7 @@ header md_snapshot_refresh_ticker_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<1> unused_event_indicator_5;
-    bit<1> unused_event_indicator_4;
-    bit<1> unused_event_indicator_3;
-    bit<1> unused_event_indicator_2;
-    bit<1> unused_event_indicator_1;
-    bit<1> unused_event_indicator_0;
+    bit<6> unused_bits_0_to_5;
     bit<280> financial_instrument_full_name;
     bit<160> symbol;
     bit<64> instrument_guid;
@@ -138,7 +118,7 @@ header md_snapshot_refresh_ticker_t {
 }
 
 header md_snapshot_refresh_ticker_snapshot_refresh_ticker_group_t {
-    bit<8> md_entry_type_ticker_entry_type;
+    bit<8> ticker_md_entry_type;
     bit<64> md_entry_px;
     bit<64> md_entry_size;
     bit<64> md_entry_time;

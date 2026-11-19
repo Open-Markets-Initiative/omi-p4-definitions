@@ -172,7 +172,7 @@ header board_lot_out_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -248,7 +248,7 @@ header neg_order_to_bl_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -324,7 +324,7 @@ header order_mod_out_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -400,7 +400,7 @@ header order_mod_reject_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -476,7 +476,7 @@ header order_cancel_out_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -552,7 +552,7 @@ header order_cancel_reject_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -628,7 +628,7 @@ header order_confirmation_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -704,7 +704,7 @@ header order_mod_confirmation_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -780,7 +780,7 @@ header order_cancel_confirmation_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -856,7 +856,7 @@ header cancel_neg_order_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -932,7 +932,7 @@ header freeze_to_control_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -1008,7 +1008,7 @@ header order_error_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -1084,7 +1084,7 @@ header batch_order_cancel_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -3789,7 +3789,7 @@ header on_stop_notification_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> reserved_4;
     bit<80> old_account_number;
@@ -3857,7 +3857,7 @@ header trade_confirmation_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> reserved_4;
     bit<80> old_account_number;
@@ -3925,7 +3925,7 @@ header trade_cancel_confirm_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> reserved_4;
     bit<80> old_account_number;
@@ -3993,7 +3993,7 @@ header trade_cancel_reject_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> reserved_4;
     bit<80> old_account_number;
@@ -4061,7 +4061,7 @@ header trade_modify_reject_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> reserved_4;
     bit<80> old_account_number;
@@ -4187,7 +4187,7 @@ header trade_modify_confirm_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> reserved_4;
     bit<80> old_account_number;
@@ -4309,7 +4309,7 @@ header giveup_app_confirm_tm_message_t {
     bit<40> broker_id;
     bit<8> filler;
     bit<16> buy_sell;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<32> last_modified_date_time;
     bit<8> initiated_by_control;
     bit<8> open_close;
@@ -4335,7 +4335,7 @@ header giveup_rej_confirm_tm_message_t {
     bit<40> broker_id;
     bit<8> filler;
     bit<16> buy_sell;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<32> last_modified_date_time;
     bit<8> initiated_by_control;
     bit<8> open_close;

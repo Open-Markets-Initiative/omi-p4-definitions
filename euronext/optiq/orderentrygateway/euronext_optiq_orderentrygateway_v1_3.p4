@@ -112,7 +112,7 @@ header new_order_message_order_optional_fields_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> undisclosed_iceberg_type;
     bit<8> stop_triggered_time_in_force;
 }
@@ -170,7 +170,7 @@ header fill_message_t {
     bit<8> emm;
     bit<8> side;
     bit<8> trade_type;
-    bit<1> unused_trade_qualifierset_7;
+    bit<1> unused_bit_7;
     bit<1> nav_trade_expressed_in_price_currency;
     bit<1> nav_trade_expressed_in_bps;
     bit<1> trade_creation_by_market_operations;
@@ -287,7 +287,7 @@ header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }

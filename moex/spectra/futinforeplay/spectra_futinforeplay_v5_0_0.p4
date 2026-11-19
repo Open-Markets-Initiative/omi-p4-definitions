@@ -95,7 +95,7 @@ header security_definition_message_t {
     bit<8> num_in_group_uint_8;
 }
 
-header security_definition_message_security_definition_message_no_m_d_feed_types_group_t {
+header security_definition_message_security_definition_message_no_md_feed_types_group_t {
     bit<200> md_feed_type;
     bit<32> market_depth;
     bit<32> md_book_type;
@@ -175,7 +175,7 @@ header discrete_auction_message_discrete_auction_message_no_underlyings_group_t 
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> security_definition_message_security_definition_message_no_m_d_feed_types_group_remaining;
+    bit<8> security_definition_message_security_definition_message_no_md_feed_types_group_remaining;
     bit<8> security_definition_message_security_definition_message_no_underlyings_group_remaining;
     bit<8> security_definition_message_security_definition_message_no_legs_group_remaining;
     bit<8> security_definition_message_security_definition_message_no_instr_attrib_group_remaining;
@@ -187,7 +187,7 @@ struct headers_t {
     market_data_packet_header_t market_data_packet_header;
     sequence_reset_message_t sequence_reset_message;
     security_definition_message_t security_definition_message;
-    security_definition_message_security_definition_message_no_m_d_feed_types_group_t security_definition_message_security_definition_message_no_m_d_feed_types_group[MAX_MESSAGES];
+    security_definition_message_security_definition_message_no_md_feed_types_group_t security_definition_message_security_definition_message_no_md_feed_types_group[MAX_MESSAGES];
     security_definition_message_security_definition_message_no_underlyings_group_header_t security_definition_message_security_definition_message_no_underlyings_group_header;
     security_definition_message_security_definition_message_no_underlyings_group_t security_definition_message_security_definition_message_no_underlyings_group[MAX_MESSAGES];
     security_definition_message_security_definition_message_no_legs_group_header_t security_definition_message_security_definition_message_no_legs_group_header;
@@ -228,19 +228,19 @@ parser SpectraFutinforeplayParser(packet_in packet, out headers_t hdr, inout met
     state parse_security_definition_message {
         packet.extract(hdr.security_definition_message);
         meta.dispatched = 1;
-        meta.security_definition_message_security_definition_message_no_m_d_feed_types_group_remaining = hdr.security_definition_message.num_in_group_uint_8;
-        transition select(meta.security_definition_message_security_definition_message_no_m_d_feed_types_group_remaining) {
+        meta.security_definition_message_security_definition_message_no_md_feed_types_group_remaining = hdr.security_definition_message.num_in_group_uint_8;
+        transition select(meta.security_definition_message_security_definition_message_no_md_feed_types_group_remaining) {
             8w0: read_security_definition_message_security_definition_message_no_underlyings_group;
-            default: parse_security_definition_message_security_definition_message_no_m_d_feed_types_group;
+            default: parse_security_definition_message_security_definition_message_no_md_feed_types_group;
         }
     }
 
-    state parse_security_definition_message_security_definition_message_no_m_d_feed_types_group {
-        packet.extract(hdr.security_definition_message_security_definition_message_no_m_d_feed_types_group.next);
-        meta.security_definition_message_security_definition_message_no_m_d_feed_types_group_remaining = meta.security_definition_message_security_definition_message_no_m_d_feed_types_group_remaining - 1;
-        transition select(meta.security_definition_message_security_definition_message_no_m_d_feed_types_group_remaining) {
+    state parse_security_definition_message_security_definition_message_no_md_feed_types_group {
+        packet.extract(hdr.security_definition_message_security_definition_message_no_md_feed_types_group.next);
+        meta.security_definition_message_security_definition_message_no_md_feed_types_group_remaining = meta.security_definition_message_security_definition_message_no_md_feed_types_group_remaining - 1;
+        transition select(meta.security_definition_message_security_definition_message_no_md_feed_types_group_remaining) {
             8w0: read_security_definition_message_security_definition_message_no_underlyings_group;
-            default: parse_security_definition_message_security_definition_message_no_m_d_feed_types_group;
+            default: parse_security_definition_message_security_definition_message_no_md_feed_types_group;
         }
     }
 
@@ -374,7 +374,7 @@ control SpectraFutinforeplayDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.market_data_packet_header);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.security_definition_message);
-        packet.emit(hdr.security_definition_message_security_definition_message_no_m_d_feed_types_group);
+        packet.emit(hdr.security_definition_message_security_definition_message_no_md_feed_types_group);
         packet.emit(hdr.security_definition_message_security_definition_message_no_underlyings_group_header);
         packet.emit(hdr.security_definition_message_security_definition_message_no_underlyings_group);
         packet.emit(hdr.security_definition_message_security_definition_message_no_legs_group_header);

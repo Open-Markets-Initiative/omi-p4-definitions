@@ -186,8 +186,8 @@ header sign_on_request_in_message_t {
     bit<1> oddlot_market;
     bit<1> spot_market;
     bit<1> auction_market;
-    bit<1> call_auction_11;
-    bit<1> call_auction_21;
+    bit<1> call_auction_1_market;
+    bit<1> call_auction_2_market;
     bit<2> broker_eligibility_reserved_lower;
     bit<7> broker_eligibility_reserved_upper;
     bit<1> preopen;

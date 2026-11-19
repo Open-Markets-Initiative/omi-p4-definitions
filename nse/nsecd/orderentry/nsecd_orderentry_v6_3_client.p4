@@ -71,7 +71,7 @@ header board_lot_in_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -147,7 +147,7 @@ header order_mod_in_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;
@@ -223,7 +223,7 @@ header order_cancel_in_message_t {
     bit<16> order_type;
     bit<64> order_number;
     bit<80> account_number;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<16> buy_sell_indicator;
     bit<32> disclosed_volume;
     bit<32> disclosed_volume_remaining;

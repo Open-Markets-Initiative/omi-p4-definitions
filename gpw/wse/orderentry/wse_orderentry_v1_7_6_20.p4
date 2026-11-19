@@ -48,14 +48,14 @@ header login_t {
 }
 
 header login_response_t {
-    bit<8> result_login_result;
+    bit<8> login_result;
     bit<32> next_expected_seq_num;
     bit<32> last_replay_seq_num;
     bit<16> session_id;
 }
 
 header connection_close_t {
-    bit<8> reason_connection_close_reason;
+    bit<8> connection_close_reason;
 }
 
 header reject_t {
@@ -117,8 +117,8 @@ header order_add_response_t {
     bit<64> public_order_id;
     bit<64> display_qty;
     bit<64> filled;
-    bit<8> status_order_status;
-    bit<16> reason_order_rejection_reason;
+    bit<8> order_status;
+    bit<16> order_rejection_reason;
     bit<8> exec_type_reason;
     bit<160> client_order_id;
 }
@@ -136,8 +136,8 @@ header order_cancel_t {
 
 header order_cancel_response_t {
     bit<64> order_id;
-    bit<8> status_order_status;
-    bit<16> reason_order_rejection_reason;
+    bit<8> order_status;
+    bit<16> order_rejection_reason;
     bit<8> exec_type_reason;
     bit<160> client_order_id;
 }
@@ -161,9 +161,9 @@ header order_modify_t {
 header order_modify_response_t {
     bit<64> order_id;
     bit<64> filled;
-    bit<8> status_order_status;
+    bit<8> order_status;
     bit<8> priority_flag;
-    bit<16> reason_order_rejection_reason;
+    bit<16> order_rejection_reason;
     bit<160> client_order_id;
 }
 
@@ -185,7 +185,7 @@ header order_mass_cancel_response_t {
     bit<8> target_party_role;
     bit<32> target_party_id;
     bit<32> market_segment_id;
-    bit<16> reason_mass_cancel_rejection_reason;
+    bit<16> mass_cancel_rejection_reason;
     bit<160> client_order_id;
 }
 
@@ -240,8 +240,8 @@ header mass_quote_response_items_quote_order_response_array_t {
     bit<32> instrument_id;
     bit<64> bid_order_id;
     bit<64> ask_order_id;
-    bit<8> status_order_status;
-    bit<16> reason_order_rejection_reason;
+    bit<8> order_status;
+    bit<16> order_rejection_reason;
 }
 
 header market_maker_command_t {
@@ -251,13 +251,13 @@ header market_maker_command_t {
 
 header market_maker_command_response_t {
     bit<32> ref_id;
-    bit<8> result_command_result;
+    bit<8> command_result;
     bit<16> rejection_code;
 }
 
 header request_for_execution_t {
     bit<32> instrument_id;
-    bit<8> reason_request_for_execution_reason;
+    bit<8> request_for_execution_reason;
 }
 
 header bid_offer_update_t {
@@ -362,8 +362,8 @@ header trade_capture_report_response_t {
     bit<32> trade_id;
     bit<168> trade_report_id;
     bit<64> secondary_trade_report_id;
-    bit<8> status_tcr_status;
-    bit<16> reason_tcr_rejection_reason;
+    bit<8> tcr_status;
+    bit<16> tcr_rejection_reason;
 }
 
 header trade_bust_t {

@@ -90,9 +90,9 @@ header active_risk_threshold_state_message_t {
 }
 
 header active_risk_threshold_change_rejected_message_t {
-    bit<160> cl_ord_id_active_risk_threshold_change_rejected_cl_ord_id;
-    bit<48> underlier_active_risk_threshold_change_rejected_underlier_optional;
-    bit<32> efid_active_risk_threshold_change_rejected_efid_optional;
+    bit<160> clordid;
+    bit<48> underlier_optional;
+    bit<32> efid_optional;
     bit<32> threshold_quantity;
     bit<16> reject_reason;
 }
@@ -106,9 +106,9 @@ header active_risk_acknowledged_message_t {
 }
 
 header active_risk_acknowledge_rejected_message_t {
-    bit<160> cl_ord_id_active_risk_acknowledge_rejected_cl_ord_id;
-    bit<48> underlier_active_risk_acknowledge_rejected_underlier;
-    bit<32> efid_active_risk_acknowledge_rejected_efid;
+    bit<160> clordid;
+    bit<48> underlier;
+    bit<32> efid;
     bit<32> threshold_quantity;
     bit<16> reject_reason;
 }
@@ -188,7 +188,7 @@ header manual_cp_breach_trigger_done_message_t {
 }
 
 header risk_threshold_update_rejected_message_t {
-    bit<160> cl_ord_id_risk_threshold_update_rejected_cl_ord_id;
+    bit<160> clordid;
     bit<8> risk_type;
     bit<16> reject_reason;
 }
@@ -236,17 +236,17 @@ header single_order_max_contracts_threshold_state_message_t {
 }
 
 header single_order_allow_market_orders_state_message_t {
-    bit<160> cl_ord_id_single_order_allow_market_orders_state_cl_ord_id_optional;
-    bit<48> underlier_single_order_allow_market_orders_state_underlier_optional;
-    bit<32> efid_single_order_allow_market_orders_state_efid_optional;
+    bit<160> clordid_optional;
+    bit<48> underlier_optional;
+    bit<32> efid_optional;
     bit<16> risk_group_id;
     bit<8> market_orders;
 }
 
 header single_order_restricted_underlier_state_message_t {
-    bit<160> cl_ord_id_single_order_restricted_underlier_state_cl_ord_id_optional;
-    bit<48> underlier_single_order_restricted_underlier_state_underlier;
-    bit<32> efid_single_order_restricted_underlier_state_efid_optional;
+    bit<160> clordid_optional;
+    bit<48> underlier;
+    bit<32> efid_optional;
     bit<16> risk_group_id;
     bit<8> restricted;
 }
@@ -257,20 +257,20 @@ header risk_settings_query_done_message_t {
 }
 
 header risk_settings_query_rejected_message_t {
-    bit<160> cl_ord_id_risk_settings_query_rejected_cl_ord_id;
+    bit<160> clordid;
     bit<16> reject_reason;
 }
 
 header manual_cp_breach_trigger_rejected_message_t {
-    bit<160> cl_ord_id_manual_cp_breach_trigger_rejected_cl_ord_id;
-    bit<48> underlier_manual_cp_breach_trigger_rejected_underlier_optional;
-    bit<32> efid_manual_cp_breach_trigger_rejected_efid_optional;
+    bit<160> clordid;
+    bit<48> underlier_optional;
+    bit<32> efid_optional;
     bit<16> risk_group_id;
     bit<16> reject_reason;
 }
 
 header breach_clear_rejected_message_t {
-    bit<160> cl_ord_id_breach_clear_rejected_cl_ord_id;
+    bit<160> clordid;
     bit<64> breach_id_optional;
     bit<16> reject_reason;
 }
@@ -281,24 +281,24 @@ header breach_cleared_message_t {
 }
 
 header breach_clear_all_accepted_message_t {
-    bit<160> cl_ord_id_breach_clear_all_accepted_cl_ord_id;
+    bit<160> clordid;
 }
 
 header breach_clear_all_rejected_message_t {
-    bit<160> cl_ord_id_breach_clear_all_rejected_cl_ord_id;
+    bit<160> clordid;
     bit<16> reject_reason;
 }
 
 header breach_clear_all_by_efid_or_underlier_accepted_message_t {
-    bit<160> cl_ord_id_breach_clear_all_by_efid_or_underlier_accepted_cl_ord_id;
-    bit<48> underlier_breach_clear_all_by_efid_or_underlier_accepted_underlier_optional;
-    bit<32> efid_breach_clear_all_by_efid_or_underlier_accepted_efid_optional;
+    bit<160> clordid;
+    bit<48> underlier_optional;
+    bit<32> efid_optional;
 }
 
 header breach_clear_all_by_efid_or_underlier_rejected_message_t {
-    bit<160> cl_ord_id_breach_clear_all_by_efid_or_underlier_rejected_cl_ord_id;
-    bit<48> underlier_breach_clear_all_by_efid_or_underlier_rejected_underlier_optional;
-    bit<32> efid_breach_clear_all_by_efid_or_underlier_rejected_efid_optional;
+    bit<160> clordid;
+    bit<48> underlier_optional;
+    bit<32> efid_optional;
     bit<16> reject_reason;
 }
 

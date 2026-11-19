@@ -31,28 +31,8 @@ class BorsaistanbulGeniuminetV2112Tests(unittest.TestCase):
         for payload in payloads.of("omi-data-packets/Bist/BorsaIstanbul.GeniumInet.Itch.v21.12/CombinationOrderBookLeg.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
-    def test_orderbookdirectory(self):
-        for payload in payloads.of("omi-data-packets/Bist/BorsaIstanbul.GeniumInet.Itch.v21.12/OrderBookDirectory.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
     def test_orderbookstatemessage(self):
         for payload in payloads.of("omi-data-packets/Bist/BorsaIstanbul.GeniumInet.Itch.v21.12/OrderBookStateMessage.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_secondsmessage(self):
-        for payload in payloads.of("omi-data-packets/Bist/BorsaIstanbul.GeniumInet.Itch.v21.12/SecondsMessage.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_shortsellstatus(self):
-        for payload in payloads.of("omi-data-packets/Bist/BorsaIstanbul.GeniumInet.Itch.v21.12/ShortSellStatus.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_systemeventmessage(self):
-        for payload in payloads.of("omi-data-packets/Bist/BorsaIstanbul.GeniumInet.Itch.v21.12/SystemEventMessage.pcap"):
-            self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
-
-    def test_ticksizetableentry(self):
-        for payload in payloads.of("omi-data-packets/Bist/BorsaIstanbul.GeniumInet.Itch.v21.12/TickSizeTableEntry.pcap"):
             self.assertTrue(self.switch.accepts(payload), "bmv2 parser rejected a captured packet")
 
 

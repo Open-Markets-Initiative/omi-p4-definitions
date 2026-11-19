@@ -82,7 +82,7 @@ header gap_fill_message_t {
 
 header reject_message_t {
     bit<64> ref_sequence_number;
-    bit<8> reason_reject_reason;
+    bit<8> reject_reason;
     bit<8> details_length;
 }
 
@@ -200,7 +200,7 @@ header new_order_reject_message_t {
     bit<64> correlation_id;
     bit<64> order_id;
     bit<64> instrument_id;
-    bit<8> reason_order_reject_reason;
+    bit<8> order_reject_reason;
     bit<8> details_length;
 }
 
@@ -253,7 +253,7 @@ header amend_order_reject_message_t {
     bit<64> correlation_id;
     bit<64> order_id;
     bit<64> instrument_id;
-    bit<8> reason_order_reject_reason;
+    bit<8> order_reject_reason;
     bit<8> details_length;
 }
 
@@ -274,7 +274,7 @@ header cancel_order_reject_message_t {
     bit<64> correlation_id;
     bit<64> order_id_optional;
     bit<64> instrument_id;
-    bit<8> reason_cancel_order_reject_reason;
+    bit<8> cancel_order_reject_reason;
     bit<8> details_length;
 }
 
@@ -355,7 +355,7 @@ header mass_quote_reject_message_t {
     bit<64> quote_id;
     bit<64> correlation_id;
     bit<64> mmp_group_id;
-    bit<8> reason_mass_quote_reject_reason;
+    bit<8> mass_quote_reject_reason;
     bit<8> details_length;
 }
 
@@ -371,7 +371,7 @@ header mass_cancel_reject_message_t {
     bit<64> timestamp;
     bit<64> exec_id;
     bit<64> correlation_id;
-    bit<8> reason_mass_cancel_reject_reason;
+    bit<8> mass_cancel_reject_reason;
     bit<8> details_length;
 }
 
@@ -385,7 +385,7 @@ header get_mass_quote_mmp_status_response_message_t {
 header get_mass_quote_mmp_status_reject_message_t {
     bit<64> timestamp;
     bit<64> correlation_id;
-    bit<8> reason_mmp_status_reject_reason;
+    bit<8> mmp_status_reject_reason;
 }
 
 header get_orders_mmp_status_response_message_t {
@@ -398,7 +398,7 @@ header get_orders_mmp_status_response_message_t {
 header get_orders_mmp_status_reject_message_t {
     bit<64> timestamp;
     bit<64> correlation_id;
-    bit<8> reason_mmp_status_reject_reason;
+    bit<8> mmp_status_reject_reason;
 }
 
 header order_filled_message_t {
@@ -532,7 +532,7 @@ header mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_g
 
 header mass_quote_orders_placed_message_mass_quote_orders_placed_message_fills_group_t {
     bit<64> match_id;
-    bit<64> order_id_fill_id;
+    bit<64> order_id;
     bit<64> fill_price;
     bit<64> mantissa;
     bit<8> exponent;
@@ -598,7 +598,7 @@ header position_moved_message_t {
     bit<8> exponent;
     bit<8> side;
     bit<8> role;
-    bit<8> reason_position_move_reason;
+    bit<8> position_move_reason;
 }
 
 struct metadata_t {

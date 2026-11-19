@@ -103,7 +103,7 @@ header long_order_message_t {
     bit<64> book_in_optional;
     bit<64> book_out_time_optional;
     bit<64> client_order_id_optional;
-    bit<1> unused_dark_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> dark_passive_order_indicator;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
@@ -202,7 +202,7 @@ header long_order_message_long_order_optional_fields_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }
@@ -924,7 +924,7 @@ header dc_quote_request_message_t {
     bit<64> book_in;
     bit<64> book_out_time;
     bit<64> client_order_id;
-    bit<1> unused_dark_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> dark_passive_order_indicator;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;

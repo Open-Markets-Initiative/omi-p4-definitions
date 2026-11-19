@@ -1259,7 +1259,7 @@ header mass_quote_response_mass_quote_response_entries_group_t {
     bit<32> quote_entry_id;
     bit<16> quote_set_id;
     bit<32> security_id;
-    bit<8> side_side;
+    bit<8> quote_side;
     bit<8> quote_entry_reject_reason_optional;
 }
 

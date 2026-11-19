@@ -51,7 +51,7 @@ header system_event_message_t {
 }
 
 header stock_directory_message_t {
-    bit<64> stock_alphanumeric_8;
+    bit<64> stock;
     bit<8> market_category;
     bit<8> financial_status_indicator;
     bit<48> round_lot_size;
@@ -68,14 +68,14 @@ header stock_directory_message_t {
 }
 
 header stock_trading_action_message_t {
-    bit<64> stock_alphanumeric_8;
+    bit<64> stock;
     bit<8> current_trading_state;
     bit<32> reason;
     bit<104> tracking_id;
 }
 
 header reg_sho_restriction_message_t {
-    bit<64> stock_alpha_8;
+    bit<64> stock;
     bit<8> reg_sho_action;
 }
 
@@ -83,7 +83,7 @@ header noii_message_t {
     bit<72> paired_shares;
     bit<72> imbalance_shares;
     bit<8> imbalance_direction;
-    bit<64> stock_alpha_8;
+    bit<64> stock;
     bit<80> far_price;
     bit<80> near_price;
     bit<80> current_reference_price;
@@ -93,7 +93,7 @@ header noii_message_t {
 
 header cross_trade_message_t {
     bit<72> shares;
-    bit<64> stock_alpha_8;
+    bit<64> stock;
     bit<80> cross_price;
     bit<96> match_number;
     bit<8> cross_type;
@@ -101,7 +101,7 @@ header cross_trade_message_t {
 }
 
 header ipo_quoting_period_update_message_t {
-    bit<64> stock_alphanumeric_8;
+    bit<64> stock;
     bit<48> ipo_quotation_release_time;
     bit<8> ipo_quotation_release_qualifier;
     bit<80> ipo_price;

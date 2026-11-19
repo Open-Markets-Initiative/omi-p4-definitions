@@ -64,14 +64,14 @@ header trading_schedule_message_t {
 header price_tick_size_message_t {
     bit<32> timestamp;
     bit<32> tick_size_table_id;
-    bit<32> tick_size_integer_4;
+    bit<32> price_tick_size;
     bit<32> price_start;
 }
 
 header quantity_tick_size_message_t {
     bit<32> timestamp;
     bit<32> tick_size_table_id;
-    bit<64> tick_size_integer_8;
+    bit<64> quantity_tick_size;
     bit<64> quantity_start;
 }
 

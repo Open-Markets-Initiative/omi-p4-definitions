@@ -107,7 +107,7 @@ header collar_group_t {
 
 header external_underlying_t {
     bit<32> external_underlying_id;
-    bit<240> product_identification_product_identification;
+    bit<240> product_identification;
     bit<8> product_identification_type;
     bit<160> product_code;
     bit<400> product_name;
@@ -135,12 +135,12 @@ header instrument_t {
     bit<32> trading_schedule_id;
     bit<512> description;
     bit<32> mic;
-    bit<64> nominal_value_price;
+    bit<64> nominal_value;
     bit<8> nominal_value_type;
-    bit<64> multiplier_multiplier;
+    bit<64> multiplier;
     bit<64> strike_price;
     bit<16> strike_price_currency;
-    bit<240> product_identification_product_identification;
+    bit<240> product_identification;
     bit<8> product_identification_type;
     bit<32> settlement_calendar_id;
     bit<8> bond_coupon_type;
@@ -210,7 +210,7 @@ header index_params_t {
 }
 
 header index_params_items_t {
-    bit<240> product_identification_product_identification;
+    bit<240> product_identification;
     bit<8> product_identification_type;
     bit<8> index_underlying_type;
 }
@@ -221,7 +221,7 @@ header index_portfolio_entry_t {
     bit<7> reserved_17_index_portfolio_entry_presence_flags;
     bit<1> has_instrument_id;
     bit<32> instrument_id;
-    bit<240> product_identification_product_identification;
+    bit<240> product_identification;
     bit<8> product_identification_type;
     bit<32> mic;
     bit<16> currency;
@@ -283,16 +283,16 @@ header top_price_level_update_t {
 
 header trade_t {
     bit<32> instrument_id;
-    bit<64> settlement_value_value;
+    bit<64> trade_settlement_value;
     bit<32> settlement_date;
     bit<64> trading_timestamp;
-    bit<240> product_identification_product_identification;
+    bit<240> product_identification;
     bit<8> product_identification_type;
     bit<64> price;
     bit<16> price_currency;
     bit<8> price_notation;
     bit<64> quantity;
-    bit<64> nominal_value_value;
+    bit<64> trade_nominal_value;
     bit<16> nominal_currency;
     bit<32> mic;
     bit<64> publication_timestamp;
@@ -322,7 +322,7 @@ header trade_t {
 }
 
 header position_report_t {
-    bit<240> product_identification_product_identification;
+    bit<240> product_identification;
     bit<8> product_identification_type;
     bit<8> pos_type;
     bit<32> open_positions;
@@ -390,7 +390,7 @@ header product_summary_t {
     bit<64> max_price;
     bit<64> min_price;
     bit<64> settlement_price;
-    bit<64> settlement_value_price;
+    bit<64> settlement_value;
     bit<32> end_trading_date;
     bit<32> last_trade_date;
     bit<32> instrument_id_2;
@@ -409,7 +409,7 @@ header product_summary_t {
     bit<64> max_price_2;
     bit<64> min_price_2;
     bit<64> settlement_price_2;
-    bit<64> settlement_value_price_2;
+    bit<64> settlement_value_2;
     bit<32> end_trading_date_2;
     bit<32> last_trade_date_2;
     bit<32> instrument_id_3;
@@ -428,7 +428,7 @@ header product_summary_t {
     bit<64> max_price_3;
     bit<64> min_price_3;
     bit<64> settlement_price_3;
-    bit<64> settlement_value_price_3;
+    bit<64> settlement_value_3;
     bit<32> end_trading_date_3;
     bit<32> last_trade_date_3;
     bit<32> instrument_id_4;
@@ -447,11 +447,11 @@ header product_summary_t {
     bit<64> max_price_4;
     bit<64> min_price_4;
     bit<64> settlement_price_4;
-    bit<64> settlement_value_price_4;
+    bit<64> settlement_value_4;
     bit<32> end_trading_date_4;
     bit<32> last_trade_date_4;
     bit<8> product_identification_type;
-    bit<240> product_identification_product_identification;
+    bit<240> product_identification;
     bit<32> product_id;
     bit<32> mic;
     bit<64> accumulated_interest;
@@ -464,7 +464,7 @@ header product_summary_t {
     bit<8> market;
     bit<8> marker_price_change;
     bit<8> lower_liquidity;
-    bit<64> multiplier_number;
+    bit<64> product_summary_multiplier;
     bit<64> dividend_rate;
     bit<64> delta;
     bit<64> gamma;
@@ -548,7 +548,7 @@ header trading_session_status_t {
 
 header test_event_t {
     bit<1600> scenario_name;
-    bit<8> event_type_event_type;
+    bit<8> event_type;
 }
 
 header order_add_t {
@@ -587,7 +587,7 @@ header order_execute_t {
 
 header order_book_event_t {
     bit<32> instrument_id;
-    bit<8> event_type_order_book_event_type;
+    bit<8> order_book_event_type;
 }
 
 struct metadata_t {

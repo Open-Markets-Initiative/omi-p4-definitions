@@ -144,7 +144,7 @@ header mwcb_status_message_t {
 header operational_halt_message_t {
     bit<16> tracking_number;
     bit<48> timestamp;
-    bit<64> stock_alpha_8;
+    bit<64> stock;
     bit<8> market_code;
     bit<8> operational_halt_action;
 }

@@ -183,6 +183,7 @@ header sequence_number_reset_message_t {
     bit<32> source_time_ns;
     bit<8> product_id;
     bit<8> channel_id;
+    bit<16> reserved_2;
 }
 
 struct metadata_t {

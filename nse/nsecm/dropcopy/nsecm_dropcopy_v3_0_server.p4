@@ -98,11 +98,11 @@ header trade_confirmation_message_t {
     bit<32> fill_price;
     bit<32> token;
     bit<16> book_type;
-    bit<16> pro_client_short_2;
+    bit<16> pro_client;
     bit<32> algo_id;
     bit<64> activity_time_in_nanos;
     bit<64> nnf_field;
-    bit<16> segment_short_2;
+    bit<16> segment;
     bit<40> broker_id;
     bit<8> filler;
     bit<80> pan;
@@ -140,11 +140,11 @@ header trade_cancel_confirm_message_t {
     bit<32> fill_price;
     bit<32> token;
     bit<16> book_type;
-    bit<16> pro_client_short_2;
+    bit<16> pro_client;
     bit<32> algo_id;
     bit<64> activity_time_in_nanos;
     bit<64> nnf_field;
-    bit<16> segment_short_2;
+    bit<16> segment;
     bit<40> broker_id;
     bit<8> filler;
     bit<80> pan;
@@ -182,11 +182,11 @@ header trade_cancel_reject_message_t {
     bit<32> fill_price;
     bit<32> token;
     bit<16> book_type;
-    bit<16> pro_client_short_2;
+    bit<16> pro_client;
     bit<32> algo_id;
     bit<64> activity_time_in_nanos;
     bit<64> nnf_field;
-    bit<16> segment_short_2;
+    bit<16> segment;
     bit<40> broker_id;
     bit<8> filler;
     bit<80> pan;
@@ -224,11 +224,11 @@ header trade_modify_confirm_message_t {
     bit<32> fill_price;
     bit<32> token;
     bit<16> book_type;
-    bit<16> pro_client_short_2;
+    bit<16> pro_client;
     bit<32> algo_id;
     bit<64> activity_time_in_nanos;
     bit<64> nnf_field;
-    bit<16> segment_short_2;
+    bit<16> segment;
     bit<40> broker_id;
     bit<8> filler;
     bit<80> pan;
@@ -274,10 +274,10 @@ header price_confirmation_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -320,10 +320,10 @@ header order_mod_reject_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -366,10 +366,10 @@ header order_cancel_reject_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -412,10 +412,10 @@ header order_confirmation_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -458,10 +458,10 @@ header order_mod_confirmation_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -504,10 +504,10 @@ header order_cancel_confirmation_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -550,10 +550,10 @@ header freeze_to_control_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -596,10 +596,10 @@ header on_stop_notification_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -642,10 +642,10 @@ header order_error_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }
@@ -688,10 +688,10 @@ header batch_order_cancel_message_t {
     bit<8> suspended;
     bit<8> filler;
     bit<80> pan;
-    bit<8> segment_char_1;
+    bit<8> segment_char;
     bit<8> participant_type;
     bit<80> account_number;
-    bit<8> pro_client_char_1;
+    bit<8> pro_client_char;
     bit<8> settlement_type;
     bit<96> settlor;
 }

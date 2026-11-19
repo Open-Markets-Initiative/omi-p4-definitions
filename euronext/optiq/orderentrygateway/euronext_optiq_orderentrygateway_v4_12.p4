@@ -117,7 +117,7 @@ header new_order_message_order_optional_fields_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> undisclosed_iceberg_type;
     bit<8> stop_triggered_time_in_force;
 }
@@ -381,7 +381,7 @@ header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }

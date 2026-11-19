@@ -82,7 +82,7 @@ header new_order_single_message_t {
     bit<24> aiq;
     bit<8> side;
     bit<64> price_price_8;
-    bit<32> order_qty_quantity_non_zero;
+    bit<32> order_qty;
 }
 
 header order_cancel_replace_request_message_t {
@@ -108,7 +108,7 @@ header order_cancel_replace_request_message_t {
     bit<24> aiq;
     bit<8> side;
     bit<64> price_price_8;
-    bit<32> order_qty_quantity_non_zero;
+    bit<32> order_qty;
 }
 
 header order_cancel_request_message_t {
@@ -135,7 +135,7 @@ header new_bulk_quote_message_new_bulk_quote_message_quote_updates_group_t {
     bit<32> instrument_id;
     bit<8> side;
     bit<32> price_price_4_optional;
-    bit<32> order_qty_quantity_zero_optional;
+    bit<32> order_qty_optional;
     bit<8> quote_type;
     bit<8> reserved;
 }

@@ -37,7 +37,7 @@ header market_data_packet_header_t {
     bit<16> msg_flags;
     bit<64> sending_time;
     bit<64> transact_time;
-    bit<32> exchange_trading_session_i_d_uint_32_optional;
+    bit<32> exchange_trading_session_id_optional;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;

@@ -77,7 +77,7 @@ header md_incremental_refresh_settle_incremental_refresh_settle_group_t {
     bit<8> exponent_2;
     bit<64> md_entry_px;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
+    bit<1> unused_bit_6;
     bit<1> reserved_bits;
     bit<1> cabinet;
     bit<1> intraday;

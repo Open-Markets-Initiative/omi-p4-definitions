@@ -104,7 +104,7 @@ header trade_confirmation_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> new_volume;
     bit<80> old_account_number;
@@ -170,7 +170,7 @@ header trade_cancel_confirm_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> new_volume;
     bit<80> old_account_number;
@@ -236,7 +236,7 @@ header trade_cancel_reject_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> new_volume;
     bit<80> old_account_number;
@@ -302,7 +302,7 @@ header trade_modify_confirm_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> new_volume;
     bit<80> old_account_number;
@@ -368,7 +368,7 @@ header trade_modify_reject_message_t {
     bit<16> ca_level;
     bit<8> open_close;
     bit<8> old_open_close;
-    bit<8> book_type_char_1;
+    bit<8> trade_book_type;
     bit<8> third_reserved_1;
     bit<32> new_volume;
     bit<80> old_account_number;
@@ -404,7 +404,7 @@ header giveup_app_confirm_tm_message_t {
     bit<40> broker_id;
     bit<8> filler;
     bit<16> buy_sell;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<32> last_modified_date_time;
     bit<8> initiated_by_control;
     bit<8> open_close;
@@ -430,7 +430,7 @@ header giveup_rej_confirm_tm_message_t {
     bit<40> broker_id;
     bit<8> filler;
     bit<16> buy_sell;
-    bit<16> book_type_short_2;
+    bit<16> book_type;
     bit<32> last_modified_date_time;
     bit<8> initiated_by_control;
     bit<8> open_close;

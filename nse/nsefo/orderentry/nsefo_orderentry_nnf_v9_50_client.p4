@@ -347,163 +347,7 @@ header order_cancellation_request_message_t {
     bit<416> reserved_52;
 }
 
-header order_confirmation_message_t {
-    bit<8> participant_type;
-    bit<8> reserved_1;
-    bit<16> competitor_period;
-    bit<16> solicitor_period;
-    bit<8> modified_cancelled_by;
-    bit<8> second_reserved_1;
-    bit<16> reason_code;
-    bit<32> reserved_4;
-    bit<32> token_no;
-    bit<48> instrument_name;
-    bit<80> symbol;
-    bit<32> expiry_date;
-    bit<32> strike_price;
-    bit<16> option_type;
-    bit<16> ca_level;
-    bit<40> counter_party_broker_id;
-    bit<8> third_reserved_1;
-    bit<16> reserved_2;
-    bit<8> closeout_flag;
-    bit<8> fourth_reserved_1;
-    bit<16> order_type;
-    bit<64> order_number;
-    bit<80> account_number;
-    bit<16> book_type;
-    bit<16> buy_sell_indicator;
-    bit<32> disclosed_volume;
-    bit<32> disclosed_volume_remaining;
-    bit<32> total_volume_remaining;
-    bit<32> volume;
-    bit<32> volume_filled_today;
-    bit<32> price;
-    bit<32> trigger_price;
-    bit<32> good_till_date;
-    bit<32> entry_date_time;
-    bit<32> minimum_fill_aon_volume;
-    bit<32> last_modified;
-    bit<1> ato;
-    bit<1> market;
-    bit<1> sl;
-    bit<1> mit;
-    bit<1> day;
-    bit<1> gtc;
-    bit<1> ioc;
-    bit<1> aon;
-    bit<1> mf;
-    bit<1> matched_ind;
-    bit<1> traded;
-    bit<1> modified;
-    bit<1> frozen;
-    bit<1> order_pre_open;
-    bit<2> reserved_12;
-    bit<16> branch_id;
-    bit<32> trader_id;
-    bit<40> broker_id;
-    bit<192> c_ord_filler;
-    bit<8> open_close;
-    bit<96> settlor;
-    bit<16> pro_client_indicator;
-    bit<16> settlement_period;
-    bit<3> reserved_68;
-    bit<1> stpc;
-    bit<2> reserved_34;
-    bit<1> col;
-    bit<1> boc;
-    bit<8> fifth_reserved_1;
-    bit<16> filler_116;
-    bit<8> filler_17;
-    bit<8> filler_18;
-    bit<64> nnf_field;
-    bit<64> mkt_replay;
-    bit<80> pan;
-    bit<32> algo_id;
-    bit<16> second_reserved_2;
-    bit<64> last_activity_reference;
-    bit<416> reserved_52;
-}
-
-header order_modification_confirmation_message_t {
-    bit<8> participant_type;
-    bit<8> reserved_1;
-    bit<16> competitor_period;
-    bit<16> solicitor_period;
-    bit<8> modified_cancelled_by;
-    bit<8> second_reserved_1;
-    bit<16> reason_code;
-    bit<32> reserved_4;
-    bit<32> token_no;
-    bit<48> instrument_name;
-    bit<80> symbol;
-    bit<32> expiry_date;
-    bit<32> strike_price;
-    bit<16> option_type;
-    bit<16> ca_level;
-    bit<40> counter_party_broker_id;
-    bit<8> third_reserved_1;
-    bit<16> reserved_2;
-    bit<8> closeout_flag;
-    bit<8> fourth_reserved_1;
-    bit<16> order_type;
-    bit<64> order_number;
-    bit<80> account_number;
-    bit<16> book_type;
-    bit<16> buy_sell_indicator;
-    bit<32> disclosed_volume;
-    bit<32> disclosed_volume_remaining;
-    bit<32> total_volume_remaining;
-    bit<32> volume;
-    bit<32> volume_filled_today;
-    bit<32> price;
-    bit<32> trigger_price;
-    bit<32> good_till_date;
-    bit<32> entry_date_time;
-    bit<32> minimum_fill_aon_volume;
-    bit<32> last_modified;
-    bit<1> ato;
-    bit<1> market;
-    bit<1> sl;
-    bit<1> mit;
-    bit<1> day;
-    bit<1> gtc;
-    bit<1> ioc;
-    bit<1> aon;
-    bit<1> mf;
-    bit<1> matched_ind;
-    bit<1> traded;
-    bit<1> modified;
-    bit<1> frozen;
-    bit<1> order_pre_open;
-    bit<2> reserved_12;
-    bit<16> branch_id;
-    bit<32> trader_id;
-    bit<40> broker_id;
-    bit<192> c_ord_filler;
-    bit<8> open_close;
-    bit<96> settlor;
-    bit<16> pro_client_indicator;
-    bit<16> settlement_period;
-    bit<3> reserved_68;
-    bit<1> stpc;
-    bit<2> reserved_34;
-    bit<1> col;
-    bit<1> boc;
-    bit<8> fifth_reserved_1;
-    bit<16> filler_116;
-    bit<8> filler_17;
-    bit<8> filler_18;
-    bit<64> nnf_field;
-    bit<64> mkt_replay;
-    bit<80> pan;
-    bit<32> algo_id;
-    bit<16> second_reserved_2;
-    bit<64> last_activity_reference;
-    bit<416> reserved_52;
-}
-
-header order_entry_message_t {
+header kill_switch_request_message_t {
     bit<8> participant_type;
     bit<8> reserved_1;
     bit<16> competitor_period;
@@ -837,9 +681,7 @@ struct headers_t {
     order_entry_request_message_t order_entry_request_message;
     order_modification_request_message_t order_modification_request_message;
     order_cancellation_request_message_t order_cancellation_request_message;
-    order_confirmation_message_t order_confirmation_message;
-    order_modification_confirmation_message_t order_modification_confirmation_message;
-    order_entry_message_t order_entry_message;
+    kill_switch_request_message_t kill_switch_request_message;
     price_modification_message_t price_modification_message;
     trade_inquiry_message_t trade_inquiry_message;
     spread_order_entry_message_t spread_order_entry_message;
@@ -871,15 +713,7 @@ parser NsefoOrderentryClientParser(packet_in packet, out headers_t hdr, inout me
             16w2000: parse_order_entry_request_message;
             16w2040: parse_order_modification_request_message;
             16w2070: parse_order_cancellation_request_message;
-            16w2073: parse_order_confirmation_message;
-            16w2074: parse_order_modification_confirmation_message;
-            16w2012: parse_order_entry_message;
-            16w2042: parse_order_entry_message;
-            16w2062: parse_order_entry_message;
-            16w2072: parse_order_entry_message;
-            16w2170: parse_order_entry_message;
-            16w2231: parse_order_entry_message;
-            16w9002: parse_order_entry_message;
+            16w2062: parse_kill_switch_request_message;
             16w2013: parse_price_modification_message;
             16w20406: parse_price_modification_message;
             16w5445: parse_trade_inquiry_message;
@@ -977,20 +811,8 @@ parser NsefoOrderentryClientParser(packet_in packet, out headers_t hdr, inout me
         transition accept;
     }
 
-    state parse_order_confirmation_message {
-        packet.extract(hdr.order_confirmation_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_order_modification_confirmation_message {
-        packet.extract(hdr.order_modification_confirmation_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_order_entry_message {
-        packet.extract(hdr.order_entry_message);
+    state parse_kill_switch_request_message {
+        packet.extract(hdr.kill_switch_request_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -1147,9 +969,7 @@ control NsefoOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.order_entry_request_message);
         packet.emit(hdr.order_modification_request_message);
         packet.emit(hdr.order_cancellation_request_message);
-        packet.emit(hdr.order_confirmation_message);
-        packet.emit(hdr.order_modification_confirmation_message);
-        packet.emit(hdr.order_entry_message);
+        packet.emit(hdr.kill_switch_request_message);
         packet.emit(hdr.price_modification_message);
         packet.emit(hdr.trade_inquiry_message);
         packet.emit(hdr.spread_order_entry_message);

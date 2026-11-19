@@ -146,7 +146,7 @@ header simple_new_order_message_t {
     bit<8> padding;
     bit<8> ordtagid;
     bit<8> mm_protection_reset;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<32> account;
     bit<80> sender_location;
     bit<40> entering_trader;
@@ -172,7 +172,7 @@ header simple_modify_order_message_t {
     bit<8> padding;
     bit<8> ordtagid;
     bit<8> mm_protection_reset;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<32> account;
     bit<80> sender_location;
     bit<40> entering_trader;
@@ -200,7 +200,7 @@ header new_order_single_message_t {
     bit<8> padding;
     bit<8> ordtagid;
     bit<8> mm_protection_reset;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<32> account;
     bit<80> sender_location;
     bit<40> entering_trader;
@@ -237,7 +237,7 @@ header order_cancel_replace_request_message_t {
     bit<8> padding;
     bit<8> ordtagid;
     bit<8> mm_protection_reset;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<32> account;
     bit<80> sender_location;
     bit<40> entering_trader;
@@ -276,7 +276,7 @@ header order_cancel_request_message_t {
     bit<8> market_segment_id;
     bit<8> padding;
     bit<16> offset_18_padding_2;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<64> security_id;
     bit<64> order_id_optional;
     bit<64> origclordid;
@@ -297,7 +297,7 @@ header new_order_cross_message_t {
     bit<8> market_segment_id;
     bit<8> padding;
     bit<16> offset_18_padding_2;
-    bit<64> crossid;
+    bit<64> cross_id;
     bit<80> sender_location;
     bit<40> entering_trader;
     bit<40> executing_trader_optional;
@@ -317,7 +317,7 @@ header new_order_cross_message_cross_sides_group_t {
     bit<8> offset_1_padding_1;
     bit<32> account;
     bit<32> entering_firm_optional;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<32> trading_sub_account;
 }
 
@@ -329,7 +329,7 @@ header execution_report_new_message_t {
     bit<8> market_segment_id_optional;
     bit<8> side;
     bit<8> ord_status;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<64> secondary_order_id;
     bit<64> security_id;
     bit<64> order_id;
@@ -349,7 +349,7 @@ header execution_report_new_message_t {
     bit<64> stop_px;
     bit<64> min_qty;
     bit<64> max_floor;
-    bit<64> crossid_optional;
+    bit<64> cross_id_optional;
     bit<64> received_time;
     bit<24> offset_152_padding_3;
     bit<8> ordtagid;
@@ -374,7 +374,7 @@ header execution_report_modify_message_t {
     bit<8> market_segment_id_optional;
     bit<8> side;
     bit<8> ord_status;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<64> secondary_order_id;
     bit<64> security_id;
     bit<64> leaves_qty;
@@ -419,7 +419,7 @@ header execution_report_cancel_message_t {
     bit<8> market_segment_id_optional;
     bit<8> side;
     bit<8> ord_status;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<64> secondary_order_id;
     bit<64> security_id;
     bit<64> cum_qty;
@@ -462,7 +462,7 @@ header execution_report_trade_message_t {
     bit<8> market_segment_id_optional;
     bit<8> side;
     bit<8> ord_status;
-    bit<64> clordid_optional;
+    bit<64> cl_ord_id_optional;
     bit<64> secondary_order_id;
     bit<64> security_id;
     bit<32> account;
@@ -484,7 +484,7 @@ header execution_report_trade_message_t {
     bit<8> offset_119_padding_1;
     bit<64> secondary_exec_id;
     bit<64> exec_ref_id;
-    bit<64> crossid_optional;
+    bit<64> cross_id_optional;
     bit<16> crossed_indicator;
     bit<64> order_qty;
     bit<8> trading_session_id;
@@ -509,7 +509,7 @@ header execution_report_reject_message_t {
     bit<8> market_segment_id_optional;
     bit<8> side;
     bit<8> cxl_rej_response_to;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<64> secondary_order_id_optional;
     bit<64> security_id;
     bit<32> ord_rej_reason;
@@ -526,7 +526,7 @@ header execution_report_reject_message_t {
     bit<64> stop_px;
     bit<64> min_qty;
     bit<64> max_floor;
-    bit<64> crossid_optional;
+    bit<64> cross_id_optional;
     bit<16> crossed_indicator;
     bit<64> received_time;
     bit<24> offset_146_padding_3;
@@ -549,7 +549,7 @@ header execution_report_forward_message_t {
     bit<8> market_segment_id_optional;
     bit<8> side;
     bit<8> ord_status;
-    bit<64> clordid_optional;
+    bit<64> cl_ord_id_optional;
     bit<64> secondary_order_id;
     bit<64> security_id;
     bit<32> account;
@@ -569,7 +569,7 @@ header execution_report_forward_message_t {
     bit<16> offset_118_padding_2;
     bit<64> secondary_exec_id;
     bit<64> exec_ref_id;
-    bit<64> fixed_rate_percentage_8_optional;
+    bit<64> fixed_rate_optional;
     bit<64> order_qty;
     bit<8> trading_session_id;
     bit<8> trading_session_sub_id;
@@ -651,7 +651,7 @@ header quote_request_message_t {
     bit<80> sender_location;
     bit<40> entering_trader;
     bit<40> executing_trader;
-    bit<64> fixed_rate_percentage_8;
+    bit<64> fixed_rate;
     bit<16> days_to_settlement;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -687,7 +687,7 @@ header quote_status_report_message_t {
     bit<80> sender_location;
     bit<40> entering_trader;
     bit<40> executing_trader;
-    bit<64> fixed_rate_percentage_8_optional;
+    bit<64> fixed_rate_optional;
     bit<8> execute_underlying_trade;
     bit<16> days_to_settlement_optional;
     bit<32> trading_sub_account;
@@ -715,7 +715,7 @@ header quote_message_t {
     bit<80> sender_location;
     bit<40> entering_trader;
     bit<40> executing_trader;
-    bit<64> fixed_rate_percentage_8;
+    bit<64> fixed_rate;
     bit<8> execute_underlying_trade;
     bit<16> days_to_settlement;
     bit<32> trading_sub_account;
@@ -761,7 +761,7 @@ header quote_request_reject_message_t {
     bit<64> order_qty_optional;
     bit<80> sender_location;
     bit<40> executing_trader;
-    bit<64> fixed_rate_percentage_8_optional;
+    bit<64> fixed_rate_optional;
     bit<16> days_to_settlement_optional;
     bit<16> block_length;
     bit<8> num_in_group;
@@ -892,7 +892,7 @@ header order_mass_action_request_message_t {
     bit<8> padding;
     bit<8> mass_action_type;
     bit<8> mass_action_scope;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<8> mass_cancel_restatement_reason;
     bit<8> ordtagid;
     bit<8> side_optional;
@@ -912,7 +912,7 @@ header order_mass_action_report_message_t {
     bit<8> market_segment_id_optional;
     bit<8> mass_action_type;
     bit<8> mass_action_scope;
-    bit<64> clordid;
+    bit<64> cl_ord_id;
     bit<64> mass_action_report_id;
     bit<64> transact_time;
     bit<8> mass_action_response;

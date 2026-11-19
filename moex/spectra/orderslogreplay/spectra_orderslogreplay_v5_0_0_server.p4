@@ -51,7 +51,7 @@ header logout_message_t {
 
 header server_replay_t {
     bit<64> transact_time;
-    bit<32> exchange_trading_session_i_d_uint_32_optional;
+    bit<32> exchange_trading_session_id_optional;
     bit<16> block_length;
     bit<16> template_id;
     bit<16> schema_id;
@@ -63,7 +63,7 @@ header best_prices_message_t {
     bit<8> num_in_group_uint_8;
 }
 
-header best_prices_message_best_prices_message_no_m_d_entries_group_t {
+header best_prices_message_best_prices_message_no_md_entries_group_t {
     bit<64> mkt_bid_px;
     bit<64> mkt_offer_px;
     bit<64> mkt_bid_size;
@@ -72,13 +72,13 @@ header best_prices_message_best_prices_message_no_m_d_entries_group_t {
 }
 
 header empty_book_message_t {
-    bit<32> last_msg_seq_num_processed_u_int_32_null_optional;
+    bit<32> last_msg_seq_num_processed_optional;
 }
 
 header order_update_message_t {
-    bit<64> md_entry_id_int_64;
-    bit<64> md_entry_px_decimal_5;
-    bit<64> md_entry_size_int_64;
+    bit<64> md_entry_id;
+    bit<64> md_entry_px;
+    bit<64> md_entry_size;
     bit<64> md_flags;
     bit<64> md_flags_2;
     bit<32> security_id;
@@ -88,12 +88,12 @@ header order_update_message_t {
 }
 
 header order_execution_message_t {
-    bit<64> md_entry_id_int_64;
-    bit<64> md_entry_px_decimal_5_null_optional;
-    bit<64> md_entry_size_int_64_null_optional;
+    bit<64> md_entry_id;
+    bit<64> md_entry_px_optional;
+    bit<64> md_entry_size_optional;
     bit<64> last_px;
     bit<64> last_qty;
-    bit<64> trade_id_int_64;
+    bit<64> trade_id;
     bit<64> md_flags;
     bit<64> md_flags_2;
     bit<32> security_id;
@@ -104,7 +104,7 @@ header order_execution_message_t {
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> best_prices_message_best_prices_message_no_m_d_entries_group_remaining;
+    bit<8> best_prices_message_best_prices_message_no_md_entries_group_remaining;
 }
 
 struct headers_t {
@@ -113,7 +113,7 @@ struct headers_t {
     logout_message_t logout_message;
     server_replay_t server_replay;
     best_prices_message_t best_prices_message;
-    best_prices_message_best_prices_message_no_m_d_entries_group_t best_prices_message_best_prices_message_no_m_d_entries_group[MAX_MESSAGES];
+    best_prices_message_best_prices_message_no_md_entries_group_t best_prices_message_best_prices_message_no_md_entries_group[MAX_MESSAGES];
     empty_book_message_t empty_book_message;
     order_update_message_t order_update_message;
     order_execution_message_t order_execution_message;
@@ -172,19 +172,19 @@ parser SpectraOrderslogreplayServerParser(packet_in packet, out headers_t hdr, i
     state parse_best_prices_message {
         packet.extract(hdr.best_prices_message);
         meta.dispatched = 1;
-        meta.best_prices_message_best_prices_message_no_m_d_entries_group_remaining = hdr.best_prices_message.num_in_group_uint_8;
-        transition select(meta.best_prices_message_best_prices_message_no_m_d_entries_group_remaining) {
+        meta.best_prices_message_best_prices_message_no_md_entries_group_remaining = hdr.best_prices_message.num_in_group_uint_8;
+        transition select(meta.best_prices_message_best_prices_message_no_md_entries_group_remaining) {
             8w0: accept;
-            default: parse_best_prices_message_best_prices_message_no_m_d_entries_group;
+            default: parse_best_prices_message_best_prices_message_no_md_entries_group;
         }
     }
 
-    state parse_best_prices_message_best_prices_message_no_m_d_entries_group {
-        packet.extract(hdr.best_prices_message_best_prices_message_no_m_d_entries_group.next);
-        meta.best_prices_message_best_prices_message_no_m_d_entries_group_remaining = meta.best_prices_message_best_prices_message_no_m_d_entries_group_remaining - 1;
-        transition select(meta.best_prices_message_best_prices_message_no_m_d_entries_group_remaining) {
+    state parse_best_prices_message_best_prices_message_no_md_entries_group {
+        packet.extract(hdr.best_prices_message_best_prices_message_no_md_entries_group.next);
+        meta.best_prices_message_best_prices_message_no_md_entries_group_remaining = meta.best_prices_message_best_prices_message_no_md_entries_group_remaining - 1;
+        transition select(meta.best_prices_message_best_prices_message_no_md_entries_group_remaining) {
             8w0: accept;
-            default: parse_best_prices_message_best_prices_message_no_m_d_entries_group;
+            default: parse_best_prices_message_best_prices_message_no_md_entries_group;
         }
     }
 
@@ -241,7 +241,7 @@ control SpectraOrderslogreplayServerDeparser(packet_out packet, in headers_t hdr
         packet.emit(hdr.logout_message);
         packet.emit(hdr.server_replay);
         packet.emit(hdr.best_prices_message);
-        packet.emit(hdr.best_prices_message_best_prices_message_no_m_d_entries_group);
+        packet.emit(hdr.best_prices_message_best_prices_message_no_md_entries_group);
         packet.emit(hdr.empty_book_message);
         packet.emit(hdr.order_update_message);
         packet.emit(hdr.order_execution_message);

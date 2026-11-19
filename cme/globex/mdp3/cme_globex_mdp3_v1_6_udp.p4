@@ -108,8 +108,7 @@ header md_instrument_definition_future_t {
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -208,8 +207,7 @@ header md_instrument_definition_spread_t {
     bit<240> unit_of_measure;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -342,8 +340,7 @@ header md_incremental_refresh_daily_statistics_incremental_refresh_daily_statist
     bit<32> rpt_seq;
     bit<16> trading_reference_date;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -476,8 +473,7 @@ header snapshot_full_refresh_snapshot_full_refresh_group_t {
     bit<16> trading_reference_date;
     bit<8> open_close_settl_flag;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;
@@ -558,8 +554,7 @@ header md_instrument_definition_option_t {
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
+    bit<2> unused_bits_5_to_6;
     bit<1> reserved_bits;
     bit<1> intraday;
     bit<1> rounded;

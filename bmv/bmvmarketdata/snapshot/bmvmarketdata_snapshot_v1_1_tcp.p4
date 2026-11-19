@@ -95,15 +95,15 @@ header weighted_average_price_settlement_prices_message_t {
 header capital_trades_message_t {
     bit<32> instrument_number;
     bit<64> trade_time;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price;
     bit<8> concertation_type;
     bit<32> trade_number;
     bit<8> price_setter;
     bit<8> operation_type;
     bit<64> amount;
-    bit<40> buy_alpha_5;
-    bit<40> sell_alpha_5;
+    bit<40> buy_broker;
+    bit<40> sell_broker;
     bit<8> settlement;
     bit<8> auction_indicator;
 }
@@ -111,7 +111,7 @@ header capital_trades_message_t {
 header probable_allocation_price_message_t {
     bit<32> instrument_number;
     bit<64> probable_allocation_price;
-    bit<32> volume_int_324;
+    bit<32> volume;
 }
 
 header continuous_auctions_beginning_message_t {
@@ -154,7 +154,7 @@ header mutual_fund_trades_message_t {
 header tradability_message_t {
     bit<32> instrument_number;
     bit<32> number_of_operations;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> amount;
     bit<64> opening_price;
     bit<64> maximum;
@@ -168,10 +168,10 @@ header virtual_trades_message_t {
     bit<8> virtual_trades_status;
     bit<8> operation_type;
     bit<32> number;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<8> concertation;
-    bit<40> buy_alpha_5;
-    bit<40> sell_alpha_5;
+    bit<40> buy_broker;
+    bit<40> sell_broker;
 }
 
 header order_addition_message_t {
@@ -179,7 +179,7 @@ header order_addition_message_t {
     bit<64> date_and_time;
     bit<32> number;
     bit<8> direction;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price;
     bit<40> participant;
 }
@@ -188,7 +188,7 @@ header execution_of_orders_message_t {
     bit<32> instrument_number;
     bit<64> date;
     bit<32> number;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<32> trade_number;
     bit<64> execution_price;
 }
@@ -206,7 +206,7 @@ header order_change_message_t {
     bit<64> new_date;
     bit<32> new_number;
     bit<8> direction;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price;
 }
 
@@ -219,12 +219,12 @@ header depth_message_t {
 header depth_message_price_level_t {
     bit<64> price;
     bit<16> number_of_orders;
-    bit<32> volume_int_324;
+    bit<32> volume;
 }
 
 header best_offer_message_t {
     bit<32> instrument_number;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price_rate;
     bit<8> offer_direction;
     bit<8> operation_type;
@@ -233,14 +233,14 @@ header best_offer_message_t {
 header public_offerings_message_t {
     bit<32> instrument_number;
     bit<32> number;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> discount_rate_or_price;
     bit<32> rate_of_return;
     bit<16> term_days;
     bit<8> currency_type;
     bit<8> settlement;
-    bit<40> buy_alpha_5;
-    bit<40> sell_alpha_5;
+    bit<40> buy_broker;
+    bit<40> sell_broker;
     bit<64> placement_date;
     bit<64> issue_date;
     bit<64> maturity_date;
@@ -254,7 +254,7 @@ header open_interest_message_t {
 header derivatives_market_trades_message_t {
     bit<32> instrument_number;
     bit<64> trade_time;
-    bit<32> volume_int_324;
+    bit<32> volume;
     bit<64> price_rate;
     bit<8> concertation_type;
     bit<32> trade_number;
@@ -277,8 +277,8 @@ header general_indices_message_t {
     bit<16> component;
     bit<8> sector;
     bit<64> indices_hour;
-    bit<64> volume_int_648;
-    bit<32> indices_price_44;
+    bit<64> volume_long;
+    bit<32> indices_value;
     bit<32> variation;
     bit<32> percentage;
     bit<8> trend;
@@ -307,8 +307,8 @@ header dollar_buy_sell_message_t {
     bit<64> posture_date;
     bit<40> currency;
     bit<8> dollar_side;
-    bit<64> buy_precio_88;
-    bit<64> sell_precio_88;
+    bit<64> dollar_buy;
+    bit<64> dollar_sell;
     bit<64> last_deal;
 }
 
@@ -352,7 +352,7 @@ header benchmark_message_t {
     bit<64> outstanding;
     bit<64> integer_amount;
     bit<32> decimal_amount;
-    bit<64> indices_precio_88;
+    bit<64> benchmark_value;
     bit<64> indices_24;
     bit<8> rebalance;
     bit<64> daily_performance;
@@ -537,7 +537,7 @@ header probable_price_of_allocation_message_t {
     bit<32> instrument_number;
     bit<8> origin;
     bit<64> probable_price_of_allocation;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
 }
 
 header relation_between_bmvbiva_instruments_message_t {
@@ -550,7 +550,7 @@ header equities_market_trades_message_t {
     bit<32> instrument_number;
     bit<8> origin;
     bit<64> time_of_the_trade;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> price;
     bit<8> type_of_agreement;
     bit<64> consecutive_number_of_the_trade;
@@ -574,7 +574,7 @@ header pricevolume_indicator_message_t {
     bit<32> instrument_number;
     bit<8> origin;
     bit<64> probable_price_of_allotment;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> best_selling_price;
     bit<64> best_purchasing_price;
     bit<8> type_of_cross_trading;
@@ -585,7 +585,7 @@ header consolidated_execution_of_orders_message_t {
     bit<8> origin;
     bit<64> date;
     bit<64> consecutive_number;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> consecutive_number_of_the_trade;
     bit<64> execution_price;
     bit<8> indicator;
@@ -599,7 +599,7 @@ header registration_of_order_message_t {
     bit<64> date_and_time;
     bit<64> consecutive_number;
     bit<8> direction;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> price;
     bit<40> participant;
 }
@@ -614,7 +614,7 @@ header cancellations_of_orders_message_t {
 header last_quote_message_t {
     bit<32> instrument_number;
     bit<8> origin;
-    bit<64> volume_int_648;
+    bit<64> volume_long;
     bit<64> price_rate;
     bit<8> direction_of_the_bid;
     bit<8> type_of_trading;

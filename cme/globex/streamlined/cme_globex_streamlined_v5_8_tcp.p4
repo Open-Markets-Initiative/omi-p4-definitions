@@ -73,9 +73,7 @@ header md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_refe
     bit<8> exponent_optional;
     bit<8> open_close_settl_flag;
     bit<1> null_value;
-    bit<1> unused_settl_price_type_6;
-    bit<1> unused_settl_price_type_5;
-    bit<1> unused_settl_price_type_4;
+    bit<3> unused_bits_4_to_6;
     bit<1> reserved_bits;
     bit<1> rounded;
     bit<1> actual;
@@ -546,7 +544,7 @@ header md_instrument_definition_eris_eris_security_alt_id_group_header_t {
 }
 
 header md_instrument_definition_eris_eris_security_alt_id_group_t {
-    bit<208> security_alt_id_50;
+    bit<208> security_alt_id;
     bit<8> security_alt_id_source_optional;
 }
 
@@ -563,7 +561,7 @@ header md_instrument_definition_eris_eris_legs_group_t {
     bit<64> mantissa;
     bit<8> exponent;
     bit<400> leg_symbol;
-    bit<32> leg_ratio_qty_int_32_null;
+    bit<32> eris_leg_ratio_qty;
     bit<8> leg_side;
     bit<24> leg_currency;
     bit<64> leg_security_type_4;

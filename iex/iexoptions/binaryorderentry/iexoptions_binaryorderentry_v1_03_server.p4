@@ -102,7 +102,7 @@ header order_ack_message_t {
     bit<24> aiq;
     bit<8> side;
     bit<64> price_price_8_optional;
-    bit<32> order_qty_quantity_non_zero;
+    bit<32> order_qty;
     bit<32> leaves_qty;
     bit<64> effective_limit_price;
     bit<64> display_price;
@@ -118,7 +118,7 @@ header unsolicited_modify_ack_message_t {
     bit<64> orig_cl_ord_id;
     bit<64> order_id;
     bit<64> price_price_8;
-    bit<32> order_qty_quantity_non_zero;
+    bit<32> order_qty;
     bit<32> leaves_qty;
     bit<64> effective_limit_price;
     bit<64> display_price;
@@ -172,7 +172,7 @@ header bulk_quote_ack_message_bulk_quote_ack_message_quote_acks_group_t {
     bit<64> order_id_optional;
     bit<8> ack_type;
     bit<32> price_price_4_optional;
-    bit<32> order_qty_quantity_zero_optional;
+    bit<32> order_qty_optional;
     bit<8> reason_code_optional;
 }
 
@@ -187,7 +187,7 @@ header new_ioc_quote_ack_message_t {
     bit<64> order_id;
     bit<8> ack_type;
     bit<32> price_price_4_optional;
-    bit<32> order_qty_quantity_non_zero;
+    bit<32> order_qty;
     bit<8> reason_code_optional;
     bit<8> throttle_indicator;
 }

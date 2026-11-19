@@ -63,7 +63,7 @@ header new_order_message_t {
     bit<1> disclosed_quantity_randomization;
     bit<1> stp_incoming_order;
     bit<1> stp_resting_order;
-    bit<1> unused_dark_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> dark_passive_order_indicator;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
@@ -119,7 +119,7 @@ header new_order_message_order_optional_fields_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> undisclosed_iceberg_type;
     bit<8> stop_triggered_time_in_force;
 }
@@ -357,7 +357,7 @@ header cancel_replace_message_t {
     bit<1> disclosed_quantity_randomization;
     bit<1> stp_incoming_order;
     bit<1> stp_resting_order;
-    bit<1> unused_dark_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> dark_passive_order_indicator;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
@@ -398,7 +398,7 @@ header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_trading_session_validityset_0;
+    bit<1> unused_bit_0;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }
@@ -596,7 +596,7 @@ header quote_request_message_t {
     bit<8> side_optional;
     bit<8> firm_id_publication;
     bit<88> end_client;
-    bit<1> unused_dark_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> dark_passive_order_indicator;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
@@ -864,7 +864,7 @@ header rfq_notification_message_t {
     bit<8> rfq_update_type;
     bit<8> side_optional;
     bit<88> end_client;
-    bit<1> unused_dark_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> dark_passive_order_indicator;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
@@ -1307,7 +1307,7 @@ header rfq_audit_message_rfq_counterparts_group_t {
     bit<8> order_origin;
     bit<64> order_price;
     bit<64> last_traded_quantity;
-    bit<1> unused_dark_execution_instructionset_7;
+    bit<1> unused_bit_7;
     bit<1> dark_passive_order_indicator;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;

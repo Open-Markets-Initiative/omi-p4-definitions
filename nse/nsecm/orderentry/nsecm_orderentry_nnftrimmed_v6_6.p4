@@ -82,7 +82,7 @@ header order_modify_cancel_request_trimmed_message_t {
     bit<32> log_time;
     bit<32> user_id;
     bit<16> error_code;
-    bit<64> time_stamp_1_long_long_8;
+    bit<64> time_stamp_1;
     bit<8> time_stamp_2;
     bit<8> modified_cancelled_by;
     bit<16> reason_code;
@@ -137,7 +137,7 @@ header order_modify_cancel_response_trimmed_message_t {
     bit<32> log_time;
     bit<32> user_id;
     bit<16> error_code;
-    bit<64> time_stamp_1_long_long_8;
+    bit<64> time_stamp_1;
     bit<8> time_stamp_2;
     bit<8> modified_cancelled_by;
     bit<16> reason_code;
@@ -193,7 +193,7 @@ header trade_confirmation_trimmed_message_t {
     bit<32> log_time;
     bit<32> user_id;
     bit<64> timestamp;
-    bit<64> time_stamp_1_char_8;
+    bit<64> time_stamp_1_char;
     bit<64> response_order_number;
     bit<8> time_stamp_2;
     bit<40> broker_id;

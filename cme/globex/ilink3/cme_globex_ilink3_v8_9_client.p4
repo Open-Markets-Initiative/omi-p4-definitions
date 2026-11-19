@@ -490,7 +490,7 @@ header mass_quote_request_mass_quote_request_entries_group_t {
     bit<32> security_id;
     bit<64> price;
     bit<32> order_qty;
-    bit<8> side_side;
+    bit<8> quote_side;
     bit<32> quote_entry_id;
     bit<16> quote_set_id;
 }

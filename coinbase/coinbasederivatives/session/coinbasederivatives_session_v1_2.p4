@@ -57,11 +57,11 @@ header logon_conf_message_t {
 }
 
 header logout_message_t {
-    bit<512> reason_string_64;
+    bit<512> logout_reason;
 }
 
 header logged_out_message_t {
-    bit<512> reason_string_64;
+    bit<512> logout_reason;
 }
 
 header heartbeat_message_t {

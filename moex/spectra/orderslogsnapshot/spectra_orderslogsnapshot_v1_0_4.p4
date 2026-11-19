@@ -48,33 +48,33 @@ header sequence_reset_message_t {
 
 header order_book_snapshot_message_t {
     bit<32> security_id;
-    bit<32> last_msg_seq_num_processed_u_int_32;
+    bit<32> last_msg_seq_num_processed;
     bit<32> rpt_seq;
     bit<32> exchange_trading_session_id;
     bit<16> block_length;
     bit<8> num_in_group;
 }
 
-header order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_t {
-    bit<64> md_entry_id_int_64_null_optional;
+header order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_t {
+    bit<64> md_entry_id_optional;
     bit<64> transact_time;
-    bit<64> md_entry_px_decimal_5_null_optional;
-    bit<64> md_entry_size_int_64_null_optional;
-    bit<64> trade_id_int_64_null_optional;
+    bit<64> md_entry_px_optional;
+    bit<64> md_entry_size_optional;
+    bit<64> trade_id_optional;
     bit<64> md_flags;
     bit<8> md_entry_type;
 }
 
 struct metadata_t {
     bit<1> dispatched;
-    bit<8> order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_remaining;
+    bit<8> order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_remaining;
 }
 
 struct headers_t {
     market_data_packet_header_t market_data_packet_header;
     sequence_reset_message_t sequence_reset_message;
     order_book_snapshot_message_t order_book_snapshot_message;
-    order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_t order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group[MAX_MESSAGES];
+    order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_t order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group[MAX_MESSAGES];
 }
 
 parser SpectraOrderslogsnapshotParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
@@ -102,19 +102,19 @@ parser SpectraOrderslogsnapshotParser(packet_in packet, out headers_t hdr, inout
     state parse_order_book_snapshot_message {
         packet.extract(hdr.order_book_snapshot_message);
         meta.dispatched = 1;
-        meta.order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_remaining = hdr.order_book_snapshot_message.num_in_group;
-        transition select(meta.order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_remaining) {
+        meta.order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_remaining = hdr.order_book_snapshot_message.num_in_group;
+        transition select(meta.order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_remaining) {
             8w0: accept;
-            default: parse_order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group;
+            default: parse_order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group;
         }
     }
 
-    state parse_order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group {
-        packet.extract(hdr.order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group.next);
-        meta.order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_remaining = meta.order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_remaining - 1;
-        transition select(meta.order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group_remaining) {
+    state parse_order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group {
+        packet.extract(hdr.order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group.next);
+        meta.order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_remaining = meta.order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_remaining - 1;
+        transition select(meta.order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group_remaining) {
             8w0: accept;
-            default: parse_order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group;
+            default: parse_order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group;
         }
     }
 
@@ -151,7 +151,7 @@ control SpectraOrderslogsnapshotDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.market_data_packet_header);
         packet.emit(hdr.sequence_reset_message);
         packet.emit(hdr.order_book_snapshot_message);
-        packet.emit(hdr.order_book_snapshot_message_order_book_snapshot_message_no_m_d_entries_group);
+        packet.emit(hdr.order_book_snapshot_message_order_book_snapshot_message_no_md_entries_group);
     }
 }
 
