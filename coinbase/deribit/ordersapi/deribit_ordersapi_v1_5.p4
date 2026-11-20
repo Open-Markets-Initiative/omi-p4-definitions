@@ -131,7 +131,7 @@ header mass_quote_request_message_t {
     bit<64> correlation_id;
     bit<64> mmp_group_id;
     bit<64> self_match_prevention_id;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> reset_mmp;
     bit<16> block_length;
     bit<16> num_in_group;
@@ -419,7 +419,7 @@ header order_filled_message_order_filled_message_fills_group_t {
     bit<64> mantissa_2;
     bit<8> exponent_2;
     bit<8> side;
-    bit<5> reserved_5;
+    bit<5> reserved_4_to_8;
     bit<1> is_liquidation;
     bit<1> is_fully_filled;
     bit<1> is_quote;
@@ -442,7 +442,7 @@ header order_filled_message_order_filled_message_legs_group_t {
 header orders_canceled_message_t {
     bit<64> timestamp;
     bit<64> exec_id;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> is_last_message;
     bit<16> block_length;
     bit<16> num_in_group;
@@ -455,7 +455,7 @@ header orders_canceled_message_orders_canceled_message_orders_group_t {
     bit<64> mantissa;
     bit<8> exponent;
     bit<8> cancel_reason;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> is_quote;
 }
 

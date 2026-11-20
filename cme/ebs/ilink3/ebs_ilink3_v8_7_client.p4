@@ -107,11 +107,7 @@ header new_order_single_t {
     bit<8> ord_type;
     bit<8> time_in_force;
     bit<8> manual_order_indicator;
-    bit<1> exec_inst_reserved_5;
-    bit<1> exec_inst_reserved_4;
-    bit<1> exec_inst_reserved_3;
-    bit<1> exec_inst_reserved_2;
-    bit<1> exec_inst_reserved_1;
+    bit<5> reserved_4_to_8;
     bit<1> nh;
     bit<1> ob;
     bit<1> aon;
@@ -143,11 +139,7 @@ header order_cancel_replace_request_t {
     bit<8> time_in_force;
     bit<8> manual_order_indicator;
     bit<8> ofm_override;
-    bit<1> exec_inst_reserved_5;
-    bit<1> exec_inst_reserved_4;
-    bit<1> exec_inst_reserved_3;
-    bit<1> exec_inst_reserved_2;
-    bit<1> exec_inst_reserved_1;
+    bit<5> reserved_4_to_8;
     bit<1> nh;
     bit<1> ob;
     bit<1> aon;

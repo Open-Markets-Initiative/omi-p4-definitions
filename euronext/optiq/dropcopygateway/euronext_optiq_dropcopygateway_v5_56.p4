@@ -103,7 +103,7 @@ header long_order_message_t {
     bit<64> book_in_optional;
     bit<64> book_out_time_optional;
     bit<64> client_order_id_optional;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;
@@ -125,7 +125,7 @@ header long_order_message_t {
     bit<64> indicative_auction_volume;
     bit<64> oe_session_id;
     bit<8> lp_role_optional;
-    bit<2> reserved_2_2;
+    bit<2> reserved_7_to_8_2;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -196,12 +196,12 @@ header long_order_message_long_order_optional_fields_group_t {
     bit<64> disclosed_qty;
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> session_4;
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_bit_0;
+    bit<1> unused_bit_1;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }
@@ -370,7 +370,7 @@ header dc_short_order_reject_message_t {
     bit<8> collar_rej_type;
     bit<8> rejected_message;
     bit<16> error_code;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -444,7 +444,7 @@ header trade_bust_notification_message_t {
     bit<64> last_shares;
     bit<64> last_traded_px;
     bit<64> order_id;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -519,7 +519,7 @@ header dc_quote_message_t {
     bit<8> trading_capacity;
     bit<8> account_type;
     bit<8> lp_role;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -923,7 +923,7 @@ header dc_quote_request_message_t {
     bit<64> book_in;
     bit<64> book_out_time;
     bit<64> client_order_id;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> dark_stp_indicator;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;

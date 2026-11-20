@@ -5,7 +5,7 @@
 
 | Division | [Protocol][Omi.Ice.Protocol.Definitions] | [Encoding][Omi.Encoding.Definitions] | Version | Date | Size | [Deployment][Omi.Glossary.Deployment] | [Testing][Omi.Glossary.Testing] | [Documentation][Omi.Ice.Specifications] |
 | --- | --- | --- | --- | ---: | ---: | --- | --- | --- |
-| [IceFutures][IceFutures.Exchange] | [Bgw][Ice.IceFutures.Bgw] | [Sbe][Omi.Encoding.Sbe] | [7.0][Ice.IceFutures.Bgw.Sbe.v7.0.Definition] | 10/24/2025 | 1,532 | [Active][Omi.Glossary.Deployment.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Ice.IceFutures.Bgw.Sbe.v7.0.Url] |
+| [IceFutures][IceFutures.Exchange] | [Bgw][Ice.IceFutures.Bgw] | [Sbe][Omi.Encoding.Sbe] | [7.0][Ice.IceFutures.Bgw.Sbe.v7.0.Definition] | 10/24/2025 | 1,522 | [Active][Omi.Glossary.Deployment.Active] | [Untested][Omi.Glossary.Testing.Untested] | [url][Ice.IceFutures.Bgw.Sbe.v7.0.Url] |
 | [IceFutures][IceFutures.Exchange] | [Mdf][Ice.IceFutures.Mdf] | [iMpact][Omi.Encoding.iMpact] | [1.1.24][Ice.IceFutures.Mdf.iMpact.v1.1.24.Definition] | 3/30/2016 | 1,001 | [Deprecated][Omi.Glossary.Deployment.Deprecated] | [Verified][Omi.Glossary.Testing.Verified] |  |
 | [IceFutures][IceFutures.Exchange] | [Mdf][Ice.IceFutures.Mdf] | [iMpact][Omi.Encoding.iMpact] | [1.1.33][Ice.IceFutures.Mdf.iMpact.v1.1.33.Definition] | 8/6/2018 | 1,070 | [Deprecated][Omi.Glossary.Deployment.Deprecated] | [Verified][Omi.Glossary.Testing.Verified] |  |
 | [IceFutures][IceFutures.Exchange] | [Mdf][Ice.IceFutures.Mdf] | [iMpact][Omi.Encoding.iMpact] | [1.1.34][Ice.IceFutures.Mdf.iMpact.v1.1.34.Definition] | 9/4/2018 | 1,093 | [Deprecated][Omi.Glossary.Deployment.Deprecated] | [Verified][Omi.Glossary.Testing.Verified] |  |

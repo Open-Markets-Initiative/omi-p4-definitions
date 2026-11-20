@@ -46,7 +46,7 @@ header md_incremental_refresh_spectrum_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<6> unused_bits_0_to_5;
+    bit<6> unused_bits_1_to_6;
     bit<16> block_length;
     bit<8> num_in_group;
 }
@@ -66,7 +66,7 @@ header md_incremental_refresh_ticker_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<6> unused_bits_0_to_5;
+    bit<6> unused_bits_1_to_6;
     bit<16> block_length;
     bit<8> num_in_group;
 }
@@ -89,7 +89,7 @@ header md_snapshot_refresh_spectrum_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<6> unused_bits_0_to_5;
+    bit<6> unused_bits_1_to_6;
     bit<280> financial_instrument_full_name;
     bit<160> symbol;
     bit<64> instrument_guid;
@@ -109,7 +109,7 @@ header md_snapshot_refresh_ticker_t {
     bit<64> transact_time;
     bit<1> end_of_event;
     bit<1> recovery_message;
-    bit<6> unused_bits_0_to_5;
+    bit<6> unused_bits_1_to_6;
     bit<280> financial_instrument_full_name;
     bit<160> symbol;
     bit<64> instrument_guid;

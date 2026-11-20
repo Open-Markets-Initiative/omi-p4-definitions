@@ -85,7 +85,7 @@ header order_added_message_t {
     bit<8> side;
     bit<32> quantity;
     bit<64> price;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> retail_present;
 }
 

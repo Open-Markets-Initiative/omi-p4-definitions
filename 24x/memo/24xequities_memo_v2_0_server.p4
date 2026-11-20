@@ -97,11 +97,11 @@ header execution_report_new_message_t {
     bit<8> time_in_force;
     bit<8> order_capacity;
     bit<8> cust_order_capacity;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
-    bit<14> reserved_14;
+    bit<14> reserved_3_to_16;
     bit<1> non_attested_retail;
     bit<1> late_auction;
     bit<64> peg_offset_value;
@@ -171,7 +171,7 @@ header execution_report_trade_message_t {
     bit<64> trd_matching_id;
     bit<32> link_id_optional;
     bit<8> security_group;
-    bit<4> reserved_4;
+    bit<4> reserved_13_to_16;
     bit<1> traded_against_hidden;
     bit<1> traded_against_retail;
     bit<1> price_improvement;
@@ -329,7 +329,7 @@ header execution_report_trade_correction_message_t {
     bit<32> cum_qty;
     bit<32> link_id_optional;
     bit<8> security_group;
-    bit<4> reserved_4;
+    bit<4> reserved_13_to_16;
     bit<1> traded_against_hidden;
     bit<1> traded_against_retail;
     bit<1> price_improvement;
@@ -366,7 +366,7 @@ header execution_report_trade_break_message_t {
     bit<32> cum_qty;
     bit<32> link_id_optional;
     bit<8> security_group;
-    bit<4> reserved_4;
+    bit<4> reserved_13_to_16;
     bit<1> traded_against_hidden;
     bit<1> traded_against_retail;
     bit<1> price_improvement;

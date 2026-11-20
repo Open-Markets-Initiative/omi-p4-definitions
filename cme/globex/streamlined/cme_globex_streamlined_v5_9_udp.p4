@@ -52,7 +52,7 @@ header admin_logout_t {
 header md_incremental_refresh_eris_reference_data_and_daily_statistics_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -72,8 +72,7 @@ header md_incremental_refresh_eris_reference_data_and_daily_statistics_eris_refe
     bit<8> exponent_optional;
     bit<8> open_close_settl_flag;
     bit<1> null_value;
-    bit<3> unused_bits_4_to_6;
-    bit<1> reserved_bits;
+    bit<4> reserved_4_to_7;
     bit<1> rounded;
     bit<1> actual;
     bit<1> final_daily;
@@ -167,7 +166,7 @@ header md_news_indices_lines_of_text_group_t {
 header md_incremental_refresh_trade_blocks_340_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -219,7 +218,7 @@ header md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_t {
 header quote_request_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -276,7 +275,7 @@ header md_incremental_refresh_indices_t {
     bit<64> transact_time;
     bit<16> md_feed_type;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -314,7 +313,7 @@ header md_incremental_refresh_indices_incremental_refresh_indices_group_t {
 header md_incremental_refresh_trade_blocks_349_t {
     bit<64> transact_time_optional;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -368,7 +367,7 @@ header md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_t {
 header md_incremental_refresh_eris_351_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -407,7 +406,7 @@ header md_incremental_refresh_eris_351_eris_original_group_t {
 header md_incremental_refresh_eris_353_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -448,7 +447,7 @@ header md_incremental_refresh_ot_c_356_t {
     bit<64> transact_time;
     bit<16> trade_date;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -575,7 +574,7 @@ header md_instrument_definition_eris_eris_legs_group_t {
 header md_incremental_refresh_trade_blocks_365_t {
     bit<64> transact_time_optional;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -632,7 +631,7 @@ header md_incremental_refresh_ot_c_366_t {
     bit<64> transact_time;
     bit<16> trade_date;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;

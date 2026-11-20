@@ -408,7 +408,7 @@ header contract_standing_data_message_t {
     bit<8> settlement_method;
     bit<24> trading_currency;
     bit<8> strike_price_decimals_ratio;
-    bit<6> reserved_6;
+    bit<6> reserved_3_to_8;
     bit<1> volume;
     bit<1> delta;
     bit<8> contract_trading_type;

@@ -56,7 +56,7 @@ header best_prices_message_t {
 header best_prices_message_best_prices_message_no_md_entries_group_t {
     bit<64> mkt_bid_px;
     bit<64> mkt_offer_px;
-    bit<6> reserved_6;
+    bit<6> reserved_3_to_8;
     bit<1> offer_empty_book;
     bit<1> bid_empty_book;
     bit<32> security_id;

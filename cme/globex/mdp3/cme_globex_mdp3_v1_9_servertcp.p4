@@ -45,7 +45,7 @@ header simple_binary_header_t {
 header channel_reset_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -70,7 +70,7 @@ header admin_logout_t {
 
 header md_instrument_definition_future_legacy_t {
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -109,8 +109,7 @@ header md_instrument_definition_future_legacy_t {
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -169,7 +168,7 @@ header md_instrument_definition_future_legacy_lot_type_rules_group_t {
 
 header md_instrument_definition_spread_legacy_t {
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -208,8 +207,7 @@ header md_instrument_definition_spread_legacy_t {
     bit<240> unit_of_measure;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -280,7 +278,7 @@ header security_status_t {
     bit<32> security_id_optional;
     bit<16> trade_date;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -295,7 +293,7 @@ header security_status_t {
 header md_incremental_refresh_book_legacy_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -337,7 +335,7 @@ header md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_grou
 header md_incremental_refresh_daily_statistics_legacy_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -356,8 +354,7 @@ header md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_
     bit<32> rpt_seq;
     bit<16> trading_reference_date;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -370,7 +367,7 @@ header md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_
 header md_incremental_refresh_limits_banding_legacy_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -393,7 +390,7 @@ header md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_b
 header md_incremental_refresh_session_statistics_legacy_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -419,7 +416,7 @@ header md_incremental_refresh_session_statistics_legacy_incremental_refresh_sess
 header md_incremental_refresh_volume_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -463,8 +460,7 @@ header snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_t {
     bit<16> trading_reference_date;
     bit<8> open_close_settl_flag;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -476,7 +472,7 @@ header quote_request_t {
     bit<64> transact_time;
     bit<184> quote_req_id;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -499,7 +495,7 @@ header quote_request_related_sym_group_t {
 
 header md_instrument_definition_option_legacy_t {
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -544,8 +540,7 @@ header md_instrument_definition_option_legacy_t {
     bit<64> unit_of_measure_qty;
     bit<64> trading_reference_price;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -617,7 +612,7 @@ header md_instrument_definition_option_legacy_option_related_instruments_group_t
 header md_incremental_refresh_trade_summary_legacy_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -656,7 +651,7 @@ header md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_sum
 header md_incremental_refresh_order_book_legacy_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -701,7 +696,7 @@ header snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_
 header md_incremental_refresh_book_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -743,7 +738,7 @@ header md_incremental_refresh_book_incremental_refresh_book_order_id_group_t {
 header md_incremental_refresh_order_book_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -769,7 +764,7 @@ header md_incremental_refresh_order_book_incremental_refresh_order_book_group_t 
 header md_incremental_refresh_trade_summary_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -808,7 +803,7 @@ header md_incremental_refresh_trade_summary_incremental_refresh_trade_summary_or
 header md_incremental_refresh_daily_statistics_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -827,8 +822,7 @@ header md_incremental_refresh_daily_statistics_incremental_refresh_daily_statist
     bit<32> rpt_seq;
     bit<16> trading_reference_date;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -841,7 +835,7 @@ header md_incremental_refresh_daily_statistics_incremental_refresh_daily_statist
 header md_incremental_refresh_limits_banding_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -864,7 +858,7 @@ header md_incremental_refresh_limits_banding_incremental_refresh_limits_banding_
 header md_incremental_refresh_session_statistics_t {
     bit<64> transact_time;
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -911,8 +905,7 @@ header snapshot_full_refresh_snapshot_full_refresh_group_t {
     bit<16> trading_reference_date;
     bit<8> open_close_settl_flag;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -941,7 +934,7 @@ header snapshot_full_refresh_order_book_snapshot_full_refresh_order_book_group_t
 
 header md_instrument_definition_future_t {
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -980,8 +973,7 @@ header md_instrument_definition_future_t {
     bit<64> unit_of_measure_qty_ex;
     bit<64> trading_reference_price_ex;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -1040,7 +1032,7 @@ header md_instrument_definition_future_lot_type_rules_group_t {
 
 header md_instrument_definition_option_t {
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -1085,8 +1077,7 @@ header md_instrument_definition_option_t {
     bit<64> unit_of_measure_qty_ex;
     bit<64> trading_reference_price_ex;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;
@@ -1157,7 +1148,7 @@ header md_instrument_definition_option_option_related_instruments_group_t {
 
 header md_instrument_definition_spread_t {
     bit<1> end_of_event;
-    bit<1> reserved;
+    bit<1> reserved_7;
     bit<1> recovery_msg;
     bit<1> last_implied_msg;
     bit<1> last_stats_msg;
@@ -1196,8 +1187,7 @@ header md_instrument_definition_spread_t {
     bit<240> unit_of_measure;
     bit<64> trading_reference_price_ex;
     bit<1> null_value;
-    bit<2> unused_bits_5_to_6;
-    bit<1> reserved_bits;
+    bit<3> reserved_5_to_7;
     bit<1> intraday;
     bit<1> rounded;
     bit<1> actual;

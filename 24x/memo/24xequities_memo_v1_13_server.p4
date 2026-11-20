@@ -97,7 +97,7 @@ header execution_report_pending_new_message_t {
     bit<8> time_in_force;
     bit<8> order_capacity;
     bit<8> cust_order_capacity;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
@@ -145,7 +145,7 @@ header execution_report_new_message_t {
     bit<8> time_in_force;
     bit<8> order_capacity;
     bit<8> cust_order_capacity;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;

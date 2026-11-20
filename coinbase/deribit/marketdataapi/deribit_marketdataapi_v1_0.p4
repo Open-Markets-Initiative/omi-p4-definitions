@@ -60,7 +60,7 @@ header instrument_definition_message_t {
     bit<64> tick_size;
     bit<8> quantity_exponent;
     bit<8> type_;
-    bit<5> reserved_5;
+    bit<5> reserved_4_to_8;
     bit<1> is_perpetual;
     bit<1> is_put_option;
     bit<1> is_reversed;

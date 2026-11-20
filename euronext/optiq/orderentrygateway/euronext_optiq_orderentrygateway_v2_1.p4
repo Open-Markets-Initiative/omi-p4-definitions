@@ -55,7 +55,7 @@ header new_order_message_t {
     bit<8> trading_capacity;
     bit<8> account_type;
     bit<8> lp_role_optional;
-    bit<1> unused_bit_7;
+    bit<1> reserved_8;
     bit<1> conditional_order;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;
@@ -63,13 +63,13 @@ header new_order_message_t {
     bit<1> disclosed_quantity_randomization;
     bit<1> stp_incoming_order;
     bit<1> stp_resting_order;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;
     bit<1> displayed_order_interaction;
     bit<1> deferred_trade_indicator;
     bit<1> dark_indicator;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -111,11 +111,11 @@ header new_order_message_order_optional_fields_group_t {
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
     bit<8> peg_offset;
-    bit<4> reserved_4;
+    bit<4> reserved_5_to_8;
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_bit_0;
+    bit<1> unused_bit_1;
     bit<8> undisclosed_iceberg_type;
     bit<8> stop_triggered_time_in_force;
 }
@@ -184,7 +184,7 @@ header ack_message_t {
 header ack_message_mifid_fields_group_t {
     bit<32> execution_within_firm_short_code_optional;
     bit<32> client_identification_shortcode;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -253,7 +253,7 @@ header fill_message_mifid_fields_group_header_t {
 header fill_message_mifid_fields_group_t {
     bit<32> execution_within_firm_short_code_optional;
     bit<32> client_identification_shortcode;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -305,7 +305,7 @@ header kill_message_t {
 header kill_message_mifid_fields_group_t {
     bit<32> execution_within_firm_short_code_optional;
     bit<32> client_identification_shortcode;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -332,7 +332,7 @@ header cancel_replace_message_t {
     bit<8> time_in_force;
     bit<8> account_type_optional;
     bit<8> lp_role_optional;
-    bit<1> unused_bit_7;
+    bit<1> reserved_8;
     bit<1> conditional_order;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;
@@ -340,13 +340,13 @@ header cancel_replace_message_t {
     bit<1> disclosed_quantity_randomization;
     bit<1> stp_incoming_order;
     bit<1> stp_resting_order;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;
     bit<1> displayed_order_interaction;
     bit<1> deferred_trade_indicator;
     bit<1> dark_indicator;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -374,11 +374,11 @@ header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<64> disclosed_qty;
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
-    bit<4> reserved_4;
+    bit<4> reserved_5_to_8;
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_bit_0;
+    bit<1> unused_bit_1;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }
@@ -452,7 +452,7 @@ header reject_message_mifid_fields_group_header_t {
 header reject_message_mifid_fields_group_t {
     bit<32> execution_within_firm_short_code_optional;
     bit<32> client_identification_shortcode;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -470,7 +470,7 @@ header quotes_message_t {
     bit<8> trading_capacity;
     bit<8> account_type;
     bit<8> lp_role;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -478,7 +478,7 @@ header quotes_message_t {
     bit<1> investment_algo_indicator;
     bit<1> dea_indicator;
     bit<8> rfe_answer;
-    bit<1> unused_bit_7;
+    bit<1> reserved_8;
     bit<1> conditional_order;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;
@@ -575,7 +575,7 @@ header quote_request_message_t {
     bit<8> side_optional;
     bit<8> firm_id_publication;
     bit<88> end_client;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;
     bit<1> displayed_order_interaction;
@@ -668,7 +668,7 @@ header mass_cancel_ack_message_t {
 header mass_cancel_ack_message_mifid_fields_group_t {
     bit<32> execution_within_firm_short_code_optional;
     bit<32> client_identification_shortcode;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -804,7 +804,7 @@ header rfq_notification_message_t {
     bit<8> rfq_update_type;
     bit<8> side_optional;
     bit<88> end_client;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;
     bit<1> displayed_order_interaction;
@@ -991,7 +991,7 @@ header mm_protection_ack_message_t {
     bit<32> execution_within_firm_short_code;
     bit<32> symbol_index;
     bit<8> emm;
-    bit<5> reserved_5;
+    bit<5> reserved_4_to_8;
     bit<1> pull;
     bit<1> acknowledgement;
     bit<1> notification;
@@ -1019,7 +1019,7 @@ header new_wholesale_order_message_t {
     bit<64> price;
     bit<64> quantity;
     bit<32> execution_within_firm_short_code;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -1087,7 +1087,7 @@ header wholesale_order_ack_message_t {
     bit<64> price_optional;
     bit<64> quantity_optional;
     bit<32> execution_within_firm_short_code;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -1142,7 +1142,7 @@ header request_for_implied_execution_message_t {
     bit<64> order_id;
     bit<32> execution_within_firm_short_code;
     bit<32> client_identification_shortcode;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -1163,7 +1163,7 @@ header cross_order_message_t {
     bit<64> order_px;
     bit<64> order_qty;
     bit<32> execution_within_firm_short_code;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
@@ -1275,7 +1275,7 @@ header declaration_entry_message_t {
     bit<8> settlement_period;
     bit<8> settlement_flag;
     bit<8> guarantee_flag;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> frmaramplp;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;

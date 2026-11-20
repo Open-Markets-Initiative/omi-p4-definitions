@@ -74,7 +74,7 @@ header new_order_single_message_t {
     bit<64> price_optional;
     bit<8> time_in_force;
     bit<8> position_effect_optional;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
@@ -99,7 +99,7 @@ header short_two_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
@@ -136,7 +136,7 @@ header long_two_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
@@ -173,7 +173,7 @@ header short_one_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
@@ -209,7 +209,7 @@ header long_one_sided_bulk_quote_message_t {
     bit<64> sending_time;
     bit<160> clordid;
     bit<8> time_in_force;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
@@ -272,7 +272,7 @@ header mass_cancel_request_message_t {
     bit<48> underlier_optional;
     bit<64> options_security_id_optional;
     bit<16> cancel_group_id;
-    bit<5> reserved_5;
+    bit<5> reserved_4_to_8;
     bit<1> cancel_orders_from_this_port_only;
     bit<1> send_cancels;
     bit<1> lockout;

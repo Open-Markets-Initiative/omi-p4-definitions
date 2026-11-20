@@ -646,12 +646,7 @@ header execution_report_modify_message_t {
     bit<8> order_status;
     bit<8> order_state;
     bit<8> exec_restatement_reason;
-    bit<1> order_flags_reserved_7;
-    bit<1> order_flags_reserved_6;
-    bit<1> order_flags_reserved_5;
-    bit<1> order_flags_reserved_4;
-    bit<1> order_flags_reserved_3;
-    bit<1> order_flags_reserved_2;
+    bit<6> reserved_3_to_8;
     bit<1> stop_elected;
     bit<1> stop_limit_price_changed;
     bit<240> memo;
@@ -760,12 +755,7 @@ header execution_report_trade_message_t {
     bit<64> transact_time;
     bit<64> num_of_lots;
     bit<8> exec_type;
-    bit<1> trade_flags_reserved_7;
-    bit<1> trade_flags_reserved_6;
-    bit<1> trade_flags_reserved_5;
-    bit<1> trade_flags_reserved_4;
-    bit<1> trade_flags_reserved_3;
-    bit<1> trade_flags_reserved_2;
+    bit<6> reserved_3_to_8;
     bit<1> deal_adjust_indicator;
     bit<1> liquidity_indicator;
     bit<32> clearing_firm_optional;

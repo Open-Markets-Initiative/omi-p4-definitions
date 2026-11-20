@@ -55,20 +55,20 @@ header new_order_message_t {
     bit<8> trading_capacity;
     bit<8> account_type;
     bit<8> lp_role_optional;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;
     bit<1> disabled_cancel_on_disconnect_indicator;
     bit<1> disclosed_quantity_randomization;
     bit<1> stp_incoming_order;
     bit<1> stp_resting_order;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;
     bit<1> displayed_order_interaction;
     bit<1> deferred_trade_indicator;
     bit<1> dark_indicator;
-    bit<3> reserved_3_2;
+    bit<3> reserved_6_to_8_2;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
     bit<1> execution_algo_indicator;
@@ -108,11 +108,11 @@ header new_order_message_order_optional_fields_group_t {
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
     bit<8> peg_offset;
-    bit<4> reserved_4;
+    bit<4> reserved_5_to_8;
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_bit_0;
+    bit<1> unused_bit_1;
     bit<8> undisclosed_iceberg_type;
     bit<8> stop_triggered_time_in_force;
 }
@@ -153,7 +153,7 @@ header ack_message_t {
     bit<64> order_priority;
     bit<64> order_px;
     bit<64> order_qty_optional;
-    bit<6> reserved_6;
+    bit<6> reserved_3_to_8;
     bit<1> queue_indicator;
     bit<1> dark_indicator;
 }
@@ -170,7 +170,7 @@ header fill_message_t {
     bit<8> emm;
     bit<8> side;
     bit<8> trade_type;
-    bit<1> unused_bit_7;
+    bit<1> reserved_8;
     bit<1> nav_trade_expressed_in_price_currency;
     bit<1> nav_trade_expressed_in_bps;
     bit<1> trade_creation_by_market_operations;
@@ -243,20 +243,20 @@ header cancel_replace_message_t {
     bit<8> time_in_force;
     bit<8> account_type_optional;
     bit<8> lp_role_optional;
-    bit<2> reserved_2;
+    bit<2> reserved_7_to_8;
     bit<1> rfq_confirmation;
     bit<1> rfq_answer;
     bit<1> disabled_cancel_on_disconnect_indicator;
     bit<1> disclosed_quantity_randomization;
     bit<1> stp_incoming_order;
     bit<1> stp_resting_order;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> minimum_quantity_type;
     bit<1> sweep_order_indicator;
     bit<1> displayed_order_interaction;
     bit<1> deferred_trade_indicator;
     bit<1> dark_indicator;
-    bit<3> reserved_3_2;
+    bit<3> reserved_6_to_8_2;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
     bit<1> execution_algo_indicator;
@@ -283,11 +283,11 @@ header cancel_replace_message_cancel_replace_optional_field_group_t {
     bit<64> disclosed_qty;
     bit<32> order_expiration_time;
     bit<16> order_expiration_date;
-    bit<4> reserved_4;
+    bit<4> reserved_5_to_8;
     bit<1> session_3;
     bit<1> session_2;
     bit<1> session_1;
-    bit<1> unused_bit_0;
+    bit<1> unused_bit_1;
     bit<8> stop_triggered_time_in_force;
     bit<8> undisclosed_iceberg_type;
 }
@@ -341,7 +341,7 @@ header quotes_message_t {
     bit<8> trading_capacity;
     bit<8> account_type;
     bit<8> lp_role;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
     bit<1> execution_algo_indicator;
@@ -662,7 +662,7 @@ header declaration_entry_message_t {
     bit<8> settlement_period;
     bit<8> settlement_flag;
     bit<8> guarantee_flag;
-    bit<3> reserved_3;
+    bit<3> reserved_6_to_8;
     bit<1> deferral_indicator;
     bit<1> commodity_derivative_indicator;
     bit<1> execution_algo_indicator;

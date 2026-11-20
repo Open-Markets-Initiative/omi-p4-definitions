@@ -137,7 +137,7 @@ header new_order_message_t {
     bit<32> quantity;
     bit<32> instrument_id;
     bit<8> side;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> post_only;
     bit<16> good_til_date;
 }

@@ -329,7 +329,7 @@ header funding_rate_message_t {
     bit<64> fair_value;
     bit<64> final_funding_rate_timestamp;
     bit<64> correlation_id;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> is_final;
 }
 

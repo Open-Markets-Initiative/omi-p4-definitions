@@ -90,9 +90,9 @@ header best_bid_offer_message_t {
     bit<64> bid_price;
     bit<32> offer_size;
     bit<64> offer_price;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> retail_present_on_bid;
-    bit<7> reserved_7_2;
+    bit<7> reserved_2_to_8_2;
     bit<1> retail_present_on_offer;
 }
 
@@ -101,7 +101,7 @@ header best_bid_message_t {
     bit<16> security_id;
     bit<32> bid_size;
     bit<64> bid_price;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> retail_present_on_bid;
 }
 
@@ -110,7 +110,7 @@ header best_offer_message_t {
     bit<16> security_id;
     bit<32> offer_size;
     bit<64> offer_price;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> retail_present_on_offer;
 }
 
@@ -119,7 +119,7 @@ header best_bid_short_message_t {
     bit<16> security_id;
     bit<16> bid_size_short;
     bit<16> bid_price_short;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> retail_present_on_bid;
 }
 
@@ -128,7 +128,7 @@ header best_offer_short_message_t {
     bit<16> security_id;
     bit<16> offer_size_short;
     bit<16> offer_price_short;
-    bit<7> reserved_7;
+    bit<7> reserved_2_to_8;
     bit<1> retail_present_on_offer;
 }
 

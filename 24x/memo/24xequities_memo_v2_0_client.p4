@@ -75,11 +75,11 @@ header new_order_single_message_t {
     bit<8> time_in_force;
     bit<8> order_capacity;
     bit<8> cust_order_capacity_optional;
-    bit<13> reserved_13;
+    bit<13> reserved_4_to_16;
     bit<1> external_routing_not_allowed;
     bit<1> intermarket_sweep;
     bit<1> participate_do_not_initiate;
-    bit<14> reserved_14;
+    bit<14> reserved_3_to_16;
     bit<1> non_attested_retail;
     bit<1> late_auction;
     bit<64> peg_offset_value;
