@@ -262,14 +262,14 @@ header md_instrument_definition_indices_inst_attrib_group_t {
     bit<800> inst_attrib_value;
 }
 
-header md_instrument_definition_indices_events_group_header_t {
+header md_instrument_definition_indices_indices_events_group_header_t {
     bit<16> block_length;
-    bit<8> num_in_group_8;
+    bit<16> num_in_group;
 }
 
-header md_instrument_definition_indices_events_group_t {
-    bit<8> event_type_optional;
-    bit<64> event_time_optional;
+header md_instrument_definition_indices_indices_events_group_t {
+    bit<8> event_type_indices;
+    bit<64> event_time;
 }
 
 header md_incremental_refresh_indices_t {
@@ -295,7 +295,7 @@ header md_incremental_refresh_indices_incremental_refresh_indices_group_t {
     bit<8> exponent;
     bit<64> md_entry_size_optional;
     bit<400> symbol;
-    bit<8> open_close_settl_flag;
+    bit<8> indices_open_close_settl_flag;
     bit<64> yield_type;
     bit<64> mantissa_2;
     bit<8> exponent_2;
@@ -544,7 +544,7 @@ header md_instrument_definition_eris_eris_security_alt_id_group_header_t {
 
 header md_instrument_definition_eris_eris_security_alt_id_group_t {
     bit<208> security_alt_id;
-    bit<8> security_alt_id_source_optional;
+    bit<8> security_alt_id_source;
 }
 
 header md_instrument_definition_eris_eris_legs_group_header_t {
@@ -695,7 +695,7 @@ struct metadata_t {
     bit<8> md_incremental_refresh_trade_blocks_340_trade_blocks_original_group_remaining;
     bit<8> quote_request_quote_request_related_sym_group_remaining;
     bit<16> md_instrument_definition_indices_inst_attrib_group_remaining;
-    bit<8> md_instrument_definition_indices_events_group_remaining;
+    bit<16> md_instrument_definition_indices_indices_events_group_remaining;
     bit<8> md_incremental_refresh_indices_incremental_refresh_indices_group_remaining;
     bit<8> md_incremental_refresh_trade_blocks_349_trade_blocks_legacy_group_remaining;
     bit<8> md_incremental_refresh_eris_351_eris_original_group_remaining;
@@ -725,8 +725,8 @@ struct headers_t {
     quote_request_quote_request_related_sym_group_t quote_request_quote_request_related_sym_group[MAX_MESSAGES];
     md_instrument_definition_indices_t md_instrument_definition_indices;
     md_instrument_definition_indices_inst_attrib_group_t md_instrument_definition_indices_inst_attrib_group[MAX_MESSAGES];
-    md_instrument_definition_indices_events_group_header_t md_instrument_definition_indices_events_group_header;
-    md_instrument_definition_indices_events_group_t md_instrument_definition_indices_events_group[MAX_MESSAGES];
+    md_instrument_definition_indices_indices_events_group_header_t md_instrument_definition_indices_indices_events_group_header;
+    md_instrument_definition_indices_indices_events_group_t md_instrument_definition_indices_indices_events_group[MAX_MESSAGES];
     md_incremental_refresh_indices_t md_incremental_refresh_indices;
     md_incremental_refresh_indices_incremental_refresh_indices_group_t md_incremental_refresh_indices_incremental_refresh_indices_group[MAX_MESSAGES];
     md_incremental_refresh_trade_blocks_349_t md_incremental_refresh_trade_blocks_349;
@@ -891,7 +891,7 @@ parser CmeGlobexStreamlinedUdpParser(packet_in packet, out headers_t hdr, inout 
         meta.dispatched = 1;
         meta.md_instrument_definition_indices_inst_attrib_group_remaining = hdr.md_instrument_definition_indices.num_in_group;
         transition select(meta.md_instrument_definition_indices_inst_attrib_group_remaining) {
-            16w0: read_md_instrument_definition_indices_events_group;
+            16w0: read_md_instrument_definition_indices_indices_events_group;
             default: parse_md_instrument_definition_indices_inst_attrib_group;
         }
     }
@@ -900,26 +900,26 @@ parser CmeGlobexStreamlinedUdpParser(packet_in packet, out headers_t hdr, inout 
         packet.extract(hdr.md_instrument_definition_indices_inst_attrib_group.next);
         meta.md_instrument_definition_indices_inst_attrib_group_remaining = meta.md_instrument_definition_indices_inst_attrib_group_remaining - 1;
         transition select(meta.md_instrument_definition_indices_inst_attrib_group_remaining) {
-            16w0: read_md_instrument_definition_indices_events_group;
+            16w0: read_md_instrument_definition_indices_indices_events_group;
             default: parse_md_instrument_definition_indices_inst_attrib_group;
         }
     }
 
-    state read_md_instrument_definition_indices_events_group {
-        packet.extract(hdr.md_instrument_definition_indices_events_group_header);
-        meta.md_instrument_definition_indices_events_group_remaining = hdr.md_instrument_definition_indices_events_group_header.num_in_group_8;
-        transition select(meta.md_instrument_definition_indices_events_group_remaining) {
-            8w0: accept;
-            default: parse_md_instrument_definition_indices_events_group;
+    state read_md_instrument_definition_indices_indices_events_group {
+        packet.extract(hdr.md_instrument_definition_indices_indices_events_group_header);
+        meta.md_instrument_definition_indices_indices_events_group_remaining = hdr.md_instrument_definition_indices_indices_events_group_header.num_in_group;
+        transition select(meta.md_instrument_definition_indices_indices_events_group_remaining) {
+            16w0: accept;
+            default: parse_md_instrument_definition_indices_indices_events_group;
         }
     }
 
-    state parse_md_instrument_definition_indices_events_group {
-        packet.extract(hdr.md_instrument_definition_indices_events_group.next);
-        meta.md_instrument_definition_indices_events_group_remaining = meta.md_instrument_definition_indices_events_group_remaining - 1;
-        transition select(meta.md_instrument_definition_indices_events_group_remaining) {
-            8w0: accept;
-            default: parse_md_instrument_definition_indices_events_group;
+    state parse_md_instrument_definition_indices_indices_events_group {
+        packet.extract(hdr.md_instrument_definition_indices_indices_events_group.next);
+        meta.md_instrument_definition_indices_indices_events_group_remaining = meta.md_instrument_definition_indices_indices_events_group_remaining - 1;
+        transition select(meta.md_instrument_definition_indices_indices_events_group_remaining) {
+            16w0: accept;
+            default: parse_md_instrument_definition_indices_indices_events_group;
         }
     }
 
@@ -1174,8 +1174,8 @@ control CmeGlobexStreamlinedUdpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.quote_request_quote_request_related_sym_group);
         packet.emit(hdr.md_instrument_definition_indices);
         packet.emit(hdr.md_instrument_definition_indices_inst_attrib_group);
-        packet.emit(hdr.md_instrument_definition_indices_events_group_header);
-        packet.emit(hdr.md_instrument_definition_indices_events_group);
+        packet.emit(hdr.md_instrument_definition_indices_indices_events_group_header);
+        packet.emit(hdr.md_instrument_definition_indices_indices_events_group);
         packet.emit(hdr.md_incremental_refresh_indices);
         packet.emit(hdr.md_incremental_refresh_indices_incremental_refresh_indices_group);
         packet.emit(hdr.md_incremental_refresh_trade_blocks_349);

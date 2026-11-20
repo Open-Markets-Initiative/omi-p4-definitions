@@ -307,8 +307,8 @@ header md_incremental_refresh_book_legacy_t {
     bit<8> num_in_group;
 }
 
-header md_incremental_refresh_book_legacy_incremental_refresh_book_group_t {
-    bit<64> md_entry_px_optional_ex;
+header md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_t {
+    bit<64> md_entry_px_optional;
     bit<32> md_entry_size_short_optional;
     bit<32> security_id;
     bit<32> rpt_seq;
@@ -349,8 +349,8 @@ header md_incremental_refresh_daily_statistics_legacy_t {
     bit<8> num_in_group;
 }
 
-header md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_t {
-    bit<64> md_entry_px_optional_ex;
+header md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_t {
+    bit<64> md_entry_px_optional;
     bit<32> md_entry_size_short_optional;
     bit<32> security_id;
     bit<32> rpt_seq;
@@ -382,10 +382,10 @@ header md_incremental_refresh_limits_banding_legacy_t {
     bit<8> num_in_group;
 }
 
-header md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_t {
-    bit<64> high_limit_price_ex;
-    bit<64> low_limit_price_ex;
-    bit<64> max_price_variation_ex;
+header md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_t {
+    bit<64> high_limit_price;
+    bit<64> low_limit_price;
+    bit<64> max_price_variation;
     bit<32> security_id;
     bit<32> rpt_seq;
 }
@@ -405,8 +405,8 @@ header md_incremental_refresh_session_statistics_legacy_t {
     bit<8> num_in_group;
 }
 
-header md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_t {
-    bit<64> md_entry_px_ex;
+header md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_t {
+    bit<64> md_entry_px;
     bit<32> security_id;
     bit<32> rpt_seq;
     bit<8> open_close_settl_flag;
@@ -455,8 +455,8 @@ header snapshot_full_refresh_legacy_t {
     bit<8> num_in_group;
 }
 
-header snapshot_full_refresh_legacy_snapshot_full_refresh_group_t {
-    bit<64> md_entry_px_optional_ex;
+header snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_t {
+    bit<64> md_entry_px_optional;
     bit<32> md_entry_size_short_optional;
     bit<32> number_of_orders_optional;
     bit<8> md_price_level_optional;
@@ -629,12 +629,12 @@ header md_incremental_refresh_trade_summary_legacy_t {
     bit<8> num_in_group;
 }
 
-header md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_t {
-    bit<64> md_entry_px_ex;
+header md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_t {
+    bit<64> md_entry_px;
     bit<32> md_entry_size_short;
     bit<32> security_id;
     bit<32> rpt_seq;
-    bit<32> number_of_orders;
+    bit<32> number_of_orders_optional;
     bit<8> aggressor_side;
     bit<8> md_update_action;
     bit<32> md_trade_entry_id;
@@ -668,10 +668,10 @@ header md_incremental_refresh_order_book_legacy_t {
     bit<8> num_in_group;
 }
 
-header md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_t {
+header md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_t {
     bit<64> order_id_optional;
     bit<64> md_order_priority;
-    bit<64> md_entry_px_optional_ex;
+    bit<64> md_entry_px_optional;
     bit<32> md_display_qty_optional;
     bit<32> security_id;
     bit<8> md_update_action;
@@ -690,10 +690,10 @@ header snapshot_full_refresh_order_book_legacy_t {
     bit<8> num_in_group;
 }
 
-header snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_t {
+header snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_t {
     bit<64> order_id;
     bit<64> md_order_priority;
-    bit<64> md_entry_px_ex;
+    bit<64> md_entry_px;
     bit<32> md_display_qty;
     bit<8> md_entry_type_book;
 }
@@ -1323,13 +1323,13 @@ struct metadata_t {
     bit<8> md_instrument_definition_spread_legacy_inst_attrib_group_remaining;
     bit<8> md_instrument_definition_spread_legacy_lot_type_rules_group_remaining;
     bit<8> md_instrument_definition_spread_legacy_legacy_legs_group_remaining;
-    bit<8> md_incremental_refresh_book_legacy_incremental_refresh_book_group_remaining;
+    bit<8> md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_remaining;
     bit<8> md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group_remaining;
-    bit<8> md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_remaining;
-    bit<8> md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_remaining;
-    bit<8> md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_remaining;
+    bit<8> md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_remaining;
+    bit<8> md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_remaining;
+    bit<8> md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_remaining;
     bit<8> md_incremental_refresh_volume_incremental_refresh_volume_group_remaining;
-    bit<8> snapshot_full_refresh_legacy_snapshot_full_refresh_group_remaining;
+    bit<8> snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_remaining;
     bit<8> quote_request_related_sym_group_remaining;
     bit<8> md_instrument_definition_option_legacy_events_group_remaining;
     bit<8> md_instrument_definition_option_legacy_feed_types_group_remaining;
@@ -1337,10 +1337,10 @@ struct metadata_t {
     bit<8> md_instrument_definition_option_legacy_lot_type_rules_group_remaining;
     bit<8> md_instrument_definition_option_legacy_option_underlyings_group_remaining;
     bit<8> md_instrument_definition_option_legacy_option_related_instruments_group_remaining;
-    bit<8> md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_remaining;
+    bit<8> md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_remaining;
     bit<8> md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group_remaining;
-    bit<8> md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_remaining;
-    bit<8> snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_remaining;
+    bit<8> md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_remaining;
+    bit<8> snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_remaining;
     bit<8> md_incremental_refresh_book_incremental_refresh_book_group_remaining;
     bit<8> md_incremental_refresh_book_incremental_refresh_book_order_id_group_remaining;
     bit<8> md_incremental_refresh_order_book_incremental_refresh_order_book_group_remaining;
@@ -1396,19 +1396,19 @@ struct headers_t {
     md_instrument_definition_spread_legacy_legacy_legs_group_t md_instrument_definition_spread_legacy_legacy_legs_group[MAX_MESSAGES];
     security_status_t security_status;
     md_incremental_refresh_book_legacy_t md_incremental_refresh_book_legacy;
-    md_incremental_refresh_book_legacy_incremental_refresh_book_group_t md_incremental_refresh_book_legacy_incremental_refresh_book_group[MAX_MESSAGES];
+    md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_t md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group[MAX_MESSAGES];
     md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group_header_t md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group_header;
     md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group_t md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group[MAX_MESSAGES];
     md_incremental_refresh_daily_statistics_legacy_t md_incremental_refresh_daily_statistics_legacy;
-    md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_t md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group[MAX_MESSAGES];
+    md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_t md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group[MAX_MESSAGES];
     md_incremental_refresh_limits_banding_legacy_t md_incremental_refresh_limits_banding_legacy;
-    md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_t md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group[MAX_MESSAGES];
+    md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_t md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group[MAX_MESSAGES];
     md_incremental_refresh_session_statistics_legacy_t md_incremental_refresh_session_statistics_legacy;
-    md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_t md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group[MAX_MESSAGES];
+    md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_t md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group[MAX_MESSAGES];
     md_incremental_refresh_volume_t md_incremental_refresh_volume;
     md_incremental_refresh_volume_incremental_refresh_volume_group_t md_incremental_refresh_volume_incremental_refresh_volume_group[MAX_MESSAGES];
     snapshot_full_refresh_legacy_t snapshot_full_refresh_legacy;
-    snapshot_full_refresh_legacy_snapshot_full_refresh_group_t snapshot_full_refresh_legacy_snapshot_full_refresh_group[MAX_MESSAGES];
+    snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_t snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group[MAX_MESSAGES];
     quote_request_t quote_request;
     quote_request_related_sym_group_t quote_request_related_sym_group[MAX_MESSAGES];
     md_instrument_definition_option_legacy_t md_instrument_definition_option_legacy;
@@ -1424,13 +1424,13 @@ struct headers_t {
     md_instrument_definition_option_legacy_option_related_instruments_group_header_t md_instrument_definition_option_legacy_option_related_instruments_group_header;
     md_instrument_definition_option_legacy_option_related_instruments_group_t md_instrument_definition_option_legacy_option_related_instruments_group[MAX_MESSAGES];
     md_incremental_refresh_trade_summary_legacy_t md_incremental_refresh_trade_summary_legacy;
-    md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_t md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group[MAX_MESSAGES];
+    md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_t md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group[MAX_MESSAGES];
     md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group_header_t md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group_header;
     md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group_t md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group[MAX_MESSAGES];
     md_incremental_refresh_order_book_legacy_t md_incremental_refresh_order_book_legacy;
-    md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_t md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group[MAX_MESSAGES];
+    md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_t md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group[MAX_MESSAGES];
     snapshot_full_refresh_order_book_legacy_t snapshot_full_refresh_order_book_legacy;
-    snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_t snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group[MAX_MESSAGES];
+    snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_t snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group[MAX_MESSAGES];
     md_incremental_refresh_book_t md_incremental_refresh_book;
     md_incremental_refresh_book_incremental_refresh_book_group_t md_incremental_refresh_book_incremental_refresh_book_group[MAX_MESSAGES];
     md_incremental_refresh_book_incremental_refresh_book_order_id_group_header_t md_incremental_refresh_book_incremental_refresh_book_order_id_group_header;
@@ -1742,19 +1742,19 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     state parse_md_incremental_refresh_book_legacy {
         packet.extract(hdr.md_incremental_refresh_book_legacy);
         meta.dispatched = 1;
-        meta.md_incremental_refresh_book_legacy_incremental_refresh_book_group_remaining = hdr.md_incremental_refresh_book_legacy.num_in_group;
-        transition select(meta.md_incremental_refresh_book_legacy_incremental_refresh_book_group_remaining) {
+        meta.md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_remaining = hdr.md_incremental_refresh_book_legacy.num_in_group;
+        transition select(meta.md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_remaining) {
             8w0: read_md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group;
-            default: parse_md_incremental_refresh_book_legacy_incremental_refresh_book_group;
+            default: parse_md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group;
         }
     }
 
-    state parse_md_incremental_refresh_book_legacy_incremental_refresh_book_group {
-        packet.extract(hdr.md_incremental_refresh_book_legacy_incremental_refresh_book_group.next);
-        meta.md_incremental_refresh_book_legacy_incremental_refresh_book_group_remaining = meta.md_incremental_refresh_book_legacy_incremental_refresh_book_group_remaining - 1;
-        transition select(meta.md_incremental_refresh_book_legacy_incremental_refresh_book_group_remaining) {
+    state parse_md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group {
+        packet.extract(hdr.md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group.next);
+        meta.md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_remaining = meta.md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group_remaining) {
             8w0: read_md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group;
-            default: parse_md_incremental_refresh_book_legacy_incremental_refresh_book_group;
+            default: parse_md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group;
         }
     }
 
@@ -1779,57 +1779,57 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     state parse_md_incremental_refresh_daily_statistics_legacy {
         packet.extract(hdr.md_incremental_refresh_daily_statistics_legacy);
         meta.dispatched = 1;
-        meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_remaining = hdr.md_incremental_refresh_daily_statistics_legacy.num_in_group;
-        transition select(meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_remaining) {
+        meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_remaining = hdr.md_incremental_refresh_daily_statistics_legacy.num_in_group;
+        transition select(meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group;
+            default: parse_md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group;
         }
     }
 
-    state parse_md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group {
-        packet.extract(hdr.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group.next);
-        meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_remaining = meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_remaining - 1;
-        transition select(meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group_remaining) {
+    state parse_md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group {
+        packet.extract(hdr.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group.next);
+        meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_remaining = meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group;
+            default: parse_md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group;
         }
     }
 
     state parse_md_incremental_refresh_limits_banding_legacy {
         packet.extract(hdr.md_incremental_refresh_limits_banding_legacy);
         meta.dispatched = 1;
-        meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_remaining = hdr.md_incremental_refresh_limits_banding_legacy.num_in_group;
-        transition select(meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_remaining) {
+        meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_remaining = hdr.md_incremental_refresh_limits_banding_legacy.num_in_group;
+        transition select(meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group;
+            default: parse_md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group;
         }
     }
 
-    state parse_md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group {
-        packet.extract(hdr.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group.next);
-        meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_remaining = meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_remaining - 1;
-        transition select(meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group_remaining) {
+    state parse_md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group {
+        packet.extract(hdr.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group.next);
+        meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_remaining = meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group;
+            default: parse_md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group;
         }
     }
 
     state parse_md_incremental_refresh_session_statistics_legacy {
         packet.extract(hdr.md_incremental_refresh_session_statistics_legacy);
         meta.dispatched = 1;
-        meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_remaining = hdr.md_incremental_refresh_session_statistics_legacy.num_in_group;
-        transition select(meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_remaining) {
+        meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_remaining = hdr.md_incremental_refresh_session_statistics_legacy.num_in_group;
+        transition select(meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group;
+            default: parse_md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group;
         }
     }
 
-    state parse_md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group {
-        packet.extract(hdr.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group.next);
-        meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_remaining = meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_remaining - 1;
-        transition select(meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group_remaining) {
+    state parse_md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group {
+        packet.extract(hdr.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group.next);
+        meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_remaining = meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group;
+            default: parse_md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group;
         }
     }
 
@@ -1855,19 +1855,19 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     state parse_snapshot_full_refresh_legacy {
         packet.extract(hdr.snapshot_full_refresh_legacy);
         meta.dispatched = 1;
-        meta.snapshot_full_refresh_legacy_snapshot_full_refresh_group_remaining = hdr.snapshot_full_refresh_legacy.num_in_group;
-        transition select(meta.snapshot_full_refresh_legacy_snapshot_full_refresh_group_remaining) {
+        meta.snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_remaining = hdr.snapshot_full_refresh_legacy.num_in_group;
+        transition select(meta.snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_remaining) {
             8w0: accept;
-            default: parse_snapshot_full_refresh_legacy_snapshot_full_refresh_group;
+            default: parse_snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group;
         }
     }
 
-    state parse_snapshot_full_refresh_legacy_snapshot_full_refresh_group {
-        packet.extract(hdr.snapshot_full_refresh_legacy_snapshot_full_refresh_group.next);
-        meta.snapshot_full_refresh_legacy_snapshot_full_refresh_group_remaining = meta.snapshot_full_refresh_legacy_snapshot_full_refresh_group_remaining - 1;
-        transition select(meta.snapshot_full_refresh_legacy_snapshot_full_refresh_group_remaining) {
+    state parse_snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group {
+        packet.extract(hdr.snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group.next);
+        meta.snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_remaining = meta.snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_remaining - 1;
+        transition select(meta.snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group_remaining) {
             8w0: accept;
-            default: parse_snapshot_full_refresh_legacy_snapshot_full_refresh_group;
+            default: parse_snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group;
         }
     }
 
@@ -2002,19 +2002,19 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     state parse_md_incremental_refresh_trade_summary_legacy {
         packet.extract(hdr.md_incremental_refresh_trade_summary_legacy);
         meta.dispatched = 1;
-        meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_remaining = hdr.md_incremental_refresh_trade_summary_legacy.num_in_group;
-        transition select(meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_remaining) {
+        meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_remaining = hdr.md_incremental_refresh_trade_summary_legacy.num_in_group;
+        transition select(meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_remaining) {
             8w0: read_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group;
-            default: parse_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group;
+            default: parse_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group;
         }
     }
 
-    state parse_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group {
-        packet.extract(hdr.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group.next);
-        meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_remaining = meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_remaining - 1;
-        transition select(meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group_remaining) {
+    state parse_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group {
+        packet.extract(hdr.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group.next);
+        meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_remaining = meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group_remaining) {
             8w0: read_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group;
-            default: parse_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group;
+            default: parse_md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group;
         }
     }
 
@@ -2039,38 +2039,38 @@ parser CmeGlobexMdp3ServertcpParser(packet_in packet, out headers_t hdr, inout m
     state parse_md_incremental_refresh_order_book_legacy {
         packet.extract(hdr.md_incremental_refresh_order_book_legacy);
         meta.dispatched = 1;
-        meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_remaining = hdr.md_incremental_refresh_order_book_legacy.num_in_group;
-        transition select(meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_remaining) {
+        meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_remaining = hdr.md_incremental_refresh_order_book_legacy.num_in_group;
+        transition select(meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group;
+            default: parse_md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group;
         }
     }
 
-    state parse_md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group {
-        packet.extract(hdr.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group.next);
-        meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_remaining = meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_remaining - 1;
-        transition select(meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group_remaining) {
+    state parse_md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group {
+        packet.extract(hdr.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group.next);
+        meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_remaining = meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_remaining - 1;
+        transition select(meta.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group_remaining) {
             8w0: accept;
-            default: parse_md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group;
+            default: parse_md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group;
         }
     }
 
     state parse_snapshot_full_refresh_order_book_legacy {
         packet.extract(hdr.snapshot_full_refresh_order_book_legacy);
         meta.dispatched = 1;
-        meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_remaining = hdr.snapshot_full_refresh_order_book_legacy.num_in_group;
-        transition select(meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_remaining) {
+        meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_remaining = hdr.snapshot_full_refresh_order_book_legacy.num_in_group;
+        transition select(meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_remaining) {
             8w0: accept;
-            default: parse_snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group;
+            default: parse_snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group;
         }
     }
 
-    state parse_snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group {
-        packet.extract(hdr.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group.next);
-        meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_remaining = meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_remaining - 1;
-        transition select(meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group_remaining) {
+    state parse_snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group {
+        packet.extract(hdr.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group.next);
+        meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_remaining = meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_remaining - 1;
+        transition select(meta.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group_remaining) {
             8w0: accept;
-            default: parse_snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group;
+            default: parse_snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group;
         }
     }
 
@@ -2651,19 +2651,19 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_spread_legacy_legacy_legs_group);
         packet.emit(hdr.security_status);
         packet.emit(hdr.md_incremental_refresh_book_legacy);
-        packet.emit(hdr.md_incremental_refresh_book_legacy_incremental_refresh_book_group);
+        packet.emit(hdr.md_incremental_refresh_book_legacy_incremental_refresh_book_legacy_group);
         packet.emit(hdr.md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group_header);
         packet.emit(hdr.md_incremental_refresh_book_legacy_incremental_refresh_book_order_id_group);
         packet.emit(hdr.md_incremental_refresh_daily_statistics_legacy);
-        packet.emit(hdr.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_group);
+        packet.emit(hdr.md_incremental_refresh_daily_statistics_legacy_incremental_refresh_daily_statistics_legacy_group);
         packet.emit(hdr.md_incremental_refresh_limits_banding_legacy);
-        packet.emit(hdr.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_group);
+        packet.emit(hdr.md_incremental_refresh_limits_banding_legacy_incremental_refresh_limits_banding_legacy_group);
         packet.emit(hdr.md_incremental_refresh_session_statistics_legacy);
-        packet.emit(hdr.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_group);
+        packet.emit(hdr.md_incremental_refresh_session_statistics_legacy_incremental_refresh_session_statistics_legacy_group);
         packet.emit(hdr.md_incremental_refresh_volume);
         packet.emit(hdr.md_incremental_refresh_volume_incremental_refresh_volume_group);
         packet.emit(hdr.snapshot_full_refresh_legacy);
-        packet.emit(hdr.snapshot_full_refresh_legacy_snapshot_full_refresh_group);
+        packet.emit(hdr.snapshot_full_refresh_legacy_snapshot_full_refresh_legacy_group);
         packet.emit(hdr.quote_request);
         packet.emit(hdr.quote_request_related_sym_group);
         packet.emit(hdr.md_instrument_definition_option_legacy);
@@ -2679,13 +2679,13 @@ control CmeGlobexMdp3ServertcpDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.md_instrument_definition_option_legacy_option_related_instruments_group_header);
         packet.emit(hdr.md_instrument_definition_option_legacy_option_related_instruments_group);
         packet.emit(hdr.md_incremental_refresh_trade_summary_legacy);
-        packet.emit(hdr.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_group);
+        packet.emit(hdr.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_legacy_group);
         packet.emit(hdr.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group_header);
         packet.emit(hdr.md_incremental_refresh_trade_summary_legacy_incremental_refresh_trade_summary_order_id_group);
         packet.emit(hdr.md_incremental_refresh_order_book_legacy);
-        packet.emit(hdr.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_group);
+        packet.emit(hdr.md_incremental_refresh_order_book_legacy_incremental_refresh_order_book_legacy_group);
         packet.emit(hdr.snapshot_full_refresh_order_book_legacy);
-        packet.emit(hdr.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_group);
+        packet.emit(hdr.snapshot_full_refresh_order_book_legacy_snapshot_full_refresh_order_book_legacy_group);
         packet.emit(hdr.md_incremental_refresh_book);
         packet.emit(hdr.md_incremental_refresh_book_incremental_refresh_book_group);
         packet.emit(hdr.md_incremental_refresh_book_incremental_refresh_book_order_id_group_header);

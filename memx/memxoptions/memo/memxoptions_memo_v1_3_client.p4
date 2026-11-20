@@ -155,18 +155,18 @@ header long_two_sided_bulk_quote_message_parties_group_t {
     bit<8> party_role;
 }
 
-header long_two_sided_bulk_quote_message_two_sided_quotes_group_header_t {
+header long_two_sided_bulk_quote_message_long_two_sided_quotes_group_header_t {
     bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
-header long_two_sided_bulk_quote_message_two_sided_quotes_group_t {
+header long_two_sided_bulk_quote_message_long_two_sided_quotes_group_t {
     bit<8> list_seq_no;
-    bit<64> security_id;
-    bit<16> bid_size;
-    bit<16> bid_px;
-    bit<16> offer_size;
-    bit<16> offer_px;
+    bit<64> options_security_id_long_two_sided_bulk_quote_options_security_id;
+    bit<32> bid_size_uint_32;
+    bit<64> bid_px_price_type;
+    bit<32> offer_size_uint_32;
+    bit<64> offer_px_price_type;
 }
 
 header short_one_sided_bulk_quote_message_t {
@@ -228,17 +228,17 @@ header long_one_sided_bulk_quote_message_parties_group_t {
     bit<8> party_role;
 }
 
-header long_one_sided_bulk_quote_message_one_sided_quotes_group_header_t {
+header long_one_sided_bulk_quote_message_long_one_sided_quotes_group_header_t {
     bit<8> block_length_short;
     bit<8> num_in_group;
 }
 
-header long_one_sided_bulk_quote_message_one_sided_quotes_group_t {
+header long_one_sided_bulk_quote_message_long_one_sided_quotes_group_t {
     bit<8> list_seq_no;
-    bit<64> security_id;
+    bit<64> options_security_id_long_one_sided_bulk_quote_options_security_id;
     bit<8> side;
-    bit<16> quantity;
-    bit<16> price_short;
+    bit<32> quantity_long;
+    bit<64> price;
 }
 
 header order_cancel_replace_request_message_t {
@@ -314,11 +314,11 @@ struct metadata_t {
     bit<8> short_two_sided_bulk_quote_message_parties_group_remaining;
     bit<8> short_two_sided_bulk_quote_message_two_sided_quotes_group_remaining;
     bit<8> long_two_sided_bulk_quote_message_parties_group_remaining;
-    bit<8> long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining;
+    bit<8> long_two_sided_bulk_quote_message_long_two_sided_quotes_group_remaining;
     bit<8> short_one_sided_bulk_quote_message_parties_group_remaining;
     bit<8> short_one_sided_bulk_quote_message_one_sided_quotes_group_remaining;
     bit<8> long_one_sided_bulk_quote_message_parties_group_remaining;
-    bit<8> long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining;
+    bit<8> long_one_sided_bulk_quote_message_long_one_sided_quotes_group_remaining;
     bit<8> allocation_instruction_message_allocation_instruction_message_allocations_group_remaining;
 }
 
@@ -337,16 +337,16 @@ struct headers_t {
     short_two_sided_bulk_quote_message_two_sided_quotes_group_t short_two_sided_bulk_quote_message_two_sided_quotes_group[MAX_MESSAGES];
     long_two_sided_bulk_quote_message_t long_two_sided_bulk_quote_message;
     long_two_sided_bulk_quote_message_parties_group_t long_two_sided_bulk_quote_message_parties_group[MAX_MESSAGES];
-    long_two_sided_bulk_quote_message_two_sided_quotes_group_header_t long_two_sided_bulk_quote_message_two_sided_quotes_group_header;
-    long_two_sided_bulk_quote_message_two_sided_quotes_group_t long_two_sided_bulk_quote_message_two_sided_quotes_group[MAX_MESSAGES];
+    long_two_sided_bulk_quote_message_long_two_sided_quotes_group_header_t long_two_sided_bulk_quote_message_long_two_sided_quotes_group_header;
+    long_two_sided_bulk_quote_message_long_two_sided_quotes_group_t long_two_sided_bulk_quote_message_long_two_sided_quotes_group[MAX_MESSAGES];
     short_one_sided_bulk_quote_message_t short_one_sided_bulk_quote_message;
     short_one_sided_bulk_quote_message_parties_group_t short_one_sided_bulk_quote_message_parties_group[MAX_MESSAGES];
     short_one_sided_bulk_quote_message_one_sided_quotes_group_header_t short_one_sided_bulk_quote_message_one_sided_quotes_group_header;
     short_one_sided_bulk_quote_message_one_sided_quotes_group_t short_one_sided_bulk_quote_message_one_sided_quotes_group[MAX_MESSAGES];
     long_one_sided_bulk_quote_message_t long_one_sided_bulk_quote_message;
     long_one_sided_bulk_quote_message_parties_group_t long_one_sided_bulk_quote_message_parties_group[MAX_MESSAGES];
-    long_one_sided_bulk_quote_message_one_sided_quotes_group_header_t long_one_sided_bulk_quote_message_one_sided_quotes_group_header;
-    long_one_sided_bulk_quote_message_one_sided_quotes_group_t long_one_sided_bulk_quote_message_one_sided_quotes_group[MAX_MESSAGES];
+    long_one_sided_bulk_quote_message_long_one_sided_quotes_group_header_t long_one_sided_bulk_quote_message_long_one_sided_quotes_group_header;
+    long_one_sided_bulk_quote_message_long_one_sided_quotes_group_t long_one_sided_bulk_quote_message_long_one_sided_quotes_group[MAX_MESSAGES];
     order_cancel_replace_request_message_t order_cancel_replace_request_message;
     order_cancel_request_message_t order_cancel_request_message;
     mass_cancel_request_message_t mass_cancel_request_message;
@@ -471,7 +471,7 @@ parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout me
         meta.dispatched = 1;
         meta.long_two_sided_bulk_quote_message_parties_group_remaining = hdr.long_two_sided_bulk_quote_message.num_in_group;
         transition select(meta.long_two_sided_bulk_quote_message_parties_group_remaining) {
-            8w0: read_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+            8w0: read_long_two_sided_bulk_quote_message_long_two_sided_quotes_group;
             default: parse_long_two_sided_bulk_quote_message_parties_group;
         }
     }
@@ -480,26 +480,26 @@ parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout me
         packet.extract(hdr.long_two_sided_bulk_quote_message_parties_group.next);
         meta.long_two_sided_bulk_quote_message_parties_group_remaining = meta.long_two_sided_bulk_quote_message_parties_group_remaining - 1;
         transition select(meta.long_two_sided_bulk_quote_message_parties_group_remaining) {
-            8w0: read_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+            8w0: read_long_two_sided_bulk_quote_message_long_two_sided_quotes_group;
             default: parse_long_two_sided_bulk_quote_message_parties_group;
         }
     }
 
-    state read_long_two_sided_bulk_quote_message_two_sided_quotes_group {
-        packet.extract(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group_header);
-        meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining = hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group_header.num_in_group;
-        transition select(meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining) {
+    state read_long_two_sided_bulk_quote_message_long_two_sided_quotes_group {
+        packet.extract(hdr.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_header);
+        meta.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_remaining = hdr.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_header.num_in_group;
+        transition select(meta.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_remaining) {
             8w0: accept;
-            default: parse_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+            default: parse_long_two_sided_bulk_quote_message_long_two_sided_quotes_group;
         }
     }
 
-    state parse_long_two_sided_bulk_quote_message_two_sided_quotes_group {
-        packet.extract(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group.next);
-        meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining = meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining - 1;
-        transition select(meta.long_two_sided_bulk_quote_message_two_sided_quotes_group_remaining) {
+    state parse_long_two_sided_bulk_quote_message_long_two_sided_quotes_group {
+        packet.extract(hdr.long_two_sided_bulk_quote_message_long_two_sided_quotes_group.next);
+        meta.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_remaining = meta.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_remaining - 1;
+        transition select(meta.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_remaining) {
             8w0: accept;
-            default: parse_long_two_sided_bulk_quote_message_two_sided_quotes_group;
+            default: parse_long_two_sided_bulk_quote_message_long_two_sided_quotes_group;
         }
     }
 
@@ -545,7 +545,7 @@ parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout me
         meta.dispatched = 1;
         meta.long_one_sided_bulk_quote_message_parties_group_remaining = hdr.long_one_sided_bulk_quote_message.num_in_group;
         transition select(meta.long_one_sided_bulk_quote_message_parties_group_remaining) {
-            8w0: read_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+            8w0: read_long_one_sided_bulk_quote_message_long_one_sided_quotes_group;
             default: parse_long_one_sided_bulk_quote_message_parties_group;
         }
     }
@@ -554,26 +554,26 @@ parser MemxoptionsMemoClientParser(packet_in packet, out headers_t hdr, inout me
         packet.extract(hdr.long_one_sided_bulk_quote_message_parties_group.next);
         meta.long_one_sided_bulk_quote_message_parties_group_remaining = meta.long_one_sided_bulk_quote_message_parties_group_remaining - 1;
         transition select(meta.long_one_sided_bulk_quote_message_parties_group_remaining) {
-            8w0: read_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+            8w0: read_long_one_sided_bulk_quote_message_long_one_sided_quotes_group;
             default: parse_long_one_sided_bulk_quote_message_parties_group;
         }
     }
 
-    state read_long_one_sided_bulk_quote_message_one_sided_quotes_group {
-        packet.extract(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group_header);
-        meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining = hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group_header.num_in_group;
-        transition select(meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining) {
+    state read_long_one_sided_bulk_quote_message_long_one_sided_quotes_group {
+        packet.extract(hdr.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_header);
+        meta.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_remaining = hdr.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_header.num_in_group;
+        transition select(meta.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_remaining) {
             8w0: accept;
-            default: parse_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+            default: parse_long_one_sided_bulk_quote_message_long_one_sided_quotes_group;
         }
     }
 
-    state parse_long_one_sided_bulk_quote_message_one_sided_quotes_group {
-        packet.extract(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group.next);
-        meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining = meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining - 1;
-        transition select(meta.long_one_sided_bulk_quote_message_one_sided_quotes_group_remaining) {
+    state parse_long_one_sided_bulk_quote_message_long_one_sided_quotes_group {
+        packet.extract(hdr.long_one_sided_bulk_quote_message_long_one_sided_quotes_group.next);
+        meta.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_remaining = meta.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_remaining - 1;
+        transition select(meta.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_remaining) {
             8w0: accept;
-            default: parse_long_one_sided_bulk_quote_message_one_sided_quotes_group;
+            default: parse_long_one_sided_bulk_quote_message_long_one_sided_quotes_group;
         }
     }
 
@@ -664,16 +664,16 @@ control MemxoptionsMemoClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.short_two_sided_bulk_quote_message_two_sided_quotes_group);
         packet.emit(hdr.long_two_sided_bulk_quote_message);
         packet.emit(hdr.long_two_sided_bulk_quote_message_parties_group);
-        packet.emit(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group_header);
-        packet.emit(hdr.long_two_sided_bulk_quote_message_two_sided_quotes_group);
+        packet.emit(hdr.long_two_sided_bulk_quote_message_long_two_sided_quotes_group_header);
+        packet.emit(hdr.long_two_sided_bulk_quote_message_long_two_sided_quotes_group);
         packet.emit(hdr.short_one_sided_bulk_quote_message);
         packet.emit(hdr.short_one_sided_bulk_quote_message_parties_group);
         packet.emit(hdr.short_one_sided_bulk_quote_message_one_sided_quotes_group_header);
         packet.emit(hdr.short_one_sided_bulk_quote_message_one_sided_quotes_group);
         packet.emit(hdr.long_one_sided_bulk_quote_message);
         packet.emit(hdr.long_one_sided_bulk_quote_message_parties_group);
-        packet.emit(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group_header);
-        packet.emit(hdr.long_one_sided_bulk_quote_message_one_sided_quotes_group);
+        packet.emit(hdr.long_one_sided_bulk_quote_message_long_one_sided_quotes_group_header);
+        packet.emit(hdr.long_one_sided_bulk_quote_message_long_one_sided_quotes_group);
         packet.emit(hdr.order_cancel_replace_request_message);
         packet.emit(hdr.order_cancel_request_message);
         packet.emit(hdr.mass_cancel_request_message);
