@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
@@ -31,10 +32,13 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_length;
     bit<32> packet_sequence_number;
-    bit<128> checksum;
+}
+
+header client_registration_packet_t {
+    bit<128> registration_checksum;
     bit<16> transaction_code;
     bit<32> log_time;
     bit<16> alpha_char;
@@ -313,12 +317,26 @@ header box_sign_on_request_message_t {
     bit<64> session_key;
 }
 
+header client_session_packet_t {
+    bit<128> checksum;
+    bit<16> transaction_code;
+    bit<32> log_time;
+    bit<16> alpha_char;
+    bit<32> trader_id;
+    bit<16> error_code;
+    bit<64> header_timestamp;
+    bit<64> time_stamp_1;
+    bit<64> time_stamp_2;
+    bit<16> message_length;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
+    client_registration_packet_t client_registration_packet;
     logon_request_message_t logon_request_message;
     update_local_database_request_message_t update_local_database_request_message;
     message_download_request_message_t message_download_request_message;
@@ -330,12 +348,22 @@ struct headers_t {
     gateway_router_request_message_t gateway_router_request_message;
     secure_box_registration_request_message_t secure_box_registration_request_message;
     box_sign_on_request_message_t box_sign_on_request_message;
+    client_session_packet_t client_session_packet;
 }
 
 parser NseslbmOrderentryClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.transaction_code) {
+        packet.extract(hdr.packet_header);
+        transition select(packet.lookahead<bit<144>>()[15:0]) {
+            16w23008: parse_client_registration_packet;
+            default: parse_client_session_packet;
+        }
+    }
+
+    state parse_client_registration_packet {
+        packet.extract(hdr.client_registration_packet);
+        meta.dispatched = 1;
+        transition select(hdr.client_registration_packet.transaction_code) {
             16w2300: parse_logon_request_message;
             16w1600: parse_system_information_request_message;
             16w7300: parse_update_local_database_request_message;
@@ -435,6 +463,27 @@ parser NseslbmOrderentryClientParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
+    state parse_client_session_packet {
+        packet.extract(hdr.client_session_packet);
+        transition select(hdr.client_session_packet.transaction_code) {
+            16w2300: parse_logon_request_message;
+            16w1600: parse_system_information_request_message;
+            16w7300: parse_update_local_database_request_message;
+            16w7000: parse_message_download_request_message;
+            16w2320: parse_logoff_request_message;
+            16w2000: parse_order_entry_request_message;
+            16w2040: parse_order_modification_request_message;
+            16w2070: parse_order_cancellation_request_message;
+            16w5440: parse_trade_cancellation_request_message;
+            16w5445: parse_trade_modification_request_message;
+            16w2400: parse_gateway_router_request_message;
+            16w23008: parse_secure_box_registration_request_message;
+            16w23000: parse_box_sign_on_request_message;
+            16w23506: parse_heartbeat_message;
+            default: accept;
+        }
+    }
+
 }
 
 control NseslbmOrderentryClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -465,7 +514,8 @@ control NseslbmOrderentryClientComputeChecksum(inout headers_t hdr, inout metada
 
 control NseslbmOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.client_registration_packet);
         packet.emit(hdr.logon_request_message);
         packet.emit(hdr.update_local_database_request_message);
         packet.emit(hdr.message_download_request_message);
@@ -477,6 +527,7 @@ control NseslbmOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.gateway_router_request_message);
         packet.emit(hdr.secure_box_registration_request_message);
         packet.emit(hdr.box_sign_on_request_message);
+        packet.emit(hdr.client_session_packet);
     }
 }
 

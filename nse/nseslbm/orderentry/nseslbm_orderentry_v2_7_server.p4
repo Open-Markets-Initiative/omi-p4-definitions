@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
@@ -31,10 +32,13 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_length;
     bit<32> packet_sequence_number;
-    bit<128> checksum;
+}
+
+header server_registration_packet_t {
+    bit<128> registration_checksum;
     bit<16> transaction_code;
     bit<32> log_time;
     bit<16> alpha_char;
@@ -1394,12 +1398,26 @@ header box_sign_off_message_t {
     bit<16> box_id;
 }
 
+header server_session_packet_t {
+    bit<128> checksum;
+    bit<16> transaction_code;
+    bit<32> log_time;
+    bit<16> alpha_char;
+    bit<32> trader_id;
+    bit<16> error_code;
+    bit<64> header_timestamp;
+    bit<64> time_stamp_1;
+    bit<64> time_stamp_2;
+    bit<16> message_length;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
+    server_registration_packet_t server_registration_packet;
     logon_confirmation_body_t logon_confirmation_body;
     logon_error_body_t logon_error_body;
     system_information_response_message_t system_information_response_message;
@@ -1437,12 +1455,22 @@ struct headers_t {
     gateway_router_response_message_t gateway_router_response_message;
     box_sign_on_response_message_t box_sign_on_response_message;
     box_sign_off_message_t box_sign_off_message;
+    server_session_packet_t server_session_packet;
 }
 
 parser NseslbmOrderentryServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.transaction_code) {
+        packet.extract(hdr.packet_header);
+        transition select(packet.lookahead<bit<144>>()[15:0]) {
+            16w23009: parse_server_registration_packet;
+            default: parse_server_session_packet;
+        }
+    }
+
+    state parse_server_registration_packet {
+        packet.extract(hdr.server_registration_packet);
+        meta.dispatched = 1;
+        transition select(hdr.server_registration_packet.transaction_code) {
             16w2301: parse_logon_response_message;
             16w1601: parse_system_information_response_message;
             16w7321: parse_partial_system_information_response_message;
@@ -1489,7 +1517,7 @@ parser NseslbmOrderentryServerParser(packet_in packet, out headers_t hdr, inout 
 
     state parse_logon_response_message {
         meta.dispatched = 1;
-        transition select(hdr.message_header.message_length) {
+        transition select(hdr.server_registration_packet.message_length) {
             16w212: parse_logon_confirmation_body;
             16w180: parse_logon_error_body;
             default: accept;
@@ -1738,6 +1766,53 @@ parser NseslbmOrderentryServerParser(packet_in packet, out headers_t hdr, inout 
         transition accept;
     }
 
+    state parse_server_session_packet {
+        packet.extract(hdr.server_session_packet);
+        transition select(hdr.server_session_packet.transaction_code) {
+            16w2301: parse_logon_response_message;
+            16w1601: parse_system_information_response_message;
+            16w7321: parse_partial_system_information_response_message;
+            16w7307: parse_update_local_database_header_message;
+            16w7304: parse_update_local_database_data_message;
+            16w7308: parse_update_local_database_trailer_message;
+            16w7011: parse_message_download_header_message;
+            16w7021: parse_message_download_data_message;
+            16w7031: parse_message_download_trailer_message;
+            16w2321: parse_logoff_confirmation_response_message;
+            16w2001: parse_board_lot_out_message;
+            16w2073: parse_order_confirmation_response_message;
+            16w2012: parse_market_price_confirmation_response_message;
+            16w2170: parse_order_freeze_response_message;
+            16w2231: parse_order_error_response_message;
+            16w2041: parse_order_modification_response_message;
+            16w2074: parse_order_modification_confirmation_response_message;
+            16w2042: parse_order_modification_error_response_message;
+            16w2071: parse_order_cancellation_response_message;
+            16w2075: parse_order_cancellation_confirmation_response_message;
+            16w2072: parse_order_cancellation_error_response_message;
+            16w9002: parse_cancellation_of_orders_in_batch_message;
+            16w2009: parse_negotiated_order_entered_by_counter_party_message;
+            16w2008: parse_negotiated_order_to_regular_lot_message;
+            16w2076: parse_cancel_negotiated_order_message;
+            16w5441: parse_trade_cancellation_requested_response_message;
+            16w2223: parse_trade_cancellation_error_message;
+            16w5446: parse_trade_modification_requested_response_message;
+            16w2222: parse_trade_confirmation_message;
+            16w2212: parse_stop_loss_order_triggering_message;
+            16w2282: parse_trade_cancellation_confirmation_response_message;
+            16w2286: parse_trade_cancellation_rejection_message;
+            16w2287: parse_trade_modification_confirmation_message;
+            16w2288: parse_trade_modification_rejection_message;
+            16w5295: parse_control_message_to_trader_message;
+            16w2302: parse_error_response_message;
+            16w2401: parse_gateway_router_response_message;
+            16w23009: parse_secure_box_registration_response_message;
+            16w23001: parse_box_sign_on_response_message;
+            16w20322: parse_box_sign_off_message;
+            default: accept;
+        }
+    }
+
 }
 
 control NseslbmOrderentryServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -1768,7 +1843,8 @@ control NseslbmOrderentryServerComputeChecksum(inout headers_t hdr, inout metada
 
 control NseslbmOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.server_registration_packet);
         packet.emit(hdr.logon_confirmation_body);
         packet.emit(hdr.logon_error_body);
         packet.emit(hdr.system_information_response_message);
@@ -1806,6 +1882,7 @@ control NseslbmOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.gateway_router_response_message);
         packet.emit(hdr.box_sign_on_response_message);
         packet.emit(hdr.box_sign_off_message);
+        packet.emit(hdr.server_session_packet);
     }
 }
 

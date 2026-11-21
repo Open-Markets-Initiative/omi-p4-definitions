@@ -1,4 +1,4 @@
-// P4_16 (v1model) definition for: Nairobi NairobiEquities Snapshot Mitch v1.22
+// P4_16 (v1model) definition for: NseKenya NairobiEquities Snapshot Mitch v1.22
 // 
 // Protocol:
 //   Organization: Nairobi Securities Exchange
@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 

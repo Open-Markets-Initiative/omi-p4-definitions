@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
@@ -31,10 +32,13 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_length;
     bit<32> packet_sequence_number;
-    bit<128> checksum;
+}
+
+header client_registration_packet_t {
+    bit<128> registration_checksum;
     bit<16> transaction_code;
     bit<32> log_time;
     bit<16> alpha_char;
@@ -257,12 +261,26 @@ header user_order_value_limit_update_in_message_t {
     bit<64> reserved_8;
 }
 
+header client_session_packet_t {
+    bit<128> checksum;
+    bit<16> transaction_code;
+    bit<32> log_time;
+    bit<16> alpha_char;
+    bit<32> trader_id;
+    bit<16> error_code;
+    bit<64> header_timestamp;
+    bit<64> time_stamp_1;
+    bit<64> time_stamp_2;
+    bit<16> message_length;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
+    client_registration_packet_t client_registration_packet;
     branch_order_value_limit_update_in_message_t branch_order_value_limit_update_in_message;
     cancel_on_logout_status_request_message_t cancel_on_logout_status_request_message;
     message_download_request_message_t message_download_request_message;
@@ -279,12 +297,22 @@ struct headers_t {
     trade_modification_cancellation_status_request_message_t trade_modification_cancellation_status_request_message;
     user_unlock_request_message_t user_unlock_request_message;
     user_order_value_limit_update_in_message_t user_order_value_limit_update_in_message;
+    client_session_packet_t client_session_packet;
 }
 
 parser NsecmOrderentryClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.transaction_code) {
+        packet.extract(hdr.packet_header);
+        transition select(packet.lookahead<bit<144>>()[15:0]) {
+            16w23008: parse_client_registration_packet;
+            default: parse_client_session_packet;
+        }
+    }
+
+    state parse_client_registration_packet {
+        packet.extract(hdr.client_registration_packet);
+        meta.dispatched = 1;
+        transition select(hdr.client_registration_packet.transaction_code) {
             16w5716: parse_branch_order_value_limit_update_in_message;
             16w5790: parse_cancel_on_logout_status_request_message;
             16w7000: parse_message_download_request_message;
@@ -412,6 +440,35 @@ parser NsecmOrderentryClientParser(packet_in packet, out headers_t hdr, inout me
         transition accept;
     }
 
+    state parse_client_session_packet {
+        packet.extract(hdr.client_session_packet);
+        transition select(hdr.client_session_packet.transaction_code) {
+            16w5716: parse_branch_order_value_limit_update_in_message;
+            16w5790: parse_cancel_on_logout_status_request_message;
+            16w7000: parse_message_download_request_message;
+            16w18016: parse_auction_inquiry_request_message;
+            16w20322: parse_box_sign_off_message;
+            16w23000: parse_box_sign_on_request_message;
+            16w2400: parse_gateway_router_request_message;
+            16w2000: parse_order_entry_in_message;
+            16w2040: parse_order_entry_in_message;
+            16w2062: parse_order_entry_in_message;
+            16w2070: parse_order_entry_in_message;
+            16w5721: parse_order_limit_update_in_message;
+            16w5738: parse_password_reset_in_message;
+            16w2300: parse_sign_on_request_in_message;
+            16w5723: parse_sign_on_request_in_message;
+            16w5440: parse_trade_inquiry_in_message;
+            16w5445: parse_trade_inquiry_in_message;
+            16w7300: parse_update_local_database_request_message;
+            16w5792: parse_trade_modification_cancellation_status_request_message;
+            16w5424: parse_user_unlock_request_message;
+            16w5719: parse_user_order_value_limit_update_in_message;
+            16w1600: parse_system_information_request_message;
+            default: accept;
+        }
+    }
+
 }
 
 control NsecmOrderentryClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -442,7 +499,8 @@ control NsecmOrderentryClientComputeChecksum(inout headers_t hdr, inout metadata
 
 control NsecmOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.client_registration_packet);
         packet.emit(hdr.branch_order_value_limit_update_in_message);
         packet.emit(hdr.cancel_on_logout_status_request_message);
         packet.emit(hdr.message_download_request_message);
@@ -459,6 +517,7 @@ control NsecmOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.trade_modification_cancellation_status_request_message);
         packet.emit(hdr.user_unlock_request_message);
         packet.emit(hdr.user_order_value_limit_update_in_message);
+        packet.emit(hdr.client_session_packet);
     }
 }
 

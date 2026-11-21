@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
@@ -31,10 +32,13 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_length;
     bit<32> packet_sequence_number;
-    bit<128> checksum;
+}
+
+header client_registration_packet_t {
+    bit<128> registration_checksum;
     bit<16> transaction_code;
     bit<32> log_time;
     bit<16> alpha_char;
@@ -667,6 +671,19 @@ header user_address_unlock_request_message_t {
     bit<560> reserved_70;
 }
 
+header client_session_packet_t {
+    bit<128> checksum;
+    bit<16> transaction_code;
+    bit<32> log_time;
+    bit<16> alpha_char;
+    bit<32> trader_id;
+    bit<16> error_code;
+    bit<64> header_timestamp;
+    bit<64> time_stamp_1;
+    bit<64> time_stamp_2;
+    bit<16> message_length;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> spread_order_entry_message_ms_spd_leg_info_remaining;
@@ -675,7 +692,8 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
+    client_registration_packet_t client_registration_packet;
     sign_on_request_in_message_t sign_on_request_in_message;
     system_information_in_message_t system_information_in_message;
     gateway_router_request_message_t gateway_router_request_message;
@@ -701,12 +719,22 @@ struct headers_t {
     collateral_user_status_change_request_message_t collateral_user_status_change_request_message;
     user_trade_modify_cancel_status_change_request_message_t user_trade_modify_cancel_status_change_request_message;
     user_address_unlock_request_message_t user_address_unlock_request_message;
+    client_session_packet_t client_session_packet;
 }
 
 parser NsefoOrderentryClientParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.transaction_code) {
+        packet.extract(hdr.packet_header);
+        transition select(packet.lookahead<bit<144>>()[15:0]) {
+            16w23008: parse_client_registration_packet;
+            default: parse_client_session_packet;
+        }
+    }
+
+    state parse_client_registration_packet {
+        packet.extract(hdr.client_registration_packet);
+        meta.dispatched = 1;
+        transition select(hdr.client_registration_packet.transaction_code) {
             16w2300: parse_sign_on_request_in_message;
             16w1600: parse_system_information_in_message;
             16w2400: parse_gateway_router_request_message;
@@ -933,6 +961,63 @@ parser NsefoOrderentryClientParser(packet_in packet, out headers_t hdr, inout me
         transition accept;
     }
 
+    state parse_client_session_packet {
+        packet.extract(hdr.client_session_packet);
+        transition select(hdr.client_session_packet.transaction_code) {
+            16w2300: parse_sign_on_request_in_message;
+            16w1600: parse_system_information_in_message;
+            16w2400: parse_gateway_router_request_message;
+            16w2320: parse_sign_off_request_in_message;
+            16w7300: parse_update_local_database_in_message;
+            16w7000: parse_download_request_message;
+            16w2000: parse_order_entry_request_message;
+            16w2040: parse_order_modification_request_message;
+            16w2070: parse_order_cancellation_request_message;
+            16w2062: parse_kill_switch_request_message;
+            16w2013: parse_price_modification_message;
+            16w20406: parse_price_modification_message;
+            16w5445: parse_trade_inquiry_message;
+            16w5440: parse_trade_inquiry_message;
+            16w5441: parse_trade_inquiry_message;
+            16w2223: parse_trade_inquiry_message;
+            16w2100: parse_spread_order_entry_message;
+            16w2102: parse_spread_order_entry_message;
+            16w2104: parse_spread_order_entry_message;
+            16w2106: parse_spread_order_entry_message;
+            16w2118: parse_spread_order_entry_message;
+            16w2124: parse_spread_order_entry_message;
+            16w2125: parse_spread_order_entry_message;
+            16w2126: parse_spread_order_entry_message;
+            16w2127: parse_spread_order_entry_message;
+            16w2130: parse_spread_order_entry_message;
+            16w2131: parse_spread_order_entry_message;
+            16w2132: parse_spread_order_entry_message;
+            16w2133: parse_spread_order_entry_message;
+            16w2136: parse_spread_order_entry_message;
+            16w2154: parse_spread_order_entry_message;
+            16w2155: parse_spread_order_entry_message;
+            16w2156: parse_spread_order_entry_message;
+            16w9004: parse_spread_order_entry_message;
+            16w20408: parse_spread_order_entry_message;
+            16w20410: parse_spread_order_entry_message;
+            16w20412: parse_spread_order_entry_message;
+            16w20414: parse_spread_order_entry_message;
+            16w20416: parse_spread_order_entry_message;
+            16w23008: parse_secure_box_registration_request_in_message;
+            16w23000: parse_box_sign_on_request_in_message;
+            16w23506: parse_heartbeat_message;
+            16w20322: parse_box_sign_off_message;
+            16w5716: parse_branch_order_value_limit_update_message;
+            16w5730: parse_user_order_value_limit_update_message;
+            16w5732: parse_normal_order_limit_update_message;
+            16w5740: parse_reset_user_password_message;
+            16w5744: parse_collateral_user_status_change_request_message;
+            16w5738: parse_user_trade_modify_cancel_status_change_request_message;
+            16w5427: parse_user_address_unlock_request_message;
+            default: accept;
+        }
+    }
+
 }
 
 control NsefoOrderentryClientVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -963,7 +1048,8 @@ control NsefoOrderentryClientComputeChecksum(inout headers_t hdr, inout metadata
 
 control NsefoOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.client_registration_packet);
         packet.emit(hdr.sign_on_request_in_message);
         packet.emit(hdr.system_information_in_message);
         packet.emit(hdr.gateway_router_request_message);
@@ -989,6 +1075,7 @@ control NsefoOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.collateral_user_status_change_request_message);
         packet.emit(hdr.user_trade_modify_cancel_status_change_request_message);
         packet.emit(hdr.user_address_unlock_request_message);
+        packet.emit(hdr.client_session_packet);
     }
 }
 

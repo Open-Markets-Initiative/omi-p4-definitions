@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
@@ -31,10 +32,13 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_length;
     bit<32> packet_sequence_number;
-    bit<128> checksum;
+}
+
+header server_registration_packet_t {
+    bit<128> registration_checksum;
     bit<16> transaction_code;
     bit<32> log_time;
     bit<16> alpha_char;
@@ -441,12 +445,26 @@ header giveup_rej_confirm_tm_message_t {
     bit<8> second_reserved_1;
 }
 
+header server_session_packet_t {
+    bit<128> checksum;
+    bit<16> transaction_code;
+    bit<32> log_time;
+    bit<16> alpha_char;
+    bit<32> trader_id;
+    bit<16> error_code;
+    bit<64> header_timestamp;
+    bit<64> time_stamp_1;
+    bit<64> time_stamp_2;
+    bit<16> message_length;
+}
+
 struct metadata_t {
     bit<1> dispatched;
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
+    server_registration_packet_t server_registration_packet;
     sign_on_out_message_t sign_on_out_message;
     trade_confirmation_message_t trade_confirmation_message;
     trade_cancel_confirm_message_t trade_cancel_confirm_message;
@@ -455,12 +473,22 @@ struct headers_t {
     trade_modify_reject_message_t trade_modify_reject_message;
     giveup_app_confirm_tm_message_t giveup_app_confirm_tm_message;
     giveup_rej_confirm_tm_message_t giveup_rej_confirm_tm_message;
+    server_session_packet_t server_session_packet;
 }
 
 parser NsecomDropcopyServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.transaction_code) {
+        packet.extract(hdr.packet_header);
+        transition select(packet.lookahead<bit<144>>()[15:0]) {
+            16w23009: parse_server_registration_packet;
+            default: parse_server_session_packet;
+        }
+    }
+
+    state parse_server_registration_packet {
+        packet.extract(hdr.server_registration_packet);
+        meta.dispatched = 1;
+        transition select(hdr.server_registration_packet.transaction_code) {
             16w2301: parse_sign_on_out_message;
             16w2222: parse_trade_confirmation_message;
             16w2282: parse_trade_cancel_confirm_message;
@@ -521,6 +549,21 @@ parser NsecomDropcopyServerParser(packet_in packet, out headers_t hdr, inout met
         transition accept;
     }
 
+    state parse_server_session_packet {
+        packet.extract(hdr.server_session_packet);
+        transition select(hdr.server_session_packet.transaction_code) {
+            16w2301: parse_sign_on_out_message;
+            16w2222: parse_trade_confirmation_message;
+            16w2282: parse_trade_cancel_confirm_message;
+            16w2286: parse_trade_cancel_reject_message;
+            16w2287: parse_trade_modify_confirm_message;
+            16w2288: parse_trade_modify_reject_message;
+            16w4506: parse_giveup_app_confirm_tm_message;
+            16w4507: parse_giveup_rej_confirm_tm_message;
+            default: accept;
+        }
+    }
+
 }
 
 control NsecomDropcopyServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -551,7 +594,8 @@ control NsecomDropcopyServerComputeChecksum(inout headers_t hdr, inout metadata_
 
 control NsecomDropcopyServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.server_registration_packet);
         packet.emit(hdr.sign_on_out_message);
         packet.emit(hdr.trade_confirmation_message);
         packet.emit(hdr.trade_cancel_confirm_message);
@@ -560,6 +604,7 @@ control NsecomDropcopyServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.trade_modify_reject_message);
         packet.emit(hdr.giveup_app_confirm_tm_message);
         packet.emit(hdr.giveup_rej_confirm_tm_message);
+        packet.emit(hdr.server_session_packet);
     }
 }
 

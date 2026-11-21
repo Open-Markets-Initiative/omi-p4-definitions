@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
@@ -31,10 +32,13 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header packet_header_t {
     bit<16> packet_length;
     bit<32> packet_sequence_number;
-    bit<128> checksum;
+}
+
+header server_registration_packet_t {
+    bit<128> registration_checksum;
     bit<16> transaction_code;
     bit<32> log_time;
     bit<16> alpha_char;
@@ -1073,6 +1077,19 @@ header nlt_order_inquiry_response_message_t {
     bit<8> reserved_1;
 }
 
+header server_session_packet_t {
+    bit<128> checksum;
+    bit<16> transaction_code;
+    bit<32> log_time;
+    bit<16> alpha_char;
+    bit<32> trader_id;
+    bit<16> error_code;
+    bit<64> header_timestamp;
+    bit<64> time_stamp_1;
+    bit<64> time_stamp_2;
+    bit<16> message_length;
+}
+
 struct metadata_t {
     bit<1> dispatched;
     bit<16> spread_order_body_ms_spd_leg_info_remaining;
@@ -1085,7 +1102,8 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
+    packet_header_t packet_header;
+    server_registration_packet_t server_registration_packet;
     sign_on_out_body_t sign_on_out_body;
     error_response_body_t error_response_body;
     sign_off_request_out_message_t sign_off_request_out_message;
@@ -1135,12 +1153,22 @@ struct headers_t {
     user_address_unlock_approve_message_t user_address_unlock_approve_message;
     nlt_order_message_to_trader_message_t nlt_order_message_to_trader_message;
     nlt_order_inquiry_response_message_t nlt_order_inquiry_response_message;
+    server_session_packet_t server_session_packet;
 }
 
 parser NseixOrderentryServerParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.transaction_code) {
+        packet.extract(hdr.packet_header);
+        transition select(packet.lookahead<bit<144>>()[15:0]) {
+            16w23009: parse_server_registration_packet;
+            default: parse_server_session_packet;
+        }
+    }
+
+    state parse_server_registration_packet {
+        packet.extract(hdr.server_registration_packet);
+        meta.dispatched = 1;
+        transition select(hdr.server_registration_packet.transaction_code) {
             16w2301: parse_sign_on_request_out_message;
             16w5585: parse_sign_on_request_out_message;
             16w2321: parse_sign_off_request_out_message;
@@ -1236,7 +1264,7 @@ parser NseixOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_sign_on_request_out_message {
         meta.dispatched = 1;
-        transition select(hdr.message_header.message_length) {
+        transition select(hdr.server_registration_packet.message_length) {
             16w214: parse_sign_on_out_body;
             16w182: parse_error_response_body;
             default: accept;
@@ -1321,7 +1349,7 @@ parser NseixOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_order_cancellation_confirmation_message {
         meta.dispatched = 1;
-        transition select(hdr.message_header.message_length) {
+        transition select(hdr.server_registration_packet.message_length) {
             16w316: parse_order_entry_body;
             16w480: parse_spread_order_body;
             default: accept;
@@ -1380,7 +1408,7 @@ parser NseixOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_user_order_limit_update_message {
         meta.dispatched = 1;
-        transition select(hdr.message_header.message_length) {
+        transition select(hdr.server_registration_packet.message_length) {
             16w206: parse_user_order_limit_body;
             16w208: parse_user_order_value_limit_body;
             16w182: parse_error_response_body;
@@ -1553,7 +1581,7 @@ parser NseixOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_branch_order_value_limit_update_response_message {
         meta.dispatched = 1;
-        transition select(hdr.message_header.message_length) {
+        transition select(hdr.server_registration_packet.message_length) {
             16w136: parse_branch_order_value_limit_body;
             16w182: parse_error_response_body;
             default: accept;
@@ -1623,6 +1651,102 @@ parser NseixOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
         transition accept;
     }
 
+    state parse_server_session_packet {
+        packet.extract(hdr.server_session_packet);
+        transition select(hdr.server_session_packet.transaction_code) {
+            16w2301: parse_sign_on_request_out_message;
+            16w5585: parse_sign_on_request_out_message;
+            16w2321: parse_sign_off_request_out_message;
+            16w1601: parse_system_information_out_message;
+            16w7321: parse_system_information_out_message;
+            16w7307: parse_update_local_database_header_message;
+            16w7308: parse_update_local_database_trailer_message;
+            16w7304: parse_update_local_database_data_message;
+            16w7011: parse_header_record_message;
+            16w7021: parse_message_record_message;
+            16w7031: parse_trailer_record_message;
+            16w2073: parse_order_confirmation_message;
+            16w2083: parse_order_confirmation_message;
+            16w2074: parse_order_modification_confirmation_message;
+            16w2085: parse_order_modification_confirmation_message;
+            16w2001: parse_order_response_message;
+            16w2012: parse_order_response_message;
+            16w2041: parse_order_response_message;
+            16w2042: parse_order_response_message;
+            16w2071: parse_order_response_message;
+            16w2072: parse_order_response_message;
+            16w2087: parse_order_response_message;
+            16w2088: parse_order_response_message;
+            16w2089: parse_order_response_message;
+            16w2170: parse_order_response_message;
+            16w2231: parse_order_response_message;
+            16w9002: parse_order_response_message;
+            16w27100: parse_order_response_message;
+            16w2075: parse_order_cancellation_confirmation_message;
+            16w2223: parse_trade_inquiry_response_message;
+            16w2288: parse_trade_inquiry_response_message;
+            16w5441: parse_trade_inquiry_response_message;
+            16w5450: parse_trade_inquiry_response_message;
+            16w5452: parse_trade_inquiry_response_message;
+            16w5453: parse_trade_inquiry_response_message;
+            16w2090: parse_trade_confirmation_message;
+            16w2212: parse_trade_confirmation_message;
+            16w2222: parse_trade_confirmation_message;
+            16w2282: parse_trade_confirmation_message;
+            16w2286: parse_trade_confirmation_message;
+            16w2287: parse_trade_confirmation_message;
+            16w5449: parse_trade_confirmation_message;
+            16w2101: parse_spread_order_response_message;
+            16w2103: parse_spread_order_response_message;
+            16w2105: parse_spread_order_response_message;
+            16w2107: parse_spread_order_response_message;
+            16w2119: parse_spread_order_response_message;
+            16w2124: parse_spread_order_response_message;
+            16w2125: parse_spread_order_response_message;
+            16w2126: parse_spread_order_response_message;
+            16w2127: parse_spread_order_response_message;
+            16w2130: parse_spread_order_response_message;
+            16w2131: parse_spread_order_response_message;
+            16w2132: parse_spread_order_response_message;
+            16w2133: parse_spread_order_response_message;
+            16w2136: parse_spread_order_response_message;
+            16w2154: parse_spread_order_response_message;
+            16w2155: parse_spread_order_response_message;
+            16w2156: parse_spread_order_response_message;
+            16w9004: parse_spread_order_response_message;
+            16w27102: parse_spread_order_response_message;
+            16w27103: parse_spread_order_response_message;
+            16w27104: parse_spread_order_response_message;
+            16w5731: parse_user_order_limit_update_message;
+            16w5733: parse_dealer_limit_update_message;
+            16w5772: parse_spread_order_limit_update_message;
+            16w5295: parse_control_message_to_trader_message;
+            16w1685: parse_mba_inquiry_response_message;
+            16w1687: parse_mba_inquiry_response_message;
+            16w1689: parse_mba_inquiry_response_message;
+            16w1833: parse_market_statistics_report_message;
+            16w6502: parse_spread_bhavcopy_message;
+            16w4506: parse_giveup_confirmation_message;
+            16w4507: parse_giveup_confirmation_message;
+            16w2401: parse_gateway_router_response_message;
+            16w23009: parse_secure_box_registration_response_out_message;
+            16w23001: parse_box_sign_on_request_out_message;
+            16w20322: parse_box_sign_off_message;
+            16w5294: parse_contingency_broadcast_message;
+            16w5717: parse_branch_order_value_limit_update_response_message;
+            16w5741: parse_reset_user_password_response_message;
+            16w5745: parse_collateral_user_status_change_response_message;
+            16w5739: parse_user_trade_modify_cancel_status_change_response_message;
+            16w5428: parse_user_address_unlock_confirm_message;
+            16w5483: parse_user_address_unlock_approve_message;
+            16w5484: parse_user_address_unlock_approve_message;
+            16w2093: parse_nlt_order_message_to_trader_message;
+            16w1243: parse_nlt_order_inquiry_response_message;
+            16w7032: parse_nlt_trailer_record_message;
+            default: accept;
+        }
+    }
+
 }
 
 control NseixOrderentryServerVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
@@ -1653,7 +1777,8 @@ control NseixOrderentryServerComputeChecksum(inout headers_t hdr, inout metadata
 
 control NseixOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
+        packet.emit(hdr.packet_header);
+        packet.emit(hdr.server_registration_packet);
         packet.emit(hdr.sign_on_out_body);
         packet.emit(hdr.error_response_body);
         packet.emit(hdr.sign_off_request_out_message);
@@ -1703,6 +1828,7 @@ control NseixOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.user_address_unlock_approve_message);
         packet.emit(hdr.nlt_order_message_to_trader_message);
         packet.emit(hdr.nlt_order_inquiry_response_message);
+        packet.emit(hdr.server_session_packet);
     }
 }
 

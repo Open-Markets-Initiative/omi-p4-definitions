@@ -1,8 +1,8 @@
-// P4_16 (v1model) definition for: Nairobi NairobiEquities Replay Mitch v1.22
+// P4_16 (v1model) definition for: NseKenya NairobiEquities RealTime Mitch v1.22
 // 
 // Protocol:
 //   Organization: Nairobi Securities Exchange
-//   Protocol: Nairobi Equities Replay
+//   Protocol: Nairobi Equities Real Time
 //   Encoding: Millennium Itch
 //   Version: 1.22
 //   Date: 11/24/2020
@@ -20,8 +20,9 @@
 // The protocol compiler technologies used to produce this file are the subject of
 // patents owned by Scaled Sources LLC.  Those patent rights are retained and are
 // not transferred by this contribution:
-//   https://patents.google.com/patent/US20240129382A1/en
+//   https://patents.google.com/patent/US12101388B2/en
 //   https://patents.google.com/patent/US20240419416A1/en
+//   https://patents.google.com/patent/US20260368281A1/en
 // 
 // Open Markets Initiative website: https://openmarketsinitiative.com
 
@@ -31,38 +32,16 @@
 #define MAX_MESSAGES 64
 #define FORWARD_PORT 1
 
-header message_header_t {
+header unit_header_t {
     bit<16> length;
     bit<8> message_count;
     bit<8> market_data_group;
     bit<32> sequence_number;
 }
 
-header message_header_message_t {
+header unit_header_message_t {
     bit<16> message_length;
     bit<8> message_type;
-}
-
-header login_request_message_t {
-    bit<48> username;
-    bit<80> password;
-}
-
-header login_response_message_t {
-    bit<8> login_status;
-}
-
-header replay_request_message_t {
-    bit<8> market_data_group;
-    bit<32> first_message;
-    bit<16> count;
-}
-
-header replay_response_message_t {
-    bit<8> market_data_group;
-    bit<32> first_message;
-    bit<16> count;
-    bit<8> replay_status;
 }
 
 header time_message_t {
@@ -413,12 +392,8 @@ struct metadata_t {
 }
 
 struct headers_t {
-    message_header_t message_header;
-    message_header_message_t message_header_message[MAX_MESSAGES];
-    login_request_message_t login_request_message[MAX_MESSAGES];
-    login_response_message_t login_response_message[MAX_MESSAGES];
-    replay_request_message_t replay_request_message[MAX_MESSAGES];
-    replay_response_message_t replay_response_message[MAX_MESSAGES];
+    unit_header_t unit_header;
+    unit_header_message_t unit_header_message[MAX_MESSAGES];
     time_message_t time_message[MAX_MESSAGES];
     system_event_message_t system_event_message[MAX_MESSAGES];
     symbol_directory_message_t symbol_directory_message[MAX_MESSAGES];
@@ -448,23 +423,18 @@ struct headers_t {
     top_of_book_message_t top_of_book_message[MAX_MESSAGES];
 }
 
-parser NairobiequitiesReplayParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+parser NairobiequitiesRealtimeParser(packet_in packet, out headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     state start {
-        packet.extract(hdr.message_header);
-        transition select(hdr.message_header.message_count) {
-            8w0: parse_message_header_message_empty;
-            default: parse_message_header_message;
+        packet.extract(hdr.unit_header);
+        transition select(hdr.unit_header.message_count) {
+            8w0: parse_unit_header_message_empty;
+            default: parse_unit_header_message;
         }
     }
 
-    state parse_message_header_message {
-        packet.extract(hdr.message_header_message.next);
-        transition select(hdr.message_header_message.last.message_type) {
-            8w0x01: parse_login_request_message;
-            8w0x02: parse_login_response_message;
-            8w0x03: parse_replay_request_message;
-            8w0x04: parse_replay_response_message;
-            8w0x05: parse_logout_request_message;
+    state parse_unit_header_message {
+        packet.extract(hdr.unit_header_message.next);
+        transition select(hdr.unit_header_message.last.message_type) {
             8w0x54: parse_time_message;
             8w0x53: parse_system_event_message;
             8w0x52: parse_symbol_directory_message;
@@ -496,210 +466,181 @@ parser NairobiequitiesReplayParser(packet_in packet, out headers_t hdr, inout me
         }
     }
 
-    state parse_login_request_message {
-        packet.extract(hdr.login_request_message.next);
-        meta.dispatched = 1;
-        transition parse_message_header_message;
-    }
-
-    state parse_login_response_message {
-        packet.extract(hdr.login_response_message.next);
-        meta.dispatched = 1;
-        transition parse_message_header_message;
-    }
-
-    state parse_replay_request_message {
-        packet.extract(hdr.replay_request_message.next);
-        meta.dispatched = 1;
-        transition parse_message_header_message;
-    }
-
-    state parse_replay_response_message {
-        packet.extract(hdr.replay_response_message.next);
-        meta.dispatched = 1;
-        transition parse_message_header_message;
-    }
-
-    state parse_logout_request_message {
-        meta.dispatched = 1;
-        transition parse_message_header_message;
-    }
-
     state parse_time_message {
         packet.extract(hdr.time_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_system_event_message {
         packet.extract(hdr.system_event_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_symbol_directory_message {
         packet.extract(hdr.symbol_directory_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_symbol_status_message {
         packet.extract(hdr.symbol_status_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_add_order_message {
         packet.extract(hdr.add_order_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_add_attributed_order_message {
         packet.extract(hdr.add_attributed_order_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_order_deleted_message {
         packet.extract(hdr.order_deleted_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_order_modified_message {
         packet.extract(hdr.order_modified_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_order_book_clear_message {
         packet.extract(hdr.order_book_clear_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_order_executed_message {
         packet.extract(hdr.order_executed_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_order_executed_with_price_size_message {
         packet.extract(hdr.order_executed_with_price_size_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_trade_message {
         packet.extract(hdr.trade_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_auction_trade_message {
         packet.extract(hdr.auction_trade_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_off_book_trade_message {
         packet.extract(hdr.off_book_trade_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_trade_break_message {
         packet.extract(hdr.trade_break_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_trade_correction_message {
         packet.extract(hdr.trade_correction_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_recovery_trade_message {
         packet.extract(hdr.recovery_trade_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_auction_info_message {
         packet.extract(hdr.auction_info_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_statistics_message {
         packet.extract(hdr.statistics_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_extended_statistics_message {
         packet.extract(hdr.extended_statistics_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_consolidated_statistics_message {
         packet.extract(hdr.consolidated_statistics_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_index_message {
         packet.extract(hdr.index_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_aon_info_message {
         packet.extract(hdr.aon_info_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_news_message {
         packet.extract(hdr.news_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_update_price_point_message {
         packet.extract(hdr.update_price_point_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_delete_price_point_message {
         packet.extract(hdr.delete_price_point_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
     state parse_top_of_book_message {
         packet.extract(hdr.top_of_book_message.next);
         meta.dispatched = 1;
-        transition parse_message_header_message;
+        transition parse_unit_header_message;
     }
 
-    state parse_message_header_message_empty {
+    state parse_unit_header_message_empty {
         meta.dispatched = 1;
         transition accept;
     }
 
 }
 
-control NairobiequitiesReplayVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NairobiequitiesRealtimeVerifyChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NairobiequitiesReplayIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NairobiequitiesRealtimeIngress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
         if (meta.dispatched == 1) {
             standard_metadata.egress_spec = FORWARD_PORT;
@@ -710,24 +651,20 @@ control NairobiequitiesReplayIngress(inout headers_t hdr, inout metadata_t meta,
     }
 }
 
-control NairobiequitiesReplayEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
+control NairobiequitiesRealtimeEgress(inout headers_t hdr, inout metadata_t meta, inout standard_metadata_t standard_metadata) {
     apply {
     }
 }
 
-control NairobiequitiesReplayComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
+control NairobiequitiesRealtimeComputeChecksum(inout headers_t hdr, inout metadata_t meta) {
     apply {
     }
 }
 
-control NairobiequitiesReplayDeparser(packet_out packet, in headers_t hdr) {
+control NairobiequitiesRealtimeDeparser(packet_out packet, in headers_t hdr) {
     apply {
-        packet.emit(hdr.message_header);
-        packet.emit(hdr.message_header_message);
-        packet.emit(hdr.login_request_message);
-        packet.emit(hdr.login_response_message);
-        packet.emit(hdr.replay_request_message);
-        packet.emit(hdr.replay_response_message);
+        packet.emit(hdr.unit_header);
+        packet.emit(hdr.unit_header_message);
         packet.emit(hdr.time_message);
         packet.emit(hdr.system_event_message);
         packet.emit(hdr.symbol_directory_message);
@@ -759,10 +696,10 @@ control NairobiequitiesReplayDeparser(packet_out packet, in headers_t hdr) {
 }
 
 V1Switch(
-    NairobiequitiesReplayParser(),
-    NairobiequitiesReplayVerifyChecksum(),
-    NairobiequitiesReplayIngress(),
-    NairobiequitiesReplayEgress(),
-    NairobiequitiesReplayComputeChecksum(),
-    NairobiequitiesReplayDeparser()
+    NairobiequitiesRealtimeParser(),
+    NairobiequitiesRealtimeVerifyChecksum(),
+    NairobiequitiesRealtimeIngress(),
+    NairobiequitiesRealtimeEgress(),
+    NairobiequitiesRealtimeComputeChecksum(),
+    NairobiequitiesRealtimeDeparser()
 ) main;
