@@ -64,6 +64,10 @@ header message_download_request_message_t {
     bit<64> sequence_number;
 }
 
+header secure_box_registration_request_message_t {
+    bit<16> box_id;
+}
+
 header auction_inquiry_request_message_t {
     bit<80> symbol;
     bit<16> series;
@@ -264,6 +268,7 @@ struct headers_t {
     branch_order_value_limit_update_in_message_t branch_order_value_limit_update_in_message;
     cancel_on_logout_status_request_message_t cancel_on_logout_status_request_message;
     message_download_request_message_t message_download_request_message;
+    secure_box_registration_request_message_t secure_box_registration_request_message;
     auction_inquiry_request_message_t auction_inquiry_request_message;
     box_sign_off_message_t box_sign_off_message;
     box_sign_on_request_message_t box_sign_on_request_message;
@@ -286,6 +291,7 @@ parser NsecmOrderentryClientParser(packet_in packet, out headers_t hdr, inout me
             16w5716: parse_branch_order_value_limit_update_in_message;
             16w5790: parse_cancel_on_logout_status_request_message;
             16w7000: parse_message_download_request_message;
+            16w23008: parse_secure_box_registration_request_message;
             16w18016: parse_auction_inquiry_request_message;
             16w20322: parse_box_sign_off_message;
             16w23000: parse_box_sign_on_request_message;
@@ -323,6 +329,12 @@ parser NsecmOrderentryClientParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_message_download_request_message {
         packet.extract(hdr.message_download_request_message);
+        meta.dispatched = 1;
+        transition accept;
+    }
+
+    state parse_secure_box_registration_request_message {
+        packet.extract(hdr.secure_box_registration_request_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -444,6 +456,7 @@ control NsecmOrderentryClientDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.branch_order_value_limit_update_in_message);
         packet.emit(hdr.cancel_on_logout_status_request_message);
         packet.emit(hdr.message_download_request_message);
+        packet.emit(hdr.secure_box_registration_request_message);
         packet.emit(hdr.auction_inquiry_request_message);
         packet.emit(hdr.box_sign_off_message);
         packet.emit(hdr.box_sign_on_request_message);

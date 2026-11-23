@@ -84,10 +84,6 @@ header error_response_message_t {
     bit<1024> error_message;
 }
 
-header secure_box_registration_request_message_t {
-    bit<16> box_id;
-}
-
 header box_sign_on_response_message_t {
     bit<16> box_id;
     bit<80> reserved_10;
@@ -509,7 +505,6 @@ struct headers_t {
     branch_order_value_limit_update_out_message_t branch_order_value_limit_update_out_message;
     cancel_on_logout_status_response_message_t cancel_on_logout_status_response_message;
     error_response_message_t error_response_message;
-    secure_box_registration_request_message_t secure_box_registration_request_message;
     box_sign_on_response_message_t box_sign_on_response_message;
     gateway_router_response_message_t gateway_router_response_message;
     existing_encryption_tail_t existing_encryption_tail;
@@ -545,7 +540,6 @@ parser NsecmOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
             16w5717: parse_branch_order_value_limit_update_out_message;
             16w5791: parse_cancel_on_logout_status_response_message;
             16w2302: parse_error_response_message;
-            16w23008: parse_secure_box_registration_request_message;
             16w23001: parse_box_sign_on_response_message;
             16w2401: parse_gateway_router_response_message;
             16w5295: parse_control_message_to_trader_message;
@@ -624,12 +618,6 @@ parser NsecmOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
 
     state parse_error_response_message {
         packet.extract(hdr.error_response_message);
-        meta.dispatched = 1;
-        transition accept;
-    }
-
-    state parse_secure_box_registration_request_message {
-        packet.extract(hdr.secure_box_registration_request_message);
         meta.dispatched = 1;
         transition accept;
     }
@@ -857,7 +845,6 @@ control NsecmOrderentryServerDeparser(packet_out packet, in headers_t hdr) {
         packet.emit(hdr.branch_order_value_limit_update_out_message);
         packet.emit(hdr.cancel_on_logout_status_response_message);
         packet.emit(hdr.error_response_message);
-        packet.emit(hdr.secure_box_registration_request_message);
         packet.emit(hdr.box_sign_on_response_message);
         packet.emit(hdr.gateway_router_response_message);
         packet.emit(hdr.existing_encryption_tail);

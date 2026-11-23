@@ -1034,6 +1034,7 @@ parser NsefoOrderentryServerParser(packet_in packet, out headers_t hdr, inout me
             16w2301: parse_sign_on_request_out_message;
             16w2321: parse_sign_off_request_out_message;
             16w1601: parse_system_information_out_message;
+            16w7321: parse_system_information_out_message;
             16w2401: parse_gateway_router_response_message;
             16w7307: parse_update_local_database_header_message;
             16w7308: parse_update_local_database_trailer_message;

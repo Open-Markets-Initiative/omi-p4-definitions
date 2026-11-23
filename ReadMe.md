@@ -22,7 +22,7 @@ Updates are greatly appreciated; however, this entire repository is source gener
 
 | Protocol Count | Generated Lines |
 | --- | --- |
-| 1,113 | 1,081,916 |
+| 1,114 | 1,083,358 |
 
 ## Testing
 
@@ -111,6 +111,7 @@ Enjoy.
 [Omi.Encoding.Flex]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Flex.md "Flex Encoding"
 [Omi.Encoding.LmeSource]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/LmeSource.md "LmeSource Encoding"
 [Omi.Encoding.Simba]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Simba.md "Simba Encoding"
+[Omi.Encoding.Twime]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Twime.md "Twime Encoding"
 [Omi.Encoding.Sqf]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/Sqf.md "Sqf Encoding"
 [Omi.Encoding.AsciiItch]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/AsciiItch.md "AsciiItch Encoding"
 [Omi.Encoding.GeniumAmd]: https://github.com/Open-Markets-Initiative/Directory/blob/main/Protocols/GeniumAmd.md "GeniumAmd Encoding"
@@ -362,6 +363,7 @@ Enjoy.
 [Moex.Spectra.FutInfoReplay]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Moex/Protocols/Spectra/FutInfoReplay.md "SIMBA Spectra Futures Instrument Replay"
 [Moex.Spectra.OptInfoIncremental]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Moex/Protocols/Spectra/OptInfoIncremental.md "SIMBA Spectra Options Instrument Incremental"
 [Moex.Spectra.OptInfoReplay]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Moex/Protocols/Spectra/OptInfoReplay.md "SIMBA Spectra Options Instrument Replay"
+[Moex.Spectra.OrderEntry]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Moex/Protocols/Spectra/OrderEntry.md "TWIME Spectra Order Entry"
 [Moex.Spectra.OrdersLogIncremental]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Moex/Protocols/Spectra/OrdersLogIncremental.md "SIMBA Spectra Orders Log Incremental"
 [Moex.Spectra.OrdersLogReplay]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Moex/Protocols/Spectra/OrdersLogReplay.md "SIMBA Spectra Orders Log Historical Replay"
 [Moex.Spectra.OrdersLogSnapshot]: https://github.com/Open-Markets-Initiative/Open-Markets-Initiative/blob/main/Organizations/Moex/Protocols/Spectra/OrdersLogSnapshot.md "SIMBA Spectra Orders Log Snapshot"
